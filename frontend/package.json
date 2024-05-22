@@ -1,0 +1,59 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ]
+  },
+  "development": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version",
+    "last 1 edge version"
+  ],
+  "scripts": {
+    "build": "tsc && vite build",
+    "build:test": "tsc && vite build --mode test",
+    "dev": "vite",
+    "format": "prettier --write \"src/**/*.{ts, tsx, css, html}\" --config  ./.prettierrc.json",
+    "lint": "eslint . --ext ts,tsx,css,html --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx,css,html --report-unused-disable-directives --max-warnings 0 --fix",
+    "nswag": "nswag run nswag.json /runTime:Net80 --write src/**/api.generated.ts",
+    "preview": "vite preview",
+    "start": "vite"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.37.1",
+    "@tanstack/react-query-devtools": "^5.37.1",
+    "date-fns": "^3.6.0",
+    "i18next": "^23.11.5",
+    "i18next-http-backend": "^2.5.2",
+    "nswag": "^14.0.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^14.1.2",
+    "react-router-dom": "^6.23.1",
+    "vite-plugin-mkcert": "^1.17.5",
+    "vite-plugin-svgr": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "prettier": "^3.2.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}
