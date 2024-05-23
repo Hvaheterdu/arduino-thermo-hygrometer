@@ -4,7 +4,7 @@ public class Temperature
 {
     public int Id { get; private set; }
 
-    public Guid TemperatureGUID { get; private set; } = Guid.NewGuid();
+    public Guid TemperatureGuid { get; private set; } = Guid.NewGuid();
 
     public DateTimeOffset Date { get; private set; } = DateTimeOffset.Now.Date;
 
