@@ -10,9 +10,9 @@ public class Temperature
 
     public DateTimeOffset TemperatureReadingTime { get; private set; } = DateTimeOffset.Now;
 
-    public decimal TemperatureValue { get; set; } = decimal.Zero;
+    public string TemperatureValue { get; set; } = string.Empty;
 
-    public Temperature(decimal temperatureValue)
+    public Temperature(string temperatureValue)
     {
         TemperatureValue = temperatureValue;
     }
