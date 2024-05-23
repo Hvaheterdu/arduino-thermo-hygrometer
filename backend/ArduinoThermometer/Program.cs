@@ -1,5 +1,8 @@
 using ArduinoThermometer.API;
 using ArduinoThermometer.API.Data;
+using ArduinoThermometer.API.Models;
+using ArduinoThermometer.API.Validators;
+using FluentValidation;
 using Microsoft.OpenApi.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -67,10 +70,14 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Dependency injection DTOs, services and repositories.
+// Dependency injection DTOs, services, repositories and validators.
+builder.Services.AddScoped<IValidator<Temperature>, TemperatureDtoValidator>();
 
 // Register controller service.
 builder.Services.AddControllers();
+
+// Lowercase API routes.
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 // HTTP/HTTPS logging service
 builder.Services.AddHttpLogging(logging => logging.RequestBodyLogLimit = 4096);
