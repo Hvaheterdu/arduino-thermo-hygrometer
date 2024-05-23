@@ -35,7 +35,7 @@ public static class ProgramExtensions
     /// <exception cref="NotImplementedException"></exception>
     public static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
     {
-        builder.Services.AddDbContext<ArduinoThermometerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("ArduinoThermometer.Migrations")));
+        builder.Services.AddDbContext<ArduinoThermometerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         bool.TryParse(builder.Configuration.GetSection("Database")["RunDatabaseMigrationOnStartup"], out bool runDatabaseMigrationOnStartup);
 
