@@ -17,7 +17,16 @@ export default defineConfig({
     strictPort: true,
     https: true,
     cors: true,
-    headers: {},
+    headers: {
+      "Content-Security-Policy":
+        "default-src 'self'; connect-src ws: http: https: 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;",
+      "Permisson-Policy":
+        "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'",
+      "Referrer-Policy": "no-referrer",
+      "X-Frame-Options": "SAMEORIGIN",
+      "X-Content-Type-Options": "nosniff",
+      "X-Permitted-Cross-Domain-Policies": "none",
+    },
   },
   assetsInclude: ["**/*.svg"],
 });
