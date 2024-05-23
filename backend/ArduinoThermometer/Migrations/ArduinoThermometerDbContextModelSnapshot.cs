@@ -45,7 +45,7 @@ namespace ArduinoThermometer.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Temperatures");
+                    b.ToTable("Temperatures", (string)null);
                 });
 #pragma warning restore 612, 618
         }
