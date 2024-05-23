@@ -1,7 +1,8 @@
-﻿using ArduinoThermometer.Data.Models;
+﻿using ArduinoThermometer.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArduinoThermometer.Data;
+
 public class ArduinoThermometerDbContext : DbContext
 {
     public ArduinoThermometerDbContext(DbContextOptions<ArduinoThermometerDbContext> options) : base(options)

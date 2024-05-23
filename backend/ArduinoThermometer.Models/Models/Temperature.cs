@@ -1,4 +1,5 @@
-﻿namespace ArduinoThermometer.Data.Models;
+﻿namespace ArduinoThermometer.Models.Models;
+
 public class Temperature
 {
     public int TemperatureId { get; private set; }

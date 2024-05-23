@@ -1,7 +1,7 @@
-﻿using ArduinoThermometer.Data.Models;
+﻿using ArduinoThermometer.Models.Models;
 using FluentValidation;
 
-namespace ArduinoThermometer.Data.Validators;
+namespace ArduinoThermometer.Models.Validators;
 
 public class TemperatureDtoValidator : AbstractValidator<Temperature>
 {
