@@ -1,5 +1,6 @@
 using ArduinoThermometer.API;
 using ArduinoThermometer.API.Data;
+using ArduinoThermometer.API.Middleware;
 using ArduinoThermometer.API.Models;
 using ArduinoThermometer.API.Validators;
 using FluentValidation;
@@ -86,6 +87,9 @@ builder.Services.AddHttpLogging(logging => logging.RequestBodyLogLimit = 4096);
 builder.RegisterDatabaseAndRunMigrationsOnStartup<ArduinoThermometerDbContext>();
 
 WebApplication app = builder.Build();
+
+// Custom middleware.
+app.UseMiddleware<SecurityHeadersMiddleware>();
 
 // Swagger and SwaggerUI middleware.
 if (!app.Environment.IsProduction())
