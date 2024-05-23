@@ -19,6 +19,6 @@ public class ArduinoThermometerDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Temperature>().HasKey(t => t.TemperatureId);
+        modelBuilder.Entity<Temperature>().HasKey(t => t.Id);
     }
 }
