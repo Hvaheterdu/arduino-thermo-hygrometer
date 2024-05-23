@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermometer.API", "ArduinoThermometer.API.csproj", "{C8765456-30B5-435A-8F72-0FD67926E111}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermometer.Migrations", "..\ArduinoThermometer.Migrations\ArduinoThermometer.Migrations.csproj", "{7BDE97AD-785F-46E7-978A-68D14EFD67AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8765456-30B5-435A-8F72-0FD67926E111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8765456-30B5-435A-8F72-0FD67926E111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8765456-30B5-435A-8F72-0FD67926E111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8765456-30B5-435A-8F72-0FD67926E111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BDE97AD-785F-46E7-978A-68D14EFD67AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BDE97AD-785F-46E7-978A-68D14EFD67AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BDE97AD-785F-46E7-978A-68D14EFD67AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BDE97AD-785F-46E7-978A-68D14EFD67AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {81B73B48-700F-4EFC-A996-E7D4DBF57D99}
+	EndGlobalSection
+EndGlobal
