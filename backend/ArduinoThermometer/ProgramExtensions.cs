@@ -1,4 +1,4 @@
-﻿using ArduinoThermometer.Data;
+﻿using ArduinoThermometer.API.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArduinoThermometer.API;

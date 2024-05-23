@@ -5,11 +5,7 @@ VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermometer.API", "ArduinoThermometer.API.csproj", "{C8765456-30B5-435A-8F72-0FD67926E111}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermometer.Data", "..\ArduinoThermometer.Database\ArduinoThermometer.Data.csproj", "{16E5D699-C495-4DCF-891D-87A6B9883A7C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermometer.Migrations", "..\ArduinoThermometer.Migrations\ArduinoThermometer.Migrations.csproj", "{7BDE97AD-785F-46E7-978A-68D14EFD67AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoThermometer.Models", "..\ArduinoThermometer.Models\ArduinoThermometer.Models.csproj", "{175A751B-47D0-45BE-8B97-1D0F4404EA57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +17,10 @@ Global
 		{C8765456-30B5-435A-8F72-0FD67926E111}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8765456-30B5-435A-8F72-0FD67926E111}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8765456-30B5-435A-8F72-0FD67926E111}.Release|Any CPU.Build.0 = Release|Any CPU
-		{16E5D699-C495-4DCF-891D-87A6B9883A7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16E5D699-C495-4DCF-891D-87A6B9883A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16E5D699-C495-4DCF-891D-87A6B9883A7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16E5D699-C495-4DCF-891D-87A6B9883A7C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7BDE97AD-785F-46E7-978A-68D14EFD67AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7BDE97AD-785F-46E7-978A-68D14EFD67AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BDE97AD-785F-46E7-978A-68D14EFD67AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BDE97AD-785F-46E7-978A-68D14EFD67AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{175A751B-47D0-45BE-8B97-1D0F4404EA57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{175A751B-47D0-45BE-8B97-1D0F4404EA57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{175A751B-47D0-45BE-8B97-1D0F4404EA57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{175A751B-47D0-45BE-8B97-1D0F4404EA57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

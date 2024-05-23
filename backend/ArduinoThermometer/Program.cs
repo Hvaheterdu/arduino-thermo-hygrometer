@@ -1,5 +1,5 @@
 using ArduinoThermometer.API;
-using ArduinoThermometer.Data;
+using ArduinoThermometer.API.Data;
 using Microsoft.OpenApi.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
