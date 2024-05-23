@@ -2,18 +2,18 @@
 
 public class Temperature
 {
-    public int TemperatureId { get; private set; }
+    public int Id { get; private set; }
 
     public Guid TemperatureGUID { get; private set; } = Guid.NewGuid();
 
-    public DateTimeOffset TemperatureReadingDate { get; private set; } = DateTimeOffset.Now.Date;
+    public DateTimeOffset Date { get; private set; } = DateTimeOffset.Now.Date;
 
-    public DateTimeOffset TemperatureReadingTime { get; private set; } = DateTimeOffset.Now;
+    public DateTimeOffset Time { get; private set; } = DateTimeOffset.Now;
 
-    public string TemperatureValue { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
 
-    public Temperature(string temperatureValue)
+    public Temperature(string value)
     {
-        TemperatureValue = temperatureValue;
+        Value = value;
     }
 }
