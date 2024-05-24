@@ -19,7 +19,7 @@ public static class ProgramExtensions
 
         if (configurationValue is null)
         {
-            throw new ArgumentException(nameof(configuration));
+            throw new ArgumentException($"Configuration with name {nameof(configuration)} does not exist.");
         }
 
         return configuration;
