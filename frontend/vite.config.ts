@@ -16,6 +16,13 @@ export default defineConfig({
     port: 3001,
     strictPort: true,
     https: true,
+    proxy: {
+      "/api": {
+        target: "https://localhost:5001",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
     cors: true,
     headers: {
       "Content-Security-Policy":
