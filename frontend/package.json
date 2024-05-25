@@ -29,7 +29,7 @@
     "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "nswag": "nswag run nswag.json /runTime:Net80 --write src/**/api.generated.ts",
     "preview": "vite preview",
-    "prepush": "npm run format && npm run lint",
+    "prepare": "cd .. && husky frontend/.husky",
     "start": "vite"
   },
   "dependencies": {
@@ -56,6 +56,8 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
     "vite": "^5.2.11"
