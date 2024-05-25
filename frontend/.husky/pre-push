@@ -1,5 +1,2 @@
 cd frontend
-npm run update-version
-git add .
-git commit -m "Update package.json version"
-git push
+npm run update-version && git add . && git commit -m "Update package.json version" && git push
