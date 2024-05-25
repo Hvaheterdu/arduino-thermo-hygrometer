@@ -10,7 +10,6 @@
   "eslint.run": "onSave",
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
-  "files.eol": "\n",
   "files.insertFinalNewline": true,
   "path-intellisense.autoSlashAfterDirectory": true,
   "path-intellisense.absolutePathToWorkspace": true,
