@@ -1,4 +1,4 @@
 {
   "(*.html|*.css|*.json)": ["prettier --write"],
-  "*.{ts,tsx}": ["prettier --write", "eslint --report-unused-disable-directives --max-warnings 0"]
+  "*.{ts,tsx}": ["prettier --write", "eslint . --report-unused-disable-directives --max-warnings 0"]
 }
