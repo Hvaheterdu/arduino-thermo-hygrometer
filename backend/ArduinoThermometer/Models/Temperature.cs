@@ -8,7 +8,7 @@ public class Temperature
 
     public DateTimeOffset Date { get; private set; } = DateTimeOffset.Now.Date;
 
-    public DateTimeOffset Time { get; private set; } = DateTimeOffset.Now;
+    public TimeSpan Time { get; private set; } = DateTimeOffset.Now.TimeOfDay;
 
     public string Value { get; set; } = string.Empty;
 
