@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1",
+  "version": "0.0.2",
   "name": "frontend",
   "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@gmail.com>",
   "description": "The frontend application for a ASP.NET Core Web API that measures temperature and air humidity through a Arduino IoT device.",
@@ -35,9 +35,9 @@
     "nswag": "nswag run nswag.json /runTime:Net80 --write src/**/api.generated.ts",
     "preview": "vite preview",
     "prepare": "cd .. && husky frontend/.husky",
-    "push-patch": "npm version patch && git push",
-    "push-minor": "npm version minor && git push",
-    "push-major": "npm version major && git push",
+    "push-patch": "npm version patch && git add .",
+    "push-minor": "npm version minor && git add .",
+    "push-major": "npm version major && git add .",
     "start": "vite"
   },
   "dependencies": {
