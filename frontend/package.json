@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
+  "version": "0.0.1",
   "name": "frontend",
-  "description": "The frontend project for a ASP.NET Core Web API that measures air temperature through a Arduino IoT device.",
-  "license": "MIT",
   "author": "Burhan Mohammad Sarfraz",
+  "description": "The frontend application for a ASP.NET Core Web API that measures temperature and air humidity through a Arduino IoT device.",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "browserslist": {
