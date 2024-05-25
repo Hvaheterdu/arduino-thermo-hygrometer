@@ -35,9 +35,7 @@
     "nswag": "nswag run nswag.json /runTime:Net80 --write src/**/api.generated.ts",
     "preview": "vite preview",
     "prepare": "cd .. && husky frontend/.husky",
-    "version-patch": "npm version patch",
-    "version-minor": "npm version minor",
-    "version-major": "npm version major",
+    "update-version": "npm run version",
     "start": "vite"
   },
   "dependencies": {
