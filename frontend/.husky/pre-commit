@@ -1,5 +1,5 @@
 cd frontend
-if git diff --name-only --cached | grep 'frontend/';
+if git diff | grep 'frontend/';
   then
   npm run lint-staged
 fi
