@@ -4,6 +4,7 @@ using ArduinoThermometer.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArduinoThermometer.API.Migrations
 {
     [DbContext(typeof(ArduinoThermometerDbContext))]
-    partial class ArduinoThermometerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525205339_AddColumnNamedHumidity")]
+    partial class AddColumnNamedHumidity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace ArduinoThermometer.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Temperatures", (string)null);
+                    b.ToTable("Temperatures");
                 });
 #pragma warning restore 612, 618
         }

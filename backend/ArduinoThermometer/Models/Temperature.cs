@@ -12,8 +12,11 @@ public class Temperature
 
     public string Value { get; set; } = string.Empty;
 
-    public Temperature(string value)
+    public string Humidity { get; set; } = string.Empty;
+
+    public Temperature(string value, string humidity)
     {
         Value = value;
+        Humidity = humidity;
     }
 }
