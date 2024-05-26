@@ -34,7 +34,7 @@ CURRENT_VERSION=$(jq -r '.version' package.json)
 npm version $BUMP_TYPE --no-git-tag-version
 
 # Get the new version from package.json
-NEW_VERSION=$(jq -r '.version' package.json 1>/dev/null)
+NEW_VERSION=$(jq -r '.version' package.json 0>/dev/null)
 
 # Stage the package.json and package-lock.json files
 git add .
