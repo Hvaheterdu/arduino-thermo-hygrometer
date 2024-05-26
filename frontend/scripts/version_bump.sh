@@ -28,7 +28,9 @@ if [[ "$BUMP_TYPE" != "patch" && "$BUMP_TYPE" != "minor" && "$BUMP_TYPE" != "maj
 fi
 
 # Get the current version from package.json
-CURRENT_VERSION=$(jq -r '.version' package.json)
+CURRENT_VERSION=$(jq '.version' package.json)
+
+echo "Current package.json version: $CURRENT_VERSION"
 
 # Bump the version
 npm version $BUMP_TYPE --no-git-tag-version
