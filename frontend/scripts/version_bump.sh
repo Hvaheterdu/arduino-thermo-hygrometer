@@ -32,10 +32,10 @@ CURRENT_VERSION=$(jq -r '.version' package.json)
 echo "Current package.json version: $CURRENT_VERSION"
 
 # Bump the version
-npm version $BUMP_TYPE --no-git-tag-version
+npm version $BUMP_TYPE
 
 # Get the new version from package.json
-NEW_VERSION=$(jq '.version' package.json)
+NEW_VERSION=$(jq -r '.version' package.json)
 
 # Stage the package.json and package-lock.json files
 git add .
