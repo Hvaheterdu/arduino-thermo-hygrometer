@@ -1,7 +1,7 @@
 using ArduinoThermometer.API;
 using ArduinoThermometer.API.Data;
+using ArduinoThermometer.API.DTOs;
 using ArduinoThermometer.API.Middleware;
-using ArduinoThermometer.API.Models;
 using ArduinoThermometer.API.Repositories;
 using ArduinoThermometer.API.Services;
 using ArduinoThermometer.API.Validators;
@@ -75,9 +75,13 @@ builder.Services.AddSwaggerGen(options =>
 
 // Dependency injection DTOs, services, repositories and validators.
 builder.Services.AddTransient<TemperatureService>();
+builder.Services.AddTransient<BatteryService>();
 
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
-builder.Services.AddScoped<IValidator<Temperature>, TemperatureDtoValidator>();
+builder.Services.AddScoped<IBatteryRepository, BatteryRepository>();
+
+builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>();
+builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 
 // Register controller service.
 builder.Services.AddControllers();
