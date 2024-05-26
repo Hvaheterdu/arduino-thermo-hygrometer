@@ -1,5 +1,5 @@
 {
-  "version": "0.0.10",
+  "version": "0.0.11",
   "name": "frontend",
   "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@gmail.com>",
   "description": "The frontend application for a ASP.NET Core Web API that measures temperature and air humidity through a Arduino IoT device.",
@@ -36,9 +36,7 @@
     "preview": "vite preview",
     "prepare": "cd .. && husky frontend/.husky",
     "start": "vite",
-    "version-patch": "npm version patch",
-    "version-minor": "npm version minor",
-    "version-major": "npm version major"
+    "version-bump": "cd scripts && sh ./version_bump.sh"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.39.0",
