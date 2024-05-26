@@ -28,7 +28,7 @@ if [[ "$BUMP_TYPE" != "patch" && "$BUMP_TYPE" != "minor" && "$BUMP_TYPE" != "maj
 fi
 
 # Get the current version from package.json
-CURRENT_VERSION=$(jq '.version' package.json)
+CURRENT_VERSION=$(jq -r '.version' package.json)
 
 echo "Current package.json version: $CURRENT_VERSION"
 
@@ -36,7 +36,7 @@ echo "Current package.json version: $CURRENT_VERSION"
 npm version $BUMP_TYPE --no-git-tag-version
 
 # Get the new version from package.json
-NEW_VERSION=$(jq -r '.version' package.json 0>/dev/null)
+NEW_VERSION=$(jq '.version' package.json)
 
 # Stage the package.json and package-lock.json files
 git add .
