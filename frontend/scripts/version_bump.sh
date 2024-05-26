@@ -34,7 +34,7 @@ echo "Current project version: $CURRENT_VERSION"
 echo "New project version: "
 
 # Bump the version
-npm version $BUMP_TYPE --no-git-tag-version
+echo "New project version is $(npm version $BUMP_TYPE --no-git-tag-version)"
 
 echo
 
