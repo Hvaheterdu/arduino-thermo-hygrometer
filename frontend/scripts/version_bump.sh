@@ -34,7 +34,7 @@ echo "Current project version: $CURRENT_VERSION"
 echo
 
 # Bump the version
-echo "New project version is $(npm version $BUMP_TYPE --no-git-tag-version)"
+echo "New project version: $(npm version $BUMP_TYPE --no-git-tag-version)"
 echo
 
 # Get the new version from package.json
