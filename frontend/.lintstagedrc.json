@@ -1,6 +1,6 @@
 {
   "(*.html|*.css|*.json)": ["prettier --write"],
-  "*.{ts,tsx}": [
+  "src/**/*.{ts,tsx} !(*.generated.ts, *.d.ts, *.cjs, vite.config.ts)": [
     "prettier --write",
     "eslint src/** --report-unused-disable-directives --max-warnings 0"
   ]
