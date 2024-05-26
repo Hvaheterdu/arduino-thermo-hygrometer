@@ -1,2 +1,6 @@
 node_modules
-src/api/api.generated.ts
+dist
+vite.config.ts
+*.cjs
+*.d.ts
+*.generated.ts
