@@ -10,10 +10,10 @@ using Microsoft.OpenApi.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Configuration check.
-builder.Configuration.VerifyConfigurationExists("AzureKeyVault", "Url");
-builder.Configuration.VerifyConfigurationExists("MicrosoftGraph:GraphScope");
-builder.Configuration.VerifyConfigurationExists("CORS", "AllowedOrigin");
+// Verify configuration.
+builder.Configuration.VerifyConfiguration("AzureKeyVault", "Url");
+builder.Configuration.VerifyConfiguration("MicrosoftGraph:GraphScope");
+builder.Configuration.VerifyConfiguration("CORS", "AllowedOrigin");
 
 // Configure CORS.
 builder.Services.AddCors(options =>
@@ -32,7 +32,7 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddHttpsRedirection(options =>
     {
         options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-        options.HttpsPort = 5001;
+        options.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORTS:Development");
     });
 }
 else
@@ -40,7 +40,7 @@ else
     builder.Services.AddHttpsRedirection(options =>
     {
         options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
-        options.HttpsPort = 443;
+        options.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORT:Production");
     });
 }
 
@@ -58,8 +58,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1.0", new OpenApiInfo
     {
         Version = "v1.0",
-        Title = "Arduino Thermometer API.",
-        Description = "ASP.NET Core Web API for getting temperature from a Arduino Thermometer IoT Device.",
+        Title = "Arduino thermometer and air humidity API.",
+        Description = "ASP.NET Core Web API for getting temperature and air humidity from a Arduino IoT Device.",
         Contact = new OpenApiContact
         {
             Name = "Burhan Mohammad Sarfraz",
@@ -74,9 +74,10 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Dependency injection DTOs, services, repositories and validators.
-builder.Services.AddTransient<TemperatureService>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<IValidator<Temperature>, TemperatureDtoValidator>();
+
+builder.Services.AddTransient<TemperatureService>();
 
 // Register controller service.
 builder.Services.AddControllers();

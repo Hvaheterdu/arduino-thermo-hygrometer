@@ -1,5 +1,20 @@
-﻿namespace ArduinoThermometer.API.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record TemperatureDTO
+namespace ArduinoThermometer.API.DTOs;
+
+public record TemperatureDto
 {
+    [Required]
+    public DateTimeOffset Date { get; set; } = default!;
+
+    [Required]
+    public TimeSpan Time { get; set; } = default!;
+
+    [Required]
+    [StringLength(10)]
+    public string Temp { get; set; } = default!;
+
+    [Required]
+    [StringLength(10)]
+    public string Humidity { get; set; } = default!;
 }

@@ -1,22 +1,34 @@
-﻿namespace ArduinoThermometer.API.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ArduinoThermometer.API.Models;
 
 public class Temperature
 {
+    [Required]
     public int Id { get; private set; }
 
+    [Required]
     public Guid TemperatureGuid { get; private set; } = Guid.NewGuid();
 
-    public DateTimeOffset Date { get; private set; } = DateTimeOffset.Now.Date;
+    [Required]
+    public DateTimeOffset Date { get; set; } = DateTimeOffset.Now.Date;
 
-    public TimeSpan Time { get; private set; } = DateTimeOffset.Now.TimeOfDay;
+    [Required]
+    public TimeSpan Time { get; set; } = DateTimeOffset.Now.TimeOfDay;
 
-    public string Value { get; set; } = string.Empty;
+    [Required]
+    [StringLength(10)]
+    public string Temp { get; set; } = string.Empty;
 
+    [Required]
+    [StringLength(10)]
     public string Humidity { get; set; } = string.Empty;
 
-    public Temperature(string value, string humidity)
+    public Temperature(DateTimeOffset date, TimeSpan time, string temp, string humidity)
     {
-        Value = value;
+        Date = date;
+        Time = time;
+        Temp = temp;
         Humidity = humidity;
     }
 }

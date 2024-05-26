@@ -13,7 +13,7 @@ public static class ProgramExtensions
     /// <param name="value">The optional value to check against the configuration value.</param>
     /// <returns>The configuration object.</returns>
     /// <exception cref="ArgumentException"></exception>
-    public static IConfiguration VerifyConfigurationExists(this IConfiguration configuration, string key, string? value = null)
+    public static IConfiguration VerifyConfiguration(this IConfiguration configuration, string key, string? value = null)
     {
         string? configurationValue = value == null ? configuration.GetSection(key)?.Value : configuration.GetSection(key)[value!];
 

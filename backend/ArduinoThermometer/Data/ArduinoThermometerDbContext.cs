@@ -12,7 +12,7 @@ public class ArduinoThermometerDbContext : DbContext
     public DbSet<Temperature> Temperatures { get; set; } = null!;
 
     /// <summary>
-    /// Construct database table from model.
+    /// Construct database table from model with Id as key.
     /// </summary>
     /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)

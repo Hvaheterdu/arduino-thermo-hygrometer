@@ -1,6 +1,4 @@
-﻿using ArduinoThermometer.API.Repositories;
-using ArduinoThermometer.API.Services;
-using ArduinoThermometer.API.Validators;
+﻿using ArduinoThermometer.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArduinoThermometer.API.Controllers;
@@ -10,13 +8,9 @@ namespace ArduinoThermometer.API.Controllers;
 public class TemperatureController : ControllerBase
 {
     private readonly TemperatureService _temperatureService;
-    private readonly TemperatureRepository _temperatureRepository;
-    private readonly TemperatureDtoValidator _temperatureDtoValidator;
 
-    public TemperatureController(TemperatureService temperatureService, TemperatureRepository temperatureRepository, TemperatureDtoValidator temperatureDtoValidator)
+    public TemperatureController(TemperatureService temperatureService)
     {
         _temperatureService = temperatureService;
-        _temperatureRepository = temperatureRepository;
-        _temperatureDtoValidator = temperatureDtoValidator;
     }
 }
