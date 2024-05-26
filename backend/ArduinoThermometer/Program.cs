@@ -130,9 +130,6 @@ app.UseCors();
 app.UseAuthorization();
 app.UseAuthentication();
 
-// Serve frontend as static files from web application.
-app.UseStaticFiles();
-
 // Endpoints for controllers.
 app.MapControllers();
 
