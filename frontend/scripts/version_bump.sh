@@ -31,7 +31,6 @@ fi
 CURRENT_VERSION=$(jq -r '.version' package.json)
 
 echo "Current project version: $CURRENT_VERSION"
-echo
 
 # Bump the version
 echo "New project version: $(npm version $BUMP_TYPE --no-git-tag-version)"
