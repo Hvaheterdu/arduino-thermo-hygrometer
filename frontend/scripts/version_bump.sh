@@ -27,7 +27,7 @@ if [[ "$BUMP_TYPE" != "patch" && "$BUMP_TYPE" != "minor" && "$BUMP_TYPE" != "maj
 fi
 
 # Get the current version from package.json
-CURRENT_VERSION=$(jq -R '.version' package.json)
+CURRENT_VERSION=$(jq -r '.version' package.json)
 
 echo "Current package.json version: $CURRENT_VERSION"
 
