@@ -1,5 +1,5 @@
 ﻿namespace ArduinoThermometer.API.Repositories;
 
-public class TemperatureRepository
+public class TemperatureRepository : ITemperatureRepository
 {
 }

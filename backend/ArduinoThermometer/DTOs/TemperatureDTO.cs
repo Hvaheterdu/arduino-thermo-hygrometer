@@ -1,5 +1,5 @@
 ﻿namespace ArduinoThermometer.API.DTOs;
 
-public class TemperatureDTO
+public record TemperatureDTO
 {
 }
