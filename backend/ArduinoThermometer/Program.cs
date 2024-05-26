@@ -74,10 +74,10 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Dependency injection DTOs, services, repositories and validators.
+builder.Services.AddTransient<TemperatureService>();
+
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<IValidator<Temperature>, TemperatureDtoValidator>();
-
-builder.Services.AddTransient<TemperatureService>();
 
 // Register controller service.
 builder.Services.AddControllers();

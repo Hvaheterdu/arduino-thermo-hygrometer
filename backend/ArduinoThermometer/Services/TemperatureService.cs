@@ -1,15 +1,16 @@
-﻿using ArduinoThermometer.API.Repositories;
-using ArduinoThermometer.API.Validators;
+﻿using ArduinoThermometer.API.Models;
+using ArduinoThermometer.API.Repositories;
+using FluentValidation;
 
 namespace ArduinoThermometer.API.Services;
 
 public class TemperatureService
 {
-    private readonly TemperatureRepository _temperatureRepository;
-    private readonly TemperatureDtoValidator _temperatureDtoValidator;
+    private readonly ITemperatureRepository _temperatureRepository;
+    private readonly IValidator<Temperature> _temperatureDtoValidator;
     private readonly ILogger<TemperatureService> _logger;
 
-    public TemperatureService(TemperatureRepository temperatureRepository, TemperatureDtoValidator temperatureDtoValidator, ILogger<TemperatureService> logger)
+    public TemperatureService(ITemperatureRepository temperatureRepository, IValidator<Temperature> temperatureDtoValidator, ILogger<TemperatureService> logger)
     {
         _temperatureRepository = temperatureRepository;
         _temperatureDtoValidator = temperatureDtoValidator;
