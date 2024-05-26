@@ -31,7 +31,6 @@ fi
 CURRENT_VERSION=$(jq -r '.version' package.json)
 
 echo "Current project version: $CURRENT_VERSION"
-echo
 echo "New project version: "
 
 # Bump the version
