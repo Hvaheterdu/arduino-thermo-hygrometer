@@ -19,7 +19,6 @@ fi
 BUMP_TYPE=$1
 
 echo "Automatically performing a $BUMP_TYPE update to package.json."
-echo
 
 # Check if the provided argument is valid
 if [[ "$BUMP_TYPE" != "patch" && "$BUMP_TYPE" != "minor" && "$BUMP_TYPE" != "major" ]]; then
