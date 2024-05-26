@@ -19,6 +19,7 @@ fi
 BUMP_TYPE=$1
 
 echo "Automatically performing a $BUMP_TYPE update to project."
+echo
 
 # Check if the provided argument is valid
 if [[ "$BUMP_TYPE" != "patch" && "$BUMP_TYPE" != "minor" && "$BUMP_TYPE" != "major" ]]; then
@@ -35,6 +36,8 @@ echo "New project version: "
 
 # Bump the version
 npm version $BUMP_TYPE --no-git-tag-version
+
+echo
 
 # Get the new version from package.json
 NEW_VERSION=$(jq -r '.version' package.json)
