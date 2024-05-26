@@ -18,6 +18,8 @@ fi
 
 BUMP_TYPE=$1
 
+echo "Automatically performing a $BUMP_TYPE update to package.json.\n"
+
 # Check if the provided argument is valid
 if [[ "$BUMP_TYPE" != "patch" && "$BUMP_TYPE" != "minor" && "$BUMP_TYPE" != "major" ]]; then
   echo "Invalid version type. Use \"patch\", \"minor\", or \"major\"."
@@ -39,4 +41,4 @@ git add .
 # Commit the changes
 git commit -m "Bump version from $CURRENT_VERSION to $NEW_VERSION"
 
-echo "Version bumped from $CURRENT_VERSION to $NEW_VERSION and changes committed successfully."
+echo "\nVersion bumped from $CURRENT_VERSION to $NEW_VERSION and changes committed successfully."
