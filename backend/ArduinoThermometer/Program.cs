@@ -90,7 +90,11 @@ builder.Services.AddControllers();
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 // HTTP/HTTPS logging service
-builder.Services.AddHttpLogging(logging => logging.RequestBodyLogLimit = 4096);
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.ResponseBodyLogLimit = 8096;
+    logging.RequestBodyLogLimit = 8096;
+});
 
 // Register database, migrations and run migrations on startup
 builder.RegisterDatabaseAndRunMigrationsOnStartup<ArduinoThermometerDbContext>();
