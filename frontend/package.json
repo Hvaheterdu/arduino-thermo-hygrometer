@@ -36,7 +36,7 @@
     "preview": "vite preview",
     "prepare": "cd .. && husky frontend/.husky",
     "start": "vite",
-    "version-bump": "cd scripts && sh ./version_bump.sh"
+    "version-bump": "sh scripts/version_bump.sh"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.39.0",
