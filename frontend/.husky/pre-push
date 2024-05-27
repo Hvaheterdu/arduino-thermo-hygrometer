@@ -1,0 +1,5 @@
+cd frontend
+if git status --porcelain | grep 'frontend/';
+  then
+  npm run format:check
+fi
