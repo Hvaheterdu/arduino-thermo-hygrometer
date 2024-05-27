@@ -6,5 +6,5 @@ read AHEAD_COMMIT_COUNT BEHIND_COMMIT_COUNT <<< "$DIFF_COMMITS"
 
 if $AHEAD_COMMIT_COUNT -gt $BEHIND_COMMIT_COUNT | grep 'frontend/';
 then
-  echo "hello"
+  npm run format:check
 fi
