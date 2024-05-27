@@ -12,6 +12,7 @@ module.exports = {
   ],
   extends: [
     "eslint:recommended",
+    "plugin:@stylistic/recommended-extends",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
