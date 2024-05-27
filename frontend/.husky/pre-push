@@ -4,6 +4,8 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 DIFF_COMMITS=$(git rev-list --left-right --count origin/main...main)
 read AHEAD_COMMIT_COUNT BEHIND_COMMIT_COUNT <<< "$DIFF_COMMITS"
 
+echo AHEAD_COMMIT_COUNT BEHIND_COMMIT_COUNT
+
 if $AHEAD_COMMIT_COUNT -gt $BEHIND_COMMIT_COUNT | grep 'frontend/'; then
   npm run format:check
 fi
