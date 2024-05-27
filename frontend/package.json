@@ -1,8 +1,20 @@
 {
   "version": "0.0.40",
   "name": "frontend",
-  "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@gmail.com>",
+  "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@outlook.com>",
   "description": "The frontend application for a ASP.NET Core Web API that measures temperature and air humidity through a Arduino IoT device.",
+  "keywords": [
+    "TypeScript",
+    "React",
+    "Arduino",
+    "IoT",
+    "Temperature",
+    "Air humidity"
+  ],
+  "bugs": {
+    "url": "https://github.com/Hvaheterdu/arduino-thermometer/issues",
+    "email": "burhan.mohammad.sarfraz@outlook.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
