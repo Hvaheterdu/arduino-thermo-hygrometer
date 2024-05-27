@@ -1,5 +1,5 @@
 cd frontend
 if git status --porcelain | grep 'frontend/';
-then
+  then
   npm run lint-staged
 fi
