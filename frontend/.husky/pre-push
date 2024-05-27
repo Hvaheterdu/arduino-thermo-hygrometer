@@ -1,7 +1,2 @@
 cd frontend
-if git diff --cached --name-only | grep 'frontend/';
-then
-  echo "running....."
-  npm run format:check
-  echo "run completted"
-fi
+npm run format:check
