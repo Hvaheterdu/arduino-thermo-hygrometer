@@ -1,5 +1,5 @@
 cd frontend
-if git status --porcelain | grep 'frontend/';
-  then
+if git diff --cached --name-only | grep 'frontend/';
+then
   npm run format:check
 fi
