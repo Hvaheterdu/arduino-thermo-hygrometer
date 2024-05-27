@@ -2,5 +2,5 @@ node_modules
 dist
 vite.config.ts
 *.cjs
-*.d.ts
 *.generated.ts
+*.d.ts
