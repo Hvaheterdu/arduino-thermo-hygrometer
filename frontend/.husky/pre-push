@@ -1,4 +1,5 @@
 cd frontend
 if git diff HEAD --quiet | grep 'frontend/'; then
+  echo "TEST"
   npm run format:check
 fi
