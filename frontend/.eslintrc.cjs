@@ -7,6 +7,7 @@ module.exports = {
     "react",
     "react-hooks",
     "react-refresh",
+    "@stylistic",
     "prettier",
   ],
   extends: [
@@ -42,6 +43,13 @@ module.exports = {
   },
   rules: {
     "filename-rules/match": [2, { ".ts": "camelcase", ".tsx": "pascalcase" }],
+    "@stylistic/no-trailing-spaces": [
+      "error",
+      {
+        skipBlankLines: true,
+        ignoreComments: true,
+      },
+    ],
     "no-console": "error",
     "no-unused-vars": "off",
     "no-debugger": "error",
