@@ -123,8 +123,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// Test comment.
-
 // CORS middleware.
 app.UseCors();
 
