@@ -8,7 +8,7 @@
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
-    "declareDir": "/src/types/"
+    "declareDir": "/src/types/",
 
     /* Bundler mode */
     "moduleResolution": "NodeNext",
