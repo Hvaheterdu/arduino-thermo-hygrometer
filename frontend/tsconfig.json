@@ -5,6 +5,10 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "NodeNext",
     "skipLibCheck": true,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "declareDir": "/src/types/"
 
     /* Bundler mode */
     "moduleResolution": "NodeNext",
