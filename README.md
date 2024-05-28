@@ -1,1 +1,1 @@
-# Arduino Air Humidity and Temperature Sensor
+# Arduino Air Humidity and Temperature IoT Device
