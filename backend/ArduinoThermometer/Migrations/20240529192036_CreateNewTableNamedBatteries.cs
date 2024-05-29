@@ -5,7 +5,7 @@
 namespace ArduinoThermometer.API.Migrations;
 
 /// <inheritdoc />
-public partial class CreateNewTableNamedBattery : Migration
+public partial class CreateNewTableNamedBatteries : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
@@ -13,7 +13,7 @@ public partial class CreateNewTableNamedBattery : Migration
         migrationBuilder.CreateTable(name: "Batteries", columns: table => new
         {
             id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+        .Annotation("SqlServer:Identity", "1, 1"),
             temperature_id = table.Column<int>(type: "int", nullable: false),
             battery_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
             date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArduinoThermometer.API.Migrations
 {
     [DbContext(typeof(ArduinoThermometerDbContext))]
-    [Migration("20240526182118_CreateNewTableNamedBattery")]
-    partial class CreateNewTableNamedBattery
+    [Migration("20240529192036_CreateNewTableNamedBatteries")]
+    partial class CreateNewTableNamedBatteries
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
