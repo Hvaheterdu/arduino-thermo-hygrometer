@@ -37,7 +37,7 @@ public static class ProgramExtensions
     {
         builder.Services.AddDbContext<ArduinoThermometerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        bool.TryParse(builder.Configuration.GetSection("Database")["RunDatabaseMigrationOnStartup"], out bool runDatabaseMigrationOnStartup);
+        bool.TryParse(builder.Configuration.GetSection("Database")["RunDatabaseMigrationsOnStartup"], out bool runDatabaseMigrationOnStartup);
 
         if (runDatabaseMigrationOnStartup)
         {
