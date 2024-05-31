@@ -1,3 +1,4 @@
+/* eslint import-x/no-default-export: 0 */
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import mkcert from "vite-plugin-mkcert";
@@ -15,7 +16,6 @@ export default defineConfig({
     host: "localhost",
     port: 3001,
     strictPort: true,
-    https: true,
     cors: true,
     headers: {
       "Content-Security-Policy":
