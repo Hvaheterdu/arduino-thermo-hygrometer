@@ -1,6 +1,6 @@
 node_modules
 dist
-vite.config.ts
+build
 *.cjs
 *.d.ts
 *.generated.ts
