@@ -3,7 +3,7 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "NodeNext",
+    "module": "ESNext",
     "skipLibCheck": true,
     "outDir": "dist",
     "declaration": true,
@@ -11,7 +11,7 @@
     "declarationDir": "/src/types/",
 
     /* Bundler mode */
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -29,7 +29,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "strict": true,
+    "strict": true
   },
   "include": ["src"],
   "references": [
