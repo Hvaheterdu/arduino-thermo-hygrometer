@@ -1,5 +1,5 @@
 ﻿using ArduinoThermoHygrometer.DTOs;
-using ArduinoThermoHygrometer.Models;
+using ArduinoThermoHygrometer.Entities;
 
 namespace ArduinoThermoHygrometer.Mapper;
 

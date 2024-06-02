@@ -1,4 +1,4 @@
-﻿using ArduinoThermoHygrometer.Models;
+﻿using ArduinoThermoHygrometer.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArduinoThermoHygrometer.Data;
