@@ -7,6 +7,7 @@ public class Battery
 {
     [Key]
     [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; init; }
 
     [Required]
@@ -14,20 +15,23 @@ public class Battery
 
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid BatteryGuid { get; init; } = Guid.NewGuid();
+    public Guid BatteryGuid { get; init; }
 
     [Required]
-    public DateTimeOffset Date { get; init; } = DateTimeOffset.Now.Date;
+    public DateOnly Date { get; init; }
 
     [Required]
-    public TimeSpan Time { get; init; } = DateTimeOffset.Now.TimeOfDay;
+    public TimeOnly Time { get; init; }
 
     [Required]
     [StringLength(10)]
-    public string BatteryStatus { get; set; }
+    public string BatteryStatus { get; set; } = string.Empty;
 
     public Battery(string batteryStatus)
     {
+        BatteryGuid = Guid.NewGuid();
+        Date = DateOnly.FromDateTime(DateTimeOffset.Now.Date);
+        Time = TimeOnly.FromTimeSpan(DateTimeOffset.Now.TimeOfDay);
         BatteryStatus = batteryStatus;
     }
 }

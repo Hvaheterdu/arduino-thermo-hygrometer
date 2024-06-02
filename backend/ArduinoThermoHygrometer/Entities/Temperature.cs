@@ -12,13 +12,13 @@ public class Temperature
 
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid TemperatureGuid { get; init; } = Guid.NewGuid();
+    public Guid TemperatureGuid { get; init; }
 
     [Required]
-    public DateTimeOffset Date { get; init; } = DateTimeOffset.Now.Date;
+    public DateOnly Date { get; init; }
 
     [Required]
-    public TimeSpan Time { get; init; } = DateTimeOffset.Now.TimeOfDay;
+    public TimeOnly Time { get; init; }
 
     [Required]
     [StringLength(10)]
@@ -30,6 +30,9 @@ public class Temperature
 
     public Temperature(string temp, string airHumidity)
     {
+        TemperatureGuid = Guid.NewGuid();
+        Date = DateOnly.FromDateTime(DateTimeOffset.Now.Date);
+        Time = TimeOnly.FromTimeSpan(DateTimeOffset.Now.TimeOfDay);
         Temp = temp;
         AirHumidity = airHumidity;
     }
