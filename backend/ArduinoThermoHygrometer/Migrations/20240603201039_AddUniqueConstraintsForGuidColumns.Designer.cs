@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArduinoThermoHygrometer.Migrations
 {
     [DbContext(typeof(ArduinoThermoHygrometerDbContext))]
-    [Migration("20240529230252_AddDefaultValuesForDateAndTimeColumnsForEntireDb")]
-    partial class AddDefaultValuesForDateAndTimeColumnsForEntireDb
+    [Migration("20240603201039_AddUniqueConstraintsForGuidColumns")]
+    partial class AddUniqueConstraintsForGuidColumns
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace ArduinoThermoHygrometer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ArduinoThermoHygrometer.Models.Battery", b =>
+            modelBuilder.Entity("ArduinoThermoHygrometer.Entities.Battery", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,21 +42,24 @@ namespace ArduinoThermoHygrometer.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<int>("TemperatureId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("Time")
+                    b.Property<TimeOnly>("Time")
                         .HasColumnType("time");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BatteryGuid")
+                        .IsUnique();
+
                     b.ToTable("Batteries");
                 });
 
-            modelBuilder.Entity("ArduinoThermoHygrometer.Models.Temperature", b =>
+            modelBuilder.Entity("ArduinoThermoHygrometer.Entities.Temperature", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,8 +72,8 @@ namespace ArduinoThermoHygrometer.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<string>("Temp")
                         .IsRequired()
@@ -81,10 +84,13 @@ namespace ArduinoThermoHygrometer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<TimeSpan>("Time")
+                    b.Property<TimeOnly>("Time")
                         .HasColumnType("time");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TemperatureGuid")
+                        .IsUnique();
 
                     b.ToTable("Temperatures");
                 });

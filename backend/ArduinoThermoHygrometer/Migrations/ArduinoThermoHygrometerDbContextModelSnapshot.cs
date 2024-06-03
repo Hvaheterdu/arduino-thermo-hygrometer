@@ -50,6 +50,9 @@ namespace ArduinoThermoHygrometer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BatteryGuid")
+                        .IsUnique();
+
                     b.ToTable("Batteries");
                 });
 
@@ -82,6 +85,9 @@ namespace ArduinoThermoHygrometer.Migrations
                         .HasColumnType("time");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TemperatureGuid")
+                        .IsUnique();
 
                     b.ToTable("Temperatures");
                 });

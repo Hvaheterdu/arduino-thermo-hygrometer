@@ -14,9 +14,9 @@ public partial class InitialCreate : Migration
         {
             id = table.Column<int>(type: "int", nullable: false)
                 .Annotation("SqlServer:Identity", "1, 1"),
-            temperature_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-            date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-            time = table.Column<TimeSpan>(type: "time", nullable: false),
+            temperature_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+            date = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS DATE)"),
+            time = table.Column<TimeOnly>(type: "time", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS TIME)"),
             temp = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
             air_humidity = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
         },
@@ -27,9 +27,9 @@ public partial class InitialCreate : Migration
             id = table.Column<int>(type: "int", nullable: false)
                 .Annotation("SqlServer:Identity", "1, 1"),
             temperature_id = table.Column<int>(type: "int", nullable: false),
-            battery_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-            date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-            time = table.Column<TimeSpan>(type: "time", nullable: false),
+            battery_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+            date = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS DATE)"),
+            time = table.Column<TimeOnly>(type: "time", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS TIME)"),
             battery_status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
         },
         constraints: table =>
