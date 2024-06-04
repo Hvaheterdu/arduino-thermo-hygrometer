@@ -1,0 +1,93 @@
+module.exports = {
+  root: true,
+  env: { browser: true, es2020: true },
+  plugins: [
+    "@typescript-eslint",
+    "filename-rules",
+    "react",
+    "react-hooks",
+    "react-refresh",
+    "prettier",
+  ],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked",
+    "plugin:import-x/recommended",
+    "plugin:import-x/errors",
+    "plugin:import-x/warnings",
+    "plugin:import-x/typescript",
+    "prettier",
+  ],
+  ignorePatterns: ["dist", "node_modules", "build", "*.cjs", "*.d.ts", "*.generated.ts"],
+  settings: {
+    react: {
+      version: "18.3",
+    },
+  },
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: true,
+    tsconfigRootDir: __dirname,
+    ecmaFeatures: {
+      jsx: true,
+      impliedStrict: true,
+    },
+  },
+  rules: {
+    "filename-rules/match": [2, { ".ts": "camelcase", ".tsx": "pascalcase" }],
+    "no-console": "error",
+    "no-unused-vars": "off",
+    "no-debugger": "error",
+    "no-use-before-define": "error",
+    "import-x/no-unresolved": "error",
+    "import-x/no-default-export": "error",
+    "react-refresh/only-export-components": "warn",
+    "@typescript-eslint/no-unsafe-argument": "error",
+    "@typescript-eslint/no-unsafe-assignment": "error",
+    "@typescript-eslint/no-unsafe-call": "error",
+    "@typescript-eslint/no-unsafe-member-access": "error",
+    "@typescript-eslint/no-unsafe-return": "error",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/prefer-namespace-keyword": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        ignoreRestSiblings: true,
+      },
+    ],
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        selector: "default",
+        format: ["camelCase"],
+        leadingUnderscore: "allow",
+      },
+      {
+        selector: "variable",
+        format: ["PascalCase", "camelCase"],
+        leadingUnderscore: "allow",
+      },
+      {
+        selector: "parameter",
+        format: ["camelCase"],
+        leadingUnderscore: "allow",
+      },
+      {
+        selector: "property",
+        format: null,
+        leadingUnderscore: "allow",
+      },
+      {
+        selector: "typeLike",
+        format: ["PascalCase"],
+      },
+    ],
+  },
+};
