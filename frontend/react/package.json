@@ -1,5 +1,5 @@
 {
-  "version": "0.0.49",
+  "version": "0.0.50",
   "name": "frontend-react",
   "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@outlook.com>",
   "description": "The frontend application for a ASP.NET Core Web API that measures temperature and air humidity through a Arduino IoT device.",
@@ -37,7 +37,6 @@
   ],
   "scripts": {
     "build": "tsc && vite build",
-    "build:test": "tsc && vite build --mode test",
     "dev": "vite",
     "format": "prettier --write \"*.{ts,tsx,html,css,json,md}\"",
     "format:check": "prettier --check \"*.{ts,tsx,html,css,json,md}\"",
