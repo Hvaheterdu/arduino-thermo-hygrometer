@@ -1,2 +1,4 @@
 cd frontend/react/
-exit 1
+if git status --porcelain | grep 'react/'; then
+  npm run lint-staged
+fi
