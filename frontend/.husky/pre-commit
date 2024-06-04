@@ -1,4 +1,0 @@
-cd frontend
-if git status --porcelain | grep 'frontend/'; then
-  npm run lint-staged
-fi

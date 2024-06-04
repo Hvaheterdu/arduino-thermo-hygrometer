@@ -1,5 +1,0 @@
-# Frontend
-
-## Directory structure
-
-## Usage
