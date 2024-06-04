@@ -3,6 +3,7 @@ export const App = (): JSX.Element => {
     <>
       <h1>React 18 Alpha</h1>
       <p>This works.</p>
+      <p>This works 2.</p>
     </>
   );
 };
