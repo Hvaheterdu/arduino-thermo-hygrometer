@@ -1,4 +1,2 @@
 cd frontend/react/
-if git status --porcelain | grep 'react/'; then
-  exit 1
-fi
+exit 1
