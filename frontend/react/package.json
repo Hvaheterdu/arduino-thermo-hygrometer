@@ -1,6 +1,6 @@
 {
-  "version": "0.0.48",
-  "name": "frontend",
+  "version": "0.0.49",
+  "name": "frontend-react",
   "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@outlook.com>",
   "description": "The frontend application for a ASP.NET Core Web API that measures temperature and air humidity through a Arduino IoT device.",
   "keywords": [
