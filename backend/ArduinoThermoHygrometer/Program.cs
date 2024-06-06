@@ -117,11 +117,8 @@ if (!app.Environment.IsProduction())
 }
 
 // HSTS (Strict-Transport-Security header) and HTTPS redirect middleware.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-    app.UseHsts();
-}
+app.UseHttpsRedirection();
+app.UseHsts();
 
 // CORS middleware.
 app.UseCors();
