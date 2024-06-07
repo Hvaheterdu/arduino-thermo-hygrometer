@@ -9,8 +9,8 @@ public static class RuntimeVariables
         public const string Development = "Development";
         public const string Staging = "Staging";
         public const string Test = "Test";
+        public const string Production = "Production";
         public const string UnitTest = "UnitTest";
         public const string IntegrationTest = "IntegrationTest";
-        public const string Production = "Production";
     }
 }
