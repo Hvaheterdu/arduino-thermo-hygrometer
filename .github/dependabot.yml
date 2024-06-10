@@ -10,6 +10,8 @@ updates:
     directory: "/frontend/react/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "eslint"
 
   - package-ecosystem: "npm"
     directory: "/frontend/vue/"
