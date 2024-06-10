@@ -77,6 +77,6 @@
     "vite": "^5.2.12",
     "vite-plugin-mkcert": "^1.17.5",
     "vue-eslint-parser": "^9.4.3",
-    "vue-tsc": "^2.0.19"
+    "vue-tsc": "^2.0.21"
   }
 }
