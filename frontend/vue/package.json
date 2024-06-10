@@ -53,7 +53,7 @@
     "version-bump-sh": "sh scripts/version_bump_sh.sh"
   },
   "dependencies": {
-    "@tanstack/vue-query": "^5.40.1",
+    "@tanstack/vue-query": "^5.41.0",
     "nswag": "^14.0.7",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
