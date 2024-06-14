@@ -49,7 +49,7 @@ builder.Services.AddHsts(options =>
 {
     options.Preload = true;
     options.IncludeSubDomains = true;
-    options.MaxAge = TimeSpan.FromDays(30);
+    options.MaxAge = TimeSpan.FromSeconds(63072000);
 });
 
 // Swagger/OpenAPI (https://aka.ms/aspnetcore/swashbuckle).
@@ -58,8 +58,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1.0", new OpenApiInfo
     {
         Version = "v1.0",
-        Title = "Arduino thermometer and air humidity API.",
-        Description = "ASP.NET Core Web API for getting temperature and air humidity from a Arduino IoT Device.",
+        Title = "Arduino thermo hygrometer API.",
+        Description = "ASP.NET Core Web API for a arduino thermo hygrometer IoT device.",
         Contact = new OpenApiContact
         {
             Name = "Burhan Mohammad Sarfraz",

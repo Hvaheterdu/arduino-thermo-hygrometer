@@ -11,17 +11,24 @@ public class SecurityHeadersMiddleware
 
     public Task Invoke(HttpContext httpContext)
     {
+        // Cache-Control. Header used to direct caching done by browsers. Providing no-store indicates that any caches of any kind (private or shared)
+        // should not store the response that contains the header.
+        if (!httpContext.Response.Headers.ContainsKey("Cache-Control"))
+        {
+            httpContext.Response.Headers.Append("Cache-Control", "no-store");
+        }
+
         // Content-Security-Policy. Added layer of security that helps to detect and mitigate certain types of attacks,
         // including Cross-Site Scripting (XSS) and data injection attacks.
         if (!httpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
         {
-            httpContext.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; connect-src ws: http: https: 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;");
+            httpContext.Response.Headers.Append("Content-Security-Policy", "default-src 'none'; style-src 'self'; img-src 'self; font-src 'self'; script-src 'self'; frame-ancestors 'none';");
         }
 
         // Permisson-Policy. Provides mechanisms for web developers to explicitly declare what functionality can and cannot be used on a website.
         if (!httpContext.Response.Headers.ContainsKey("Permisson-Policy"))
         {
-            httpContext.Response.Headers.Append("Permisson-Policy", "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'");
+            httpContext.Response.Headers.Append("Permisson-Policy", "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()");
         }
 
         // Referrer-Policy. HTTP header that controls how much referrer information (sent with the Referer header) should be included with requests.
