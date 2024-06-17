@@ -11,8 +11,6 @@ using Microsoft.OpenApi.Models;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Verify configuration.
-builder.Configuration.VerifyConfiguration("AzureKeyVault", "Url");
-builder.Configuration.VerifyConfiguration("MicrosoftGraph", "GraphScope");
 builder.Configuration.VerifyConfiguration("CORS", "AllowedOrigin");
 
 // Configure CORS.
