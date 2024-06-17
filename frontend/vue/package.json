@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@tanstack/vue-query": "^5.41.0",
-    "nswag": "^14.0.7",
+    "nswag": "^14.0.8",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
   },
