@@ -7,16 +7,11 @@ version: 2
 updates:
 
   - package-ecosystem: "npm"
-    directory: "/frontend/react/"
+    directory: "/frontend"
     schedule:
       interval: "weekly"
     ignore:
       - dependency-name: "eslint"
-
-  - package-ecosystem: "npm"
-    directory: "/frontend/vue/"
-    schedule:
-      interval: "weekly"
 
   - package-ecosystem: "github-actions"
     directory: "/"
