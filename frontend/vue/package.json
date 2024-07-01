@@ -56,7 +56,7 @@
     "@tanstack/vue-query": "^5.45.0",
     "nswag": "^14.0.8",
     "vue": "^3.4.30",
-    "vue-router": "^4.3.2"
+    "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.15.0",
