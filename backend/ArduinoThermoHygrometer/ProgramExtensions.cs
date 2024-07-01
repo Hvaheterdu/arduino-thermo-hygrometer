@@ -44,9 +44,21 @@ public static class ProgramExtensions
             using IServiceScope scope = builder.Services.BuildServiceProvider().CreateScope();
             ArduinoThermoHygrometerDbContext arduinoThermoHygrometerDbContext = scope.ServiceProvider.GetRequiredService<ArduinoThermoHygrometerDbContext>();
 
-            if (!arduinoThermoHygrometerDbContext.Database.CanConnect() || !arduinoThermoHygrometerDbContext.Database.EnsureCreated())
+            bool attemptDatabaseConnection = arduinoThermoHygrometerDbContext.Database.CanConnect();
+            if (!attemptDatabaseConnection)
             {
                 throw new NotImplementedException("Unable to connect to database. Check if the connection string is correct in appsettings.Development.json.");
+            }
+
+            if (!attemptDatabaseConnection)
+            {
+                arduinoThermoHygrometerDbContext.Database.EnsureCreated();
+            }
+
+            bool isSqlServer = arduinoThermoHygrometerDbContext.Database.IsSqlServer();
+            if (!isSqlServer)
+            {
+                throw new NotImplementedException("Database provider is not SQL Server.");
             }
 
             arduinoThermoHygrometerDbContext.Database.Migrate();
