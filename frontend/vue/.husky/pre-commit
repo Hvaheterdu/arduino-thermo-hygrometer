@@ -1,4 +1,0 @@
-cd frontend/vue/
-if git status --porcelain | grep 'vue/'; then
-  npm run lint-staged
-fi
