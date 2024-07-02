@@ -47,12 +47,12 @@ public static class ProgramExtensions
             bool attemptDatabaseConnection = arduinoThermoHygrometerDbContext.Database.CanConnect();
             if (!attemptDatabaseConnection)
             {
-                throw new NotImplementedException("Unable to connect to database. Check if the connection string is correct in appsettings.Development.json.");
+                arduinoThermoHygrometerDbContext.Database.EnsureCreated();
             }
 
             if (!attemptDatabaseConnection)
             {
-                arduinoThermoHygrometerDbContext.Database.EnsureCreated();
+                throw new NotImplementedException("Unable to connect to database. Check if the connection string is correct in appsettings.Development.json.");
             }
 
             bool isSqlServer = arduinoThermoHygrometerDbContext.Database.IsSqlServer();
