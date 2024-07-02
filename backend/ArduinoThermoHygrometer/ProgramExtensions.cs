@@ -48,7 +48,6 @@ public static class ProgramExtensions
             bool attemptDatabaseConnection = arduinoThermoHygrometerDbContext.Database.CanConnect();
             if (!attemptDatabaseConnection)
             {
-                arduinoThermoHygrometerDbContext.Database.EnsureCreated();
                 arduinoThermoHygrometerDbContext.Database.Migrate();
             }
 
