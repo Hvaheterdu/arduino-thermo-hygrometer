@@ -45,9 +45,9 @@ else
 // HSTS (Strict-Transport-Security header) service.
 builder.Services.AddHsts(options =>
 {
-    options.Preload = true;
+    options.MaxAge = TimeSpan.FromSeconds(31536000);
     options.IncludeSubDomains = true;
-    options.MaxAge = TimeSpan.FromSeconds(63072000);
+    options.Preload = true;
 });
 
 // Swagger/OpenAPI (https://aka.ms/aspnetcore/swashbuckle).
@@ -115,8 +115,8 @@ if (!app.Environment.IsProduction())
 }
 
 // HSTS (Strict-Transport-Security header) and HTTPS redirect middleware.
-app.UseHttpsRedirection();
 app.UseHsts();
+app.UseHttpsRedirection();
 
 // CORS middleware.
 app.UseCors();
