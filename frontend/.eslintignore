@@ -1,6 +1,5 @@
-node_modules
-dist
 build
+dist
+node_modules
 *.cjs
-*.d.ts
 *.generated.ts

@@ -22,7 +22,7 @@ public class SecurityHeadersMiddleware
         // including Cross-Site Scripting (XSS) and data injection attacks.
         if (!httpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
         {
-            httpContext.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; connect-src 'self' data: http: ws:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; script-src 'self' 'unsafe-inline'; frame-ancestors 'none';");
+            httpContext.Response.Headers.Append("Content-Security-Policy", "base-uri 'self'; connect-src data: http: ws: 'self'; default-src 'self';  frame-ancestors 'none'; font-src 'self'; img-src 'self' data:; object-src 'none';");
         }
 
         // Permisson-Policy. Provides mechanisms for web developers to explicitly declare what functionality can and cannot be used on a website.
