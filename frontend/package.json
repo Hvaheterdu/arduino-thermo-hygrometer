@@ -40,7 +40,7 @@
     "dev": "vite",
     "format": "prettier --write \"*.{ts,tsx,html,css,json,md}\"",
     "format:check": "prettier --check \"*.{ts,tsx,html,css,json,md}\"",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint src/** --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint-staged": "lint-staged",
     "nswag": "nswag run nswag.json /runTime:Net80 --write src/**/api.generated.ts",
     "preview": "vite preview",

@@ -57,7 +57,7 @@ module.exports = {
     ],
     "no-console": "error",
     "no-unused-vars": "off",
-    "no-debugger": "warn",
+    "no-debugger": "error",
     "no-use-before-define": "error",
     "import-x/no-unresolved": "error",
     "import-x/no-default-export": "error",
