@@ -33,7 +33,7 @@ public static class ProgramExtensions
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     /// <exception cref="NotImplementedException">Thrown when unable to connect to the database.</exception>"
-    /// <exception cref="NotImplementedException">Thrown when the database provider is not SQL Server.</exception>"
+    /// <exception cref="NotSupportedException">Thrown when the database provider is not SQL Server.</exception>"
     public static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
     {
         builder.Services.AddDbContext<ArduinoThermoHygrometerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -48,18 +48,17 @@ public static class ProgramExtensions
             bool attemptDatabaseConnection = arduinoThermoHygrometerDbContext.Database.CanConnect();
             if (!attemptDatabaseConnection)
             {
-                arduinoThermoHygrometerDbContext.Database.Migrate();
+                throw new NotImplementedException("Unable to connect to database. Check if the connection string is correct in appsettings.Development.json and restart your IDE.");
             }
-
-            if (!attemptDatabaseConnection)
+            else
             {
-                throw new NotImplementedException("Unable to connect to database. Check if the connection string is correct in appsettings.Development.json.");
+                arduinoThermoHygrometerDbContext.Database.Migrate();
             }
 
             bool isSqlServer = arduinoThermoHygrometerDbContext.Database.IsSqlServer();
             if (!isSqlServer)
             {
-                throw new NotImplementedException("Database provider is not SQL Server.");
+                throw new NotSupportedException("Database provider is not SQL Server.");
             }
         }
 
