@@ -55,7 +55,7 @@ module.exports = {
         "src/**/": "FLAT_CASE",
       },
     ],
-    "no-console": "warn",
+    "no-console": "error",
     "no-unused-vars": "off",
     "no-debugger": "warn",
     "no-use-before-define": "error",
