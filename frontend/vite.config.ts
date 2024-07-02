@@ -19,9 +19,9 @@ export default defineConfig({
     cors: true,
     headers: {
       "Content-Security-Policy":
-        "default-src 'self'; connect-src ws: http: https: 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;",
+        "default-src 'self'; connect-src http: https: ws: 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';",
       "Permisson-Policy":
-        "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'",
+        "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=())",
       "Referrer-Policy": "no-referrer",
       "X-Frame-Options": "SAMEORIGIN",
       "X-Content-Type-Options": "nosniff",

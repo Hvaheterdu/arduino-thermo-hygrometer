@@ -3,7 +3,7 @@ module.exports = {
   env: { browser: true, es2020: true },
   plugins: [
     "@typescript-eslint",
-    "filename-rules",
+    "check-file",
     "react",
     "react-hooks",
     "react-refresh",
@@ -23,7 +23,7 @@ module.exports = {
     "plugin:import-x/typescript",
     "prettier",
   ],
-  ignorePatterns: ["dist", "node_modules", "build", "*.cjs", "*.d.ts", "*.generated.ts"],
+  ignorePatterns: ["build", "dist", "node_modules", "vite.config.ts", "*.cjs", "*.generated.ts"],
   settings: {
     react: {
       version: "18.3",
@@ -41,7 +41,20 @@ module.exports = {
     },
   },
   rules: {
-    "filename-rules/match": [2, { ".ts": "camelcase", ".tsx": "pascalcase" }],
+    "check-file/filename-naming-convention": [
+      "error",
+      {
+        "**/*.{tsx}": "PASCAL_CASE",
+        "**/*.{ts}": "KEBAB_CASE",
+        "**/*.{d.ts}": "KEBAB_CASE",
+      },
+    ],
+    "check-file/folder-naming-convention": [
+      "error",
+      {
+        "src/**/": "FLAT_CASE",
+      },
+    ],
     "no-console": "error",
     "no-unused-vars": "off",
     "no-debugger": "error",
@@ -63,30 +76,34 @@ module.exports = {
       },
     ],
     "@typescript-eslint/naming-convention": [
-      "warn",
+      "error",
       {
-        selector: "default",
-        format: ["camelCase"],
-        leadingUnderscore: "allow",
+        selector: "enum",
+        format: ["PascalCase"],
+      },
+      {
+        selector: "enumMember",
+        format: ["PascalCase"],
+      },
+      {
+        selector: "function",
+        format: ["camelCase", "PascalCase"],
+      },
+      {
+        selector: "interface",
+        format: ["PascalCase"],
+      },
+      {
+        selector: "typeProperty",
+        format: ["snake_case", "UPPER_CASE"],
+      },
+      {
+        selector: "enum",
+        format: ["PascalCase"],
       },
       {
         selector: "variable",
-        format: ["PascalCase", "camelCase"],
-        leadingUnderscore: "allow",
-      },
-      {
-        selector: "parameter",
-        format: ["camelCase"],
-        leadingUnderscore: "allow",
-      },
-      {
-        selector: "property",
-        format: null,
-        leadingUnderscore: "allow",
-      },
-      {
-        selector: "typeLike",
-        format: ["PascalCase"],
+        format: ["camelCase", "PascalCase"],
       },
     ],
   },
