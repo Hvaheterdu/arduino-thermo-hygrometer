@@ -18,13 +18,6 @@ public class SecurityHeadersMiddleware
             httpContext.Response.Headers.Append("Cache-Control", "no-store");
         }
 
-        // Content-Security-Policy. Added layer of security that helps to detect and mitigate certain types of attacks,
-        // including Cross-Site Scripting (XSS) and data injection attacks.
-        if (!httpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
-        {
-            httpContext.Response.Headers.Append("Content-Security-Policy", "base-uri 'self'; connect-src data: http: ws: 'self'; default-src 'self';  frame-ancestors 'none'; font-src 'self'; img-src 'self' data:; object-src 'none';");
-        }
-
         // Permisson-Policy. Provides mechanisms for web developers to explicitly declare what functionality can and cannot be used on a website.
         if (!httpContext.Response.Headers.ContainsKey("Permisson-Policy"))
         {
