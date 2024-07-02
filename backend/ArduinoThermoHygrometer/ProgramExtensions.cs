@@ -5,14 +5,15 @@ namespace ArduinoThermoHygrometer;
 
 public static class ProgramExtensions
 {
+
     /// <summary>
-    /// Verifies if the specified configuration key exists and optionally checks if the value matches the specified value.
+    /// Verifies the configuration value for the specified key.
     /// </summary>
-    /// <param name="configuration">The configuration object.</param>
-    /// <param name="key">The configuration key to verify.</param>
-    /// <param name="value">The optional value to check against the configuration value.</param>
-    /// <returns>The configuration object.</returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="configuration">The IConfiguration instance.</param>
+    /// <param name="key">The key of the configuration value.</param>
+    /// <param name="value">The optional value of the configuration section.</param>
+    /// <returns>The updated IConfiguration instance.</returns>
+    /// <exception cref="ArgumentException">Thrown when the configuration value does not exist.</exception>
     public static IConfiguration VerifyConfiguration(this IConfiguration configuration, string key, string? value = null)
     {
         string? configurationValue = value == null ? configuration.GetSection(key)?.Value : configuration.GetSection(key)[value!];
@@ -26,13 +27,13 @@ public static class ProgramExtensions
     }
 
     /// <summary>
-    /// Registers the specified database context and runs the database migration from another project
-    /// on application startup if configured to do so.
+    /// Registers the database and runs migrations on application startup.
     /// </summary>
-    /// <typeparam name="T">The type of database context.</typeparam>
-    /// <param name="builder">The web application builder.</param>
-    /// <returns>The web application builder.</returns>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <typeparam name="T">The type of the DbContext.</typeparam>
+    /// <param name="builder">The WebApplicationBuilder instance.</param>
+    /// <returns>The updated WebApplicationBuilder instance.</returns>
+    /// <exception cref="NotImplementedException">Thrown when unable to connect to the database.</exception>"
+    /// <exception cref="NotImplementedException">Thrown when the database provider is not SQL Server.</exception>"
     public static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
     {
         builder.Services.AddDbContext<ArduinoThermoHygrometerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -48,6 +49,7 @@ public static class ProgramExtensions
             if (!attemptDatabaseConnection)
             {
                 arduinoThermoHygrometerDbContext.Database.EnsureCreated();
+                arduinoThermoHygrometerDbContext.Database.Migrate();
             }
 
             if (!attemptDatabaseConnection)
@@ -60,8 +62,6 @@ public static class ProgramExtensions
             {
                 throw new NotImplementedException("Database provider is not SQL Server.");
             }
-
-            arduinoThermoHygrometerDbContext.Database.Migrate();
         }
 
         return builder;
