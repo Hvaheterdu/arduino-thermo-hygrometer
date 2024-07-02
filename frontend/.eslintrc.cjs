@@ -23,7 +23,7 @@ module.exports = {
     "plugin:import-x/typescript",
     "prettier",
   ],
-  ignorePatterns: ["build", "dist", "node_modules", "*.cjs", "*.generated.ts"],
+  ignorePatterns: ["build", "dist", "node_modules", "vite.config.ts", "*.cjs", "*.generated.ts"],
   settings: {
     react: {
       version: "18.3",
