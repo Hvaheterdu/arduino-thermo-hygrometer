@@ -5,18 +5,19 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "outDir": "dist",
+    "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "/src/types/",
+    "declarationDir": "./dist/types",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "sourceMap": true,
-    "noEmit": true,
+    "noEmitOnError": true,
+    "importHelpers": true,
+    "downlevelIteration": true,
     "jsx": "react-jsx",
 
     /* Linting */
@@ -25,6 +26,7 @@
     "allowUnreachableCode": false,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

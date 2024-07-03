@@ -7,9 +7,10 @@
 # Ignore artifacts:
 build
 coverage
+dist
 
-# Ignore NSWAG generated file
-src/api/api.generated.ts
+# Ignore generated file
+**/*.generated.ts
 
 # Ignore package-lock.json
 package-lock.json
