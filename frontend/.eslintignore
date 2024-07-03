@@ -1,6 +1,15 @@
+# Directory
 build
+coverage
 dist
 node_modules
+
+# Files
 vite.config.ts
 *.cjs
-*.generated.ts
+**/*.generated.ts
+
+# Hidden directories
+**/.git
+**/.svn
+**/.hg
