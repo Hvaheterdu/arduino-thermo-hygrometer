@@ -56,8 +56,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1.0", new OpenApiInfo
     {
         Version = "v1.0",
-        Title = "Arduino thermo hygrometer API.",
-        Description = "ASP.NET Core Web API for a arduino thermo hygrometer IoT device.",
+        Title = "Arduino Thermo Hygrometer API.",
+        Description = "An ASP.NET Core Web API for an Arduino Thermo Hygrometer IoT device.",
         Contact = new OpenApiContact
         {
             Name = "Burhan Mohammad Sarfraz",
@@ -65,7 +65,7 @@ builder.Services.AddSwaggerGen(options =>
         },
         License = new OpenApiLicense
         {
-            Name = "The MIT License",
+            Name = "MIT License",
             Url = new Uri("https://mit-license.org/")
         }
     });
@@ -108,8 +108,8 @@ if (!app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Arduino Thermometer API v1.0");
-        options.OAuthAppName("Arduino Thermometer API Swagger API");
+        options.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Arduino Thermo Hygrometer API v1.0");
+        options.OAuthAppName("Arduino Thermo Hygrometer API");
         options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
     });
 }
@@ -122,8 +122,8 @@ app.UseHttpsRedirection();
 app.UseCors();
 
 // Authentication and authorization middleware.
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 // Endpoints for controllers.
 app.MapControllers();
