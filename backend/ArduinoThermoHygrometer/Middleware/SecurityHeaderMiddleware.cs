@@ -9,20 +9,19 @@ public class SecurityHeadersMiddleware
         _requestDelegate = requestDelegate;
     }
 
-    public Task Invoke(HttpContext httpContext)
+    /// <summary>
+    /// Invokes the middleware for security headers.
+    /// </summary>
+    /// <param name="httpContext">The HTTP context.</param>
+    /// <returns>A task that represents the asynchronous middleware operation.</returns>
+    public async Task InvokeAsync(HttpContext httpContext)
     {
-        // Referrer-Policy. HTTP header that controls how much referrer information (sent with the Referer header) should be included with requests.
-        if (!httpContext.Response.Headers.ContainsKey("Referrer-Policy"))
-        {
-            httpContext.Response.Headers.Append("Referrer-Policy", "no-referrer");
-        }
+        httpContext.Response.Headers.TryAdd("Cache-Control", "no-store");
+        httpContext.Response.Headers.TryAdd("Content-Security-Policy", "connect-src http: wss: 'self'; default-src 'self'; frame-ancestors 'none'; img-src data: 'self'; script-src 'unsafe-inline' 'self'; style-src 'unsafe-inline' 'self';");
+        httpContext.Response.Headers.TryAdd("Referrer-Policy", "no-referrer");
+        httpContext.Response.Headers.TryAdd("X-Content-Type-Options", "nosniff");
+        httpContext.Response.Headers.TryAdd("X-Frame-Options", "DENY");
 
-        // X-Content-Type-Options. HTTP response header used by the server to indicate that the MIME types advertised in the Content-Type headers should be followed and not be changed.
-        if (!httpContext.Response.Headers.ContainsKey("X-Content-Type-Options"))
-        {
-            httpContext.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-        }
-
-        return _requestDelegate.Invoke(httpContext);
+        await _requestDelegate(httpContext);
     }
 }
