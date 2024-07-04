@@ -47,18 +47,16 @@ public static class ProgramExtensions
             bool isSqlServer = arduinoThermoHygrometerDbContext.Database.IsSqlServer();
             if (!isSqlServer)
             {
-                throw new NotSupportedException("Database provider is not SQL Server.");
+                throw new NotSupportedException("Database provider currently in use is not the SQL Server provider.");
             }
 
-            bool attemptDatabaseConnection = arduinoThermoHygrometerDbContext.Database.CanConnect();
-            if (!attemptDatabaseConnection)
+            string? isConnectionStringSet = arduinoThermoHygrometerDbContext.Database.GetConnectionString();
+            if (isConnectionStringSet is null)
             {
-                throw new NotImplementedException("Unable to connect to database. Check if the connection string is correct in appsettings.Development.json and restart your IDE.");
+                throw new NotImplementedException("Database connection cannot be established. Set the connection string in appsettings.Development.json and ensure that it is correct.");
             }
-            else
-            {
-                arduinoThermoHygrometerDbContext.Database.Migrate();
-            }
+
+            arduinoThermoHygrometerDbContext.Database.Migrate();
         }
 
         return builder;
