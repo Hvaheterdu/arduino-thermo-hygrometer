@@ -1,10 +1,10 @@
-using ArduinoThermoHygrometer;
-using ArduinoThermoHygrometer.Data;
-using ArduinoThermoHygrometer.DTOs;
-using ArduinoThermoHygrometer.Middleware;
-using ArduinoThermoHygrometer.Repositories;
-using ArduinoThermoHygrometer.Services;
-using ArduinoThermoHygrometer.Validators;
+using ArduinoThermoHygrometer.Infrastructure.Data;
+using ArduinoThermoHygrometer.Web;
+using ArduinoThermoHygrometer.Web.DTOs;
+using ArduinoThermoHygrometer.Web.Middleware;
+using ArduinoThermoHygrometer.Web.Repositories;
+using ArduinoThermoHygrometer.Web.Services;
+using ArduinoThermoHygrometer.Web.Validators;
 using FluentValidation;
 using Microsoft.OpenApi.Models;
 
