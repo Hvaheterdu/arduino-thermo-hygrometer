@@ -6,17 +6,17 @@
 version: 2
 updates:
 
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "weekly"
     ignore:
       - dependency-name: "eslint"
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
 
   - package-ecosystem: "nuget"
     directory: "/backend/ArduinoThermoHygrometer/"
