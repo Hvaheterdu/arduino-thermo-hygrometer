@@ -1,7 +1,7 @@
-﻿using ArduinoThermoHygrometer.Data;
+﻿using ArduinoThermoHygrometer.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace ArduinoThermoHygrometer;
+namespace ArduinoThermoHygrometer.Web;
 
 public static class ProgramExtensions
 {
@@ -35,7 +35,11 @@ public static class ProgramExtensions
     /// <exception cref="NotImplementedException">Thrown when unable to connect to the database.</exception>"
     public static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
     {
-        builder.Services.AddDbContext<ArduinoThermoHygrometerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddDbContext<ArduinoThermoHygrometerDbContext>(options =>
+        {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+            assembly => assembly.MigrationsAssembly("ArduinoThermoHygrometer.Infrastructure"));
+        });
 
         bool.TryParse(builder.Configuration.GetSection("Database")["RunDatabaseMigrationsOnStartup"], out bool runDatabaseMigrationOnStartup);
 

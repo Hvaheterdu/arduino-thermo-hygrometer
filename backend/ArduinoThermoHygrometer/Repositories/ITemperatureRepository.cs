@@ -1,4 +1,4 @@
-﻿namespace ArduinoThermoHygrometer.Repositories;
+﻿namespace ArduinoThermoHygrometer.Web.Repositories;
 
 public interface ITemperatureRepository
 {
