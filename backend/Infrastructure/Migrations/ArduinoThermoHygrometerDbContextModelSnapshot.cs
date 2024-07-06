@@ -38,11 +38,8 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
-
-                    b.Property<TimeOnly>("CreatedTime")
-                        .HasColumnType("time");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("TemperatureId")
                         .HasColumnType("int");
@@ -65,11 +62,8 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
-
-                    b.Property<TimeOnly>("CreatedTime")
-                        .HasColumnType("time");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Temp")
                         .IsRequired()

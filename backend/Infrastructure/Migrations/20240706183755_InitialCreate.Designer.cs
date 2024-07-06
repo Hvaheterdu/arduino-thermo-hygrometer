@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 {
     [DbContext(typeof(ArduinoThermoHygrometerDbContext))]
-    [Migration("20240706130540_InitialCreate")]
+    [Migration("20240706183755_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -41,11 +41,8 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
-
-                    b.Property<TimeOnly>("CreatedTime")
-                        .HasColumnType("time");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("TemperatureId")
                         .HasColumnType("int");
@@ -68,11 +65,8 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
-
-                    b.Property<TimeOnly>("CreatedTime")
-                        .HasColumnType("time");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Temp")
                         .IsRequired()

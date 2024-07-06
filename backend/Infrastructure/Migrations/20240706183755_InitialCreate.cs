@@ -15,8 +15,7 @@ public partial class InitialCreate : Migration
             id = table.Column<int>(type: "int", nullable: false)
                 .Annotation("SqlServer:Identity", "1, 1"),
             temperature_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-            created_date = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS DATE)"),
-            created_time = table.Column<TimeOnly>(type: "time", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS TIME)"),
+            created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
             temp = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
             air_humidity = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
         },
@@ -28,8 +27,7 @@ public partial class InitialCreate : Migration
                 .Annotation("SqlServer:Identity", "1, 1"),
             temperature_id = table.Column<int>(type: "int", nullable: false),
             battery_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-            created_date = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS DATE)"),
-            created_time = table.Column<TimeOnly>(type: "time", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS TIME)"),
+            created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
             battery_status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
         },
         constraints: table =>
@@ -44,9 +42,21 @@ public partial class InitialCreate : Migration
         });
 
         migrationBuilder.CreateIndex(
-            name: "FK_Batteries_Temperatures_temperature_id",
+            name: "FK_Batteries_temperature_id",
             table: "Batteries",
             column: "temperature_id",
+            unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Temperatures_temperature_guid",
+            table: "Temperatures",
+            column: "temperature_guid",
+            unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Batteries_battery_guid",
+            table: "Batteries",
+            column: "battery_guid",
             unique: true);
     }
 
