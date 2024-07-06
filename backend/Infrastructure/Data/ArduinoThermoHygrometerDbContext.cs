@@ -21,13 +21,7 @@ public class ArduinoThermoHygrometerDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Temperature>().HasKey(t => t.Id);
-        modelBuilder.Entity<Temperature>()
-            .HasIndex(t => t.TemperatureGuid)
-            .IsUnique();
 
         modelBuilder.Entity<Battery>().HasKey(b => b.Id);
-        modelBuilder.Entity<Battery>()
-            .HasIndex(b => b.BatteryGuid)
-            .IsUnique();
     }
 }
