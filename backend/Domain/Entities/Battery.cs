@@ -11,9 +11,6 @@ public class Battery
     public int Id { get; init; }
 
     [Required]
-    public int TemperatureId { get; init; }
-
-    [Required]
     public Guid BatteryGuid { get; init; }
 
     [Required]
