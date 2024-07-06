@@ -31,7 +31,6 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<Guid>("BatteryGuid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BatteryStatus")
@@ -39,19 +38,16 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateOnly>("Date")
+                    b.Property<DateOnly>("CreatedDate")
                         .HasColumnType("date");
+
+                    b.Property<TimeOnly>("CreatedTime")
+                        .HasColumnType("time");
 
                     b.Property<int>("TemperatureId")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("Time")
-                        .HasColumnType("time");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("BatteryGuid")
-                        .IsUnique();
 
                     b.ToTable("Batteries");
                 });
@@ -69,8 +65,11 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateOnly>("Date")
+                    b.Property<DateOnly>("CreatedDate")
                         .HasColumnType("date");
+
+                    b.Property<TimeOnly>("CreatedTime")
+                        .HasColumnType("time");
 
                     b.Property<string>("Temp")
                         .IsRequired()
@@ -78,16 +77,9 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<Guid>("TemperatureGuid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<TimeOnly>("Time")
-                        .HasColumnType("time");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TemperatureGuid")
-                        .IsUnique();
 
                     b.ToTable("Temperatures");
                 });

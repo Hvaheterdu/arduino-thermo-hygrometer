@@ -5,7 +5,7 @@
 namespace ArduinoThermoHygrometer.Infrastructure.Migrations;
 
 /// <inheritdoc />
-public partial class Init : Migration
+public partial class InitialCreate : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,8 @@ public partial class Init : Migration
             id = table.Column<int>(type: "int", nullable: false)
                 .Annotation("SqlServer:Identity", "1, 1"),
             temperature_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-            date = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS DATE)"),
-            time = table.Column<TimeOnly>(type: "time", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS TIME)"),
+            created_date = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS DATE)"),
+            created_time = table.Column<TimeOnly>(type: "time", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS TIME)"),
             temp = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
             air_humidity = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
         },
@@ -28,8 +28,8 @@ public partial class Init : Migration
                 .Annotation("SqlServer:Identity", "1, 1"),
             temperature_id = table.Column<int>(type: "int", nullable: false),
             battery_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-            date = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS DATE)"),
-            time = table.Column<TimeOnly>(type: "time", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS TIME)"),
+            created_date = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS DATE)"),
+            created_time = table.Column<TimeOnly>(type: "time", nullable: false, defaultValueSql: "CAST(SYSDATETIME() AS TIME)"),
             battery_status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
         },
         constraints: table =>
@@ -44,15 +44,9 @@ public partial class Init : Migration
         });
 
         migrationBuilder.CreateIndex(
-            name: "IX_Temperatures_TemperatureGuid",
-            table: "Temperatures",
-            column: "temperature_guid",
-            unique: true);
-
-        migrationBuilder.CreateIndex(
-            name: "IX_Batteries_BatteryGuid",
+            name: "FK_Batteries_Temperatures_temperature_id",
             table: "Batteries",
-            column: "battery_guid",
+            column: "temperature_id",
             unique: true);
     }
 
