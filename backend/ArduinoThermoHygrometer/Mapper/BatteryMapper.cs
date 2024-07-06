@@ -14,6 +14,7 @@ public static class BatteryMapper
     {
         Battery battery = new(batteryDto.BatteryStatus)
         {
+            CreatedAt = DateTimeOffset.Now,
             BatteryStatus = batteryDto.BatteryStatus
         };
 
@@ -29,6 +30,7 @@ public static class BatteryMapper
     {
         return new BatteryDto
         {
+            CreatedAt = DateTimeOffset.Now,
             BatteryStatus = battery.BatteryStatus
         };
     }

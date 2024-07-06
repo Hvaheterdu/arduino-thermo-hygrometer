@@ -14,6 +14,7 @@ public static class TemperatureMapper
     {
         Temperature temperature = new(temperatureDto.Temp, temperatureDto.AirHumidity)
         {
+            CreatedAt = DateTimeOffset.Now,
             Temp = temperatureDto.Temp,
             AirHumidity = temperatureDto.AirHumidity
         };
@@ -30,6 +31,7 @@ public static class TemperatureMapper
     {
         return new TemperatureDto
         {
+            CreatedAt = DateTimeOffset.Now,
             Temp = temperature.Temp,
             AirHumidity = temperature.AirHumidity
         };
