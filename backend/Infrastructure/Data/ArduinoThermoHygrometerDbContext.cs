@@ -1,7 +1,7 @@
-﻿using ArduinoThermoHygrometer.Entities;
+﻿using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ArduinoThermoHygrometer.Data;
+namespace ArduinoThermoHygrometer.Infrastructure.Data;
 
 public class ArduinoThermoHygrometerDbContext : DbContext
 {
@@ -13,9 +13,9 @@ public class ArduinoThermoHygrometerDbContext : DbContext
     }
 
     /// <summary>
-    /// Construct database table from model with Id as key.
+    /// Configures the model for the database context.
     /// </summary>
-    /// <param name="modelBuilder"></param>
+    /// <param name="modelBuilder">The model builder instance.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
