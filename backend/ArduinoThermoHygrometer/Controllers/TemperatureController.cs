@@ -1,7 +1,7 @@
-﻿using ArduinoThermoHygrometer.Services;
+﻿using ArduinoThermoHygrometer.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ArduinoThermoHygrometer.Controllers;
+namespace ArduinoThermoHygrometer.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace ArduinoThermoHygrometer.Migrations;
+namespace ArduinoThermoHygrometer.Infrastructure.Migrations;
 
 /// <inheritdoc />
-public partial class InitialCreate : Migration
+public partial class Init : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,6 +42,18 @@ public partial class InitialCreate : Migration
                 principalColumn: "id",
                 onDelete: ReferentialAction.Cascade);
         });
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Temperatures_TemperatureGuid",
+            table: "Temperatures",
+            column: "temperature_guid",
+            unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Batteries_BatteryGuid",
+            table: "Batteries",
+            column: "battery_guid",
+            unique: true);
     }
 
     /// <inheritdoc />

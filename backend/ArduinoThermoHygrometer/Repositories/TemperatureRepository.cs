@@ -1,6 +1,6 @@
-﻿using ArduinoThermoHygrometer.Data;
+﻿using ArduinoThermoHygrometer.Infrastructure.Data;
 
-namespace ArduinoThermoHygrometer.Repositories;
+namespace ArduinoThermoHygrometer.Web.Repositories;
 
 public class TemperatureRepository : ITemperatureRepository
 {

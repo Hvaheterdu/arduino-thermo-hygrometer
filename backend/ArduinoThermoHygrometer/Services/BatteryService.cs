@@ -1,8 +1,8 @@
-﻿using ArduinoThermoHygrometer.DTOs;
-using ArduinoThermoHygrometer.Repositories;
+﻿using ArduinoThermoHygrometer.Web.DTOs;
+using ArduinoThermoHygrometer.Web.Repositories;
 using FluentValidation;
 
-namespace ArduinoThermoHygrometer.Services;
+namespace ArduinoThermoHygrometer.Web.Services;
 
 public class BatteryService
 {

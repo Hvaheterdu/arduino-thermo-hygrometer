@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ArduinoThermoHygrometer.Entities;
+namespace ArduinoThermoHygrometer.Domain.Entities;
 
-public class Battery
+public class Temperature
 {
     [Key]
     [Required]
@@ -11,11 +11,8 @@ public class Battery
     public int Id { get; init; }
 
     [Required]
-    public int TemperatureId { get; init; }
-
-    [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid BatteryGuid { get; init; }
+    public Guid TemperatureGuid { get; init; }
 
     [Required]
     public DateOnly Date { get; init; }
@@ -25,13 +22,18 @@ public class Battery
 
     [Required]
     [StringLength(10)]
-    public string BatteryStatus { get; set; } = string.Empty;
+    public string Temp { get; set; } = string.Empty;
 
-    public Battery(string batteryStatus)
+    [Required]
+    [StringLength(10)]
+    public string AirHumidity { get; set; } = string.Empty;
+
+    public Temperature(string temp, string airHumidity)
     {
-        BatteryGuid = Guid.NewGuid();
+        TemperatureGuid = Guid.NewGuid();
         Date = DateOnly.FromDateTime(DateTimeOffset.Now.Date);
         Time = TimeOnly.FromTimeSpan(DateTimeOffset.Now.TimeOfDay);
-        BatteryStatus = batteryStatus;
+        Temp = temp;
+        AirHumidity = airHumidity;
     }
 }
