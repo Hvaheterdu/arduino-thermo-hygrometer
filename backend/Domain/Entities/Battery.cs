@@ -17,10 +17,7 @@ public class Battery
     public Guid BatteryGuid { get; init; }
 
     [Required]
-    public DateOnly CreatedDate { get; init; }
-
-    [Required]
-    public TimeOnly CreatedTime { get; init; }
+    public DateTimeOffset CreatedAt { get; init; }
 
     [Required]
     [StringLength(10)]
@@ -29,8 +26,7 @@ public class Battery
     public Battery(string batteryStatus)
     {
         BatteryGuid = Guid.NewGuid();
-        CreatedDate = DateOnly.FromDateTime(DateTimeOffset.Now.Date);
-        CreatedTime = TimeOnly.FromTimeSpan(DateTimeOffset.Now.TimeOfDay);
+        CreatedAt = DateTimeOffset.Now;
         BatteryStatus = batteryStatus;
     }
 }
