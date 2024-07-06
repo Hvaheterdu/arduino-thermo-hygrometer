@@ -1,7 +1,7 @@
-﻿using ArduinoThermoHygrometer.DTOs;
-using ArduinoThermoHygrometer.Entities;
+﻿using ArduinoThermoHygrometer.Domain.Entities;
+using ArduinoThermoHygrometer.Web.DTOs;
 
-namespace ArduinoThermoHygrometer.Mapper;
+namespace ArduinoThermoHygrometer.Web.Mapper;
 
 public static class TemperatureMapper
 {

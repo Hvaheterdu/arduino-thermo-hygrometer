@@ -1,4 +1,4 @@
-﻿namespace ArduinoThermoHygrometer.Middleware;
+﻿namespace ArduinoThermoHygrometer.Web.Middleware;
 
 public class SecurityHeadersMiddleware
 {
