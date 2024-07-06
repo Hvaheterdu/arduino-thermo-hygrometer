@@ -41,9 +41,6 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("TemperatureId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Batteries");

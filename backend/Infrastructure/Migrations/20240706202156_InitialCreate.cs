@@ -25,27 +25,11 @@ public partial class InitialCreate : Migration
         {
             id = table.Column<int>(type: "int", nullable: false)
                 .Annotation("SqlServer:Identity", "1, 1"),
-            temperature_id = table.Column<int>(type: "int", nullable: false),
             battery_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
             created_at = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
             battery_status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
         },
-        constraints: table =>
-        {
-            table.PrimaryKey("PK_Batteries", x => x.id);
-            table.ForeignKey(
-                name: "FK_Batteries_Temperatures_temperature_id",
-                column: x => x.temperature_id,
-                principalTable: "Temperatures",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
-        });
-
-        migrationBuilder.CreateIndex(
-            name: "FK_Batteries_temperature_id",
-            table: "Batteries",
-            column: "temperature_id",
-            unique: true);
+        constraints: table => table.PrimaryKey("PK_Batteries", x => x.id));
 
         migrationBuilder.CreateIndex(
             name: "IX_Temperatures_temperature_guid",
