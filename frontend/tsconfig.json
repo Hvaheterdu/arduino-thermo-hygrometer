@@ -1,44 +1,10 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "outDir": "./dist",
-    "declaration": true,
-    "declarationMap": true,
-    "declarationDir": "./dist/types",
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "sourceMap": true,
-    "noEmitOnError": true,
-    "importHelpers": true,
-    "downlevelIteration": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
-    "forceConsistentCasingInFileNames": true,
-    "exactOptionalPropertyTypes": true,
-    "allowUnreachableCode": false,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "strict": true
-  },
-  "include": ["src", "vite.config.ts"],
-  "exclude": ["node_modules"],
   "references": [
     {
       "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
     }
-  ],
-  "types": ["vite/client"]
+  ]
 }
