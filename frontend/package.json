@@ -50,7 +50,7 @@
     "version-bump-sh": "sh scripts/version_bump_sh.sh"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.51.1",
+    "@tanstack/react-query": "^5.51.11",
     "nswag": "^14.0.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
