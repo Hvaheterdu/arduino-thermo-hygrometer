@@ -7,7 +7,13 @@ public class TemperatureDtoValidator : AbstractValidator<TemperatureDto>
 {
     public TemperatureDtoValidator()
     {
-        RuleFor(t => t.Temp).NotEmpty().NotNull();
-        RuleFor(t => t.AirHumidity).NotEmpty().NotNull();
+        RuleFor(t => t.Temp)
+            .MaximumLength(10)
+            .NotEmpty()
+            .NotNull();
+        RuleFor(t => t.AirHumidity)
+            .MaximumLength(10)
+            .NotEmpty()
+            .NotNull();
     }
 }

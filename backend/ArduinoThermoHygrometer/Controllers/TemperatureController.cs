@@ -7,9 +7,9 @@ namespace ArduinoThermoHygrometer.Web.Controllers;
 [Route("api/[controller]")]
 public class TemperatureController : ControllerBase
 {
-    private readonly TemperatureService _temperatureService;
+    private readonly ITemperatureService _temperatureService;
 
-    public TemperatureController(TemperatureService temperatureService)
+    public TemperatureController(ITemperatureService temperatureService)
     {
         _temperatureService = temperatureService;
     }

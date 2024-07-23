@@ -6,7 +6,6 @@ namespace ArduinoThermoHygrometer.Domain.Entities;
 public class Temperature
 {
     [Key]
-    [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; init; }
 

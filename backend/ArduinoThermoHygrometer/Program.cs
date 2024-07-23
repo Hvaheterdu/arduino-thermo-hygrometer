@@ -72,8 +72,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Dependency injection DTOs, services, repositories and validators.
-builder.Services.AddTransient<TemperatureService>();
-builder.Services.AddTransient<BatteryService>();
+builder.Services.AddTransient<ITemperatureService, TemperatureService>();
+builder.Services.AddTransient<IBatteryService, BatteryService>();
 
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<IBatteryRepository, BatteryRepository>();
@@ -82,7 +82,7 @@ builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>(
 builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 
 // Register controller service.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.ReturnHttpNotAcceptable = true);
 
 // Lowercase API routes.
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
@@ -103,7 +103,7 @@ WebApplication app = builder.Build();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
 // Swagger and SwaggerUI middleware.
-if (!app.Environment.IsProduction())
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>

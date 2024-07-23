@@ -7,9 +7,9 @@ namespace ArduinoThermoHygrometer.Web.Controllers;
 [Route("api/[controller]")]
 public class BatteryController : ControllerBase
 {
-    private readonly BatteryService _batteryService;
+    private readonly IBatteryService _batteryService;
 
-    public BatteryController(BatteryService batteryService)
+    public BatteryController(IBatteryService batteryService)
     {
         _batteryService = batteryService;
     }
