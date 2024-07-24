@@ -15,6 +15,10 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
         _apiVersionDescriptionProvider = apiVersionDescriptionProvider;
     }
 
+    /// <summary>
+    /// Configures the SwaggerGenOptions for generating Swagger documentation.
+    /// </summary>
+    /// <param name="options">The SwaggerGenOptions to configure.</param>
     public void Configure(SwaggerGenOptions options)
     {
         foreach (ApiVersionDescription apiDescription in _apiVersionDescriptionProvider.ApiVersionDescriptions)
@@ -28,11 +32,11 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
         options.IncludeXmlComments(xmlCommentsFullPath);
     }
 
-    public void Configure(string? name, SwaggerGenOptions options)
-    {
-        Configure(options);
-    }
-
+    /// <summary>
+    /// Creates an instance of <see cref="OpenApiInfo"/> for the specified <paramref name="apiDescription"/>.
+    /// </summary>
+    /// <param name="apiDescription">The <see cref="ApiVersionDescription"/> object.</param>
+    /// <returns>An instance of <see cref="OpenApiInfo"/>.</returns>
     private static OpenApiInfo CreateOpenApiInfoForVersion(ApiVersionDescription apiDescription)
     {
         OpenApiInfo openApiInfo = new()
@@ -53,5 +57,16 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
         };
 
         return openApiInfo;
+    }
+
+    /// <summary>
+    /// Has to be implemented because of the interface.
+    /// Calls the Configure method without the name parameter.
+    /// </summary>
+    /// <param name="name">The name of the options instance to configure.</param>
+    /// <param name="options">The SwaggerGenOptions to configure.</param>
+    public void Configure(string? name, SwaggerGenOptions options)
+    {
+        Configure(options);
     }
 }

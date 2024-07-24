@@ -7,7 +7,6 @@ using ArduinoThermoHygrometer.Web.OpenApi;
 using ArduinoThermoHygrometer.Web.Repositories;
 using ArduinoThermoHygrometer.Web.Services;
 using ArduinoThermoHygrometer.Web.Validators;
-using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using FluentValidation;
 using HealthChecks.UI.Client;
@@ -16,39 +15,22 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text.Json.Serialization;
 
+// Services.
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-// Verify configuration.
-builder.Configuration.VerifyConfiguration("CORS", "AllowedOrigin");
 
 // Configure CORS.
 builder.Services.AddCors(setupAction =>
 {
     setupAction.AddDefaultPolicy(configurePolicy =>
     {
-        configurePolicy.WithOrigins(builder.Configuration.GetSection("CORS")["AllowedOrigin"]!)
+        configurePolicy.WithOrigins(builder.Configuration.GetSection("CORS")["AllowedOrigins"]!)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
 
 // HTTPS redirect service.
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHttpsRedirection(configureOptions =>
-    {
-        configureOptions.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORTS:Development");
-        configureOptions.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-    });
-}
-else
-{
-    builder.Services.AddHttpsRedirection(configureOptions =>
-    {
-        configureOptions.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORT:Production");
-        configureOptions.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
-    });
-}
+builder.AddHttpsRedirection();
 
 // HSTS (Strict-Transport-Security header) service.
 builder.Services.AddHsts(configureOptions =>
@@ -56,13 +38,6 @@ builder.Services.AddHsts(configureOptions =>
     configureOptions.IncludeSubDomains = true;
     configureOptions.MaxAge = TimeSpan.FromSeconds(31536000);
     configureOptions.Preload = true;
-});
-
-// HTTP/HTTPS logging service.
-builder.Services.AddHttpLogging(configureOptions =>
-{
-    configureOptions.ResponseBodyLogLimit = 8096;
-    configureOptions.RequestBodyLogLimit = 8096;
 });
 
 // Dependency injection from other projects.
@@ -95,19 +70,7 @@ builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true
 builder.RegisterDatabaseAndRunMigrationsOnStartup<ArduinoThermoHygrometerDbContext>();
 
 // API versioning.
-builder.Services.AddApiVersioning(setupAction =>
-{
-    setupAction.ApiVersionReader = new UrlSegmentApiVersionReader();
-    setupAction.AssumeDefaultVersionWhenUnspecified = true;
-    setupAction.DefaultApiVersion = new ApiVersion(0, 1);
-    setupAction.ReportApiVersions = true;
-})
-    .AddMvc()
-    .AddApiExplorer(setupAction =>
-    {
-        setupAction.GroupNameFormat = "'v'VVVV";
-        setupAction.SubstituteApiVersionInUrl = true;
-    });
+builder.AddApiVersioning();
 
 // Dependency injection for Swagger generated options.
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>();
@@ -116,6 +79,7 @@ builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwa
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Middleware.
 WebApplication app = builder.Build();
 
 // Custom middleware.

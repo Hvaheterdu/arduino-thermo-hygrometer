@@ -1,4 +1,5 @@
 ﻿using ArduinoThermoHygrometer.Infrastructure.Data;
+using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArduinoThermoHygrometer.Web.Extensions;
@@ -6,23 +7,54 @@ namespace ArduinoThermoHygrometer.Web.Extensions;
 public static class ProgramExtensions
 {
     /// <summary>
-    /// Verifies the configuration value for the specified key.
+    /// Adds HTTP redirection to the WebApplicationBuilder.
     /// </summary>
-    /// <param name="configuration">The IConfiguration instance.</param>
-    /// <param name="key">The key of the configuration value.</param>
-    /// <param name="value">The optional value of the configuration section.</param>
-    /// <returns>The updated IConfiguration instance.</returns>
-    /// <exception cref="ArgumentException">Thrown when the configuration value does not exist.</exception>
-    public static IConfiguration VerifyConfiguration(this IConfiguration configuration, string key, string? value = null)
+    /// <param name="builder">The WebApplicationBuilder instance.</param>
+    /// <returns>The updated WebApplicationBuilder instance.</returns>
+    public static WebApplicationBuilder AddHttpsRedirection(this WebApplicationBuilder builder)
     {
-        string? configurationValue = value == null ? configuration.GetSection(key)?.Value : configuration.GetSection(key)[value!];
-
-        if (configurationValue is null)
+        if (builder.Environment.IsDevelopment())
         {
-            throw new ArgumentException($"Configuration with name {nameof(configuration)} does not exist.");
+            builder.Services.AddHttpsRedirection(configureOptions =>
+            {
+                configureOptions.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORTS:Development");
+                configureOptions.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+            });
+        }
+        else
+        {
+            builder.Services.AddHttpsRedirection(configureOptions =>
+            {
+                configureOptions.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORT:Production");
+                configureOptions.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+            });
         }
 
-        return configuration;
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds API versioning to the WebApplicationBuilder.
+    /// </summary>
+    /// <param name="builder">The WebApplicationBuilder instance.</param>
+    /// <returns>The updated WebApplicationBuilder instance.</returns>
+    public static WebApplicationBuilder AddApiVersioning(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddApiVersioning(setupAction =>
+        {
+            setupAction.ApiVersionReader = new UrlSegmentApiVersionReader();
+            setupAction.AssumeDefaultVersionWhenUnspecified = true;
+            setupAction.DefaultApiVersion = new ApiVersion(0, 1);
+            setupAction.ReportApiVersions = true;
+        })
+            .AddMvc()
+            .AddApiExplorer(setupAction =>
+            {
+                setupAction.GroupNameFormat = "'v'VVVV";
+                setupAction.SubstituteApiVersionInUrl = true;
+            });
+
+        return builder;
     }
 
     /// <summary>

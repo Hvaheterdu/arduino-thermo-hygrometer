@@ -6,19 +6,24 @@
     <members>
         <member name="M:ArduinoThermoHygrometer.Web.Controllers.HealthcheckController.GetHealthCheckReport">
             <summary>
-            Get Healthcheck status local development application.
+            Retrieves the health check report.
             </summary>
-            <returns>JSON representation of healthcheck status.</returns>
+            <returns>The health report.</returns>
+            <response code="200">Returns the health report.</response>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.VerifyConfiguration(Microsoft.Extensions.Configuration.IConfiguration,System.String,System.String)">
+        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.AddHttpsRedirection(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
-            Verifies the configuration value for the specified key.
+            Adds HTTP redirection to the WebApplicationBuilder.
             </summary>
-            <param name="configuration">The IConfiguration instance.</param>
-            <param name="key">The key of the configuration value.</param>
-            <param name="value">The optional value of the configuration section.</param>
-            <returns>The updated IConfiguration instance.</returns>
-            <exception cref="T:System.ArgumentException">Thrown when the configuration value does not exist.</exception>
+            <param name="builder">The WebApplicationBuilder instance.</param>
+            <returns>The updated WebApplicationBuilder instance.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.AddApiVersioning(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Adds API versioning to the WebApplicationBuilder.
+            </summary>
+            <param name="builder">The WebApplicationBuilder instance.</param>
+            <returns>The updated WebApplicationBuilder instance.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RegisterDatabaseAndRunMigrationsOnStartup``1(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
@@ -35,28 +40,28 @@
             Battery entity to dto mapper.
             </summary>
             <param name="batteryDto">Dto object.</param>
-            <returns></returns>
+            <returns>Battery entity</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Web.Mappers.BatteryMapper.GetBatteryDtoFromBattery(ArduinoThermoHygrometer.Domain.Entities.Battery)">
             <summary>
             Battery dto to entity mapper.
             </summary>
             <param name="battery">Entity object.</param>
-            <returns></returns>
+            <returns>BatteryDto entity</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Web.Mappers.TemperatureMapper.GetTemperatureFromTemperatureDto(ArduinoThermoHygrometer.Web.DTOs.TemperatureDto)">
             <summary>
             Temperature entity to dto mapper.
             </summary>
             <param name="temperatureDto">Dto object.</param>
-            <returns></returns>
+            <returns>Temperature entity</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Web.Mappers.TemperatureMapper.GetTemperatureDtoFromTemperature(ArduinoThermoHygrometer.Domain.Entities.Temperature)">
             <summary>
             Temperature dto to entity mapper.
             </summary>
             <param name="temperature">Entity object.</param>
-            <returns></returns>
+            <returns>TemperatureDto entity</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Web.Middleware.SecurityHeadersMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
@@ -64,6 +69,27 @@
             </summary>
             <param name="httpContext">The HTTP context.</param>
             <returns>A task that represents the asynchronous middleware operation.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Web.OpenApi.ConfigureSwaggerGenOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <summary>
+            Configures the SwaggerGenOptions for generating Swagger documentation.
+            </summary>
+            <param name="options">The SwaggerGenOptions to configure.</param>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Web.OpenApi.ConfigureSwaggerGenOptions.CreateOpenApiInfoForVersion(Asp.Versioning.ApiExplorer.ApiVersionDescription)">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.OpenApi.Models.OpenApiInfo"/> for the specified <paramref name="apiDescription"/>.
+            </summary>
+            <param name="apiDescription">The <see cref="T:Asp.Versioning.ApiExplorer.ApiVersionDescription"/> object.</param>
+            <returns>An instance of <see cref="T:Microsoft.OpenApi.Models.OpenApiInfo"/>.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Web.OpenApi.ConfigureSwaggerGenOptions.Configure(System.String,Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <summary>
+            Has to be implemented because of the interface.
+            Calls the Configure method without the name parameter.
+            </summary>
+            <param name="name">The name of the options instance to configure.</param>
+            <param name="options">The SwaggerGenOptions to configure.</param>
         </member>
     </members>
 </doc>
