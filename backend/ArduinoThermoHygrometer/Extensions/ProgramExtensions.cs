@@ -1,7 +1,7 @@
 ﻿using ArduinoThermoHygrometer.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace ArduinoThermoHygrometer.Web;
+namespace ArduinoThermoHygrometer.Web.Extensions;
 
 public static class ProgramExtensions
 {
