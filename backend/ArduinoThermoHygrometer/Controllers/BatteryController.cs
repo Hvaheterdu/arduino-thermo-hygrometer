@@ -1,15 +1,17 @@
 ﻿using ArduinoThermoHygrometer.Web.Services;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArduinoThermoHygrometer.Web.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion(0.1)]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class BatteryController : ControllerBase
 {
-    private readonly BatteryService _batteryService;
+    private readonly IBatteryService _batteryService;
 
-    public BatteryController(BatteryService batteryService)
+    public BatteryController(IBatteryService batteryService)
     {
         _batteryService = batteryService;
     }
