@@ -7,6 +7,9 @@ public class BatteryDtoValidator : AbstractValidator<BatteryDto>
 {
     public BatteryDtoValidator()
     {
-        RuleFor(b => b.BatteryStatus).NotEmpty().NotNull();
+        RuleFor(b => b.BatteryStatus)
+            .MaximumLength(10)
+            .NotEmpty()
+            .NotNull();
     }
 }

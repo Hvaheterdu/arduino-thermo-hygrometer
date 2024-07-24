@@ -1,122 +1,116 @@
+using ArduinoThermoHygrometer.Infrastructure;
 using ArduinoThermoHygrometer.Infrastructure.Data;
-using ArduinoThermoHygrometer.Web;
 using ArduinoThermoHygrometer.Web.DTOs;
+using ArduinoThermoHygrometer.Web.Extensions;
 using ArduinoThermoHygrometer.Web.Middleware;
+using ArduinoThermoHygrometer.Web.OpenApi;
 using ArduinoThermoHygrometer.Web.Repositories;
 using ArduinoThermoHygrometer.Web.Services;
 using ArduinoThermoHygrometer.Web.Validators;
+using Asp.Versioning.ApiExplorer;
 using FluentValidation;
-using Microsoft.OpenApi.Models;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Text.Json.Serialization;
 
+// Services.
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Verify configuration.
-builder.Configuration.VerifyConfiguration("CORS", "AllowedOrigin");
-
 // Configure CORS.
-builder.Services.AddCors(options =>
+builder.Services.AddCors(setupAction =>
 {
-    options.AddDefaultPolicy(policy =>
+    setupAction.AddDefaultPolicy(configurePolicy =>
     {
-        policy.WithOrigins(builder.Configuration.GetSection("CORS")["AllowedOrigin"]!)
+        configurePolicy.WithOrigins(builder.Configuration.GetSection("CORS")["AllowedOrigins"]!)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
 
 // HTTPS redirect service.
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHttpsRedirection(options =>
-    {
-        options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-        options.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORTS:Development");
-    });
-}
-else
-{
-    builder.Services.AddHttpsRedirection(options =>
-    {
-        options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
-        options.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORT:Production");
-    });
-}
+builder.AddHttpsRedirection();
 
 // HSTS (Strict-Transport-Security header) service.
-builder.Services.AddHsts(options =>
+builder.Services.AddHsts(configureOptions =>
 {
-    options.MaxAge = TimeSpan.FromSeconds(31536000);
-    options.IncludeSubDomains = true;
-    options.Preload = true;
+    configureOptions.IncludeSubDomains = true;
+    configureOptions.MaxAge = TimeSpan.FromSeconds(31536000);
+    configureOptions.Preload = true;
 });
 
-// Swagger/OpenAPI (https://aka.ms/aspnetcore/swashbuckle).
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1.0", new OpenApiInfo
-    {
-        Version = "v1.0",
-        Title = "Arduino Thermo Hygrometer API.",
-        Description = "An ASP.NET Core Web API for an Arduino Thermo Hygrometer IoT device.",
-        Contact = new OpenApiContact
-        {
-            Name = "Burhan Mohammad Sarfraz",
-            Email = "burhan.mohammad.sarfraz@outlook.com"
-        },
-        License = new OpenApiLicense
-        {
-            Name = "MIT License",
-            Url = new Uri("https://mit-license.org/")
-        }
-    });
-});
+// Dependency injection from other projects.
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Dependency injection DTOs, services, repositories and validators.
-builder.Services.AddTransient<TemperatureService>();
-builder.Services.AddTransient<BatteryService>();
+builder.Services.AddTransient<ITemperatureService, TemperatureService>();
+builder.Services.AddTransient<IBatteryService, BatteryService>();
 
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<IBatteryRepository, BatteryRepository>();
+
+builder.Services.AddScoped<IHealthcheckService, HealthcheckService>();
 
 builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>();
 builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 
 // Register controller service.
-builder.Services.AddControllers();
+builder.Services.AddControllers(configure => configure.ReturnHttpNotAcceptable = true)
+    .AddJsonOptions(configure =>
+    {
+        configure.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        configure.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
 
 // Lowercase API routes.
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
-// HTTP/HTTPS logging service
-builder.Services.AddHttpLogging(logging =>
-{
-    logging.ResponseBodyLogLimit = 8096;
-    logging.RequestBodyLogLimit = 8096;
-});
-
-// Register database, migrations and run migrations on startup
+// Register database, migrations and run migrations on startup.
 builder.RegisterDatabaseAndRunMigrationsOnStartup<ArduinoThermoHygrometerDbContext>();
 
+// API versioning.
+builder.AddApiVersioning();
+
+// Dependency injection for Swagger generated options.
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>();
+
+// Swagger/OpenAPI (https://aka.ms/aspnetcore/swashbuckle).
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Middleware.
 WebApplication app = builder.Build();
 
 // Custom middleware.
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
 // Swagger and SwaggerUI middleware.
-if (!app.Environment.IsProduction())
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(options =>
+    app.UseSwaggerUI(setupAction =>
     {
-        options.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Arduino Thermo Hygrometer API v1.0");
-        options.OAuthAppName("Arduino Thermo Hygrometer API");
-        options.OAuthUseBasicAuthenticationWithAccessCodeGrant();
+        IReadOnlyList<ApiVersionDescription> apiVersionProvider = app.DescribeApiVersions();
+        foreach (ApiVersionDescription description in apiVersionProvider)
+        {
+            setupAction.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
+        }
+
+        setupAction.OAuthAppName("Arduino Thermo Hygrometer API");
+        setupAction.OAuthUseBasicAuthenticationWithAccessCodeGrant();
     });
 }
 
 // HSTS (Strict-Transport-Security header) and HTTPS redirect middleware.
 app.UseHsts();
 app.UseHttpsRedirection();
+
+// Healthcheck middleware.
+app.MapHealthChecks($"/api/_health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 // CORS middleware.
 app.UseCors();
