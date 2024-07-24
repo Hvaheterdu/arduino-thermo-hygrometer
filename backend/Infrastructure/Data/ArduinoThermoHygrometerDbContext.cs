@@ -13,7 +13,8 @@ public class ArduinoThermoHygrometerDbContext : DbContext
     }
 
     /// <summary>
-    /// Seeds the database with initial data.
+    /// Configures the model for the database context.
+    /// Is utilised for seeding the database with data.
     /// </summary>
     /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)

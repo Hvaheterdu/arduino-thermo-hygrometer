@@ -18,12 +18,14 @@ public class HealthcheckController : ControllerBase
     }
 
     /// <summary>
-    /// Get Healthcheck status local development application.
+    /// Retrieves the health check report.
     /// </summary>
-    /// <returns>JSON representation of healthcheck status.</returns>
+    /// <returns>The health report.</returns>
+    /// <response code="200">Returns the health report.</response>
     [HttpGet]
     [Consumes("application/json")]
     [Produces("application/json")]
+    [ApiVersion(0.1)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> GetHealthCheckReport()
     {
