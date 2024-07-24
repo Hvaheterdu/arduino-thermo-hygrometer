@@ -1,15 +1,17 @@
 ﻿using ArduinoThermoHygrometer.Web.Services;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArduinoThermoHygrometer.Web.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion(0.1)]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class TemperatureController : ControllerBase
 {
-    private readonly TemperatureService _temperatureService;
+    private readonly ITemperatureService _temperatureService;
 
-    public TemperatureController(TemperatureService temperatureService)
+    public TemperatureController(ITemperatureService temperatureService)
     {
         _temperatureService = temperatureService;
     }

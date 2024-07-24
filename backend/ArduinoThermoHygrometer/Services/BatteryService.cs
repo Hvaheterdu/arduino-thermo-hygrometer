@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace ArduinoThermoHygrometer.Web.Services;
 
-public class BatteryService
+public class BatteryService : IBatteryService
 {
     private readonly IBatteryRepository _batteryRepository;
     private readonly IValidator<BatteryDto> _batteryDtoValidator;

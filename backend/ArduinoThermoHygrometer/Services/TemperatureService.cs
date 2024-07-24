@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace ArduinoThermoHygrometer.Web.Services;
 
-public class TemperatureService
+public class TemperatureService : ITemperatureService
 {
     private readonly ITemperatureRepository _temperatureRepository;
     private readonly IValidator<TemperatureDto> _temperatureDtoValidator;
