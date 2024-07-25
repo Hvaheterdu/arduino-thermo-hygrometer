@@ -17,7 +17,7 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -31,26 +31,19 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<Guid>("BatteryGuid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BatteryStatus")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("string");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("SYSDATETIMEOFFSET()");
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BatteryGuid")
-                        .IsUnique();
-
-                    b.ToTable("Batteries", (string)null);
+                    b.ToTable("Batteries");
                 });
 
             modelBuilder.Entity("ArduinoThermoHygrometer.Domain.Entities.Temperature", b =>
@@ -64,29 +57,22 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.Property<string>("AirHumidity")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("string");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("SYSDATETIMEOFFSET()");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Temp")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("string");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<Guid>("TemperatureGuid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TemperatureGuid")
-                        .IsUnique();
-
-                    b.ToTable("Temperatures", (string)null);
+                    b.ToTable("Temperatures");
                 });
 #pragma warning restore 612, 618
         }

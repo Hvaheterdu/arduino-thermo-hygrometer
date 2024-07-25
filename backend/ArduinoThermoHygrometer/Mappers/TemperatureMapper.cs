@@ -14,7 +14,7 @@ public static class TemperatureMapper
     {
         Temperature temperature = new(temperatureDto.Temp, temperatureDto.AirHumidity)
         {
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = temperatureDto.CreatedAt,
             Temp = temperatureDto.Temp,
             AirHumidity = temperatureDto.AirHumidity
         };
@@ -26,12 +26,12 @@ public static class TemperatureMapper
     /// Temperature dto to entity mapper.
     /// </summary>
     /// <param name="temperature">Entity object.</param>
-    /// <returns>TemperatureDto entity</returns>
+    /// <returns>TemperatureDto object</returns>
     public static TemperatureDto GetTemperatureDtoFromTemperature(Temperature temperature)
     {
         return new TemperatureDto
         {
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = temperature.CreatedAt,
             Temp = temperature.Temp,
             AirHumidity = temperature.AirHumidity
         };
