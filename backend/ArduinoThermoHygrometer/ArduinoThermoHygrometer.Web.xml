@@ -47,7 +47,7 @@
             Battery dto to entity mapper.
             </summary>
             <param name="battery">Entity object.</param>
-            <returns>BatteryDto entity</returns>
+            <returns>BatteryDto object</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Web.Mappers.TemperatureMapper.GetTemperatureFromTemperatureDto(ArduinoThermoHygrometer.Web.DTOs.TemperatureDto)">
             <summary>
@@ -61,7 +61,7 @@
             Temperature dto to entity mapper.
             </summary>
             <param name="temperature">Entity object.</param>
-            <returns>TemperatureDto entity</returns>
+            <returns>TemperatureDto object</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Web.Middleware.SecurityHeadersMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
