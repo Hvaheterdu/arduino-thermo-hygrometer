@@ -18,6 +18,13 @@
             <param name="builder">The WebApplicationBuilder instance.</param>
             <returns>The updated WebApplicationBuilder instance.</returns>
         </member>
+        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.AddRateLimiter(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Adds fixed window rate limiter middleware to the WebApplicationBuilder.
+            </summary>
+            <param name="builder">The WebApplicationBuilder instance.</param>
+            <returns>The updated WebApplicationBuilder instance.</returns>
+        </member>
         <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.AddApiVersioning(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds API versioning to the WebApplicationBuilder.
