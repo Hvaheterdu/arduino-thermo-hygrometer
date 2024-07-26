@@ -63,7 +63,7 @@ public class GlobalExceptionHandlingMiddleware : IExceptionHandler
     {
         _logger.LogError(
             exception,
-            "{RequestPath}\n      Exception: {Message}\n      InnerException: {Message}",
+            "{GetRequestUriWithRequestMethod}\n      Exception: {Message}\n      InnerException: {Message}",
             GetRequestUriWithRequestMethod(context),
             exception.Message,
             exception.InnerException?.Message);
@@ -76,9 +76,10 @@ public class GlobalExceptionHandlingMiddleware : IExceptionHandler
     /// <returns>The request URI with the request method.</returns>
     private static string GetRequestUriWithRequestMethod(HttpContext httpContext)
     {
-        string requestMethod = httpContext.Request.Method;
+        string requestMethod = httpContext.Request.Method.Replace(Environment.NewLine, "");
+        string requestPath = httpContext.Request.Path.ToString().Replace(Environment.NewLine, "");
 
-        return $"{requestMethod} {httpContext.Request.Path}";
+        return $"{requestMethod} {requestPath}";
     }
 
     /// <summary>
