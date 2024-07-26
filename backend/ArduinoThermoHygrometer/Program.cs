@@ -82,11 +82,10 @@ builder.Services.AddSwaggerGen();
 // Middleware.
 WebApplication app = builder.Build();
 
-// Exception and status code pages middleware.
+// Exception handler middleware.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler();
-    app.UseStatusCodePages();
 }
 
 // HSTS (Strict-Transport-Security header) and HTTPS redirect middleware.
