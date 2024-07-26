@@ -26,8 +26,6 @@ public class HealthcheckController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetHealthCheckReport()
     {
-        throw new Exception();
-
         HealthReport healthReport = await _healthcheckService.GetHealthcheckReport();
 
         return Ok(healthReport);
