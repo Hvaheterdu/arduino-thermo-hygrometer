@@ -1,11 +1,45 @@
-﻿using ArduinoThermoHygrometer.Infrastructure.Data;
+﻿using ArduinoThermoHygrometer.Domain.Entities;
+using ArduinoThermoHygrometer.Infrastructure.Data;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 
 namespace ArduinoThermoHygrometer.Web.Extensions;
 
 public static class ProgramExtensions
 {
+    /// <summary>
+    /// Adds HTTP Strict Transport Security (HSTS) to the WebApplicationBuilder.
+    /// </summary>
+    /// <param name="builder">The WebApplicationBuilder instance.</param>
+    /// <returns>The updated WebApplicationBuilder instance.</returns>
+    public static WebApplicationBuilder AddHsts(this WebApplicationBuilder builder)
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.AddHsts(configureOptions =>
+            {
+                configureOptions.IncludeSubDomains = true;
+                configureOptions.MaxAge = TimeSpan.FromSeconds(60);
+            });
+        }
+        else
+        {
+            builder.Services.AddHsts(configureOptions =>
+            {
+                configureOptions.IncludeSubDomains = true;
+                configureOptions.MaxAge = TimeSpan.FromSeconds(31536000);
+            });
+        }
+
+        return builder;
+    }
+
     /// <summary>
     /// Adds HTTP redirection to the WebApplicationBuilder.
     /// </summary>
@@ -29,6 +63,77 @@ public static class ProgramExtensions
                 configureOptions.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
             });
         }
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds fixed window rate limiter middleware to the WebApplicationBuilder.
+    /// </summary>
+    /// <param name="builder">The WebApplicationBuilder instance.</param>
+    /// <returns>The updated WebApplicationBuilder instance.</returns>
+    public static WebApplicationBuilder AddRateLimiter(this WebApplicationBuilder builder)
+    {
+        MyRateLimitOptions myOptions = new();
+        builder.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
+
+        builder.Services.AddRateLimiter(configureOptions =>
+        {
+            configureOptions.OnRejected = (context, cancellationToken) =>
+            {
+                if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out TimeSpan retryAfter))
+                {
+                    context.HttpContext.Response.Headers.RetryAfter = ((int)retryAfter.TotalMinutes).ToString(NumberFormatInfo.InvariantInfo);
+                }
+
+                string retryRequestAfter = ((int)retryAfter.TotalMinutes).ToString(NumberFormatInfo.InvariantInfo);
+                string requestMethod = context.HttpContext.Request.Method.Replace(Environment.NewLine, "");
+                string requestPath = context.HttpContext.Request.Path.ToString().Replace(Environment.NewLine, "");
+
+                ProblemDetails problemDetails = new()
+                {
+                    Type = context.HttpContext.Request.Path,
+                    Title = "Rate limit reached.",
+                    Detail = $"Rate limit reached for {requestMethod} method. Please try again after {retryRequestAfter} minute.",
+                    Status = StatusCodes.Status429TooManyRequests,
+                    Extensions =
+                    {
+                        ["traceId"] = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier,
+                    },
+                };
+
+                context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+                string contentType = "application/problem+json";
+
+                JsonSerializerOptions jsonOptions = new()
+                {
+                    WriteIndented = true,
+                    Converters = { new JsonStringEnumConverter() },
+                };
+
+                context.HttpContext.Response.WriteAsJsonAsync(problemDetails, jsonOptions, contentType, cancellationToken);
+
+                ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+                ILogger logger = loggerFactory.CreateLogger("ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RateLimiter");
+                logger.LogWarning("Rate limit reached for {RequestMethod} request to {RequestPath}. Please try again after {RetryRequestAfter} minute.", requestMethod, requestPath, retryRequestAfter);
+
+                return new ValueTask();
+            };
+
+            configureOptions.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+            {
+                string factory = httpContext.Request.Headers.UserAgent.ToString();
+
+                return RateLimitPartition.GetFixedWindowLimiter(
+                    httpContext.User.Identity?.Name?.ToString() ?? factory,
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = myOptions.PermitLimit,
+                        Window = TimeSpan.FromSeconds(myOptions.Window),
+                    }
+                );
+            });
+        });
 
         return builder;
     }

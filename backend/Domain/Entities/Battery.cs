@@ -19,6 +19,9 @@ public class Battery
     [StringLength(10)]
     public string BatteryStatus { get; set; } = string.Empty;
 
+    [Timestamp]
+    public byte[]? Version { get; set; }
+
     public Battery(string batteryStatus)
     {
         BatteryGuid = Guid.NewGuid();

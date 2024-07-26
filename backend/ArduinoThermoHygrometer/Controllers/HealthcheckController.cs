@@ -23,11 +23,8 @@ public class HealthcheckController : ControllerBase
     /// <returns>The health report.</returns>
     /// <response code="200">Returns the health report.</response>
     [HttpGet]
-    [Consumes("application/json")]
-    [Produces("application/json")]
-    [ApiVersion(0.1)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> GetHealthCheckReport()
+    public async Task<IActionResult> GetHealthCheckReport()
     {
         HealthReport healthReport = await _healthcheckService.GetHealthcheckReport();
 

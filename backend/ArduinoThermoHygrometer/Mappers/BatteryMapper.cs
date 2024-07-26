@@ -14,7 +14,7 @@ public static class BatteryMapper
     {
         Battery battery = new(batteryDto.BatteryStatus)
         {
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = batteryDto.CreatedAt,
             BatteryStatus = batteryDto.BatteryStatus
         };
 
@@ -25,12 +25,12 @@ public static class BatteryMapper
     /// Battery dto to entity mapper.
     /// </summary>
     /// <param name="battery">Entity object.</param>
-    /// <returns>BatteryDto entity</returns>
+    /// <returns>BatteryDto object</returns>
     public static BatteryDto GetBatteryDtoFromBattery(Battery battery)
     {
         return new BatteryDto
         {
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = battery.CreatedAt,
             BatteryStatus = battery.BatteryStatus
         };
     }
