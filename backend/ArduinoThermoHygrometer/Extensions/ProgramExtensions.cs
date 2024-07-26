@@ -88,7 +88,8 @@ public static class ProgramExtensions
 
                 string retryRequestAfter = ((int)retryAfter.TotalMinutes).ToString(NumberFormatInfo.InvariantInfo);
                 string requestMethod = context.HttpContext.Request.Method.Replace(Environment.NewLine, "");
-                string requestPath = context.HttpContext.Request.Path;
+                string requestPath = context.HttpContext.Request.Path.ToString().Replace(Environment.NewLine, "");
+
                 ProblemDetails problemDetails = new()
                 {
                     Type = context.HttpContext.Request.Path,

@@ -63,7 +63,7 @@ public class GlobalExceptionHandlingMiddleware : IExceptionHandler
     {
         _logger.LogError(
             exception,
-            "{requestPath}\n      Exception: {Message}\n      InnerException: {Message}",
+            "{RequestPath}\n      Exception: {Message}\n      InnerException: {Message}",
             GetRequestUriWithRequestMethod(context),
             exception.Message,
             exception.InnerException?.Message);
