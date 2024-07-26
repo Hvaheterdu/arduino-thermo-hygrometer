@@ -54,7 +54,7 @@ builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>(
 builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 
 // Exception handling.
-builder.Services.AddExceptionHandler<GlobalExceptionHandlingMiddleware>();
+builder.Services.AddExceptionHandler<ExceptionToProblemDetailsMiddleware>();
 
 // ProblemDetails service.
 builder.Services.AddProblemDetails();
@@ -82,11 +82,9 @@ builder.Services.AddSwaggerGen();
 // Middleware.
 WebApplication app = builder.Build();
 
-// Exception handler middleware.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler();
-}
+// Exception handler and status code pages middleware.
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 // HSTS (Strict-Transport-Security header) and HTTPS redirect middleware.
 app.UseHsts();
