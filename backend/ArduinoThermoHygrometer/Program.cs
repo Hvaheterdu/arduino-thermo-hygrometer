@@ -40,6 +40,9 @@ builder.Services.AddHsts(configureOptions =>
     configureOptions.Preload = true;
 });
 
+// Rate limiter service.
+builder.AddRateLimiter();
+
 // Dependency injection from other projects.
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -55,13 +58,15 @@ builder.Services.AddScoped<IHealthcheckService, HealthcheckService>();
 builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>();
 builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 
+// Exception handling.
+builder.Services.AddExceptionHandler<GlobalExceptionHandlingMiddleware>();
+
+// ProblemDetails service.
+builder.Services.AddProblemDetails();
+
 // Register controller service.
-builder.Services.AddControllers(configure => configure.ReturnHttpNotAcceptable = true)
-    .AddJsonOptions(configure =>
-    {
-        configure.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        configure.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-    });
+builder.Services.AddControllers()
+.AddJsonOptions(configure => configure.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 // Lowercase API routes.
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
@@ -82,8 +87,26 @@ builder.Services.AddSwaggerGen();
 // Middleware.
 WebApplication app = builder.Build();
 
-// Custom middleware.
-app.UseMiddleware<SecurityHeadersMiddleware>();
+// Exception and status code pages middleware.
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
+// HSTS (Strict-Transport-Security header) and HTTPS redirect middleware.
+app.UseHsts();
+app.UseHttpsRedirection();
+
+// Routing middleware.
+app.UseRouting();
+
+// Rate limiter middleware.
+app.UseRateLimiter();
+
+// CORS middleware.
+app.UseCors();
+
+// Authentication and authorization middleware.
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Swagger and SwaggerUI middleware.
 if (app.Environment.IsDevelopment())
@@ -102,22 +125,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// HSTS (Strict-Transport-Security header) and HTTPS redirect middleware.
-app.UseHsts();
-app.UseHttpsRedirection();
-
 // Healthcheck middleware.
 app.MapHealthChecks($"/api/_health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-// CORS middleware.
-app.UseCors();
-
-// Authentication and authorization middleware.
-app.UseAuthentication();
-app.UseAuthorization();
+// Custom middleware.
+app.UseMiddleware<SecurityHeadersMiddleware>();
 
 // Endpoints for controllers.
 app.MapControllers();

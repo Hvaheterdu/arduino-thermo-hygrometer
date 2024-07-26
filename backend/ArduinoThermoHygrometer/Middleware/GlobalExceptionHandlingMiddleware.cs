@@ -29,8 +29,8 @@ public class GlobalExceptionHandlingMiddleware : IExceptionHandler
         ProblemDetails problemDetails = new()
         {
             Type = GetRequestUri(httpContext),
-            Title = "Server Error",
-            Detail = "An unhandled server error has occurred while processing the request.",
+            Title = "Server Error.",
+            Detail = "An unhandled server error has occurred while executing the request.",
             Status = StatusCodes.Status500InternalServerError,
             Extensions =
             {
@@ -41,7 +41,7 @@ public class GlobalExceptionHandlingMiddleware : IExceptionHandler
         };
 
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        httpContext.Response.ContentType = "application/problem+json";
+        string contentType = "application/problem+json";
 
         JsonSerializerOptions jsonOptions = new()
         {
@@ -49,7 +49,7 @@ public class GlobalExceptionHandlingMiddleware : IExceptionHandler
             Converters = { new JsonStringEnumConverter() },
         };
 
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, jsonOptions, "application/problem+json", cancellationToken);
+        await httpContext.Response.WriteAsJsonAsync(problemDetails, jsonOptions, contentType, cancellationToken);
 
         return true;
     }
@@ -63,7 +63,7 @@ public class GlobalExceptionHandlingMiddleware : IExceptionHandler
     {
         _logger.LogError(
             exception,
-            "{requestPath} Uncaught exception occurred: {Message}.\nInnerException: {Message}",
+            "{requestPath}\n      Exception: {Message}\n      InnerException: {Message}",
             GetRequestUriWithRequestMethod(context),
             exception.Message,
             exception.InnerException?.Message);

@@ -2,11 +2,11 @@
 
 public class SecurityHeadersMiddleware
 {
-    private readonly RequestDelegate _requestDelegate;
+    private readonly RequestDelegate _next;
 
     public SecurityHeadersMiddleware(RequestDelegate requestDelegate)
     {
-        _requestDelegate = requestDelegate;
+        _next = requestDelegate;
     }
 
     /// <summary>
@@ -22,6 +22,6 @@ public class SecurityHeadersMiddleware
         httpContext.Response.Headers.TryAdd("X-Content-Type-Options", "nosniff");
         httpContext.Response.Headers.TryAdd("X-Frame-Options", "DENY");
 
-        await _requestDelegate(httpContext);
+        await _next(httpContext);
     }
 }
