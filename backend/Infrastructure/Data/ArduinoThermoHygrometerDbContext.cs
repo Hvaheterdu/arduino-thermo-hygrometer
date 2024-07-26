@@ -38,9 +38,13 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .IsRequired();
 
             entity.Property(b => b.BatteryStatus)
-                .HasColumnType("string")
+                .HasColumnType("nvarchar")
                 .HasMaxLength(10)
                 .IsRequired();
+
+            entity.Property(b => b.Version)
+                .HasColumnType("rowversion")
+                .IsRowVersion();
         });
 
         modelBuilder.Entity<Temperature>(entity =>
@@ -63,14 +67,18 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .IsRequired();
 
             entity.Property(t => t.Temp)
-                .HasColumnType("string")
+                .HasColumnType("nvarchar")
                 .HasMaxLength(10)
                 .IsRequired();
 
             entity.Property(t => t.AirHumidity)
-                .HasColumnType("string")
+                .HasColumnType("nvarchar")
                 .HasMaxLength(10)
                 .IsRequired();
+
+            entity.Property(t => t.Version)
+                .HasColumnType("rowversion")
+                .IsRowVersion();
         });
 
         base.OnModelCreating(modelBuilder);

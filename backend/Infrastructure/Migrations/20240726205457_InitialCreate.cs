@@ -18,7 +18,8 @@ public partial class InitialCreate : Migration
                     .Annotation("SqlServer:Identity", "1, 1"),
                 BatteryGuid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                 CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
-                BatteryStatus = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                BatteryStatus = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
             },
             constraints: table => table.PrimaryKey("PK_Batteries", x => x.Id));
 
@@ -31,7 +32,8 @@ public partial class InitialCreate : Migration
                 TemperatureGuid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                 CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
                 Temp = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                AirHumidity = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                AirHumidity = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
             },
             constraints: table => table.PrimaryKey("PK_Temperatures", x => x.Id));
 

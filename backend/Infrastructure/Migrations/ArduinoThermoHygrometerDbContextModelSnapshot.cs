@@ -38,7 +38,7 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.Property<string>("BatteryStatus")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("string");
+                        .HasColumnType("nvarchar");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -69,7 +69,7 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.Property<string>("AirHumidity")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("string");
+                        .HasColumnType("nvarchar");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -79,7 +79,7 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.Property<string>("Temp")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("string");
+                        .HasColumnType("nvarchar");
 
                     b.Property<Guid>("TemperatureGuid")
                         .ValueGeneratedOnAdd()
