@@ -29,16 +29,11 @@ builder.Services.AddCors(setupAction =>
     });
 });
 
+// HSTS (Strict-Transport-Security header) service.
+builder.AddHsts();
+
 // HTTPS redirect service.
 builder.AddHttpsRedirection();
-
-// HSTS (Strict-Transport-Security header) service.
-builder.Services.AddHsts(configureOptions =>
-{
-    configureOptions.IncludeSubDomains = true;
-    configureOptions.MaxAge = TimeSpan.FromSeconds(31536000);
-    configureOptions.Preload = true;
-});
 
 // Rate limiter service.
 builder.AddRateLimiter();
@@ -88,8 +83,11 @@ builder.Services.AddSwaggerGen();
 WebApplication app = builder.Build();
 
 // Exception and status code pages middleware.
-app.UseExceptionHandler();
-app.UseStatusCodePages();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler();
+    app.UseStatusCodePages();
+}
 
 // HSTS (Strict-Transport-Security header) and HTTPS redirect middleware.
 app.UseHsts();
@@ -133,6 +131,15 @@ app.MapHealthChecks($"/api/_health", new HealthCheckOptions
 
 // Custom middleware.
 app.UseMiddleware<SecurityHeadersMiddleware>();
+
+// Seed database.
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    IServiceProvider services = scope.ServiceProvider;
+
+    ArduinoThermoHygrometerDbContext dbContext = services.GetRequiredService<ArduinoThermoHygrometerDbContext>();
+    DatabaseInitialiser.SeedDatabase(dbContext);
+}
 
 // Endpoints for controllers.
 app.MapControllers();

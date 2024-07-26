@@ -14,6 +14,33 @@ namespace ArduinoThermoHygrometer.Web.Extensions;
 public static class ProgramExtensions
 {
     /// <summary>
+    /// Adds HTTP Strict Transport Security (HSTS) to the WebApplicationBuilder.
+    /// </summary>
+    /// <param name="builder">The WebApplicationBuilder instance.</param>
+    /// <returns>The updated WebApplicationBuilder instance.</returns>
+    public static WebApplicationBuilder AddHsts(this WebApplicationBuilder builder)
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.AddHsts(configureOptions =>
+            {
+                configureOptions.IncludeSubDomains = true;
+                configureOptions.MaxAge = TimeSpan.FromSeconds(60);
+            });
+        }
+        else
+        {
+            builder.Services.AddHsts(configureOptions =>
+            {
+                configureOptions.IncludeSubDomains = true;
+                configureOptions.MaxAge = TimeSpan.FromSeconds(31536000);
+            });
+        }
+
+        return builder;
+    }
+
+    /// <summary>
     /// Adds HTTP redirection to the WebApplicationBuilder.
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>

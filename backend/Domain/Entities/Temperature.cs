@@ -23,6 +23,9 @@ public class Temperature
     [StringLength(10)]
     public string AirHumidity { get; set; } = string.Empty;
 
+    [Timestamp]
+    public byte[]? Version { get; set; }
+
     public Temperature(string temp, string airHumidity)
     {
         TemperatureGuid = Guid.NewGuid();
