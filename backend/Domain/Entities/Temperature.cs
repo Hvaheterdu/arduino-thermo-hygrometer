@@ -17,10 +17,12 @@ public class Temperature
 
     [Required]
     [StringLength(10)]
+    [RegularExpression("^[0-9]*$")]
     public string Temp { get; set; } = string.Empty;
 
     [Required]
     [StringLength(10)]
+    [RegularExpression("^[0-9]*$")]
     public string AirHumidity { get; set; } = string.Empty;
 
     [Timestamp]

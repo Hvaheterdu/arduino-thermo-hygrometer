@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 {
     [DbContext(typeof(ArduinoThermoHygrometerDbContext))]
-    [Migration("20240726191406_RowVersioningForTables")]
-    partial class RowVersioningForTables
+    [Migration("20240726205457_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,7 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.Property<string>("BatteryStatus")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("string");
+                        .HasColumnType("nvarchar");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -72,7 +72,7 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.Property<string>("AirHumidity")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("string");
+                        .HasColumnType("nvarchar");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -82,7 +82,7 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.Property<string>("Temp")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("string");
+                        .HasColumnType("nvarchar");
 
                     b.Property<Guid>("TemperatureGuid")
                         .ValueGeneratedOnAdd()
