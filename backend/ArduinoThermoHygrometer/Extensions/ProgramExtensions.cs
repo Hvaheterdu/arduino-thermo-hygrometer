@@ -114,7 +114,7 @@ public static class ProgramExtensions
 
                 ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
                 ILogger logger = loggerFactory.CreateLogger("ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RateLimiter");
-                logger.LogWarning($"Rate limit reached for {requestMethod} request to {requestPath}. Please try again after {retryRequestAfter} minute.");
+                logger.LogWarning("Rate limit reached for {RequestMethod} request to {RequestPath}. Please try again after {RetryRequestAfter} minute.", requestMethod, requestPath, retryRequestAfter);
 
                 return new ValueTask();
             };
