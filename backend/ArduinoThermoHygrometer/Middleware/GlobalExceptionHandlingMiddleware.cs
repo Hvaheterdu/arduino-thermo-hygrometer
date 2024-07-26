@@ -76,7 +76,9 @@ public class GlobalExceptionHandlingMiddleware : IExceptionHandler
     /// <returns>The request URI with the request method.</returns>
     private static string GetRequestUriWithRequestMethod(HttpContext httpContext)
     {
-        return $"{httpContext.Request.Method.ToUpperInvariant()} {httpContext?.Request?.Path}";
+        string requestMethod = httpContext.Request.Method;
+
+        return $"{requestMethod} {httpContext.Request.Path}";
     }
 
     /// <summary>
@@ -86,6 +88,6 @@ public class GlobalExceptionHandlingMiddleware : IExceptionHandler
     /// <returns>The request URI.</returns>
     private static string GetRequestUri(HttpContext httpContext)
     {
-        return $"{httpContext?.Request?.Path}";
+        return $"{httpContext.Request.Path}";
     }
 }

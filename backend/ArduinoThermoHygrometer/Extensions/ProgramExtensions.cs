@@ -87,11 +87,12 @@ public static class ProgramExtensions
                 }
 
                 string retryRequestAfter = ((int)retryAfter.TotalMinutes).ToString(NumberFormatInfo.InvariantInfo);
+                string requestMethod = context.HttpContext.Request.Method;
                 ProblemDetails problemDetails = new()
                 {
                     Type = context.HttpContext.Request.Path,
                     Title = "Rate limit reached.",
-                    Detail = $"Rate limit reached for {context.HttpContext.Request.Method} method. Please try again after {retryRequestAfter} minute.",
+                    Detail = $"Rate limit reached for {requestMethod} method. Please try again after {retryRequestAfter} minute.",
                     Status = StatusCodes.Status429TooManyRequests,
                     Extensions =
                     {
@@ -112,7 +113,7 @@ public static class ProgramExtensions
 
                 ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
                 ILogger logger = loggerFactory.CreateLogger("ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RateLimiter");
-                logger.LogWarning($"Rate limit reached for {context.HttpContext.Request.Method} request to {context.HttpContext.Request.Path}. Please try again after {retryRequestAfter} minute.");
+                logger.LogWarning($"Rate limit reached for {requestMethod} request to {context.HttpContext.Request.Path}. Please try again after {retryRequestAfter} minute.");
 
                 return new ValueTask();
             };
