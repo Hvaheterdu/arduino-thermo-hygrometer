@@ -11,27 +11,6 @@
             <returns>The health report.</returns>
             <response code="200">Returns the health report.</response>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Exceptions.ExceptionToProblemDetailsHandler.CreateLogsForExceptions(Microsoft.AspNetCore.Http.HttpContext,System.Exception)">
-            <summary>
-            Creates logs for exceptions.
-            </summary>
-            <param name="context">The HttpContext object.</param>
-            <param name="exception">The exception that occurred.</param>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Exceptions.ExceptionToProblemDetailsHandler.GetRequestUriWithRequestMethod(Microsoft.AspNetCore.Http.HttpContext)">
-            <summary>
-            Gets the request URI with the request method from the provided HttpContext.
-            </summary>
-            <param name="httpContext">The HttpContext object.</param>
-            <returns>The request URI with the request method.</returns>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Exceptions.ExceptionToProblemDetailsHandler.GetRequestUri(Microsoft.AspNetCore.Http.HttpContext)">
-            <summary>
-            Gets the request URI from the provided HttpContext.
-            </summary>
-            <param name="httpContext">The HttpContext object.</param>
-            <returns>The request URI.</returns>
-        </member>
         <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.AddHsts(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds HTTP Strict Transport Security (HSTS) to the WebApplicationBuilder.
@@ -98,30 +77,48 @@
             <param name="temperature">Entity object.</param>
             <returns>TemperatureDto object</returns>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Middleware.GlobalExceptionHandlingMiddleware.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
+        <member name="M:ArduinoThermoHygrometer.Web.Middleware.ExceptionToProblemDetailsMiddleware.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
             <summary>
-            Tries to handle the exception asynchronously.
+            Attempts to handle an exception by creating logs and writing a ProblemDetails response.
             </summary>
-            <param name="httpContext">The HttpContext object.</param>
+            <param name="httpContext">The current HttpContext.</param>
             <param name="exception">The exception that occurred.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>A task representing the asynchronous operation. The task result indicates whether the exception was handled successfully.</returns>
+            <param name="cancellationToken">A CancellationToken to observe while waiting for the task to complete.</param>
+            <returns>A ValueTask of bool indicating whether the exception was handled. Always returns true.</returns>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Middleware.GlobalExceptionHandlingMiddleware.CreateLogsForExceptions(Microsoft.AspNetCore.Http.HttpContext,System.Exception)">
+        <member name="M:ArduinoThermoHygrometer.Web.Middleware.ExceptionToProblemDetailsMiddleware.CreateProblemDetails(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.String,System.Int32)">
+            <summary>
+            Creates a <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> object that encapsulates information about an exception 
+            that occurred during the handling of an HTTP request.
+            </summary>
+            <param name="httpContext">The <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/> representing the current HTTP request.</param>
+            <param name="exception">The <see cref="T:System.Exception"/> that was thrown during the handling of the HTTP request.</param>
+            <param name="type"></param>
+            <param name="statusCode"></param>
+            <returns>A <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> object containing detailed information about the exception and the context in which it occurred.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Web.Middleware.ExceptionToProblemDetailsMiddleware.GetProblemDetailsType(System.Exception)">
+            <summary>
+            Determines the appropriate Problem Details type URL based on the provided exception.
+            </summary>
+            <param name="exception">The exception for which to determine the Problem Details type.</param>
+            <returns>A string representing the URL of the RFC 9110 section that corresponds to the type of exception.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Web.Middleware.ExceptionToProblemDetailsMiddleware.CreateLogsForExceptions(Microsoft.AspNetCore.Http.HttpContext,System.Exception)">
             <summary>
             Creates logs for exceptions.
             </summary>
             <param name="context">The HttpContext object.</param>
             <param name="exception">The exception that occurred.</param>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Middleware.GlobalExceptionHandlingMiddleware.GetRequestUriWithRequestMethod(Microsoft.AspNetCore.Http.HttpContext)">
+        <member name="M:ArduinoThermoHygrometer.Web.Middleware.ExceptionToProblemDetailsMiddleware.GetRequestUriWithRequestMethod(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
             Gets the request URI with the request method from the provided HttpContext.
             </summary>
             <param name="httpContext">The HttpContext object.</param>
             <returns>The request URI with the request method.</returns>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Middleware.GlobalExceptionHandlingMiddleware.GetRequestUri(Microsoft.AspNetCore.Http.HttpContext)">
+        <member name="M:ArduinoThermoHygrometer.Web.Middleware.ExceptionToProblemDetailsMiddleware.GetRequestUri(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
             Gets the request URI from the provided HttpContext.
             </summary>

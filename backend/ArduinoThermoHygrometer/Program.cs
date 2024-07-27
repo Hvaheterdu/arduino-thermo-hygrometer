@@ -57,7 +57,7 @@ builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>(
 builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 
 // Exception handling.
-builder.Services.AddExceptionHandler<ExceptionToProblemDetailsHandler>();
+builder.Services.AddExceptionHandler<ExceptionToProblemDetailsMiddleware>();
 
 // ProblemDetails service.
 builder.Services.AddProblemDetails(configure =>
