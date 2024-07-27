@@ -17,7 +17,7 @@ public class Battery
 
     [Required]
     [StringLength(10)]
-    [RegularExpression("^[0-9]*$")]
+    [RegularExpression("^[0-9]{1,3}$")]
     public string BatteryStatus { get; set; } = string.Empty;
 
     [Timestamp]

@@ -16,6 +16,13 @@ public class ExceptionToProblemDetailsHandler : IExceptionHandler
         _logger = logger;
     }
 
+    /// <summary>
+    /// Attempts to handle an exception by creating logs and writing a ProblemDetails response.
+    /// </summary>
+    /// <param name="httpContext">The current HttpContext.</param>
+    /// <param name="exception">The exception that occurred.</param>
+    /// <param name="cancellationToken">A CancellationToken to observe while waiting for the task to complete.</param>
+    /// <returns>A ValueTask of bool indicating whether the exception was handled. Always returns true.</returns>
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         CreateLogsForExceptions(httpContext, exception);

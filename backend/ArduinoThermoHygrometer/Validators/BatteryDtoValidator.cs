@@ -9,7 +9,7 @@ public class BatteryDtoValidator : AbstractValidator<BatteryDto>
     {
         RuleFor(b => b.BatteryStatus)
             .MaximumLength(10)
-            .Matches("^[0-9]*$")
+            .Matches("^[0-9]{1,3}$")
             .NotEmpty()
             .NotNull();
     }
