@@ -1,4 +1,4 @@
-﻿using ArduinoThermoHygrometer.Web.Services;
+﻿using ArduinoThermoHygrometer.Web.Services.Contracts;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;

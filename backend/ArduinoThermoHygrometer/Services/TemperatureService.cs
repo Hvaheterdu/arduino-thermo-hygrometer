@@ -1,5 +1,6 @@
 ﻿using ArduinoThermoHygrometer.Web.DTOs;
-using ArduinoThermoHygrometer.Web.Repositories;
+using ArduinoThermoHygrometer.Web.Repositories.Contracts;
+using ArduinoThermoHygrometer.Web.Services.Contracts;
 using FluentValidation;
 
 namespace ArduinoThermoHygrometer.Web.Services;

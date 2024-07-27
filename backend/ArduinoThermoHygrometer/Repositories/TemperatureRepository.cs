@@ -1,4 +1,5 @@
 ﻿using ArduinoThermoHygrometer.Infrastructure.Data;
+using ArduinoThermoHygrometer.Web.Repositories.Contracts;
 
 namespace ArduinoThermoHygrometer.Web.Repositories;
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using ArduinoThermoHygrometer.Web.Services.Contracts;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace ArduinoThermoHygrometer.Web.Services;
 

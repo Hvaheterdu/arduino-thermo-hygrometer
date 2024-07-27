@@ -1,11 +1,14 @@
 using ArduinoThermoHygrometer.Infrastructure;
 using ArduinoThermoHygrometer.Infrastructure.Data;
 using ArduinoThermoHygrometer.Web.DTOs;
+using ArduinoThermoHygrometer.Web.Exceptions;
 using ArduinoThermoHygrometer.Web.Extensions;
 using ArduinoThermoHygrometer.Web.Middleware;
 using ArduinoThermoHygrometer.Web.OpenApi;
 using ArduinoThermoHygrometer.Web.Repositories;
+using ArduinoThermoHygrometer.Web.Repositories.Contracts;
 using ArduinoThermoHygrometer.Web.Services;
+using ArduinoThermoHygrometer.Web.Services.Contracts;
 using ArduinoThermoHygrometer.Web.Validators;
 using Asp.Versioning.ApiExplorer;
 using FluentValidation;
@@ -54,10 +57,14 @@ builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>(
 builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 
 // Exception handling.
-builder.Services.AddExceptionHandler<ExceptionToProblemDetailsMiddleware>();
+builder.Services.AddExceptionHandler<ExceptionToProblemDetailsHandler>();
 
 // ProblemDetails service.
-builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails(configure =>
+{
+    configure.CustomizeProblemDetails = context => context.ProblemDetails.Instance =
+        $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
+});
 
 // Register controller service.
 builder.Services.AddControllers()
