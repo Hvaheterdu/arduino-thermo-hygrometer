@@ -10,12 +10,10 @@ namespace ArduinoThermoHygrometer.Web.Middleware;
 
 public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
 {
-    private readonly IProblemDetailsService _problemDetailsService;
     private readonly ILogger<ExceptionToProblemDetailsMiddleware> _logger;
 
-    public ExceptionToProblemDetailsMiddleware(IProblemDetailsService problemDetailsService, ILogger<ExceptionToProblemDetailsMiddleware> logger)
+    public ExceptionToProblemDetailsMiddleware(ILogger<ExceptionToProblemDetailsMiddleware> logger)
     {
-        _problemDetailsService = problemDetailsService;
         _logger = logger;
     }
 
