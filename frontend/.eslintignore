@@ -5,7 +5,6 @@ dist
 node_modules
 
 # Files
-vite.config.ts
 *.cjs
 **/*.generated.ts
 
