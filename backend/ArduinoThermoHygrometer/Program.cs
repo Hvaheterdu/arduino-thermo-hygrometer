@@ -1,7 +1,6 @@
 using ArduinoThermoHygrometer.Infrastructure;
 using ArduinoThermoHygrometer.Infrastructure.Data;
 using ArduinoThermoHygrometer.Web.DTOs;
-using ArduinoThermoHygrometer.Web.Exceptions;
 using ArduinoThermoHygrometer.Web.Extensions;
 using ArduinoThermoHygrometer.Web.Middleware;
 using ArduinoThermoHygrometer.Web.OpenApi;

@@ -12,6 +12,10 @@ public class HealthcheckService : IHealthcheckService
         _healthCheckService = healthCheckService;
     }
 
+    /// <summary>
+    /// Asynchronously retrieves a health check report.
+    /// </summary>
+    /// <returns>Returns the <see cref="HealthReport"/> which provides the health check status.</returns>
     public async Task<HealthReport> GetHealthcheckReport()
     {
         return await _healthCheckService.CheckHealthAsync();

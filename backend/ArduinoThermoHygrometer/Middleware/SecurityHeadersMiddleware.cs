@@ -4,9 +4,9 @@ public class SecurityHeadersMiddleware
 {
     private readonly RequestDelegate _next;
 
-    public SecurityHeadersMiddleware(RequestDelegate requestDelegate)
+    public SecurityHeadersMiddleware(RequestDelegate next)
     {
-        _next = requestDelegate;
+        _next = next;
     }
 
     /// <summary>
