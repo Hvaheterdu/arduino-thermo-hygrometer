@@ -28,7 +28,6 @@ module.exports = {
     "coverage",
     "dist",
     "node_modules",
-    "vite.config.ts",
     "*.cjs",
     "**/*.generated.ts",
     "**/.git",
