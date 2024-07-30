@@ -16,7 +16,9 @@ export default defineConfig({
     host: "localhost",
     port: 3001,
     strictPort: true,
-    cors: true,
+    cors: {
+      origin: "https://localhost:5001",
+    },
     headers: {
       "content-security-policy":
         "base-uri 'self'; default-src 'self'; frame-ancestors 'none'; manifest-src 'none'; script-src 'unsafe-inline' 'self';",
