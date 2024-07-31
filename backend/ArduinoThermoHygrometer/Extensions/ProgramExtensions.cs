@@ -163,19 +163,27 @@ public static class ProgramExtensions
     }
 
     /// <summary>
-    /// Registers the database and runs migrations on application startup.
+    /// Adds database registration and runs migrations on application startup.
     /// </summary>
     /// <typeparam name="T">The type of the DbContext.</typeparam>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
-    /// <exception cref="NotSupportedException">Thrown when the database provider is not SQL Server.</exception>"
-    /// <exception cref="NotImplementedException">Thrown when unable to connect to the database.</exception>"
+    /// <exception cref="NotImplementedException">Thrown when the database connection string cannot be found.</exception>
+    /// <exception cref="NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when database migrations are not set to run on application startup.</exception>
     public static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
     {
-        builder.Services.AddDbContext<ArduinoThermoHygrometerDbContext>(options =>
+        string? databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        if (databaseConnectionString is null)
         {
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-            assembly => assembly.MigrationsAssembly("ArduinoThermoHygrometer.Infrastructure"));
+            throw new NotImplementedException("Database connection string cannot be found." +
+                "Set the connection string in appsettings.Development.json and ensure that it is correct.");
+        }
+
+        builder.Services.AddDbContext<ArduinoThermoHygrometerDbContext>(optionsAction =>
+        {
+            optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+            sqlServerOptionsAction => sqlServerOptionsAction.MigrationsAssembly("ArduinoThermoHygrometer.Infrastructure"));
         });
 
         bool.TryParse(builder.Configuration.GetSection("Database")["RunDatabaseMigrationsOnStartup"], out bool runDatabaseMigrationOnStartup);
@@ -191,13 +199,12 @@ public static class ProgramExtensions
                 throw new NotSupportedException("Database provider currently in use is not the SQL Server provider.");
             }
 
-            string? isConnectionStringSet = arduinoThermoHygrometerDbContext.Database.GetConnectionString();
-            if (isConnectionStringSet is null)
-            {
-                throw new NotImplementedException("Database connection cannot be established. Set the connection string in appsettings.Development.json and ensure that it is correct.");
-            }
-
             arduinoThermoHygrometerDbContext.Database.Migrate();
+        }
+        else
+        {
+            throw new ArgumentNullException(runDatabaseMigrationOnStartup.ToString(),
+                "Database migrations are not set to run on application startup. Set the 'Database' key with 'RunDatabaseMigrationsOnStartup' value to 'true' in appsettings.Development.json.");
         }
 
         return builder;
