@@ -153,5 +153,11 @@
             <param name="name">The name of the options instance to configure.</param>
             <param name="options">The SwaggerGenOptions to configure.</param>
         </member>
+        <member name="M:ArduinoThermoHygrometer.Web.Services.HealthcheckService.GetHealthcheckReport">
+            <summary>
+            Asynchronously retrieves a health check report.
+            </summary>
+            <returns>Returns the <see cref="T:Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport"/> which provides the health check status.</returns>
+        </member>
     </members>
 </doc>
