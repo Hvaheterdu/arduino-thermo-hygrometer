@@ -163,7 +163,7 @@ public static class ProgramExtensions
     }
 
     /// <summary>
-    /// Adds database registration and runs migrations on application startup.
+    /// Registers database and runs migrations on application startup.
     /// </summary>
     /// <typeparam name="T">The type of the DbContext.</typeparam>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
