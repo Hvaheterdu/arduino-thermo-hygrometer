@@ -162,7 +162,7 @@ public static class ProgramExtensions
     /// <exception cref="ArgumentNullException">Thrown when database migrations are not set to run on application startup.</exception>
     public static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
     {
-        RegisterDatabase(builder);
+        RegisterDatabaseContext(builder);
 
         RunDatabaseMigrationsOnStartup(builder);
 
@@ -174,7 +174,7 @@ public static class ProgramExtensions
     /// </summary>
     /// <param name="builder">The <see cref="WebApplicationBuilder"/> to configure.</param>
     /// <exception cref="NotImplementedException">Thrown when the database connection string is not found in the configuration.</exception>
-    private static void RegisterDatabase(this WebApplicationBuilder builder)
+    private static void RegisterDatabaseContext(this WebApplicationBuilder builder)
     {
         string? databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         if (databaseConnectionString is null)
@@ -198,7 +198,7 @@ public static class ProgramExtensions
     /// <exception cref="ArgumentNullException">Thrown when the 'RunDatabaseMigrationsOnStartup' configuration key is not set to 'true'.</exception>
     private static void RunDatabaseMigrationsOnStartup(this WebApplicationBuilder builder)
     {
-        bool.TryParse(builder.Configuration.GetSection("Database")["RunDatabaseMigrationsOnStartup"], out bool runDatabaseMigrationOnStartup);
+        bool.TryParse(builder.Configuration.GetSection("Database")["RunMigrationsOnStartup"], out bool runDatabaseMigrationOnStartup);
 
         if (runDatabaseMigrationOnStartup)
         {
@@ -216,7 +216,7 @@ public static class ProgramExtensions
         else
         {
             throw new ArgumentNullException(runDatabaseMigrationOnStartup.ToString(),
-                "Database migrations are not set to run on application startup. Set the 'Database' key with 'RunDatabaseMigrationsOnStartup' value to 'true' in appsettings.Development.json.");
+                "Database migrations are not set to run on application startup. Set the 'Database' key with 'RunMigrationsOnStartup' value to 'true' in appsettings.Development.json.");
         }
     }
 
@@ -236,9 +236,9 @@ public static class ProgramExtensions
             Detail = $"Rate limit reached for {requestMethod} method. Please try again after {retryRequestAfter} minute.",
             Status = StatusCodes.Status429TooManyRequests,
             Extensions =
-                    {
-                        ["traceId"] = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier,
-                    },
+                {
+                    ["traceId"] = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier,
+                },
         };
     }
 
