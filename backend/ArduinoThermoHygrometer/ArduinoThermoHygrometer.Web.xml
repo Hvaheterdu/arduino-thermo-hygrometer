@@ -50,7 +50,7 @@
             <exception cref="T:System.NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
             <exception cref="T:System.ArgumentNullException">Thrown when database migrations are not set to run on application startup.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RegisterDatabase(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RegisterDatabaseContext(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Registers the database context with the dependency injection container.
             </summary>
