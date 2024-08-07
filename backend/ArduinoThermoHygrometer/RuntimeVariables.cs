@@ -1,4 +1,4 @@
-﻿namespace Application;
+﻿namespace ArduinoThermoHygrometer.Web;
 
 public static class RuntimeVariables
 {
