@@ -5,11 +5,12 @@ namespace ArduinoThermoHygrometer.Web.Mappers;
 
 public static class BatteryMapper
 {
+
     /// <summary>
-    /// Battery entity to dto mapper.
+    /// Converts a BatteryDto object to a Battery object.
     /// </summary>
-    /// <param name="batteryDto">Dto object.</param>
-    /// <returns>Battery entity</returns>
+    /// <param name="batteryDto">The BatteryDto object to convert.</param>
+    /// <returns>The converted Battery object.</returns>
     public static Battery GetBatteryFromBatteryDto(BatteryDto batteryDto)
     {
         Battery battery = new(batteryDto.BatteryStatus)
@@ -22,10 +23,10 @@ public static class BatteryMapper
     }
 
     /// <summary>
-    /// Battery dto to entity mapper.
+    /// Converts a Battery object to a BatteryDto object.
     /// </summary>
-    /// <param name="battery">Entity object.</param>
-    /// <returns>BatteryDto object</returns>
+    /// <param name="battery">The Battery object to convert.</param>
+    /// <returns>The converted BatteryDto object.</returns>
     public static BatteryDto GetBatteryDtoFromBattery(Battery battery)
     {
         return new BatteryDto
