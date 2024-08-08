@@ -6,10 +6,10 @@ namespace ArduinoThermoHygrometer.Web.Mappers;
 public static class TemperatureMapper
 {
     /// <summary>
-    /// Temperature entity to dto mapper.
+    /// Converts a TemperatureDto object to a Temperature object.
     /// </summary>
-    /// <param name="temperatureDto">Dto object.</param>
-    /// <returns>Temperature entity</returns>
+    /// <param name="temperatureDto">The TemperatureDto object to convert.</param>
+    /// <returns>The converted Temperature object.</returns>
     public static Temperature GetTemperatureFromTemperatureDto(TemperatureDto temperatureDto)
     {
         Temperature temperature = new(temperatureDto.Temp, temperatureDto.AirHumidity)
@@ -23,10 +23,10 @@ public static class TemperatureMapper
     }
 
     /// <summary>
-    /// Temperature dto to entity mapper.
+    /// Converts a Temperature object to a TemperatureDto object.
     /// </summary>
-    /// <param name="temperature">Entity object.</param>
-    /// <returns>TemperatureDto object</returns>
+    /// <param name="temperature">The Temperature object to convert.</param>
+    /// <returns>The converted TemperatureDto object.</returns>
     public static TemperatureDto GetTemperatureDtoFromTemperature(Temperature temperature)
     {
         return new TemperatureDto

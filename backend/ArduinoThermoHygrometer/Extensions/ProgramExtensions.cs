@@ -15,7 +15,7 @@ namespace ArduinoThermoHygrometer.Web.Extensions;
 public static class ProgramExtensions
 {
     /// <summary>
-    /// Adds HTTP Strict Transport Security (HSTS) to the WebApplicationBuilder.
+    /// Adds HTTP Strict Transport Security (HSTS) service to the WebApplicationBuilder.
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
@@ -42,7 +42,7 @@ public static class ProgramExtensions
     }
 
     /// <summary>
-    /// Adds HTTP redirection to the WebApplicationBuilder.
+    /// Adds HTTP redirection service to the WebApplicationBuilder.
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
@@ -69,7 +69,7 @@ public static class ProgramExtensions
     }
 
     /// <summary>
-    /// Adds fixed window rate limiter middleware to the WebApplicationBuilder.
+    /// Adds fixed window rate limiter service to the WebApplicationBuilder.
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
@@ -128,7 +128,7 @@ public static class ProgramExtensions
     }
 
     /// <summary>
-    /// Adds API versioning to the WebApplicationBuilder.
+    /// Adds API versioning service to the WebApplicationBuilder.
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
