@@ -16,14 +16,12 @@ public class Battery
     public DateTimeOffset CreatedAt { get; init; }
 
     [Required]
-    [StringLength(10)]
-    [RegularExpression("^[0-9]{1,3}$")]
-    public string BatteryStatus { get; set; } = string.Empty;
+    public int BatteryStatus { get; set; }
 
     [Timestamp]
     public byte[]? Version { get; set; }
 
-    public Battery(string batteryStatus)
+    public Battery(int batteryStatus)
     {
         BatteryGuid = Guid.NewGuid();
         CreatedAt = DateTimeOffset.Now;

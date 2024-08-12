@@ -8,8 +8,8 @@ public class BatteryDtoValidator : AbstractValidator<BatteryDto>
     public BatteryDtoValidator()
     {
         RuleFor(b => b.BatteryStatus)
-            .MaximumLength(10)
-            .Matches("^[0-9]{1,3}$")
+            .GreaterThanOrEqualTo(0)
+            .LessThanOrEqualTo(100)
             .NotEmpty()
             .NotNull();
     }

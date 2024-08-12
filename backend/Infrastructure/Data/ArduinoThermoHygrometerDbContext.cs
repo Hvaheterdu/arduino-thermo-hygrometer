@@ -20,7 +20,16 @@ public class ArduinoThermoHygrometerDbContext : DbContext
     {
         modelBuilder.Entity<Battery>(entity =>
         {
-            entity.ToTable("Batteries");
+            entity.ToTable("Batteries", buildAction =>
+            {
+                buildAction.HasCheckConstraint(
+                    name: "CK_BatteryStatus_NotNegative",
+                    sql: $"{nameof(Battery.BatteryStatus)} >= 0");
+
+                buildAction.HasCheckConstraint(
+                    name: "CK_BatteryStatus_LessThanOrEqualToOneHundred",
+                    sql: $"{nameof(Battery.BatteryStatus)} <= 100");
+            });
 
             entity.HasKey(b => b.Id);
 
@@ -38,8 +47,7 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .IsRequired();
 
             entity.Property(b => b.BatteryStatus)
-                .HasColumnType("nvarchar")
-                .HasMaxLength(10)
+                .HasColumnType("int")
                 .IsRequired();
 
             entity.Property(b => b.Version)
@@ -49,7 +57,24 @@ public class ArduinoThermoHygrometerDbContext : DbContext
 
         modelBuilder.Entity<Temperature>(entity =>
         {
-            entity.ToTable("Temperatures");
+            entity.ToTable("Temperatures", buildAction =>
+            {
+                buildAction.HasCheckConstraint(
+                    name: "CK_Temp_GreaterThanOrEqualToNegativeFiftyFive",
+                    sql: $"{nameof(Temperature.Temp)} >= -55");
+
+                buildAction.HasCheckConstraint(
+                    name: "CK_Temp_LessThanOrEqualToOneHundredAndTwentyFive",
+                    sql: $"{nameof(Temperature.Temp)} <= 125");
+
+                buildAction.HasCheckConstraint(
+                    name: "CK_AirHumidity_GreaterThanOrEqualToTwenty",
+                    sql: $"{nameof(Temperature.AirHumidity)} >= 20");
+
+                buildAction.HasCheckConstraint(
+                    name: "CK_AirHumidity_LessThanOrEqualToNinety",
+                    sql: $"{nameof(Temperature.AirHumidity)} <= 90");
+            });
 
             entity.HasKey(t => t.Id);
 
@@ -67,13 +92,13 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .IsRequired();
 
             entity.Property(t => t.Temp)
-                .HasColumnType("nvarchar")
-                .HasMaxLength(10)
+                .HasColumnType("decimal")
+                .HasPrecision(5, 2)
                 .IsRequired();
 
             entity.Property(t => t.AirHumidity)
-                .HasColumnType("nvarchar")
-                .HasMaxLength(10)
+                .HasColumnType("decimal")
+                .HasPrecision(4, 2)
                 .IsRequired();
 
             entity.Property(t => t.Version)
