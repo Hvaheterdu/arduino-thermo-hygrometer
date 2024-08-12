@@ -119,14 +119,13 @@
             <param name="cancellationToken">A CancellationToken to observe while waiting for the task to complete.</param>
             <returns>A ValueTask of bool indicating whether the exception was handled. Always returns true.</returns>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Middleware.ExceptionToProblemDetailsMiddleware.CreateProblemDetails(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.String,System.Int32)">
+        <member name="M:ArduinoThermoHygrometer.Web.Middleware.ExceptionToProblemDetailsMiddleware.CreateProblemDetails(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Int32)">
             <summary>
             Creates a <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> object that encapsulates information about an exception 
             that occurred during the handling of an HTTP request.
             </summary>
             <param name="httpContext">The <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/> representing the current HTTP request.</param>
             <param name="exception">The <see cref="T:System.Exception"/> that was thrown during the handling of the HTTP request.</param>
-            <param name="type"></param>
             <param name="statusCode"></param>
             <returns>A <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> object containing detailed information about the exception and the context in which it occurred.</returns>
         </member>

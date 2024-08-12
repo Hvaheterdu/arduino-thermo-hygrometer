@@ -37,24 +37,24 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
         switch (exception)
         {
             case BadRequestException badRequestException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(badRequestException),
-                    StatusCodes.Status400BadRequest), jsonOptions, contentType, cancellationToken);
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, StatusCodes.Status400BadRequest),
+                    jsonOptions, contentType, cancellationToken);
                 break;
             case UnauthorizedException unauthorizedAccessException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(unauthorizedAccessException),
-                    StatusCodes.Status401Unauthorized), jsonOptions, contentType, cancellationToken);
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, StatusCodes.Status401Unauthorized),
+                    jsonOptions, contentType, cancellationToken);
                 break;
             case ForbiddenException forbiddenException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(forbiddenException),
-                    StatusCodes.Status403Forbidden), jsonOptions, contentType, cancellationToken);
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, StatusCodes.Status403Forbidden),
+                    jsonOptions, contentType, cancellationToken);
                 break;
             case NotFoundException notFoundException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(notFoundException),
-                    StatusCodes.Status404NotFound), jsonOptions, contentType, cancellationToken);
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, StatusCodes.Status404NotFound),
+                    jsonOptions, contentType, cancellationToken);
                 break;
             default:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(exception),
-                    StatusCodes.Status500InternalServerError), jsonOptions, contentType, cancellationToken);
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, StatusCodes.Status500InternalServerError),
+                    jsonOptions, contentType, cancellationToken);
                 break;
         }
 
@@ -67,14 +67,13 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
     /// </summary>
     /// <param name="httpContext">The <see cref="HttpContext"/> representing the current HTTP request.</param>
     /// <param name="exception">The <see cref="Exception"/> that was thrown during the handling of the HTTP request.</param>
-    /// <param name="type"></param>
     /// <param name="statusCode"></param>
     /// <returns>A <see cref="ProblemDetails"/> object containing detailed information about the exception and the context in which it occurred.</returns>
-    private static ProblemDetails CreateProblemDetails(HttpContext httpContext, Exception exception, string type, int statusCode)
+    private static ProblemDetails CreateProblemDetails(HttpContext httpContext, Exception exception, int statusCode)
     {
         return new ProblemDetails
         {
-            Type = type,
+            Type = GetProblemDetailsType(exception),
             Title = Regex.Replace(exception.GetType().Name, "([a-z])([A-Z])", "$1 $2"),
             Detail = exception.Message,
             Status = statusCode,
@@ -95,13 +94,13 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
     {
         switch (exception)
         {
-            case BadRequestException badRequestException:
+            case BadRequestException _:
                 return "https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.1";
-            case UnauthorizedException unauthorizedAccessException:
+            case UnauthorizedException _:
                 return "https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.2";
-            case ForbiddenException forbiddenException:
+            case ForbiddenException _:
                 return "https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.4";
-            case NotFoundException notFoundException:
+            case NotFoundException _:
                 return "https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.5";
             default:
                 return "https://datatracker.ietf.org/doc/html/rfc9110#section-15.6.1";
