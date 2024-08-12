@@ -37,19 +37,19 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
         switch (exception)
         {
             case BadRequestException badRequestException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, StatusCodes.Status400BadRequest),
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, badRequestException, StatusCodes.Status400BadRequest),
                     jsonOptions, contentType, cancellationToken);
                 break;
             case UnauthorizedException unauthorizedAccessException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, StatusCodes.Status401Unauthorized),
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, unauthorizedAccessException, StatusCodes.Status401Unauthorized),
                     jsonOptions, contentType, cancellationToken);
                 break;
             case ForbiddenException forbiddenException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, StatusCodes.Status403Forbidden),
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, forbiddenException, StatusCodes.Status403Forbidden),
                     jsonOptions, contentType, cancellationToken);
                 break;
             case NotFoundException notFoundException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, StatusCodes.Status404NotFound),
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, notFoundException, StatusCodes.Status404NotFound),
                     jsonOptions, contentType, cancellationToken);
                 break;
             default:
