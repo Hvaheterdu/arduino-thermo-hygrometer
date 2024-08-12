@@ -8,14 +8,14 @@ public class TemperatureDtoValidator : AbstractValidator<TemperatureDto>
     public TemperatureDtoValidator()
     {
         RuleFor(t => t.Temp)
-            .MaximumLength(10)
-            .Matches("^[0-9]{1,3}([.][0-9]{1,4})?$")
+            .GreaterThanOrEqualTo(-55)
+            .LessThanOrEqualTo(125)
             .NotEmpty()
             .NotNull();
 
         RuleFor(t => t.AirHumidity)
-            .MaximumLength(10)
-            .Matches("^[0-9]{1,3}$")
+            .GreaterThanOrEqualTo(20)
+            .LessThanOrEqualTo(90)
             .NotEmpty()
             .NotNull();
     }
