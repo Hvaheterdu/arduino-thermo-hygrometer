@@ -35,10 +35,8 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<string>("BatteryStatus")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar");
+                    b.Property<int>("BatteryStatus")
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -55,7 +53,12 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.HasIndex("BatteryGuid")
                         .IsUnique();
 
-                    b.ToTable("Batteries", (string)null);
+                    b.ToTable("Batteries", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_BatteryStatus_LessThanOrEqualToOneHundred", "BatteryStatus <= 100");
+
+                            t.HasCheckConstraint("CK_BatteryStatus_NotNegative", "BatteryStatus >= 0");
+                        });
                 });
 
             modelBuilder.Entity("ArduinoThermoHygrometer.Domain.Entities.Temperature", b =>
@@ -66,20 +69,18 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AirHumidity")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar");
+                    b.Property<decimal>("AirHumidity")
+                        .HasPrecision(4, 2)
+                        .HasColumnType("decimal");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
 
-                    b.Property<string>("Temp")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar");
+                    b.Property<decimal>("Temp")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal");
 
                     b.Property<Guid>("TemperatureGuid")
                         .ValueGeneratedOnAdd()
@@ -96,7 +97,16 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.HasIndex("TemperatureGuid")
                         .IsUnique();
 
-                    b.ToTable("Temperatures", (string)null);
+                    b.ToTable("Temperatures", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_AirHumidity_GreaterThanOrEqualToTwenty", "AirHumidity >= 20");
+
+                            t.HasCheckConstraint("CK_AirHumidity_LessThanOrEqualToNinety", "AirHumidity <= 90");
+
+                            t.HasCheckConstraint("CK_Temp_GreaterThanOrEqualToNegativeFiftyFive", "Temp >= -55");
+
+                            t.HasCheckConstraint("CK_Temp_LessThanOrEqualToOneHundredAndTwentyFive", "Temp <= 125");
+                        });
                 });
 #pragma warning restore 612, 618
         }
