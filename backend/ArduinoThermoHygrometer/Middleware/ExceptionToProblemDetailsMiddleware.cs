@@ -37,19 +37,19 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
         switch (exception)
         {
             case BadRequestException badRequestException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(exception),
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(badRequestException),
                     StatusCodes.Status400BadRequest), jsonOptions, contentType, cancellationToken);
                 break;
             case UnauthorizedException unauthorizedAccessException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(exception),
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(unauthorizedAccessException),
                     StatusCodes.Status401Unauthorized), jsonOptions, contentType, cancellationToken);
                 break;
             case ForbiddenException forbiddenException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(exception),
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(forbiddenException),
                     StatusCodes.Status403Forbidden), jsonOptions, contentType, cancellationToken);
                 break;
             case NotFoundException notFoundException:
-                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(exception),
+                await httpContext.Response.WriteAsJsonAsync(CreateProblemDetails(httpContext, exception, GetProblemDetailsType(notFoundException),
                     StatusCodes.Status404NotFound), jsonOptions, contentType, cancellationToken);
                 break;
             default:
@@ -79,9 +79,9 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
             Detail = exception.Message,
             Status = statusCode,
             Instance = GetRequestUri(httpContext),
-            Extensions =
+            Extensions = new Dictionary<string, object?>
             {
-                ["traceId"] = Activity.Current?.Id ?? httpContext.TraceIdentifier
+                { "traceId", Activity.Current?.Id ?? httpContext.TraceIdentifier }
             }
         };
     }
