@@ -1,6 +1,6 @@
 ﻿namespace ArduinoThermoHygrometer.Domain.Entities;
 
-public class RateLimitOptions
+public class ApiRateLimiterOptions
 {
     public const string RateLimit = "RateLimit";
 

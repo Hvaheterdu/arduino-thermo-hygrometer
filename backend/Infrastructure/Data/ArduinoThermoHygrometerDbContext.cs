@@ -18,12 +18,14 @@ public class ArduinoThermoHygrometerDbContext : DbContext
     /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        ArgumentNullException.ThrowIfNull(modelBuilder, nameof(modelBuilder));
+
         modelBuilder.Entity<Battery>(entity =>
         {
             entity.ToTable("Batteries", buildAction =>
             {
                 buildAction.HasCheckConstraint(
-                    name: "CK_BatteryStatus_NotNegative",
+                    name: "CK_BatteryStatus_GreaterThanOrEqualToZero",
                     sql: $"{nameof(Battery.BatteryStatus)} >= 0");
 
                 buildAction.HasCheckConstraint(
@@ -60,20 +62,20 @@ public class ArduinoThermoHygrometerDbContext : DbContext
             entity.ToTable("Temperatures", buildAction =>
             {
                 buildAction.HasCheckConstraint(
-                    name: "CK_Temp_GreaterThanOrEqualToNegativeFiftyFive",
-                    sql: $"{nameof(Temperature.Temp)} >= -55");
-
-                buildAction.HasCheckConstraint(
-                    name: "CK_Temp_LessThanOrEqualToOneHundredAndTwentyFive",
-                    sql: $"{nameof(Temperature.Temp)} <= 125");
-
-                buildAction.HasCheckConstraint(
                     name: "CK_AirHumidity_GreaterThanOrEqualToTwenty",
                     sql: $"{nameof(Temperature.AirHumidity)} >= 20");
 
                 buildAction.HasCheckConstraint(
                     name: "CK_AirHumidity_LessThanOrEqualToNinety",
                     sql: $"{nameof(Temperature.AirHumidity)} <= 90");
+
+                buildAction.HasCheckConstraint(
+                    name: "CK_Temp_GreaterThanOrEqualToNegativeFiftyFive",
+                    sql: $"{nameof(Temperature.Temp)} >= -55");
+
+                buildAction.HasCheckConstraint(
+                    name: "CK_Temp_LessThanOrEqualToOneHundredAndTwentyFive",
+                    sql: $"{nameof(Temperature.Temp)} <= 125");
             });
 
             entity.HasKey(t => t.Id);

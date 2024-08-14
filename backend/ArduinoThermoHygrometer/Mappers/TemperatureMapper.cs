@@ -12,6 +12,8 @@ public static class TemperatureMapper
     /// <returns>The converted Temperature object.</returns>
     public static Temperature GetTemperatureFromTemperatureDto(TemperatureDto temperatureDto)
     {
+        ArgumentNullException.ThrowIfNull(temperatureDto, nameof(temperatureDto));
+
         Temperature temperature = new(temperatureDto.Temp, temperatureDto.AirHumidity)
         {
             CreatedAt = temperatureDto.CreatedAt,
@@ -29,6 +31,8 @@ public static class TemperatureMapper
     /// <returns>The converted TemperatureDto object.</returns>
     public static TemperatureDto GetTemperatureDtoFromTemperature(Temperature temperature)
     {
+        ArgumentNullException.ThrowIfNull(temperature, nameof(temperature));
+
         return new TemperatureDto
         {
             CreatedAt = temperature.CreatedAt,

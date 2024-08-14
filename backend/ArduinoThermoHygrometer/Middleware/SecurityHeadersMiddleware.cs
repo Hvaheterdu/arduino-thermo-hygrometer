@@ -1,4 +1,6 @@
-﻿namespace ArduinoThermoHygrometer.Web.Middleware;
+﻿#pragma warning disable CA2007
+
+namespace ArduinoThermoHygrometer.Web.Middleware;
 
 public class SecurityHeadersMiddleware
 {
@@ -16,6 +18,8 @@ public class SecurityHeadersMiddleware
     /// <returns>A task that represents the asynchronous middleware operation.</returns>
     public async Task InvokeAsync(HttpContext httpContext)
     {
+        ArgumentNullException.ThrowIfNull(httpContext, nameof(httpContext));
+
         httpContext.Response.Headers.TryAdd("Cache-Control", "no-store, no-cache");
         httpContext.Response.Headers.TryAdd("Content-Security-Policy", "connect-src 'none'; default-src 'none'; frame-ancestors 'none'; img-src 'none'; script-src 'none'; style-src 'none';");
         httpContext.Response.Headers.TryAdd("Referrer-Policy", "no-referrer");

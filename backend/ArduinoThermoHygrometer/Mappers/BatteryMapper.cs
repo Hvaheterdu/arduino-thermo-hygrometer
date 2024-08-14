@@ -13,6 +13,8 @@ public static class BatteryMapper
     /// <returns>The converted Battery object.</returns>
     public static Battery GetBatteryFromBatteryDto(BatteryDto batteryDto)
     {
+        ArgumentNullException.ThrowIfNull(batteryDto, nameof(batteryDto));
+
         Battery battery = new(batteryDto.BatteryStatus)
         {
             CreatedAt = batteryDto.CreatedAt,
@@ -29,6 +31,8 @@ public static class BatteryMapper
     /// <returns>The converted BatteryDto object.</returns>
     public static BatteryDto GetBatteryDtoFromBattery(Battery battery)
     {
+        ArgumentNullException.ThrowIfNull(battery, nameof(battery));
+
         return new BatteryDto
         {
             CreatedAt = battery.CreatedAt,

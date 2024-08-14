@@ -55,9 +55,9 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 
                     b.ToTable("Batteries", null, t =>
                         {
-                            t.HasCheckConstraint("CK_BatteryStatus_LessThanOrEqualToOneHundred", "BatteryStatus <= 100");
+                            t.HasCheckConstraint("CK_BatteryStatus_GreaterThanOrEqualToZero", "BatteryStatus >= 0");
 
-                            t.HasCheckConstraint("CK_BatteryStatus_NotNegative", "BatteryStatus >= 0");
+                            t.HasCheckConstraint("CK_BatteryStatus_LessThanOrEqualToOneHundred", "BatteryStatus <= 100");
                         });
                 });
 
