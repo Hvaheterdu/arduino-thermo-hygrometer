@@ -260,15 +260,14 @@ public static class ProgramExtensions
     /// <param name="retryRequestAfter">The time in minutes after which the request can be retried.</param>
     private static void LoggerForRateLimiter(string requestMethod, string requestPath, string retryRequestAfter)
     {
-        ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+        using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
         {
             builder.AddConsole();
             builder.AddOpenTelemetry();
         });
+
         ILogger logger = loggerFactory.CreateLogger("ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RateLimiter");
         LoggingExtensions.LoggingWarning(logger,
             $"Rate limit reached for {requestMethod} request to {requestPath}. Please try again after {retryRequestAfter} minute.");
-
-        loggerFactory.Dispose();
     }
 }
