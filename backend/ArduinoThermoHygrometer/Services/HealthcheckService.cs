@@ -1,6 +1,8 @@
 ﻿using ArduinoThermoHygrometer.Web.Services.Contracts;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
+#pragma warning disable CA2007
+
 namespace ArduinoThermoHygrometer.Web.Services;
 
 public class HealthcheckService : IHealthcheckService

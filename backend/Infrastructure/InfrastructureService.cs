@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ArduinoThermoHygrometer.Infrastructure;
-public static class DependencyInjection
+public static class InfrastructureService
 {
     /// <summary>
     /// Adds infrastructure services to the specified <see cref="IServiceCollection"/>.

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 {
     [DbContext(typeof(ArduinoThermoHygrometerDbContext))]
-    [Migration("20240812194343_InitialCreate")]
+    [Migration("20240814125257_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -58,9 +58,9 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 
                     b.ToTable("Batteries", null, t =>
                         {
-                            t.HasCheckConstraint("CK_BatteryStatus_LessThanOrEqualToOneHundred", "BatteryStatus <= 100");
+                            t.HasCheckConstraint("CK_BatteryStatus_GreaterThanOrEqualToZero", "BatteryStatus >= 0");
 
-                            t.HasCheckConstraint("CK_BatteryStatus_NotNegative", "BatteryStatus >= 0");
+                            t.HasCheckConstraint("CK_BatteryStatus_LessThanOrEqualToOneHundred", "BatteryStatus <= 100");
                         });
                 });
 

@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+#pragma warning disable CA1819
+
 namespace ArduinoThermoHygrometer.Domain.Entities;
 
 public class Temperature

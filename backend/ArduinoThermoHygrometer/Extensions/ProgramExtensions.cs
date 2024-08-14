@@ -21,6 +21,8 @@ public static class ProgramExtensions
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     public static WebApplicationBuilder AddHsts(this WebApplicationBuilder builder)
     {
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+
         if (builder.Environment.IsDevelopment())
         {
             builder.Services.AddHsts(configureOptions =>
@@ -48,6 +50,8 @@ public static class ProgramExtensions
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     public static WebApplicationBuilder AddHttpsRedirection(this WebApplicationBuilder builder)
     {
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+
         if (builder.Environment.IsDevelopment())
         {
             builder.Services.AddHttpsRedirection(configureOptions =>
@@ -75,8 +79,10 @@ public static class ProgramExtensions
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     public static WebApplicationBuilder AddRateLimiter(this WebApplicationBuilder builder)
     {
-        RateLimitOptions myOptions = new();
-        builder.Configuration.GetSection(RateLimitOptions.RateLimit).Bind(myOptions);
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+
+        ApiRateLimiterOptions myOptions = new();
+        builder.Configuration.GetSection(ApiRateLimiterOptions.RateLimit).Bind(myOptions);
 
         builder.Services.AddRateLimiter(configureOptions =>
         {
@@ -87,8 +93,8 @@ public static class ProgramExtensions
                     context.HttpContext.Response.Headers.RetryAfter = ((int)retryAfter.TotalMinutes).ToString(NumberFormatInfo.InvariantInfo);
                 }
 
-                string requestMethod = context.HttpContext.Request.Method.Replace(Environment.NewLine, "");
-                string requestPath = context.HttpContext.Request.Path.ToString().Replace(Environment.NewLine, "");
+                string requestMethod = context.HttpContext.Request.Method.Replace(Environment.NewLine, "", 0);
+                string requestPath = context.HttpContext.Request.Path.ToString().Replace(Environment.NewLine, "", 0);
                 string retryRequestAfter = ((int)retryAfter.TotalMinutes).ToString(NumberFormatInfo.InvariantInfo);
 
                 ProblemDetails problemDetails = CreateProblemDetailsForRateLimiter(context, requestMethod, retryRequestAfter);
@@ -134,6 +140,8 @@ public static class ProgramExtensions
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     public static WebApplicationBuilder AddApiVersioning(this WebApplicationBuilder builder)
     {
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+
         builder.Services.AddApiVersioning(setupAction =>
         {
             setupAction.ApiVersionReader = new UrlSegmentApiVersionReader();
@@ -162,6 +170,8 @@ public static class ProgramExtensions
     /// <exception cref="ArgumentNullException">Thrown when database migrations are not set to run on application startup.</exception>
     public static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
     {
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+
         RegisterDatabaseContext(builder);
 
         RunDatabaseMigrationsOnStartup(builder);
@@ -198,7 +208,7 @@ public static class ProgramExtensions
     /// <exception cref="ArgumentNullException">Thrown when the 'RunDatabaseMigrationsOnStartup' configuration key is not set to 'true'.</exception>
     private static void RunDatabaseMigrationsOnStartup(this WebApplicationBuilder builder)
     {
-        bool.TryParse(builder.Configuration.GetSection("Database")["RunMigrationsOnStartup"], out bool runDatabaseMigrationOnStartup);
+        _ = bool.TryParse(builder.Configuration.GetSection("Database")["RunMigrationsOnStartup"], out bool runDatabaseMigrationOnStartup);
 
         if (runDatabaseMigrationOnStartup)
         {
@@ -250,8 +260,14 @@ public static class ProgramExtensions
     /// <param name="retryRequestAfter">The time in minutes after which the request can be retried.</param>
     private static void LoggerForRateLimiter(string requestMethod, string requestPath, string retryRequestAfter)
     {
-        ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder.AddConsole();
+            builder.AddOpenTelemetry();
+        });
+
         ILogger logger = loggerFactory.CreateLogger("ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RateLimiter");
-        logger.LogWarning("Rate limit reached for {RequestMethod} request to {RequestPath}. Please try again after {RetryRequestAfter} minute.", requestMethod, requestPath, retryRequestAfter);
+        LoggingExtensions.LoggingWarning(logger,
+            $"Rate limit reached for {requestMethod} request to {requestPath}. Please try again after {retryRequestAfter} minute.");
     }
 }

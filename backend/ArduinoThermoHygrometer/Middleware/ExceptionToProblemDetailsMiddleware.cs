@@ -1,10 +1,13 @@
 ﻿using ArduinoThermoHygrometer.Web.Exceptions;
+using ArduinoThermoHygrometer.Web.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+
+#pragma warning disable CA2007
 
 namespace ArduinoThermoHygrometer.Web.Middleware;
 
@@ -26,6 +29,9 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
     /// <returns>A ValueTask of bool indicating whether the exception was handled. Always returns true.</returns>
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(exception, nameof(exception));
+        ArgumentNullException.ThrowIfNull(httpContext, nameof(httpContext));
+
         CreateLogsForExceptions(httpContext, exception);
 
         string contentType = "application/problem+json";
@@ -114,12 +120,10 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
     /// <param name="exception">The exception that occurred.</param>
     private void CreateLogsForExceptions(HttpContext context, Exception exception)
     {
-        _logger.LogError(
-            exception,
-            "{GetRequestUriWithRequestMethod}\n      Exception: {Message}\n      InnerException: {Message}",
-            GetRequestUriWithRequestMethod(context),
-            exception.Message,
-            exception.InnerException?.Message);
+        LoggingExtensions.LoggingError(_logger,
+            $"{GetRequestUriWithRequestMethod(context)}\n" +
+            $"      Exception: {exception.Message}\n" +
+            $"      InnerException: {exception.InnerException?.Message}");
     }
 
     /// <summary>
@@ -129,8 +133,8 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
     /// <returns>The request URI with the request method.</returns>
     private static string GetRequestUriWithRequestMethod(HttpContext httpContext)
     {
-        string requestMethod = httpContext.Request.Method.Replace(Environment.NewLine, "");
-        string requestPath = httpContext.Request.Path.ToString().Replace(Environment.NewLine, "");
+        string requestMethod = httpContext.Request.Method.Replace(Environment.NewLine, "", 0);
+        string requestPath = httpContext.Request.Path.ToString().Replace(Environment.NewLine, "", 0);
 
         return $"{requestMethod} {requestPath}";
     }

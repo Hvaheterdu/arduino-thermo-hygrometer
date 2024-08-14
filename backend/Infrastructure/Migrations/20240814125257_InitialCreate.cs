@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
+#pragma warning disable CA1062
 
 namespace ArduinoThermoHygrometer.Infrastructure.Migrations;
 
@@ -24,8 +25,8 @@ public partial class InitialCreate : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_Batteries", x => x.Id);
+                table.CheckConstraint("CK_BatteryStatus_GreaterThanOrEqualToZero", "BatteryStatus >= 0");
                 table.CheckConstraint("CK_BatteryStatus_LessThanOrEqualToOneHundred", "BatteryStatus <= 100");
-                table.CheckConstraint("CK_BatteryStatus_NotNegative", "BatteryStatus >= 0");
             });
 
         migrationBuilder.CreateTable(
