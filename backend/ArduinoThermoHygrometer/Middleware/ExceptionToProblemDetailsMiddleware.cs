@@ -27,6 +27,8 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
     /// <param name="exception">The exception that occurred.</param>
     /// <param name="cancellationToken">A CancellationToken to observe while waiting for the task to complete.</param>
     /// <returns>A ValueTask of bool indicating whether the exception was handled. Always returns true.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="exception"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="httpContext"/> is null.</exception>
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(exception, nameof(exception));

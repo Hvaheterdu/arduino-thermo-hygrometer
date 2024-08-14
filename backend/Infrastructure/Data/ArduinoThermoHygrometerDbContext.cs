@@ -16,6 +16,7 @@ public class ArduinoThermoHygrometerDbContext : DbContext
     /// Configures the model for the database context.
     /// </summary>
     /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="modelBuilder"/> is null.</exception>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder, nameof(modelBuilder));

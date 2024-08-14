@@ -10,6 +10,7 @@ public static class TemperatureMapper
     /// </summary>
     /// <param name="temperatureDto">The TemperatureDto object to convert.</param>
     /// <returns>The converted Temperature object.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="temperatureDto"/> is null.</exception>
     public static Temperature GetTemperatureFromTemperatureDto(TemperatureDto temperatureDto)
     {
         ArgumentNullException.ThrowIfNull(temperatureDto, nameof(temperatureDto));
@@ -29,6 +30,7 @@ public static class TemperatureMapper
     /// </summary>
     /// <param name="temperature">The Temperature object to convert.</param>
     /// <returns>The converted TemperatureDto object.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="temperature"/> is null.</exception>
     public static TemperatureDto GetTemperatureDtoFromTemperature(Temperature temperature)
     {
         ArgumentNullException.ThrowIfNull(temperature, nameof(temperature));

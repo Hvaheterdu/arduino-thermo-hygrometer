@@ -16,6 +16,7 @@ public class SecurityHeadersMiddleware
     /// </summary>
     /// <param name="httpContext">The HTTP context.</param>
     /// <returns>A task that represents the asynchronous middleware operation.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="httpContext"/> is null.</exception>
     public async Task InvokeAsync(HttpContext httpContext)
     {
         ArgumentNullException.ThrowIfNull(httpContext, nameof(httpContext));

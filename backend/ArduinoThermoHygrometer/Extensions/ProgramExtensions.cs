@@ -19,6 +19,7 @@ public static class ProgramExtensions
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
     public static WebApplicationBuilder AddHsts(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
@@ -48,6 +49,7 @@ public static class ProgramExtensions
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
     public static WebApplicationBuilder AddHttpsRedirection(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
@@ -77,6 +79,7 @@ public static class ProgramExtensions
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
     public static WebApplicationBuilder AddRateLimiter(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
@@ -138,6 +141,7 @@ public static class ProgramExtensions
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
     public static WebApplicationBuilder AddApiVersioning(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
@@ -165,6 +169,7 @@ public static class ProgramExtensions
     /// <typeparam name="T">The type of the DbContext.</typeparam>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
     /// <exception cref="NotImplementedException">Thrown when the database connection string cannot be found.</exception>
     /// <exception cref="NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
     /// <exception cref="ArgumentNullException">Thrown when database migrations are not set to run on application startup.</exception>
