@@ -202,7 +202,7 @@ public static class ProgramExtensions
         builder.Services.AddDbContext<ArduinoThermoHygrometerDbContext>(optionsAction =>
         {
             optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-            sqlServerOptionsAction => sqlServerOptionsAction.MigrationsAssembly(InfrastructureService.GetAssemblyName()));
+            sqlServerOptionsAction => sqlServerOptionsAction.MigrationsAssembly(InfrastructureDependencyInjection.GetAssemblyName()));
         });
     }
 

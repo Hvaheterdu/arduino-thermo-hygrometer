@@ -3,7 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ArduinoThermoHygrometer.Infrastructure;
-public static class InfrastructureService
+
+public static class InfrastructureDependencyInjection
 {
     /// <summary>
     /// Gets the name of the assembly.
@@ -11,7 +12,7 @@ public static class InfrastructureService
     /// <returns>The name of the assembly.</returns>
     public static string GetAssemblyName()
     {
-        return typeof(InfrastructureService).Assembly.GetName().Name!;
+        return typeof(InfrastructureDependencyInjection).Assembly.GetName().Name!;
     }
 
     /// <summary>
