@@ -44,8 +44,8 @@ builder.AddRateLimiter();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Dependency injection DTOs, services, repositories and validators.
-builder.Services.AddTransient<ITemperatureService, TemperatureService>();
-builder.Services.AddTransient<IBatteryService, BatteryService>();
+builder.Services.AddScoped<ITemperatureService, TemperatureService>();
+builder.Services.AddScoped<IBatteryService, BatteryService>();
 
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<IBatteryRepository, BatteryRepository>();
