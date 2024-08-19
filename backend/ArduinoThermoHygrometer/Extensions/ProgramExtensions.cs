@@ -1,4 +1,5 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
+using ArduinoThermoHygrometer.Infrastructure;
 using ArduinoThermoHygrometer.Infrastructure.Data;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -201,7 +202,7 @@ public static class ProgramExtensions
         builder.Services.AddDbContext<ArduinoThermoHygrometerDbContext>(optionsAction =>
         {
             optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-            sqlServerOptionsAction => sqlServerOptionsAction.MigrationsAssembly("ArduinoThermoHygrometer.Infrastructure"));
+            sqlServerOptionsAction => sqlServerOptionsAction.MigrationsAssembly(InfrastructureService.GetAssemblyName()));
         });
     }
 
