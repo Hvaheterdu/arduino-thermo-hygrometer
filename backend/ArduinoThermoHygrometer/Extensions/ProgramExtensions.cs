@@ -212,7 +212,7 @@ public static class ProgramExtensions
     private static void RunDatabaseMigrationsOnStartup(this WebApplicationBuilder builder)
     {
         IConfigurationSection databaseConfiguration = builder.Configuration.GetSection("Database");
-        bool runDatabaseMigrationsOnStartup = databaseConfiguration.GetValue("RunMigrationsOnStartup", true);
+        _ = databaseConfiguration.GetValue("RunMigrationsOnStartup", true);
 
         using ServiceProvider serviceProvider = builder.Services.BuildServiceProvider();
         using IServiceScope scope = serviceProvider.CreateScope();
