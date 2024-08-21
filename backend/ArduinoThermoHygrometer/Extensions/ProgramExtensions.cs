@@ -191,17 +191,7 @@ public static class ProgramExtensions
     /// <exception cref="NotImplementedException">Thrown when the database connection string is not found in the configuration.</exception>
     private static void RegisterDatabaseContext(this WebApplicationBuilder builder)
     {
-        string? databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-        if (databaseConnectionString is null)
-        {
-            throw new NotImplementedException("Database connection string cannot be found in appsettings.Development.json");
-        }
-
-        builder.Services.AddDbContext<ArduinoThermoHygrometerDbContext>(optionsAction =>
-        {
-            optionsAction.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-            sqlServerOptionsAction => sqlServerOptionsAction.MigrationsAssembly(InfrastructureDependencyInjection.GetAssemblyName()));
-        });
+        InfrastructureDependencyInjection.AddSqlServer(builder.Services, builder.Configuration);
     }
 
     /// <summary>
