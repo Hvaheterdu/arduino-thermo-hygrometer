@@ -202,7 +202,7 @@ public static class ProgramExtensions
     private static void RunDatabaseMigrationsOnStartup(this WebApplicationBuilder builder)
     {
         IConfigurationSection databaseConfiguration = builder.Configuration.GetSection("Database");
-        _ = databaseConfiguration.GetValue("RunMigrationsOnStartup", true);
+        databaseConfiguration.GetValue("RunMigrationsOnStartup", true);
 
         using ServiceProvider serviceProvider = builder.Services.BuildServiceProvider();
         using IServiceScope scope = serviceProvider.CreateScope();
@@ -233,9 +233,9 @@ public static class ProgramExtensions
             Detail = $"Rate limit reached for {requestMethod} method. Please try again after {retryRequestAfter} minute.",
             Status = StatusCodes.Status429TooManyRequests,
             Extensions =
-                {
-                    ["traceId"] = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier,
-                },
+            {
+                ["traceId"] = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier,
+            },
         };
     }
 

@@ -67,7 +67,7 @@ builder.Services.AddProblemDetails(configure =>
 
 // Register controller service.
 builder.Services.AddControllers(configure => configure.ReturnHttpNotAcceptable = true)
-.AddJsonOptions(configure => configure.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+    .AddJsonOptions(configure => configure.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 // Lowercase API routes.
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
