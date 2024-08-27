@@ -54,20 +54,6 @@
             <exception cref="T:System.NotImplementedException">Thrown when the database connection string cannot be found.</exception>
             <exception cref="T:System.NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RegisterDatabaseContext(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
-            <summary>
-            Registers the database context with the dependency injection container.
-            </summary>
-            <param name="builder">The <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> to configure.</param>
-            <exception cref="T:System.NotImplementedException">Thrown when the database connection string is not found in the configuration.</exception>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RunDatabaseMigrationsOnStartup(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
-            <summary>
-            Runs database migrations on application startup if configured to do so.
-            </summary>
-            <param name="builder">The <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> to configure.</param>
-            <exception cref="T:System.NotSupportedException">Thrown when the database provider is not SQL Server.</exception>
-        </member>
         <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.CreateProblemDetailsForRateLimiter(Microsoft.AspNetCore.RateLimiting.OnRejectedContext,System.String,System.String)">
             <summary>
             Creates a <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> instance for a rate limiter rejection.

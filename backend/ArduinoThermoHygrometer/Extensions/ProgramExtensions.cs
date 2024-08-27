@@ -177,30 +177,8 @@ public static class ProgramExtensions
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
-        RegisterDatabaseContext(builder);
-
-        RunDatabaseMigrationsOnStartup(builder);
-
-        return builder;
-    }
-
-    /// <summary>
-    /// Registers the database context with the dependency injection container.
-    /// </summary>
-    /// <param name="builder">The <see cref="WebApplicationBuilder"/> to configure.</param>
-    /// <exception cref="NotImplementedException">Thrown when the database connection string is not found in the configuration.</exception>
-    private static void RegisterDatabaseContext(this WebApplicationBuilder builder)
-    {
         InfrastructureDependencyInjection.AddSqlServer(builder.Services, builder.Configuration);
-    }
 
-    /// <summary>
-    /// Runs database migrations on application startup if configured to do so.
-    /// </summary>
-    /// <param name="builder">The <see cref="WebApplicationBuilder"/> to configure.</param>
-    /// <exception cref="NotSupportedException">Thrown when the database provider is not SQL Server.</exception>
-    private static void RunDatabaseMigrationsOnStartup(this WebApplicationBuilder builder)
-    {
         IConfigurationSection databaseConfiguration = builder.Configuration.GetSection("Database");
         databaseConfiguration.GetValue("RunMigrationsOnStartup", true);
 
@@ -215,6 +193,8 @@ public static class ProgramExtensions
         }
 
         arduinoThermoHygrometerDbContext.Database.Migrate();
+
+        return builder;
     }
 
     /// <summary>
