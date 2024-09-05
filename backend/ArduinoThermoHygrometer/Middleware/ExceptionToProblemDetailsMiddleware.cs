@@ -85,7 +85,7 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
             Title = Regex.Replace(exception.GetType().Name, "([a-z])([A-Z])", "$1 $2"),
             Detail = exception.Message,
             Status = statusCode,
-            Instance = GetRequestUri(httpContext),
+            Instance = httpContext.Request.Path.ToString(),
             Extensions = new Dictionary<string, object?>
             {
                 { "traceId", Activity.Current?.Id ?? httpContext.TraceIdentifier }
@@ -139,15 +139,5 @@ public class ExceptionToProblemDetailsMiddleware : IExceptionHandler
         string requestPath = httpContext.Request.Path.ToString().Replace(Environment.NewLine, "", 0);
 
         return $"{requestMethod} {requestPath}";
-    }
-
-    /// <summary>
-    /// Gets the request URI from the provided HttpContext.
-    /// </summary>
-    /// <param name="httpContext">The HttpContext object.</param>
-    /// <returns>The request URI.</returns>
-    private static string GetRequestUri(HttpContext httpContext)
-    {
-        return httpContext.Request.Path.ToString();
     }
 }
