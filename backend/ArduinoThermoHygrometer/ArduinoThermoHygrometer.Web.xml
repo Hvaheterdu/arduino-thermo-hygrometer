@@ -145,13 +145,6 @@
             <param name="httpContext">The HttpContext object.</param>
             <returns>The request URI with the request method.</returns>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Middleware.ExceptionToProblemDetailsMiddleware.GetRequestUri(Microsoft.AspNetCore.Http.HttpContext)">
-            <summary>
-            Gets the request URI from the provided HttpContext.
-            </summary>
-            <param name="httpContext">The HttpContext object.</param>
-            <returns>The request URI.</returns>
-        </member>
         <member name="M:ArduinoThermoHygrometer.Web.Middleware.SecurityHeadersMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
             Invokes the middleware for security headers.
