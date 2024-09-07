@@ -7,5 +7,11 @@ public static class DatabaseInitialiser
     /// <param name="dbContext">The database context to which the data will be added.</param>
     public static void SeedDatabase(ArduinoThermoHygrometerDbContext dbContext)
     {
+        ArgumentNullException.ThrowIfNull(dbContext);
+
+        if (!dbContext.Temperatures.Any())
+        {
+            return;
+        }
     }
 }
