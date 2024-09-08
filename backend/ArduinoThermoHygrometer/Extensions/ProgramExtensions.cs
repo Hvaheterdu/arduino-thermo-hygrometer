@@ -1,6 +1,6 @@
-﻿using ArduinoThermoHygrometer.Domain.Entities;
-using ArduinoThermoHygrometer.Infrastructure;
+﻿using ArduinoThermoHygrometer.Infrastructure;
 using ArduinoThermoHygrometer.Infrastructure.Data;
+using ArduinoThermoHygrometer.Web.Options;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
