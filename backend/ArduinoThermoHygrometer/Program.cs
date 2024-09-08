@@ -136,8 +136,9 @@ app.MapHealthChecks($"/api/_health", new HealthCheckOptions
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
 // Seed database.
-using (IServiceScope scope = app.Services.CreateScope())
+if (!app.Environment.IsProduction())
 {
+    using IServiceScope scope = app.Services.CreateScope();
     IServiceProvider services = scope.ServiceProvider;
 
     ArduinoThermoHygrometerDbContext dbContext = services.GetRequiredService<ArduinoThermoHygrometerDbContext>();
