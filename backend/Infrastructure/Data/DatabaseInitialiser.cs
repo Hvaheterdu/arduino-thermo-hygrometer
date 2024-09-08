@@ -13,5 +13,10 @@ public static class DatabaseInitialiser
         {
             return;
         }
+
+        if (!dbContext.Temperatures.Any())
+        {
+            return;
+        }
     }
 }
