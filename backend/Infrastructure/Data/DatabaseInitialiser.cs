@@ -9,7 +9,7 @@ public static class DatabaseInitialiser
     {
         ArgumentNullException.ThrowIfNull(dbContext);
 
-        if (!dbContext.Temperatures.Any())
+        if (!dbContext.Batteries.Any())
         {
             return;
         }
