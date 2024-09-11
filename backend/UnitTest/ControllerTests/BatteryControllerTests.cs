@@ -1,0 +1,4 @@
+﻿namespace ArduinoThermoHygrometer.UnitTest.ControllerTests;
+public class BatteryControllerTests
+{
+}
