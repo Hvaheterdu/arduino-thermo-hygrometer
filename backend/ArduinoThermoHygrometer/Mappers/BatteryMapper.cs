@@ -16,7 +16,7 @@ public static class BatteryMapper
     {
         ArgumentNullException.ThrowIfNull(batteryDto, nameof(batteryDto));
 
-        Battery battery = new(batteryDto.BatteryStatus)
+        Battery battery = new(batteryDto.RegisteredAt, batteryDto.BatteryStatus)
         {
             RegisteredAt = batteryDto.RegisteredAt,
             BatteryStatus = batteryDto.BatteryStatus

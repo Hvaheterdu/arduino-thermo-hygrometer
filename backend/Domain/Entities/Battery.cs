@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 #pragma warning disable CA1819
 
@@ -11,11 +10,8 @@ public class Battery
     [Required]
     public Guid Id { get; init; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int BatteryId { get; init; }
-
     [Required]
-    public DateTimeOffset RegisteredAt { get; init; }
+    public DateTimeOffset RegisteredAt { get; set; } = DateTimeOffset.Now;
 
     [Required]
     public int BatteryStatus { get; set; }
@@ -23,10 +19,10 @@ public class Battery
     [Timestamp]
     public byte[]? Version { get; set; }
 
-    public Battery(int batteryStatus)
+    public Battery(DateTimeOffset registeredAt, int batteryStatus)
     {
         Id = Guid.NewGuid();
-        RegisteredAt = DateTimeOffset.Now;
+        RegisteredAt = registeredAt;
         BatteryStatus = batteryStatus;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace ArduinoThermoHygrometer.Infrastructure.Data;
+﻿using ArduinoThermoHygrometer.Domain.Entities;
+
+namespace ArduinoThermoHygrometer.Infrastructure.Data;
 public static class DatabaseInitialiser
 {
     /// <summary>
@@ -11,12 +13,34 @@ public static class DatabaseInitialiser
 
         if (!dbContext.Batteries.Any())
         {
-            return;
+            List<Battery> batteries = new()
+            {
+                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(12), 90),
+                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(13), 90),
+                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(14), 89),
+                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(15), 89),
+                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(16), 89),
+                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(17), 88),
+            };
+
+            dbContext.AddRange(batteries);
+            dbContext.SaveChanges();
         }
 
         if (!dbContext.Temperatures.Any())
         {
-            return;
+            List<Temperature> temperatures = new()
+            {
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(12), 14, 83),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(13), 15, 86),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(14), 16, 88),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(15), 16, 89),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(16), 16, 87),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(17), 16, 87),
+            };
+
+            dbContext.AddRange(temperatures);
+            dbContext.SaveChanges();
         }
     }
 }

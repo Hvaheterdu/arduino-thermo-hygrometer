@@ -15,7 +15,7 @@ public static class TemperatureMapper
     {
         ArgumentNullException.ThrowIfNull(temperatureDto, nameof(temperatureDto));
 
-        Temperature temperature = new(temperatureDto.Temp, temperatureDto.AirHumidity)
+        Temperature temperature = new(temperatureDto.RegisteredAt, temperatureDto.Temp, temperatureDto.AirHumidity)
         {
             RegisteredAt = temperatureDto.RegisteredAt,
             Temp = temperatureDto.Temp,

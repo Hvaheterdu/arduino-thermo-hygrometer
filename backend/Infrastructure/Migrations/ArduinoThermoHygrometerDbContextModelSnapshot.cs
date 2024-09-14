@@ -29,12 +29,6 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<int>("BatteryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BatteryId"));
-
                     b.Property<int>("BatteryStatus")
                         .HasColumnType("int");
 
@@ -52,13 +46,10 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 
                     SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
 
-                    b.HasIndex("BatteryId")
-                        .IsUnique();
-
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("BatteryId"));
-
                     b.HasIndex("RegisteredAt")
                         .IsUnique();
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("RegisteredAt"));
 
                     b.ToTable("Batteries", null, t =>
                         {
@@ -88,12 +79,6 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal");
 
-                    b.Property<int>("TemperatureId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TemperatureId"));
-
                     b.Property<byte[]>("Version")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -106,10 +91,7 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                     b.HasIndex("RegisteredAt")
                         .IsUnique();
 
-                    b.HasIndex("TemperatureId")
-                        .IsUnique();
-
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("TemperatureId"));
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("RegisteredAt"));
 
                     b.ToTable("Temperatures", null, t =>
                         {

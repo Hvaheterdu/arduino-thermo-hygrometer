@@ -43,16 +43,13 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .HasDefaultValueSql("NEWID()")
                 .IsRequired();
 
-            entity.HasIndex(b => b.BatteryId)
-                .IsClustered()
-                .IsUnique();
-
             entity.Property(b => b.RegisteredAt)
                 .HasColumnType("datetimeoffset")
                 .HasDefaultValueSql("SYSDATETIMEOFFSET()")
                 .IsRequired();
 
             entity.HasIndex(b => b.RegisteredAt)
+                .IsClustered()
                 .IsUnique();
 
             entity.Property(b => b.BatteryStatus)
@@ -93,16 +90,13 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .HasDefaultValueSql("NEWID()")
                 .IsRequired();
 
-            entity.HasIndex(t => t.TemperatureId)
-                .IsClustered()
-                .IsUnique();
-
             entity.Property(t => t.RegisteredAt)
                 .HasColumnType("datetimeoffset")
                 .HasDefaultValueSql("SYSDATETIMEOFFSET()")
                 .IsRequired();
 
             entity.HasIndex(t => t.RegisteredAt)
+                .IsClustered()
                 .IsUnique();
 
             entity.Property(t => t.Temp)

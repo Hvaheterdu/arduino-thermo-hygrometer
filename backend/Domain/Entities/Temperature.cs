@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 #pragma warning disable CA1819
 
@@ -11,11 +10,8 @@ public class Temperature
     [Required]
     public Guid Id { get; init; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int TemperatureId { get; init; }
-
     [Required]
-    public DateTimeOffset RegisteredAt { get; init; }
+    public DateTimeOffset RegisteredAt { get; init; } = DateTimeOffset.Now;
 
     [Required]
     public decimal Temp { get; set; }
@@ -26,10 +22,10 @@ public class Temperature
     [Timestamp]
     public byte[]? Version { get; set; }
 
-    public Temperature(decimal temp, decimal airHumidity)
+    public Temperature(DateTimeOffset registeredAt, decimal temp, decimal airHumidity)
     {
         Id = Guid.NewGuid();
-        RegisteredAt = DateTimeOffset.Now;
+        RegisteredAt = registeredAt;
         Temp = temp;
         AirHumidity = airHumidity;
     }
