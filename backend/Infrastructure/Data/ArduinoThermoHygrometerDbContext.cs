@@ -35,20 +35,25 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                     sql: $"{nameof(Battery.BatteryStatus)} <= 100");
             });
 
-            entity.HasKey(b => b.Id);
+            entity.HasKey(b => b.Id)
+                .IsClustered(clustered: false);
 
-            entity.Property(b => b.BatteryGuid)
+            entity.Property(b => b.Id)
                 .HasColumnType("uniqueidentifier")
                 .HasDefaultValueSql("NEWID()")
                 .IsRequired();
 
-            entity.HasIndex(b => b.BatteryGuid)
+            entity.HasIndex(b => b.BatteryId)
+                .IsClustered()
                 .IsUnique();
 
-            entity.Property(b => b.CreatedAt)
+            entity.Property(b => b.RegisteredAt)
                 .HasColumnType("datetimeoffset")
                 .HasDefaultValueSql("SYSDATETIMEOFFSET()")
                 .IsRequired();
+
+            entity.HasIndex(b => b.RegisteredAt)
+                .IsUnique();
 
             entity.Property(b => b.BatteryStatus)
                 .HasColumnType("int")
@@ -80,20 +85,25 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                     sql: $"{nameof(Temperature.Temp)} <= 125");
             });
 
-            entity.HasKey(t => t.Id);
+            entity.HasKey(t => t.Id)
+                .IsClustered(clustered: false);
 
-            entity.Property(t => t.TemperatureGuid)
+            entity.Property(t => t.Id)
                 .HasColumnType("uniqueidentifier")
                 .HasDefaultValueSql("NEWID()")
                 .IsRequired();
 
-            entity.HasIndex(t => t.TemperatureGuid)
+            entity.HasIndex(t => t.TemperatureId)
+                .IsClustered()
                 .IsUnique();
 
-            entity.Property(t => t.CreatedAt)
+            entity.Property(t => t.RegisteredAt)
                 .HasColumnType("datetimeoffset")
                 .HasDefaultValueSql("SYSDATETIMEOFFSET()")
                 .IsRequired();
+
+            entity.HasIndex(t => t.RegisteredAt)
+                .IsUnique();
 
             entity.Property(t => t.Temp)
                 .HasColumnType("decimal")

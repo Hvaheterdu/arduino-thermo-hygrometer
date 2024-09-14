@@ -8,14 +8,14 @@ namespace ArduinoThermoHygrometer.Domain.Entities;
 public class Temperature
 {
     [Key]
+    [Required]
+    public Guid Id { get; init; }
+
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; init; }
+    public int TemperatureId { get; init; }
 
     [Required]
-    public Guid TemperatureGuid { get; init; }
-
-    [Required]
-    public DateTimeOffset CreatedAt { get; init; }
+    public DateTimeOffset RegisteredAt { get; init; }
 
     [Required]
     public decimal Temp { get; set; }
@@ -28,8 +28,8 @@ public class Temperature
 
     public Temperature(decimal temp, decimal airHumidity)
     {
-        TemperatureGuid = Guid.NewGuid();
-        CreatedAt = DateTimeOffset.Now;
+        Id = Guid.NewGuid();
+        RegisteredAt = DateTimeOffset.Now;
         Temp = temp;
         AirHumidity = airHumidity;
     }

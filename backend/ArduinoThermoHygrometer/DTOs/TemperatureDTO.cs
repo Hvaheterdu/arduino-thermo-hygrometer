@@ -2,7 +2,7 @@
 
 public record TemperatureDto
 {
-    public DateTimeOffset CreatedAt { get; set; } = default!;
+    public DateTimeOffset RegisteredAt { get; set; } = default!;
 
     public decimal Temp { get; set; } = default!;
 

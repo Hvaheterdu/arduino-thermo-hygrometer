@@ -17,7 +17,7 @@ public static class TemperatureMapper
 
         Temperature temperature = new(temperatureDto.Temp, temperatureDto.AirHumidity)
         {
-            CreatedAt = temperatureDto.CreatedAt,
+            RegisteredAt = temperatureDto.RegisteredAt,
             Temp = temperatureDto.Temp,
             AirHumidity = temperatureDto.AirHumidity
         };
@@ -37,7 +37,7 @@ public static class TemperatureMapper
 
         return new TemperatureDto
         {
-            CreatedAt = temperature.CreatedAt,
+            RegisteredAt = temperature.RegisteredAt,
             Temp = temperature.Temp,
             AirHumidity = temperature.AirHumidity
         };

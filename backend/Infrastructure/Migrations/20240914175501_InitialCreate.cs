@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-#pragma warning disable CA1062
 
 namespace ArduinoThermoHygrometer.Infrastructure.Migrations;
 
@@ -15,16 +14,17 @@ public partial class InitialCreate : Migration
             name: "Batteries",
             columns: table => new
             {
-                Id = table.Column<int>(type: "int", nullable: false)
+                Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                BatteryId = table.Column<int>(type: "int", nullable: false)
                     .Annotation("SqlServer:Identity", "1, 1"),
-                BatteryGuid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
+                RegisteredAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
                 BatteryStatus = table.Column<int>(type: "int", nullable: false),
                 Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_Batteries", x => x.Id);
+                table.PrimaryKey("PK_Batteries", x => x.Id)
+                    .Annotation("SqlServer:Clustered", false);
                 table.CheckConstraint("CK_BatteryStatus_GreaterThanOrEqualToZero", "BatteryStatus >= 0");
                 table.CheckConstraint("CK_BatteryStatus_LessThanOrEqualToOneHundred", "BatteryStatus <= 100");
             });
@@ -33,17 +33,18 @@ public partial class InitialCreate : Migration
             name: "Temperatures",
             columns: table => new
             {
-                Id = table.Column<int>(type: "int", nullable: false)
+                Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                TemperatureId = table.Column<int>(type: "int", nullable: false)
                     .Annotation("SqlServer:Identity", "1, 1"),
-                TemperatureGuid = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
+                RegisteredAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
                 Temp = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
                 AirHumidity = table.Column<decimal>(type: "decimal(4,2)", precision: 4, scale: 2, nullable: false),
                 Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_Temperatures", x => x.Id);
+                table.PrimaryKey("PK_Temperatures", x => x.Id)
+                    .Annotation("SqlServer:Clustered", false);
                 table.CheckConstraint("CK_AirHumidity_GreaterThanOrEqualToTwenty", "AirHumidity >= 20");
                 table.CheckConstraint("CK_AirHumidity_LessThanOrEqualToNinety", "AirHumidity <= 90");
                 table.CheckConstraint("CK_Temp_GreaterThanOrEqualToNegativeFiftyFive", "Temp >= -55");
@@ -51,16 +52,30 @@ public partial class InitialCreate : Migration
             });
 
         migrationBuilder.CreateIndex(
-            name: "IX_Batteries_BatteryGuid",
+            name: "IX_Batteries_BatteryId",
             table: "Batteries",
-            column: "BatteryGuid",
+            column: "BatteryId",
+            unique: true)
+                .Annotation("SqlServer:Clustered", true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Batteries_RegisteredAt",
+            table: "Batteries",
+            column: "RegisteredAt",
             unique: true);
 
         migrationBuilder.CreateIndex(
-            name: "IX_Temperatures_TemperatureGuid",
+            name: "IX_Temperatures_RegisteredAt",
             table: "Temperatures",
-            column: "TemperatureGuid",
+            column: "RegisteredAt",
             unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Temperatures_TemperatureId",
+            table: "Temperatures",
+            column: "TemperatureId",
+            unique: true)
+                .Annotation("SqlServer:Clustered", true);
     }
 
     /// <inheritdoc />

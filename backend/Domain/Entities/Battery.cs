@@ -8,14 +8,14 @@ namespace ArduinoThermoHygrometer.Domain.Entities;
 public class Battery
 {
     [Key]
+    [Required]
+    public Guid Id { get; init; }
+
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; init; }
+    public int BatteryId { get; init; }
 
     [Required]
-    public Guid BatteryGuid { get; init; }
-
-    [Required]
-    public DateTimeOffset CreatedAt { get; init; }
+    public DateTimeOffset RegisteredAt { get; init; }
 
     [Required]
     public int BatteryStatus { get; set; }
@@ -25,8 +25,8 @@ public class Battery
 
     public Battery(int batteryStatus)
     {
-        BatteryGuid = Guid.NewGuid();
-        CreatedAt = DateTimeOffset.Now;
+        Id = Guid.NewGuid();
+        RegisteredAt = DateTimeOffset.Now;
         BatteryStatus = batteryStatus;
     }
 }

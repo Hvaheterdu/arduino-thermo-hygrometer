@@ -17,28 +17,28 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("ArduinoThermoHygrometer.Domain.Entities.Battery", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid>("BatteryGuid")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<int>("BatteryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BatteryId"));
+
                     b.Property<int>("BatteryStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTimeOffset>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
@@ -50,7 +50,14 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BatteryGuid")
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
+
+                    b.HasIndex("BatteryId")
+                        .IsUnique();
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("BatteryId"));
+
+                    b.HasIndex("RegisteredAt")
                         .IsUnique();
 
                     b.ToTable("Batteries", null, t =>
@@ -63,17 +70,16 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 
             modelBuilder.Entity("ArduinoThermoHygrometer.Domain.Entities.Temperature", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<decimal>("AirHumidity")
                         .HasPrecision(4, 2)
                         .HasColumnType("decimal");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTimeOffset>("RegisteredAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
@@ -82,10 +88,11 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal");
 
-                    b.Property<Guid>("TemperatureGuid")
+                    b.Property<int>("TemperatureId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TemperatureId"));
 
                     b.Property<byte[]>("Version")
                         .IsConcurrencyToken()
@@ -94,8 +101,15 @@ namespace ArduinoThermoHygrometer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TemperatureGuid")
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
+
+                    b.HasIndex("RegisteredAt")
                         .IsUnique();
+
+                    b.HasIndex("TemperatureId")
+                        .IsUnique();
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("TemperatureId"));
 
                     b.ToTable("Temperatures", null, t =>
                         {
