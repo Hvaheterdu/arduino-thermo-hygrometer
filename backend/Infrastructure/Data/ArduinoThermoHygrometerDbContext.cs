@@ -9,6 +9,8 @@ public class ArduinoThermoHygrometerDbContext : DbContext
 
     public DbSet<Temperature> Temperatures { get; set; } = null!;
 
+    public DbSet<Humidity> Humidities { get; set; } = null!;
+
     public ArduinoThermoHygrometerDbContext(DbContextOptions<ArduinoThermoHygrometerDbContext> options) : base(options)
     {
     }
@@ -66,14 +68,6 @@ public class ArduinoThermoHygrometerDbContext : DbContext
             entity.ToTable("Temperatures", buildAction =>
             {
                 buildAction.HasCheckConstraint(
-                    name: "CK_AirHumidity_GreaterThanOrEqualToTwenty",
-                    sql: $"{nameof(Temperature.AirHumidity)} >= 20");
-
-                buildAction.HasCheckConstraint(
-                    name: "CK_AirHumidity_LessThanOrEqualToNinety",
-                    sql: $"{nameof(Temperature.AirHumidity)} <= 90");
-
-                buildAction.HasCheckConstraint(
                     name: "CK_Temp_GreaterThanOrEqualToNegativeFiftyFive",
                     sql: $"{nameof(Temperature.Temp)} >= -55");
 
@@ -103,6 +97,41 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .HasColumnType("decimal")
                 .HasPrecision(5, 2)
                 .IsRequired();
+
+            entity.Property(t => t.Version)
+                .HasColumnType("rowversion")
+                .IsRowVersion();
+        });
+
+        modelBuilder.Entity<Humidity>(entity =>
+        {
+            entity.ToTable("Humidities", buildAction =>
+            {
+                buildAction.HasCheckConstraint(
+                    name: "CK_AirHumidity_GreaterThanOrEqualToTwenty",
+                    sql: $"{nameof(Humidity.AirHumidity)} >= 20");
+
+                buildAction.HasCheckConstraint(
+                    name: "CK_AirHumidity_LessThanOrEqualToNinety",
+                    sql: $"{nameof(Humidity.AirHumidity)} <= 90");
+            });
+
+            entity.HasKey(t => t.Id)
+                .IsClustered(clustered: false);
+
+            entity.Property(t => t.Id)
+                .HasColumnType("uniqueidentifier")
+                .HasDefaultValueSql("NEWID()")
+                .IsRequired();
+
+            entity.Property(t => t.RegisteredAt)
+                .HasColumnType("datetimeoffset")
+                .HasDefaultValueSql("SYSDATETIMEOFFSET()")
+                .IsRequired();
+
+            entity.HasIndex(t => t.RegisteredAt)
+                .IsClustered()
+                .IsUnique();
 
             entity.Property(t => t.AirHumidity)
                 .HasColumnType("decimal")

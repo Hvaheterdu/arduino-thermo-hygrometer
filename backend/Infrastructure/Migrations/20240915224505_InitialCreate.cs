@@ -28,21 +28,35 @@ public partial class InitialCreate : Migration
             });
 
         migrationBuilder.CreateTable(
+            name: "Humidities",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                RegisteredAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
+                AirHumidity = table.Column<decimal>(type: "decimal(4,2)", precision: 4, scale: 2, nullable: false),
+                Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Humidities", x => x.Id)
+                    .Annotation("SqlServer:Clustered", false);
+                table.CheckConstraint("CK_AirHumidity_GreaterThanOrEqualToTwenty", "AirHumidity >= 20");
+                table.CheckConstraint("CK_AirHumidity_LessThanOrEqualToNinety", "AirHumidity <= 90");
+            });
+
+        migrationBuilder.CreateTable(
             name: "Temperatures",
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                 RegisteredAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
                 Temp = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
-                AirHumidity = table.Column<decimal>(type: "decimal(4,2)", precision: 4, scale: 2, nullable: false),
                 Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
             },
             constraints: table =>
             {
                 table.PrimaryKey("PK_Temperatures", x => x.Id)
                     .Annotation("SqlServer:Clustered", false);
-                table.CheckConstraint("CK_AirHumidity_GreaterThanOrEqualToTwenty", "AirHumidity >= 20");
-                table.CheckConstraint("CK_AirHumidity_LessThanOrEqualToNinety", "AirHumidity <= 90");
                 table.CheckConstraint("CK_Temp_GreaterThanOrEqualToNegativeFiftyFive", "Temp >= -55");
                 table.CheckConstraint("CK_Temp_LessThanOrEqualToOneHundredAndTwentyFive", "Temp <= 125");
             });
@@ -50,6 +64,13 @@ public partial class InitialCreate : Migration
         migrationBuilder.CreateIndex(
             name: "IX_Batteries_RegisteredAt",
             table: "Batteries",
+            column: "RegisteredAt",
+            unique: true)
+                .Annotation("SqlServer:Clustered", true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Humidities_RegisteredAt",
+            table: "Humidities",
             column: "RegisteredAt",
             unique: true)
                 .Annotation("SqlServer:Clustered", true);
@@ -67,6 +88,9 @@ public partial class InitialCreate : Migration
     {
         migrationBuilder.DropTable(
             name: "Batteries");
+
+        migrationBuilder.DropTable(
+            name: "Humidities");
 
         migrationBuilder.DropTable(
             name: "Temperatures");

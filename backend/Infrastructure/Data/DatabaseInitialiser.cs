@@ -31,15 +31,31 @@ public static class DatabaseInitialiser
         {
             List<Temperature> temperatures = new()
             {
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(12), 14, 83),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(13), 15, 86),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(14), 16, 88),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(15), 16, 89),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(16), 16, 87),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(17), 16, 87),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(12), 14),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(13), 15),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(14), 16),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(15), 16),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(16), 16),
+                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(17), 16),
             };
 
             dbContext.AddRange(temperatures);
+            dbContext.SaveChanges();
+        }
+
+        if (!dbContext.Humidities.Any())
+        {
+            List<Humidity> humidities = new()
+            {
+                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(12), 83),
+                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(13), 86),
+                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(14), 88),
+                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(15), 89),
+                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(16), 87),
+                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(17), 87),
+            };
+
+            dbContext.AddRange(humidities);
             dbContext.SaveChanges();
         }
     }

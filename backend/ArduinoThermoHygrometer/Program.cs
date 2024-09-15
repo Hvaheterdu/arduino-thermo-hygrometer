@@ -44,16 +44,19 @@ builder.AddRateLimiter();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Dependency injection DTOs, services, repositories and validators.
-builder.Services.AddScoped<ITemperatureService, TemperatureService>();
 builder.Services.AddScoped<IBatteryService, BatteryService>();
+builder.Services.AddScoped<IHumidityService, HumidityService>();
+builder.Services.AddScoped<ITemperatureService, TemperatureService>();
 
-builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<IBatteryRepository, BatteryRepository>();
+builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
+builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 
 builder.Services.AddScoped<IHealthcheckService, HealthcheckService>();
 
-builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>();
 builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
+builder.Services.AddScoped<IValidator<HumidityDto>, HumidityDtoValidator>();
+builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>();
 
 // Exception handling.
 builder.Services.AddExceptionHandler<GlobalExceptionHandlerMiddleware>();

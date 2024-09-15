@@ -3,8 +3,7 @@
 #pragma warning disable CA1819
 
 namespace ArduinoThermoHygrometer.Domain.Entities;
-
-public class Temperature
+public class Humidity
 {
     [Key]
     [Required]
@@ -14,15 +13,15 @@ public class Temperature
     public DateTimeOffset RegisteredAt { get; init; } = DateTimeOffset.Now;
 
     [Required]
-    public decimal Temp { get; set; }
+    public decimal AirHumidity { get; set; }
 
     [Timestamp]
     public byte[]? Version { get; set; }
 
-    public Temperature(DateTimeOffset registeredAt, decimal temp)
+    public Humidity(DateTimeOffset registeredAt, decimal airHumidity)
     {
         Id = Guid.NewGuid();
         RegisteredAt = registeredAt;
-        Temp = temp;
+        AirHumidity = airHumidity;
     }
 }

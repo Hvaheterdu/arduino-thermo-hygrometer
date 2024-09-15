@@ -12,11 +12,5 @@ public class TemperatureDtoValidator : AbstractValidator<TemperatureDto>
             .LessThanOrEqualTo(125)
             .NotEmpty()
             .NotNull();
-
-        RuleFor(t => t.AirHumidity)
-            .GreaterThanOrEqualTo(20)
-            .LessThanOrEqualTo(90)
-            .NotEmpty()
-            .NotNull();
     }
 }
