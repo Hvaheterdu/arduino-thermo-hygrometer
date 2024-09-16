@@ -53,7 +53,7 @@ public class BatteryRepository : IBatteryRepository
         return battery;
     }
 
-    public Battery RemoveBattery(BatteryDto batteryDto)
+    public Battery? RemoveBattery(BatteryDto batteryDto)
     {
         Battery? battery = BatteryMapper.GetBatteryFromBatteryDto(batteryDto);
         _dbContext.Batteries.Remove(battery);
