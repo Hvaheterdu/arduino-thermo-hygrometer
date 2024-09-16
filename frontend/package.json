@@ -71,7 +71,7 @@
     "eslint-plugin-jsdoc": "^50.2.3",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.36.1",
-    "eslint-plugin-react-hooks": "^5.1.0-rc-fb9a90fa48-20240614",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",
     "husky": "^9.1.6",
     "knip": "^5.30.2",
