@@ -1,6 +1,10 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
 using ArduinoThermoHygrometer.Infrastructure.Data;
+using ArduinoThermoHygrometer.Web.DTOs;
 using ArduinoThermoHygrometer.Web.Repositories.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ArduinoThermoHygrometer.Web.Repositories;
 
@@ -13,41 +17,37 @@ public class HumidityRepository : IHumidityRepository
         _dbContext = dbContext;
     }
 
-    public Task<IEnumerable<Humidity>> GetAllHumiditiesAsync()
-    {
-        throw new NotImplementedException();
-    }
-    public Task<Humidity> GetHumidityByIdAsync(Guid id)
+    public Task<IEnumerable<Humidity?>> GetAllHumiditiesAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<Humidity> GetHumidityByDateAndTimeAsync(DateTimeOffset dateTimeOffset)
+    public Task<Humidity?> GetHumidityByIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Humidity> AddHumidityAsync(Humidity battery)
+    public Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset dateTimeOffset)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Humidity> UpdateHumidityAsync(Humidity battery)
+    public Task<Humidity?> AddHumidityAsync(HumidityDto humidityDto)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Humidity> RemoveHumidityByDateAndTimeAsync(DateTimeOffset dateTimeOffset)
+    public Task<Humidity?> UpdateHumidityAsync(HumidityDto humidityDto)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Humidity> RemoveHumidityByIdAsync(Guid id)
+    public Humidity? RemoveHumidity(HumidityDto humidityDto)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Humidity> SaveChangesAsync()
+    public Task SaveChangesAsync()
     {
         throw new NotImplementedException();
     }

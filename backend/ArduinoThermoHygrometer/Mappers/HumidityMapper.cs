@@ -17,6 +17,7 @@ public static class HumidityMapper
 
         Humidity humidity = new(humidityDto.RegisteredAt, humidityDto.AirHumidity)
         {
+            Id = humidityDto.Id,
             RegisteredAt = humidityDto.RegisteredAt,
             AirHumidity = humidityDto.AirHumidity
         };
@@ -36,6 +37,7 @@ public static class HumidityMapper
 
         return new HumidityDto
         {
+            Id = humidity.Id,
             RegisteredAt = humidity.RegisteredAt,
             AirHumidity = humidity.AirHumidity
         };

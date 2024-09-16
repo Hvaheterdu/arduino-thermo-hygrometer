@@ -1,22 +1,21 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
+using ArduinoThermoHygrometer.Web.DTOs;
 
 namespace ArduinoThermoHygrometer.Web.Repositories.Contracts;
 
 public interface ITemperatureRepository
 {
-    Task<IEnumerable<Temperature>> GetAllTemperaturesAsync();
+    Task<IEnumerable<Temperature?>> GetAllTemperaturesAsync();
 
-    Task<Temperature> GetTemperatureByIdAsync(Guid id);
+    Task<Temperature?> GetTemperatureByIdAsync(Guid id);
 
-    Task<Temperature> GetTemperatureByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
+    Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
 
-    Task<Temperature> AddTemperatureAsync(Temperature battery);
+    Task<Temperature?> AddTemperatureAsync(TemperatureDto temperatureDto);
 
-    Task<Temperature> UpdateTemperatureAsync(Temperature battery);
+    Task<Temperature?> UpdateTemperatureAsync(TemperatureDto temperatureDto);
 
-    Task<Temperature> RemoveTemperatureByIdAsync(Guid id);
+    Temperature? RemoveTemperature(TemperatureDto temperatureDto);
 
-    Task<Temperature> RemoveTemperatureByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
-
-    Task<Temperature> SaveChangesAsync();
+    Task SaveChangesAsync();
 }

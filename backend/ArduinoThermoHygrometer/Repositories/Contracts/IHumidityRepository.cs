@@ -1,22 +1,21 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
+using ArduinoThermoHygrometer.Web.DTOs;
 
 namespace ArduinoThermoHygrometer.Web.Repositories.Contracts;
 
 public interface IHumidityRepository
 {
-    Task<IEnumerable<Humidity>> GetAllHumiditiesAsync();
+    Task<IEnumerable<Humidity?>> GetAllHumiditiesAsync();
 
-    Task<Humidity> GetHumidityByIdAsync(Guid id);
+    Task<Humidity?> GetHumidityByIdAsync(Guid id);
 
-    Task<Humidity> GetHumidityByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
+    Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
 
-    Task<Humidity> AddHumidityAsync(Humidity battery);
+    Task<Humidity?> AddHumidityAsync(HumidityDto humidityDto);
 
-    Task<Humidity> UpdateHumidityAsync(Humidity battery);
+    Task<Humidity?> UpdateHumidityAsync(HumidityDto humidityDto);
 
-    Task<Humidity> RemoveHumidityByIdAsync(Guid id);
+    Humidity? RemoveHumidity(HumidityDto humidityDto);
 
-    Task<Humidity> RemoveHumidityByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
-
-    Task<Humidity> SaveChangesAsync();
+    Task SaveChangesAsync();
 }
