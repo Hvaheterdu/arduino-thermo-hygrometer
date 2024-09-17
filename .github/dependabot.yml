@@ -15,10 +15,8 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "weekly"
-    ignore:
-      - dependency-name: "eslint"
 
   - package-ecosystem: "nuget"
-    directory: "/backend"
+    directory: "/backend/ArduinoThermoHygrometer"
     schedule:
       interval: "weekly"
