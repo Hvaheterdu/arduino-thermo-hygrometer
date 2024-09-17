@@ -11,11 +11,11 @@ public interface IBatteryRepository
 
     Task<Battery?> GetBatteryByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
 
-    Task<Battery?> AddBatteryAsync(BatteryDto batteryDto);
+    Task<Battery?> AddBatteryAsync(Battery battery);
 
-    Task<Battery?> UpdateBatteryAsync(BatteryDto batteryDto);
+    Battery? UpdateBatteryAsync(Battery battery);
 
-    Battery? RemoveBattery(BatteryDto batteryDto);
+    Battery? RemoveBattery(Battery battery);
 
     Task SaveChangesAsync();
 }

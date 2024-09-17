@@ -37,25 +37,22 @@ public class BatteryRepository : IBatteryRepository
         return battery;
     }
 
-    public async Task<Battery?> AddBatteryAsync(BatteryDto batteryDto)
+    public async Task<Battery?> AddBatteryAsync(Battery battery)
     {
-        Battery? battery = BatteryMapper.GetBatteryFromBatteryDto(batteryDto);
         await _dbContext.AddAsync<Battery>(battery);
 
         return battery;
     }
 
-    public async Task<Battery?> UpdateBatteryAsync(BatteryDto batteryDto)
+    public Battery? UpdateBatteryAsync(Battery battery)
     {
-        Battery? battery = await _dbContext.Batteries.FindAsync(batteryDto.Id);
-        battery = BatteryMapper.GetBatteryFromBatteryDto(batteryDto);
+        _dbContext.Batteries.Update(battery);
 
         return battery;
     }
 
-    public Battery? RemoveBattery(BatteryDto batteryDto)
+    public Battery? RemoveBattery(Battery battery)
     {
-        Battery? battery = BatteryMapper.GetBatteryFromBatteryDto(batteryDto);
         _dbContext.Batteries.Remove(battery);
 
         return battery;

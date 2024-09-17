@@ -11,11 +11,11 @@ public interface ITemperatureRepository
 
     Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
 
-    Task<Temperature?> AddTemperatureAsync(TemperatureDto temperatureDto);
+    Task<Temperature?> AddTemperatureAsync(Temperature temperature);
 
-    Task<Temperature?> UpdateTemperatureAsync(TemperatureDto temperatureDto);
+    Temperature? UpdateTemperatureAsync(Temperature temperature);
 
-    Temperature? RemoveTemperature(TemperatureDto temperatureDto);
+    Temperature? RemoveTemperature(Temperature temperature);
 
     Task SaveChangesAsync();
 }

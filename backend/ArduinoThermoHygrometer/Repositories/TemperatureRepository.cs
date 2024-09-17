@@ -29,17 +29,17 @@ public class TemperatureRepository : ITemperatureRepository
         throw new NotImplementedException();
     }
 
-    public Task<Temperature?> AddTemperatureAsync(TemperatureDto temperatureDto)
+    public Task<Temperature?> AddTemperatureAsync(Temperature temperature)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Temperature?> UpdateTemperatureAsync(TemperatureDto temperatureDto)
+    public Temperature? UpdateTemperatureAsync(Temperature temperature)
     {
         throw new NotImplementedException();
     }
 
-    public Temperature? RemoveTemperature(TemperatureDto temperatureDto)
+    public Temperature? RemoveTemperature(Temperature temperature)
     {
         throw new NotImplementedException();
     }

@@ -11,11 +11,11 @@ public interface IHumidityRepository
 
     Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
 
-    Task<Humidity?> AddHumidityAsync(HumidityDto humidityDto);
+    Task<Humidity?> AddHumidityAsync(Humidity humidity);
 
-    Task<Humidity?> UpdateHumidityAsync(HumidityDto humidityDto);
+    Humidity? UpdateHumidityAsync(Humidity humidity);
 
-    Humidity? RemoveHumidity(HumidityDto humidityDto);
+    Humidity? RemoveHumidity(Humidity humidity);
 
     Task SaveChangesAsync();
 }

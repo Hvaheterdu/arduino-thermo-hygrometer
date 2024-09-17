@@ -32,17 +32,17 @@ public class HumidityRepository : IHumidityRepository
         throw new NotImplementedException();
     }
 
-    public Task<Humidity?> AddHumidityAsync(HumidityDto humidityDto)
+    public Task<Humidity?> AddHumidityAsync(Humidity humidity)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Humidity?> UpdateHumidityAsync(HumidityDto humidityDto)
+    public Humidity? UpdateHumidityAsync(Humidity humidity)
     {
         throw new NotImplementedException();
     }
 
-    public Humidity? RemoveHumidity(HumidityDto humidityDto)
+    public Humidity? RemoveHumidity(Humidity humidity)
     {
         throw new NotImplementedException();
     }
