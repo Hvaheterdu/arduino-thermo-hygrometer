@@ -24,7 +24,7 @@ public class TemperatureRepository : ITemperatureRepository
         throw new NotImplementedException();
     }
 
-    public Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset dateTimeOffset)
+    public Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset registeredAt)
     {
         throw new NotImplementedException();
     }

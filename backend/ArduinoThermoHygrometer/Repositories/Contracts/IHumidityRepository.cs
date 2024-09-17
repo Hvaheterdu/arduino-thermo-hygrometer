@@ -9,7 +9,7 @@ public interface IHumidityRepository
 
     Task<Humidity?> GetHumidityByIdAsync(Guid id);
 
-    Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
+    Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset registeredAt);
 
     Task<Humidity?> AddHumidityAsync(Humidity humidity);
 

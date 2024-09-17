@@ -27,7 +27,7 @@ public class HumidityRepository : IHumidityRepository
         throw new NotImplementedException();
     }
 
-    public Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset dateTimeOffset)
+    public Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset registeredAt)
     {
         throw new NotImplementedException();
     }

@@ -9,7 +9,7 @@ public interface IBatteryRepository
 
     Task<Battery?> GetBatteryByIdAsync(Guid id);
 
-    Task<Battery?> GetBatteryByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
+    Task<Battery?> GetBatteryByDateAndTimeAsync(DateTimeOffset registeredAt);
 
     Task<Battery?> AddBatteryAsync(Battery battery);
 

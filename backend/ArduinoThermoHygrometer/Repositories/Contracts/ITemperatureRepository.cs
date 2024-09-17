@@ -9,7 +9,7 @@ public interface ITemperatureRepository
 
     Task<Temperature?> GetTemperatureByIdAsync(Guid id);
 
-    Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset dateTimeOffset);
+    Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset registeredAt);
 
     Task<Temperature?> AddTemperatureAsync(Temperature temperature);
 
