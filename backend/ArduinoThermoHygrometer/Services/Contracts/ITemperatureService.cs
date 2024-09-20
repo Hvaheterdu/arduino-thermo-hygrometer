@@ -2,4 +2,5 @@
 
 public interface ITemperatureService
 {
+    void Dummy();
 }
