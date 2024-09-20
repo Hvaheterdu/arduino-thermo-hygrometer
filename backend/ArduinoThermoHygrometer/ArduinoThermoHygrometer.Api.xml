@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>ArduinoThermoHygrometer.Web</name>
+        <name>ArduinoThermoHygrometer.Api</name>
     </assembly>
     <members>
         <member name="M:ArduinoThermoHygrometer.Web.Controllers.HealthcheckController.GetHealthCheckReport">

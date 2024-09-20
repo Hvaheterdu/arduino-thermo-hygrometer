@@ -1,16 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<AnalysisLevel>latest</AnalysisLevel>
-	<AnalysisMode>all</AnalysisMode>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>all</AnalysisMode>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-	<AssemblyName>ArduinoThermoHygrometer.UnitTest</AssemblyName>
-	<RootNamespace>ArduinoThermoHygrometer.UnitTest</RootNamespace>
+    <AssemblyName>ArduinoThermoHygrometer.IntegrationTest</AssemblyName>
+    <RootNamespace>ArduinoThermoHygrometer.IntegrationTest</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="NSubstitute" Version="5.1.0" />
+    <PackageReference Include="Testcontainers.Kafka" Version="3.10.0" />
+    <PackageReference Include="Testcontainers.MsSql" Version="3.10.0" />
+    <PackageReference Include="Testcontainers.Redis" Version="3.10.0" />
     <PackageReference Include="xunit" Version="2.9.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <PrivateAssets>all</PrivateAssets>

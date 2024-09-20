@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>all</AnalysisMode>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>ArduinoThermoHygrometer.Domain</AssemblyName>
     <RootNamespace>ArduinoThermoHygrometer.Domain</RootNamespace>
   </PropertyGroup>

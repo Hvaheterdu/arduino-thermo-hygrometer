@@ -6,21 +6,22 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>all</AnalysisMode>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>ArduinoThermoHygrometer.Web.xml</DocumentationFile>
-    <AssemblyName>ArduinoThermoHygrometer.Web</AssemblyName>
-    <RootNamespace>ArduinoThermoHygrometer.Web</RootNamespace>
+    <DocumentationFile>ArduinoThermoHygrometer.Api.xml</DocumentationFile>
+    <AssemblyName>ArduinoThermoHygrometer.Api</AssemblyName>
+    <RootNamespace>ArduinoThermoHygrometer.Api</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1591;1701;1702;2007</NoWarn>
-    <WarningLevel>0</WarningLevel>
+    <NoWarn>CS1591;CA2007</NoWarn>
+    <WarningLevel>9999</WarningLevel>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1591;1701;1702;2007</NoWarn>
-    <WarningLevel>0</WarningLevel>
+    <NoWarn>CS1591;CA2007</NoWarn>
+    <WarningLevel>9999</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,7 +35,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.8" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.64.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.16" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
   </ItemGroup>
 

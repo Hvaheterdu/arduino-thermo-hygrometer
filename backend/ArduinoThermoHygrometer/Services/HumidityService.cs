@@ -17,4 +17,9 @@ public class HumidityService : IHumidityService
         _humidityDtovValidator = humidityDtovValidator;
         _logger = logger;
     }
+
+    public void Dummy()
+    {
+        throw new NotImplementedException();
+    }
 }

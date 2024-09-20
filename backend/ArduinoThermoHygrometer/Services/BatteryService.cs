@@ -17,4 +17,9 @@ public class BatteryService : IBatteryService
         _batteryDtoValidator = batteryDtoValidator;
         _logger = logger;
     }
+
+    public void Dummy()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -17,4 +17,9 @@ public class TemperatureService : ITemperatureService
         _temperatureDtoValidator = temperatureDtoValidator;
         _logger = logger;
     }
+
+    public void Dummy()
+    {
+        throw new NotImplementedException();
+    }
 }

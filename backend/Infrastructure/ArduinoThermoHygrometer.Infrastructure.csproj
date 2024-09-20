@@ -6,8 +6,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>all</AnalysisMode>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>ArduinoThermoHygrometer.Infrastructure</AssemblyName>
     <RootNamespace>ArduinoThermoHygrometer.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>9999</WarningLevel>
+    <NoWarn>CA1062</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>9999</WarningLevel>
+    <NoWarn>CA1062</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
