@@ -13,6 +13,16 @@
 	<RootNamespace>ArduinoThermoHygrometer.Test.Integration</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>9999</WarningLevel>
+    <NoWarn>CS1701;CS1702</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>9999</WarningLevel>
+    <NoWarn>CS1701;CS1702</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
@@ -26,7 +36,6 @@
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageReference Include="Testcontainers" Version="3.10.0" />
-    <PackageReference Include="Testcontainers.Kafka" Version="3.10.0" />
     <PackageReference Include="Testcontainers.MsSql" Version="3.10.0" />
     <PackageReference Include="Testcontainers.Redis" Version="3.10.0" />
   </ItemGroup>
