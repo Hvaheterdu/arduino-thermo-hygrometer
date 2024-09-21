@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -9,8 +9,8 @@
 	<AnalysisLevel>latest</AnalysisLevel>
 	<AnalysisMode>all</AnalysisMode>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	<AssemblyName>ArduinoThermoHygrometer.UnitTest</AssemblyName>
-	<RootNamespace>ArduinoThermoHygrometer.UnitTest</RootNamespace>
+	<AssemblyName>ArduinoThermoHygrometer.Test.Unit</AssemblyName>
+	<RootNamespace>ArduinoThermoHygrometer.Test.Unit</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
