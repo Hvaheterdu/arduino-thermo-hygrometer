@@ -1,6 +1,7 @@
-﻿using ArduinoThermoHygrometer.Infrastructure;
+﻿using ArduinoThermoHygrometer.Api.Extensions;
+using ArduinoThermoHygrometer.Api.Options;
+using ArduinoThermoHygrometer.Infrastructure;
 using ArduinoThermoHygrometer.Infrastructure.Data;
-using ArduinoThermoHygrometer.Web.Options;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -11,7 +12,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 
-namespace ArduinoThermoHygrometer.Web.Extensions;
+namespace ArduinoThermoHygrometer.Api.Extensions;
 
 public static class ProgramExtensions
 {
@@ -177,7 +178,7 @@ public static class ProgramExtensions
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
-        InfrastructureDependencyInjection.AddSqlServer(builder.Services, builder.Configuration);
+        builder.Services.AddSqlServer(builder.Configuration);
 
         IConfigurationSection databaseConfiguration = builder.Configuration.GetSection("Database");
         databaseConfiguration.GetValue("RunMigrationsOnStartup", true);
@@ -233,8 +234,7 @@ public static class ProgramExtensions
             configure.AddOpenTelemetry();
         });
 
-        ILogger logger = loggerFactory.CreateLogger("ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RateLimiter");
-        LoggingExtensions.LoggingWarning(logger,
-            $"Rate limit reached for {requestMethod} request to {requestPath}. Please try again after {retryRequestAfter} minute.");
+        ILogger logger = loggerFactory.CreateLogger("Rate limiter");
+        logger.LoggingWarning($"Rate limit reached for {requestMethod} request to {requestPath}. Please try again after {retryRequestAfter} minute.");
     }
 }

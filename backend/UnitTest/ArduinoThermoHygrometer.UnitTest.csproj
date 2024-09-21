@@ -28,6 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ArduinoThermoHygrometer\ArduinoThermoHygrometer.Api.csproj" />
+    <ProjectReference Include="..\Domain\ArduinoThermoHygrometer.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

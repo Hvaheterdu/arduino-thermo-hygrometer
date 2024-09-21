@@ -1,11 +1,9 @@
-﻿using ArduinoThermoHygrometer.Domain.Entities;
+﻿using ArduinoThermoHygrometer.Api.Repositories.Contracts;
+using ArduinoThermoHygrometer.Domain.Entities;
 using ArduinoThermoHygrometer.Infrastructure.Data;
-using ArduinoThermoHygrometer.Web.DTOs;
-using ArduinoThermoHygrometer.Web.Mappers;
-using ArduinoThermoHygrometer.Web.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 
-namespace ArduinoThermoHygrometer.Web.Repositories;
+namespace ArduinoThermoHygrometer.Api.Repositories;
 
 public class BatteryRepository : IBatteryRepository
 {
@@ -39,7 +37,7 @@ public class BatteryRepository : IBatteryRepository
 
     public async Task<Battery?> AddBatteryAsync(Battery battery)
     {
-        await _dbContext.AddAsync<Battery>(battery);
+        await _dbContext.AddAsync(battery);
 
         return battery;
     }

@@ -1,4 +1,4 @@
-﻿namespace ArduinoThermoHygrometer.Web.DTOs;
+﻿namespace ArduinoThermoHygrometer.Api.DTOs;
 
 public record BatteryDto
 {

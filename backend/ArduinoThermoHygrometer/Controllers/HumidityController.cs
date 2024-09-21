@@ -1,8 +1,8 @@
-﻿using ArduinoThermoHygrometer.Web.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Api.Services.Contracts;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ArduinoThermoHygrometer.Web.Controllers;
+namespace ArduinoThermoHygrometer.Api.Controllers;
 
 [ApiController]
 [ApiVersion(0.1)]

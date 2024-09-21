@@ -1,7 +1,7 @@
-﻿using ArduinoThermoHygrometer.Domain.Entities;
-using ArduinoThermoHygrometer.Web.DTOs;
+﻿using ArduinoThermoHygrometer.Api.DTOs;
+using ArduinoThermoHygrometer.Domain.Entities;
 
-namespace ArduinoThermoHygrometer.Web.Mappers;
+namespace ArduinoThermoHygrometer.Api.Mappers;
 
 public static class BatteryMapper
 {

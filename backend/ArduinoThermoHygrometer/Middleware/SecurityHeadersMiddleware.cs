@@ -1,6 +1,4 @@
-﻿#pragma warning disable CA2007
-
-namespace ArduinoThermoHygrometer.Web.Middleware;
+﻿namespace ArduinoThermoHygrometer.Api.Middleware;
 
 public class SecurityHeadersMiddleware
 {

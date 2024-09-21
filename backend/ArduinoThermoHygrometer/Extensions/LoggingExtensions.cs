@@ -1,4 +1,4 @@
-﻿namespace ArduinoThermoHygrometer.Web.Extensions;
+﻿namespace ArduinoThermoHygrometer.Api.Extensions;
 
 public static partial class LoggingExtensions
 {

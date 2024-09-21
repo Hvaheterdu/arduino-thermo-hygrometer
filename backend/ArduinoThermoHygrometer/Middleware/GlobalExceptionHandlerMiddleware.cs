@@ -1,4 +1,4 @@
-﻿using ArduinoThermoHygrometer.Web.Extensions;
+﻿using ArduinoThermoHygrometer.Api.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,9 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
-#pragma warning disable CA2007
-
-namespace ArduinoThermoHygrometer.Web.Middleware;
+namespace ArduinoThermoHygrometer.Api.Middleware;
 
 public class GlobalExceptionHandlerMiddleware : IExceptionHandler
 {
@@ -66,8 +64,7 @@ public class GlobalExceptionHandlerMiddleware : IExceptionHandler
     /// <param name="exception">The exception that occurred.</param>
     private void CreateLogsForExceptions(Exception exception)
     {
-        LoggingExtensions.LoggingError(_logger,
-            $"Exception: {exception.Message}\n" +
+        _logger.LoggingError($"Exception: {exception.Message}\n" +
             $"      InnerException: {exception.InnerException?.Message}");
     }
 }

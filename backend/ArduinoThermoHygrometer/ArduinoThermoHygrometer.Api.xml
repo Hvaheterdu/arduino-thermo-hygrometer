@@ -4,14 +4,14 @@
         <name>ArduinoThermoHygrometer.Api</name>
     </assembly>
     <members>
-        <member name="M:ArduinoThermoHygrometer.Web.Controllers.HealthcheckController.GetHealthCheckReport">
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.HealthcheckController.GetHealthCheckReport">
             <summary>
             Retrieves the health check report.
             </summary>
             <returns>The health report.</returns>
             <response code="200">Returns the health report.</response>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.AddHsts(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddHsts(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds HTTP Strict Transport Security (HSTS) service to the WebApplicationBuilder.
             </summary>
@@ -19,7 +19,7 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.AddHttpsRedirection(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddHttpsRedirection(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds HTTP redirection service to the WebApplicationBuilder.
             </summary>
@@ -27,7 +27,7 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.AddRateLimiter(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddRateLimiter(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds fixed window rate limiter service to the WebApplicationBuilder.
             </summary>
@@ -35,7 +35,7 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.AddApiVersioning(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddApiVersioning(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds API versioning service to the WebApplicationBuilder.
             </summary>
@@ -43,7 +43,7 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.RegisterDatabaseAndRunMigrationsOnStartup``1(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.RegisterDatabaseAndRunMigrationsOnStartup``1(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Registers database and runs migrations on application startup.
             </summary>
@@ -54,7 +54,7 @@
             <exception cref="T:System.NotImplementedException">Thrown when the database connection string cannot be found.</exception>
             <exception cref="T:System.NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.CreateProblemDetailsForRateLimiter(Microsoft.AspNetCore.RateLimiting.OnRejectedContext,System.String,System.String)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.CreateProblemDetailsForRateLimiter(Microsoft.AspNetCore.RateLimiting.OnRejectedContext,System.String,System.String)">
             <summary>
             Creates a <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> instance for a rate limiter rejection.
             </summary>
@@ -63,7 +63,7 @@
             <param name="retryRequestAfter">The time in minutes after which the request can be retried.</param>
             <returns>A <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> instance containing details about the rate limit rejection.</returns>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Extensions.ProgramExtensions.LoggerForRateLimiter(System.String,System.String,System.String)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.LoggerForRateLimiter(System.String,System.String,System.String)">
             <summary>
             Logs a warning message when a rate limit is reached.
             </summary>
@@ -71,7 +71,7 @@
             <param name="requestPath">The path of the request that was rate limited.</param>
             <param name="retryRequestAfter">The time in minutes after which the request can be retried.</param>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Mappers.BatteryMapper.GetBatteryFromBatteryDto(ArduinoThermoHygrometer.Web.DTOs.BatteryDto)">
+        <member name="M:ArduinoThermoHygrometer.Api.Mappers.BatteryMapper.GetBatteryFromBatteryDto(ArduinoThermoHygrometer.Api.DTOs.BatteryDto)">
             <summary>
             Converts a BatteryDto object to a Battery object.
             </summary>
@@ -79,7 +79,7 @@
             <returns>The converted Battery object.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="batteryDto"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Mappers.BatteryMapper.GetBatteryDtoFromBattery(ArduinoThermoHygrometer.Domain.Entities.Battery)">
+        <member name="M:ArduinoThermoHygrometer.Api.Mappers.BatteryMapper.GetBatteryDtoFromBattery(ArduinoThermoHygrometer.Domain.Entities.Battery)">
             <summary>
             Converts a Battery object to a BatteryDto object.
             </summary>
@@ -87,7 +87,7 @@
             <returns>The converted BatteryDto object.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="battery"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Mappers.HumidityMapper.GetHumidityFromHumidityDto(ArduinoThermoHygrometer.Web.DTOs.HumidityDto)">
+        <member name="M:ArduinoThermoHygrometer.Api.Mappers.HumidityMapper.GetHumidityFromHumidityDto(ArduinoThermoHygrometer.Api.DTOs.HumidityDto)">
             <summary>
             Converts a HumidityDto object to a Humidity object.
             </summary>
@@ -95,7 +95,7 @@
             <returns>The converted Humidity object.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="humidityDto"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Mappers.HumidityMapper.GetHumidityDtoFromHumidity(ArduinoThermoHygrometer.Domain.Entities.Humidity)">
+        <member name="M:ArduinoThermoHygrometer.Api.Mappers.HumidityMapper.GetHumidityDtoFromHumidity(ArduinoThermoHygrometer.Domain.Entities.Humidity)">
             <summary>
             Converts a Humidity object to a HumidityDto object.
             </summary>
@@ -103,7 +103,7 @@
             <returns>The converted HumidityDto object.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="humidity"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Mappers.TemperatureMapper.GetTemperatureFromTemperatureDto(ArduinoThermoHygrometer.Web.DTOs.TemperatureDto)">
+        <member name="M:ArduinoThermoHygrometer.Api.Mappers.TemperatureMapper.GetTemperatureFromTemperatureDto(ArduinoThermoHygrometer.Api.DTOs.TemperatureDto)">
             <summary>
             Converts a TemperatureDto object to a Temperature object.
             </summary>
@@ -111,7 +111,7 @@
             <returns>The converted Temperature object.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="temperatureDto"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Mappers.TemperatureMapper.GetTemperatureDtoFromTemperature(ArduinoThermoHygrometer.Domain.Entities.Temperature)">
+        <member name="M:ArduinoThermoHygrometer.Api.Mappers.TemperatureMapper.GetTemperatureDtoFromTemperature(ArduinoThermoHygrometer.Domain.Entities.Temperature)">
             <summary>
             Converts a Temperature object to a TemperatureDto object.
             </summary>
@@ -119,7 +119,7 @@
             <returns>The converted TemperatureDto object.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="temperature"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Middleware.GlobalExceptionHandlerMiddleware.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
+        <member name="M:ArduinoThermoHygrometer.Api.Middleware.GlobalExceptionHandlerMiddleware.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
             <summary>
             Attempts to handle an exception by creating logs and writing a ProblemDetails response.
             </summary>
@@ -130,13 +130,13 @@
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="exception"/> is null.</exception>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="httpContext"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Middleware.GlobalExceptionHandlerMiddleware.CreateLogsForExceptions(System.Exception)">
+        <member name="M:ArduinoThermoHygrometer.Api.Middleware.GlobalExceptionHandlerMiddleware.CreateLogsForExceptions(System.Exception)">
             <summary>
             Creates logs for exceptions.
             </summary>
             <param name="exception">The exception that occurred.</param>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Middleware.SecurityHeadersMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
+        <member name="M:ArduinoThermoHygrometer.Api.Middleware.SecurityHeadersMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
             Invokes the middleware for security headers.
             </summary>
@@ -144,20 +144,20 @@
             <returns>A task that represents the asynchronous middleware operation.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="httpContext"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.OpenApi.ConfigureSwaggerGenOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+        <member name="M:ArduinoThermoHygrometer.Api.OpenApi.ConfigureSwaggerGenOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
             <summary>
             Configures the SwaggerGenOptions for generating Swagger documentation.
             </summary>
             <param name="options">The SwaggerGenOptions to configure.</param>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.OpenApi.ConfigureSwaggerGenOptions.CreateOpenApiInfoForVersion(Asp.Versioning.ApiExplorer.ApiVersionDescription)">
+        <member name="M:ArduinoThermoHygrometer.Api.OpenApi.ConfigureSwaggerGenOptions.CreateOpenApiInfoForVersion(Asp.Versioning.ApiExplorer.ApiVersionDescription)">
             <summary>
             Creates an instance of <see cref="T:Microsoft.OpenApi.Models.OpenApiInfo"/> for the specified <paramref name="apiDescription"/>.
             </summary>
             <param name="apiDescription">The <see cref="T:Asp.Versioning.ApiExplorer.ApiVersionDescription"/> object.</param>
             <returns>An instance of <see cref="T:Microsoft.OpenApi.Models.OpenApiInfo"/>.</returns>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.OpenApi.ConfigureSwaggerGenOptions.Configure(System.String,Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+        <member name="M:ArduinoThermoHygrometer.Api.OpenApi.ConfigureSwaggerGenOptions.Configure(System.String,Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
             <summary>
             Has to be implemented because of the interface.
             Calls the Configure method without the name parameter.
@@ -165,7 +165,7 @@
             <param name="name">The name of the options instance to configure.</param>
             <param name="options">The SwaggerGenOptions to configure.</param>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Web.Services.HealthcheckService.GetHealthcheckReport">
+        <member name="M:ArduinoThermoHygrometer.Api.Services.HealthcheckService.GetHealthcheckReport">
             <summary>
             Asynchronously retrieves a health check report.
             </summary>

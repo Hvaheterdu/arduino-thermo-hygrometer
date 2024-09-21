@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
-namespace ArduinoThermoHygrometer.Web.OpenApi;
+namespace ArduinoThermoHygrometer.Api.OpenApi;
 
 public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptions>
 {

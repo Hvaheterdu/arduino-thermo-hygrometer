@@ -1,4 +1,4 @@
-﻿namespace ArduinoThermoHygrometer.Web.Services.Contracts;
+﻿namespace ArduinoThermoHygrometer.Api.Services.Contracts;
 
 public interface IBatteryService
 {

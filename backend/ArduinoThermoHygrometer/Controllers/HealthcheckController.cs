@@ -1,11 +1,11 @@
-﻿using ArduinoThermoHygrometer.Web.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Api.Services.Contracts;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 #pragma warning disable CA2007
 
-namespace ArduinoThermoHygrometer.Web.Controllers;
+namespace ArduinoThermoHygrometer.Api.Controllers;
 
 [ApiController]
 [ApiVersion(0.1)]

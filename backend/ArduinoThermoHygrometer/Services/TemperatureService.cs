@@ -1,9 +1,9 @@
-﻿using ArduinoThermoHygrometer.Web.DTOs;
-using ArduinoThermoHygrometer.Web.Repositories.Contracts;
-using ArduinoThermoHygrometer.Web.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Api.DTOs;
+using ArduinoThermoHygrometer.Api.Repositories.Contracts;
+using ArduinoThermoHygrometer.Api.Services.Contracts;
 using FluentValidation;
 
-namespace ArduinoThermoHygrometer.Web.Services;
+namespace ArduinoThermoHygrometer.Api.Services;
 
 public class TemperatureService : ITemperatureService
 {

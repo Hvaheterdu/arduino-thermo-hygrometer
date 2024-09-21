@@ -1,4 +1,4 @@
-﻿namespace ArduinoThermoHygrometer.Web.Options;
+﻿namespace ArduinoThermoHygrometer.Api.Options;
 
 public class ApiRateLimiterOptions
 {

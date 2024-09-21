@@ -1,4 +1,4 @@
-﻿namespace ArduinoThermoHygrometer.Web;
+﻿namespace ArduinoThermoHygrometer.Api;
 
 public static class GlobalVariables
 {

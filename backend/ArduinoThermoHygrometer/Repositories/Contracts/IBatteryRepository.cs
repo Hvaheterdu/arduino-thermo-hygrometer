@@ -1,7 +1,6 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
-using ArduinoThermoHygrometer.Web.DTOs;
 
-namespace ArduinoThermoHygrometer.Web.Repositories.Contracts;
+namespace ArduinoThermoHygrometer.Api.Repositories.Contracts;
 
 public interface IBatteryRepository
 {

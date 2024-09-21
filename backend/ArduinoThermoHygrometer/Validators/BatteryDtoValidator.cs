@@ -1,7 +1,7 @@
-﻿using ArduinoThermoHygrometer.Web.DTOs;
+﻿using ArduinoThermoHygrometer.Api.DTOs;
 using FluentValidation;
 
-namespace ArduinoThermoHygrometer.Web.Validators;
+namespace ArduinoThermoHygrometer.Api.Validators;
 
 public class BatteryDtoValidator : AbstractValidator<BatteryDto>
 {

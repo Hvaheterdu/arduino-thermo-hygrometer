@@ -1,12 +1,8 @@
-﻿using ArduinoThermoHygrometer.Domain.Entities;
+﻿using ArduinoThermoHygrometer.Api.Repositories.Contracts;
+using ArduinoThermoHygrometer.Domain.Entities;
 using ArduinoThermoHygrometer.Infrastructure.Data;
-using ArduinoThermoHygrometer.Web.DTOs;
-using ArduinoThermoHygrometer.Web.Repositories.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace ArduinoThermoHygrometer.Web.Repositories;
+namespace ArduinoThermoHygrometer.Api.Repositories;
 
 public class HumidityRepository : IHumidityRepository
 {
