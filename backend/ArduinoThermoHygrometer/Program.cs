@@ -139,7 +139,7 @@ app.MapHealthChecks($"/api/_health", new HealthCheckOptions
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
 // Seed database.
-if (!app.Environment.IsProduction())
+if (app.Environment.IsDevelopment())
 {
     using IServiceScope scope = app.Services.CreateScope();
     IServiceProvider services = scope.ServiceProvider;
