@@ -1,5 +1,1 @@
-# Frontend
-
-## Directory structure
-
-## Usage
+# Web UI
