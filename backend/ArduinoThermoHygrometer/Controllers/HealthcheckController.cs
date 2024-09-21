@@ -3,8 +3,6 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-#pragma warning disable CA2007
-
 namespace ArduinoThermoHygrometer.Api.Controllers;
 
 [ApiController]

@@ -7,9 +7,9 @@ public class ArduinoThermoHygrometerDbContext : DbContext
 {
     public DbSet<Battery> Batteries { get; set; } = null!;
 
-    public DbSet<Temperature> Temperatures { get; set; } = null!;
-
     public DbSet<Humidity> Humidities { get; set; } = null!;
+
+    public DbSet<Temperature> Temperatures { get; set; } = null!;
 
     public ArduinoThermoHygrometerDbContext(DbContextOptions<ArduinoThermoHygrometerDbContext> options) : base(options)
     {
@@ -63,46 +63,6 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .IsRowVersion();
         });
 
-        modelBuilder.Entity<Temperature>(entity =>
-        {
-            entity.ToTable("Temperatures", buildAction =>
-            {
-                buildAction.HasCheckConstraint(
-                    name: "CK_Temp_GreaterThanOrEqualToNegativeFiftyFive",
-                    sql: $"{nameof(Temperature.Temp)} >= -55");
-
-                buildAction.HasCheckConstraint(
-                    name: "CK_Temp_LessThanOrEqualToOneHundredAndTwentyFive",
-                    sql: $"{nameof(Temperature.Temp)} <= 125");
-            });
-
-            entity.HasKey(t => t.Id)
-                .IsClustered(clustered: false);
-
-            entity.Property(t => t.Id)
-                .HasColumnType("uniqueidentifier")
-                .HasDefaultValueSql("NEWID()")
-                .IsRequired();
-
-            entity.Property(t => t.RegisteredAt)
-                .HasColumnType("datetimeoffset")
-                .HasDefaultValueSql("SYSDATETIMEOFFSET()")
-                .IsRequired();
-
-            entity.HasIndex(t => t.RegisteredAt)
-                .IsClustered()
-                .IsUnique();
-
-            entity.Property(t => t.Temp)
-                .HasColumnType("decimal")
-                .HasPrecision(5, 2)
-                .IsRequired();
-
-            entity.Property(t => t.Version)
-                .HasColumnType("rowversion")
-                .IsRowVersion();
-        });
-
         modelBuilder.Entity<Humidity>(entity =>
         {
             entity.ToTable("Humidities", buildAction =>
@@ -136,6 +96,46 @@ public class ArduinoThermoHygrometerDbContext : DbContext
             entity.Property(t => t.AirHumidity)
                 .HasColumnType("decimal")
                 .HasPrecision(4, 2)
+                .IsRequired();
+
+            entity.Property(t => t.Version)
+                .HasColumnType("rowversion")
+                .IsRowVersion();
+        });
+
+        modelBuilder.Entity<Temperature>(entity =>
+        {
+            entity.ToTable("Temperatures", buildAction =>
+            {
+                buildAction.HasCheckConstraint(
+                    name: "CK_Temp_GreaterThanOrEqualToNegativeFiftyFive",
+                    sql: $"{nameof(Temperature.Temp)} >= -55");
+
+                buildAction.HasCheckConstraint(
+                    name: "CK_Temp_LessThanOrEqualToOneHundredAndTwentyFive",
+                    sql: $"{nameof(Temperature.Temp)} <= 125");
+            });
+
+            entity.HasKey(t => t.Id)
+                .IsClustered(clustered: false);
+
+            entity.Property(t => t.Id)
+                .HasColumnType("uniqueidentifier")
+                .HasDefaultValueSql("NEWID()")
+                .IsRequired();
+
+            entity.Property(t => t.RegisteredAt)
+                .HasColumnType("datetimeoffset")
+                .HasDefaultValueSql("SYSDATETIMEOFFSET()")
+                .IsRequired();
+
+            entity.HasIndex(t => t.RegisteredAt)
+                .IsClustered()
+                .IsUnique();
+
+            entity.Property(t => t.Temp)
+                .HasColumnType("decimal")
+                .HasPrecision(5, 2)
                 .IsRequired();
 
             entity.Property(t => t.Version)

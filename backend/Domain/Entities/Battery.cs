@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-#pragma warning disable CA1819
-
 namespace ArduinoThermoHygrometer.Domain.Entities;
 
 public class Battery
