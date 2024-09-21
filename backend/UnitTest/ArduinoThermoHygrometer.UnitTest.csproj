@@ -1,26 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
+	<Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<AnalysisLevel>latest</AnalysisLevel>
-	<AnalysisMode>all</AnalysisMode>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+	<AnalysisLevel>latest</AnalysisLevel>
+	<AnalysisMode>all</AnalysisMode>
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	<AssemblyName>ArduinoThermoHygrometer.UnitTest</AssemblyName>
 	<RootNamespace>ArduinoThermoHygrometer.UnitTest</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningLevel>9999</WarningLevel>
-    <NoWarn>CA1707</NoWarn>
+    <NoWarn>CS1701;CS1702</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <WarningLevel>9999</WarningLevel>
-    <NoWarn>CA1707</NoWarn>
+    <NoWarn>CS1701;CS1702</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,20 +34,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit" Version="2.9.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+    <PackageReference Include="NUnit" Version="4.2.2" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ArduinoThermoHygrometer\ArduinoThermoHygrometer.Api.csproj" />
-    <ProjectReference Include="..\Domain\ArduinoThermoHygrometer.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="Xunit" />
+    <Using Include="NUnit.Framework" />
   </ItemGroup>
 
 </Project>

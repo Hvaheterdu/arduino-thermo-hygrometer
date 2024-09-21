@@ -11,4 +11,14 @@
     <RootNamespace>ArduinoThermoHygrometer.Domain</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>9999</WarningLevel>
+    <NoWarn>CS1701;CS1702</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>9999</WarningLevel>
+    <NoWarn>CS1701;CS1702</NoWarn>
+  </PropertyGroup>
+
 </Project>
