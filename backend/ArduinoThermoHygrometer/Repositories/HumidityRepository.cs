@@ -1,6 +1,7 @@
 ﻿using ArduinoThermoHygrometer.Api.Repositories.Contracts;
 using ArduinoThermoHygrometer.Domain.Entities;
 using ArduinoThermoHygrometer.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArduinoThermoHygrometer.Api.Repositories;
 
@@ -13,38 +14,50 @@ public class HumidityRepository : IHumidityRepository
         _dbContext = dbContext;
     }
 
-    public Task<IEnumerable<Humidity?>> GetAllHumiditiesAsync()
+    public async Task<IEnumerable<Humidity?>> GetAllHumiditiesAsync()
     {
-        throw new NotImplementedException();
+        IEnumerable<Humidity?> humidities = await _dbContext.Humidities.ToListAsync();
+
+        return humidities;
     }
 
-    public Task<Humidity?> GetHumidityByIdAsync(Guid id)
+    public async Task<Humidity?> GetHumidityByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        Humidity? humidity = await _dbContext.Humidities.FindAsync(id);
+
+        return humidity;
     }
 
-    public Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset registeredAt)
+    public async Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset registeredAt)
     {
-        throw new NotImplementedException();
+        Humidity? humidity = await _dbContext.Humidities.FirstOrDefaultAsync(h => h.RegisteredAt == registeredAt);
+
+        return humidity;
     }
 
-    public Task<Humidity?> AddHumidityAsync(Humidity humidity)
+    public async Task<Humidity?> AddHumidityAsync(Humidity humidity)
     {
-        throw new NotImplementedException();
+        await _dbContext.Humidities.AddAsync(humidity);
+
+        return humidity;
     }
 
-    public Humidity? UpdateHumidityAsync(Humidity humidity)
+    public Humidity? UpdateHumidity(Humidity humidity)
     {
-        throw new NotImplementedException();
+        _dbContext.Humidities.Update(humidity);
+
+        return humidity;
     }
 
     public Humidity? RemoveHumidity(Humidity humidity)
     {
-        throw new NotImplementedException();
+        _dbContext.Humidities.Remove(humidity);
+
+        return humidity;
     }
 
-    public Task SaveChangesAsync()
+    public async Task SaveChangesAsync()
     {
-        throw new NotImplementedException();
+        await _dbContext.SaveChangesAsync();
     }
 }

@@ -12,7 +12,7 @@ public interface IBatteryRepository
 
     Task<Battery?> AddBatteryAsync(Battery battery);
 
-    Battery? UpdateBatteryAsync(Battery battery);
+    Battery? UpdateBattery(Battery battery);
 
     Battery? RemoveBattery(Battery battery);
 

@@ -42,7 +42,7 @@ public class BatteryRepository : IBatteryRepository
         return battery;
     }
 
-    public Battery? UpdateBatteryAsync(Battery battery)
+    public Battery? UpdateBattery(Battery battery)
     {
         _dbContext.Batteries.Update(battery);
 

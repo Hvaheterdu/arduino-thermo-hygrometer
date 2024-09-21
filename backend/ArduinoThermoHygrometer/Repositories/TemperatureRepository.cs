@@ -1,6 +1,7 @@
 ﻿using ArduinoThermoHygrometer.Api.Repositories.Contracts;
 using ArduinoThermoHygrometer.Domain.Entities;
 using ArduinoThermoHygrometer.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArduinoThermoHygrometer.Api.Repositories;
 
@@ -13,38 +14,50 @@ public class TemperatureRepository : ITemperatureRepository
         _dbContext = dbContext;
     }
 
-    public Task<IEnumerable<Temperature?>> GetAllTemperaturesAsync()
+    public async Task<IEnumerable<Temperature?>> GetAllTemperaturesAsync()
     {
-        throw new NotImplementedException();
+        IEnumerable<Temperature?> temperatures = await _dbContext.Temperatures.ToListAsync();
+
+        return temperatures;
     }
 
-    public Task<Temperature?> GetTemperatureByIdAsync(Guid id)
+    public async Task<Temperature?> GetTemperatureByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        Temperature? temperature = await _dbContext.Temperatures.FindAsync(id);
+
+        return temperature;
     }
 
-    public Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset registeredAt)
+    public async Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset registeredAt)
     {
-        throw new NotImplementedException();
+        Temperature? temperature = await _dbContext.Temperatures.FirstOrDefaultAsync(t => t.RegisteredAt == registeredAt);
+
+        return temperature;
     }
 
-    public Task<Temperature?> AddTemperatureAsync(Temperature temperature)
+    public async Task<Temperature?> AddTemperatureAsync(Temperature temperature)
     {
-        throw new NotImplementedException();
+        await _dbContext.Temperatures.AddAsync(temperature);
+
+        return temperature;
     }
 
-    public Temperature? UpdateTemperatureAsync(Temperature temperature)
+    public Temperature? UpdateTemperature(Temperature temperature)
     {
-        throw new NotImplementedException();
+        _dbContext.Temperatures.Update(temperature);
+
+        return temperature;
     }
 
     public Temperature? RemoveTemperature(Temperature temperature)
     {
-        throw new NotImplementedException();
+        _dbContext.Temperatures.Remove(temperature);
+
+        return temperature;
     }
 
-    public Task SaveChangesAsync()
+    public async Task SaveChangesAsync()
     {
-        throw new NotImplementedException();
+        await _dbContext.SaveChangesAsync();
     }
 }

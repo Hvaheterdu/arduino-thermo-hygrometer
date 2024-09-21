@@ -12,7 +12,7 @@ public interface IHumidityRepository
 
     Task<Humidity?> AddHumidityAsync(Humidity humidity);
 
-    Humidity? UpdateHumidityAsync(Humidity humidity);
+    Humidity? UpdateHumidity(Humidity humidity);
 
     Humidity? RemoveHumidity(Humidity humidity);
 

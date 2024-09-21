@@ -12,7 +12,7 @@ public interface ITemperatureRepository
 
     Task<Temperature?> AddTemperatureAsync(Temperature temperature);
 
-    Temperature? UpdateTemperatureAsync(Temperature temperature);
+    Temperature? UpdateTemperature(Temperature temperature);
 
     Temperature? RemoveTemperature(Temperature temperature);
 
