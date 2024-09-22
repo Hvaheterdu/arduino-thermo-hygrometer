@@ -1,16 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-	<Nullable>enable</Nullable>
+    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
 	<AnalysisLevel>latest</AnalysisLevel>
 	<AnalysisMode>all</AnalysisMode>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	<AssemblyName>ArduinoThermoHygrometer.Test.Unit</AssemblyName>
-	<RootNamespace>ArduinoThermoHygrometer.Test.Unit</RootNamespace>
+	<AssemblyName>ArduinoThermoHygrometer.Test</AssemblyName>
+	<RootNamespace>ArduinoThermoHygrometer.Test</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,7 +28,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.47.0" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
     <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17">
       <PrivateAssets>all</PrivateAssets>
@@ -40,15 +42,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="Testcontainers" Version="3.10.0" />
+    <PackageReference Include="Testcontainers.MsSql" Version="3.10.0" />
+    <PackageReference Include="Testcontainers.Redis" Version="3.10.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ArduinoThermoHygrometer\ArduinoThermoHygrometer.Api.csproj" />
-    <ProjectReference Include="..\Domain\ArduinoThermoHygrometer.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="NUnit.Framework" />
+    <Folder Include="IntegrationTests\" />
+    <Folder Include="UnitTests\" />
   </ItemGroup>
 
 </Project>
