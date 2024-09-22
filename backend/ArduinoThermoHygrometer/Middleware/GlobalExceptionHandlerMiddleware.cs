@@ -1,5 +1,4 @@
-﻿using ArduinoThermoHygrometer.Api.Extensions;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net;
@@ -64,7 +63,7 @@ public class GlobalExceptionHandlerMiddleware : IExceptionHandler
     /// <param name="exception">The exception that occurred.</param>
     private void CreateLogsForExceptions(Exception exception)
     {
-        _logger.LoggingError($"Exception: {exception.Message}\n" +
-            $"      InnerException: {exception.InnerException?.Message}");
+        _logger.LogError("Exception: {ExceptionMessage}\n InnerException: {ExceptionInnerExceptionMessage}",
+            exception.Message, exception.InnerException?.Message);
     }
 }

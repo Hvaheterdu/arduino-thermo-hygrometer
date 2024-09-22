@@ -40,6 +40,9 @@ builder.AddHttpsRedirection();
 // Rate limiter service.
 builder.AddRateLimiter();
 
+// Opentelemetry logging.
+builder.AddOpenTelemetryLogging();
+
 // Dependency injection from other projects.
 builder.Services.AddInfrastructure(builder.Configuration);
 

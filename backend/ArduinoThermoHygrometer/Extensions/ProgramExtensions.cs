@@ -6,8 +6,13 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
@@ -199,6 +204,45 @@ public static class ProgramExtensions
     }
 
     /// <summary>
+    /// Configures OpenTelemetry logging for the provided <see cref="WebApplicationBuilder"/> instance.
+    /// </summary>
+    /// <param name="builder">The <see cref="WebApplicationBuilder"/> to configure OpenTelemetry logging for.</param>
+    /// <returns>The same <see cref="WebApplicationBuilder"/> instance, allowing for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="builder"/> is null.</exception>
+    public static WebApplicationBuilder AddOpenTelemetryLogging(this WebApplicationBuilder builder)
+    {
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+
+        builder.Logging.ClearProviders();
+
+        Assembly? assembly = Assembly.GetAssembly(typeof(Program));
+
+        if (!builder.Environment.IsProduction())
+        {
+            builder.Logging.AddOpenTelemetry(configure =>
+            {
+                configure.SetResourceBuilder(ResourceBuilder.CreateDefault()
+                    .AddService(nameof(ArduinoThermoHygrometer))
+                    .AddAttributes(new Dictionary<string, object>()
+                    {
+                        ["deployment.environment"] = builder.Environment.EnvironmentName,
+                        ["service.version"] = assembly?.GetName()?.Version?.ToString() ?? string.Empty
+                    }));
+
+                configure.IncludeScopes = true;
+                configure.IncludeFormattedMessage = true;
+            });
+
+            builder.Services.AddOpenTelemetry()
+                .ConfigureResource(configure => configure.AddService(nameof(ArduinoThermoHygrometer)))
+                .WithLogging(configure => configure.AddConsoleExporter());
+        }
+        // TODO: Add else statement with logging, metrics and tracing for production environment.
+
+        return builder;
+    }
+
+    /// <summary>
     /// Creates a <see cref="ProblemDetails"/> instance for a rate limiter rejection.
     /// </summary>
     /// <param name="context">The context of the rejected request.</param>
@@ -228,13 +272,10 @@ public static class ProgramExtensions
     /// <param name="retryRequestAfter">The time in minutes after which the request can be retried.</param>
     private static void LoggerForRateLimiter(string requestMethod, string requestPath, string retryRequestAfter)
     {
-        using ILoggerFactory loggerFactory = LoggerFactory.Create(configure =>
-        {
-            configure.AddConsole();
-            configure.AddOpenTelemetry();
-        });
+        using ILoggerFactory loggerFactory = LoggerFactory.Create(configure => configure.AddOpenTelemetry());
 
         ILogger logger = loggerFactory.CreateLogger("Rate limiter");
-        logger.LoggingWarning($"Rate limit reached for {requestMethod} request to {requestPath}. Please try again after {retryRequestAfter} minute.");
+        logger.LogWarning("Rate limit reached for {RequestMethod} request to {RequestPath}. Please try again after {RetryRequestAfter} minute.",
+            requestMethod, requestPath, retryRequestAfter);
     }
 }

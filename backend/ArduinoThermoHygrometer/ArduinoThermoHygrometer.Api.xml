@@ -56,6 +56,14 @@
             <exception cref="T:System.NotImplementedException">Thrown when the database connection string cannot be found.</exception>
             <exception cref="T:System.NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
         </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddOpenTelemetryLogging(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Configures OpenTelemetry logging for the provided <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> instance.
+            </summary>
+            <param name="builder">The <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> to configure OpenTelemetry logging for.</param>
+            <returns>The same <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> instance, allowing for method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the <paramref name="builder"/> is null.</exception>
+        </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.CreateProblemDetailsForRateLimiter(Microsoft.AspNetCore.RateLimiting.OnRejectedContext,System.String,System.String)">
             <summary>
             Creates a <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> instance for a rate limiter rejection.

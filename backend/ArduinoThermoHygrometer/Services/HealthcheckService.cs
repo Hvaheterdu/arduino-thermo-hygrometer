@@ -6,10 +6,12 @@ namespace ArduinoThermoHygrometer.Api.Services;
 public class HealthcheckService : IHealthcheckService
 {
     private readonly HealthCheckService _healthCheckService;
+    private readonly ILogger<HealthcheckService> _logger;
 
-    public HealthcheckService(HealthCheckService healthCheckService)
+    public HealthcheckService(HealthCheckService healthCheckService, ILogger<HealthcheckService> logger)
     {
         _healthCheckService = healthCheckService;
+        _logger = logger;
     }
 
     /// <summary>
