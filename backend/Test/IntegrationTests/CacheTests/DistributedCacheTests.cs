@@ -1,4 +1,4 @@
-﻿namespace ArduinoThermoHygrometer.Test.Integration.CacheTests;
+﻿namespace ArduinoThermoHygrometer.Test.IntegrationTests.CacheTests;
 public class DistributedCacheTests
 {
 }
