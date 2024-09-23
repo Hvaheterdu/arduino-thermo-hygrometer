@@ -274,8 +274,7 @@ public static class ProgramExtensions
     {
         using ILoggerFactory loggerFactory = LoggerFactory.Create(configure => configure.AddOpenTelemetry());
 
-        ILogger logger = loggerFactory.CreateLogger("Rate limiter");
-        logger.LogWarning("Rate limit reached for {RequestMethod} request to {RequestPath}. Please try again after {RetryRequestAfter} minute.",
-            requestMethod, requestPath, retryRequestAfter);
+        ILogger logger = loggerFactory.CreateLogger("LogRateLimitExceeded");
+        LoggingExtensions.LogRateLimitExceeded(logger, requestMethod, requestPath, retryRequestAfter);
     }
 }

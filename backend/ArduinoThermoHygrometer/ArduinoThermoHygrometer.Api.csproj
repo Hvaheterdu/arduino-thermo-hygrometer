@@ -15,12 +15,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>CA1848;CA2007;CS1591;CS1701;CS1702;</NoWarn>
+    <NoWarn>CA2007;CS1591;CS1701;CS1702;</NoWarn>
     <WarningLevel>9999</WarningLevel>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>CA1848;CA2007;CS1591;CS1701;CS1702;</NoWarn>
+    <NoWarn>CA2007;CS1591;CS1701;CS1702;</NoWarn>
     <WarningLevel>9999</WarningLevel>
   </PropertyGroup>
 
