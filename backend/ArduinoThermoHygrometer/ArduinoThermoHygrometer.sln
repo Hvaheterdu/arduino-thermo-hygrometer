@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Api", "ArduinoThermoHygrometer.Api.csproj", "{FFE132A1-8009-419E-9F34-DE0FDA29921D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Domain", "..\Domain\ArduinoThermoHygrometer.Domain.csproj", "{2A81770B-6F1B-4517-9E7A-355E0245FA02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Infrastructure", "..\Infrastructure\ArduinoThermoHygrometer.Infrastructure.csproj", "{5D3509A9-7527-487F-B689-25A36588DF7F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1D2D0E15-17FA-422A-8611-729673C2760F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Test", "..\Test\ArduinoThermoHygrometer.Test.csproj", "{A6B05FD3-1418-473F-AB9E-586036D8C963}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFE132A1-8009-419E-9F34-DE0FDA29921D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFE132A1-8009-419E-9F34-DE0FDA29921D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFE132A1-8009-419E-9F34-DE0FDA29921D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFE132A1-8009-419E-9F34-DE0FDA29921D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A81770B-6F1B-4517-9E7A-355E0245FA02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A81770B-6F1B-4517-9E7A-355E0245FA02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A81770B-6F1B-4517-9E7A-355E0245FA02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A81770B-6F1B-4517-9E7A-355E0245FA02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D3509A9-7527-487F-B689-25A36588DF7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3509A9-7527-487F-B689-25A36588DF7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3509A9-7527-487F-B689-25A36588DF7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D3509A9-7527-487F-B689-25A36588DF7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B05FD3-1418-473F-AB9E-586036D8C963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B05FD3-1418-473F-AB9E-586036D8C963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B05FD3-1418-473F-AB9E-586036D8C963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B05FD3-1418-473F-AB9E-586036D8C963}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8BCE9917-A691-4F3A-91C9-ED4357F25BEF}
+	EndGlobalSection
+EndGlobal
