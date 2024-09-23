@@ -1,4 +1,4 @@
-﻿namespace ArduinoThermoHygrometer.Test.Unit.ServiceTests;
+﻿namespace ArduinoThermoHygrometer.Test.UnitTests.ServiceTests;
 public class BatteryServiceTests
 {
 }

@@ -229,8 +229,8 @@ public static class ProgramExtensions
                         ["service.version"] = assembly?.GetName()?.Version?.ToString() ?? string.Empty
                     }));
 
-                configure.IncludeScopes = true;
                 configure.IncludeFormattedMessage = true;
+                configure.IncludeScopes = true;
             });
 
             builder.Services.AddOpenTelemetry()
