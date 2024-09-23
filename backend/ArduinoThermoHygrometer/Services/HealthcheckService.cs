@@ -1,4 +1,5 @@
-﻿using ArduinoThermoHygrometer.Api.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Api.Extensions;
+using ArduinoThermoHygrometer.Api.Services.Contracts;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace ArduinoThermoHygrometer.Api.Services;
@@ -20,21 +21,21 @@ public class HealthcheckService : IHealthCheckService
     /// <returns>Returns the <see cref="HealthReport"/> which provides the health check status.</returns>
     public async Task<HealthReport?> GetHealthCheckReport()
     {
-        _logger.LogInformation("Retrieving health check report.");
+        LoggingExtensions.LogHealthCheckReportRetrieving(_logger);
 
         HealthReport? healthReport = await _healthCheckService.CheckHealthAsync();
 
         if (healthReport == null)
         {
-            _logger.LogError("Health check report is null.");
+            LoggingExtensions.LogHealthCheckReportNull(_logger);
         }
 
         if (healthReport?.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {
-            _logger.LogError("Health check report status is {Status}.", healthReport.Status);
+            LoggingExtensions.LogHealthCheckReportStatus(_logger, healthReport.Status);
         }
 
-        _logger.LogInformation("Retrieved health check report.");
+        LoggingExtensions.LogHealthCheckReportRetrieved(_logger);
 
         return healthReport;
     }

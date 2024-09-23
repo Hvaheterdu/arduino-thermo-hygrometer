@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using ArduinoThermoHygrometer.Api.Extensions;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net;
@@ -31,7 +32,7 @@ public class GlobalExceptionHandlerMiddleware : IExceptionHandler
         ArgumentNullException.ThrowIfNull(exception, nameof(exception));
         ArgumentNullException.ThrowIfNull(httpContext, nameof(httpContext));
 
-        CreateLogsForExceptions(exception);
+        LoggingExtensions.LogUnexpectedException(_logger, exception.Message, exception.InnerException?.Message);
 
         ProblemDetails problemDetails = new()
         {
@@ -55,15 +56,5 @@ public class GlobalExceptionHandlerMiddleware : IExceptionHandler
         await httpContext.Response.WriteAsJsonAsync(problemDetails, jsonOptions, contentType, cancellationToken);
 
         return true;
-    }
-
-    /// <summary>
-    /// Creates logs for exceptions.
-    /// </summary>
-    /// <param name="exception">The exception that occurred.</param>
-    private void CreateLogsForExceptions(Exception exception)
-    {
-        _logger.LogError("Exception: {ExceptionMessage}\n InnerException: {ExceptionInnerExceptionMessage}",
-            exception.Message, exception.InnerException?.Message);
     }
 }
