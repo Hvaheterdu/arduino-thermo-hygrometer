@@ -55,7 +55,7 @@ builder.Services.AddScoped<IBatteryRepository, BatteryRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 
-builder.Services.AddScoped<IHealthcheckService, HealthcheckService>();
+builder.Services.AddScoped<IHealthCheckService, HealthcheckService>();
 
 builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 builder.Services.AddScoped<IValidator<HumidityDto>, HumidityDtoValidator>();
@@ -133,7 +133,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Healthcheck middleware.
-app.MapHealthChecks($"/api/_health", new HealthCheckOptions
+app.MapHealthChecks($"/api/health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
