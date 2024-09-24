@@ -21,9 +21,9 @@ public class HealthCheckController : ControllerBase
     /// Retrieves the health check report for the application.
     /// </summary>
     /// <returns>An <see cref="IActionResult"/> containing the health check report if the report is found.</returns>
-    /// <response code="200">Returns the health report if the system is healthy.</response>
+    /// <response code="200">Returns the health check report if the system is healthy.</response>
     /// <response code="404">Returns a <see cref="ProblemDetails"/> object if the health report is not found.</response>
-    /// <response code="500">Returns a <see cref="ProblemDetails"/> object if the system is in a degraded or unhealthy state.</response>
+    /// <response code="500">Returns a <see cref="ProblemDetails"/> object if the system is degraded or unhealthy.</response>
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
