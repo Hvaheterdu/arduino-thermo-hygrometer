@@ -19,10 +19,10 @@ public class SecurityHeadersMiddleware
     {
         ArgumentNullException.ThrowIfNull(httpContext, nameof(httpContext));
 
-        httpContext.Response.Headers.TryAdd("Cache-Control", "no-store, no-cache");
-        httpContext.Response.Headers.TryAdd("Content-Security-Policy", "connect-src 'none'; default-src 'none'; frame-ancestors 'none'; img-src 'none'; script-src 'none'; style-src 'none';");
-        httpContext.Response.Headers.TryAdd("Referrer-Policy", "no-referrer");
-        httpContext.Response.Headers.TryAdd("X-Content-Type-Options", "nosniff");
+        httpContext.Response.Headers.Append("Cache-Control", "no-store, no-cache");
+        httpContext.Response.Headers.Append("Content-Security-Policy", "connect-src 'none'; default-src 'none'; frame-ancestors 'none'; img-src 'none'; script-src 'none'; style-src 'none';");
+        httpContext.Response.Headers.Append("Referrer-Policy", "no-referrer");
+        httpContext.Response.Headers.Append("X-Content-Type-Options", "nosniff");
 
         await _next(httpContext);
     }

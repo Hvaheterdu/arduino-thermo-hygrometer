@@ -20,7 +20,10 @@ using System.Text.Json.Serialization;
 // Services.
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Configure CORS.
+// Response headers service.
+builder.WebHost.ConfigureKestrel(hostbuilder => hostbuilder.AddServerHeader = false);
+
+// CORS service.
 builder.Services.AddCors(setupAction =>
 {
     setupAction.AddDefaultPolicy(configurePolicy =>
@@ -40,7 +43,7 @@ builder.AddHttpsRedirection();
 // Rate limiter service.
 builder.AddRateLimiter();
 
-// Opentelemetry logging.
+// Opentelemetry logging service.
 builder.AddOpenTelemetryLogging();
 
 // Dependency injection from other projects.
@@ -61,7 +64,7 @@ builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 builder.Services.AddScoped<IValidator<HumidityDto>, HumidityDtoValidator>();
 builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>();
 
-// Exception handling.
+// Exception handling service.
 builder.Services.AddExceptionHandler<GlobalExceptionHandlerMiddleware>();
 
 // ProblemDetails service.
@@ -75,19 +78,19 @@ builder.Services.AddProblemDetails(configure =>
 builder.Services.AddControllers(configure => configure.ReturnHttpNotAcceptable = true)
     .AddJsonOptions(configure => configure.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-// Lowercase API routes.
+// Lowercase API routes service.
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
-// Register database, migrations and run migrations on startup.
+// Register database, migrations and run migrations on startup service.
 builder.RegisterDatabaseAndRunMigrationsOnStartup<ArduinoThermoHygrometerDbContext>();
 
-// API versioning.
+// API versioning service.
 builder.AddApiVersioning();
 
-// Dependency injection for Swagger generated options.
+// Dependency injection for Swagger generated options service.
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>();
 
-// Swagger/OpenAPI (https://aka.ms/aspnetcore/swashbuckle).
+// Swagger/OpenAPI service (https://aka.ms/aspnetcore/swashbuckle).
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
