@@ -18,25 +18,18 @@ public class HealthCheckController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves the health check report for the application.
+    /// Retrieves the health check report for the system.
     /// </summary>
-    /// <returns>An <see cref="IActionResult"/> containing the health check report if the report is found.</returns>
+    /// <returns>An <see cref="IActionResult"/> containing the health check report.</returns>
     /// <response code="200">Returns the health check report if the system is healthy.</response>
-    /// <response code="404">Returns a <see cref="ProblemDetails"/> object if the health report is not found.</response>
     /// <response code="500">Returns a <see cref="ProblemDetails"/> object if the system is degraded or unhealthy.</response>
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetHealthCheckReport()
     {
-        HealthReport? healthReport = await _healthcheckService.GetHealthCheckReport();
-
-        if (healthReport is null)
-        {
-            return NotFound(healthReport);
-        }
+        HealthReport healthReport = await _healthcheckService.GetHealthCheckReport();
 
         if (healthReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {

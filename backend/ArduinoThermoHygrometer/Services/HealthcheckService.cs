@@ -19,18 +19,13 @@ public class HealthcheckService : IHealthCheckService
     /// Asynchronously retrieves a health check report.
     /// </summary>
     /// <returns>Returns the <see cref="HealthReport"/> which provides the health check status.</returns>
-    public async Task<HealthReport?> GetHealthCheckReport()
+    public async Task<HealthReport> GetHealthCheckReport()
     {
         LoggingExtensions.LogHealthCheckReportRetrieving(_logger);
 
-        HealthReport? healthReport = await _healthCheckService.CheckHealthAsync();
+        HealthReport healthReport = await _healthCheckService.CheckHealthAsync();
 
-        if (healthReport == null)
-        {
-            LoggingExtensions.LogHealthCheckReportNull(_logger);
-        }
-
-        if (healthReport?.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
+        if (healthReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {
             LoggingExtensions.LogHealthCheckReportStatus(_logger, healthReport.Status);
         }

@@ -25,10 +25,6 @@ public static partial class LoggingExtensions
     Message = "Retrived health check report.")]
     public static partial void LogHealthCheckReportRetrieved(this ILogger logger);
 
-    [LoggerMessage(EventId = 2004, EventName = "LogHealthCheckReportNull", Level = LogLevel.Error,
-    Message = "Health check report is null.")]
-    public static partial void LogHealthCheckReportNull(this ILogger logger);
-
     [LoggerMessage(EventId = 2004, EventName = "LogHealthCheckReportStatus", Level = LogLevel.Error,
     Message = "Health check report status is {Status}.")]
     public static partial void LogHealthCheckReportStatus(this ILogger logger, HealthStatus status);
