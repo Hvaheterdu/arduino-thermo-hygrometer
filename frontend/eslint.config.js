@@ -5,6 +5,7 @@ import checkFile from "eslint-plugin-check-file";
 import eslintPluginImportX from "eslint-plugin-import-x";
 import jsdoc from "eslint-plugin-jsdoc";
 import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
+import reactPlugin from "eslint-plugin-react";
 import eslintPluginHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
@@ -42,7 +43,7 @@ export default [
       "**/coverage",
       "**/dist",
       "**/node_modules",
-      "*.cjs",
+      "**/*.js",
       "**/*.generated.ts",
       "**/.git",
       "**/.svn",
@@ -57,9 +58,12 @@ export default [
       "check-file": checkFile,
       "react-hooks": eslintPluginHooks,
       "react-refresh": reactRefresh,
+      react: reactPlugin,
     },
     rules: {
       ...eslintPluginHooks.configs.recommended.rules,
+      ...reactPlugin.configs.recommended.rules,
+      ...reactPlugin.configs["jsx-runtime"].rules,
       "check-file/filename-naming-convention": [
         "error",
         {
