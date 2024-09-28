@@ -4,7 +4,7 @@
         <name>ArduinoThermoHygrometer.Api</name>
     </assembly>
     <members>
-        <member name="M:ArduinoThermoHygrometer.Api.Controllers.HealthcheckController.GetHealthCheckReportAsync">
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.HealthCheckController.GetHealthCheckReportAsync">
             <summary>
             Retrieves the health check report for the system.
             </summary>
@@ -167,12 +167,6 @@
             </summary>
             <param name="name">The name of the options instance to configure.</param>
             <param name="options">The SwaggerGenOptions to configure.</param>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Services.HealthcheckService.GetHealthCheckReportAsync">
-            <summary>
-            Asynchronously retrieves a health check report.
-            </summary>
-            <returns>Returns the <see cref="T:Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport"/> which provides the health check status.</returns>
         </member>
     </members>
 </doc>

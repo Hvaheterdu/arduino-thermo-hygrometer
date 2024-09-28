@@ -1,4 +1,4 @@
-﻿using ArduinoThermoHygrometer.Api.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Api.Extensions;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -8,13 +8,15 @@ namespace ArduinoThermoHygrometer.Api.Controllers;
 [ApiController]
 [ApiVersion(0.1)]
 [Route("api/v{version:apiVersion}/health")]
-public class HealthcheckController : ControllerBase
+public class HealthCheckController : ControllerBase
 {
-    private readonly IHealthcheckService _healthcheckService;
+    private readonly HealthCheckService _healthCheckService;
+    private readonly ILogger<HealthCheckController> _logger;
 
-    public HealthcheckController(IHealthcheckService healthcheckService)
+    public HealthCheckController(HealthCheckService healthCheckService, ILogger<HealthCheckController> logger)
     {
-        _healthcheckService = healthcheckService;
+        _healthCheckService = healthCheckService;
+        _logger = logger;
     }
 
     /// <summary>
@@ -29,13 +31,18 @@ public class HealthcheckController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetHealthCheckReportAsync()
     {
-        HealthReport healthReport = await _healthcheckService.GetHealthCheckReportAsync();
+        LoggingExtensions.LogHealthCheckReportRetrieving(_logger);
 
-        if (healthReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
+        HealthReport healthCheckReport = await _healthCheckService.CheckHealthAsync();
+
+        if (healthCheckReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, healthReport);
+            LoggingExtensions.LogHealthCheckReportStatus(_logger, healthCheckReport.Status);
+            return StatusCode(StatusCodes.Status500InternalServerError, healthCheckReport);
         }
 
-        return Ok(healthReport);
+        LoggingExtensions.LogHealthCheckReportRetrieved(_logger);
+
+        return Ok(healthCheckReport);
     }
 }
