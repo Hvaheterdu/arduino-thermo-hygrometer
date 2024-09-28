@@ -2,7 +2,7 @@
 
 namespace ArduinoThermoHygrometer.Api.Services.Contracts;
 
-public interface IHealthCheckService
+public interface IHealthcheckService
 {
     Task<HealthReport> GetHealthCheckReport();
 }

@@ -47,9 +47,4 @@
     <PackageReference Include="Testcontainers.Redis" Version="3.10.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IntegrationTests\" />
-    <Folder Include="UnitTests\" />
-  </ItemGroup>
-
 </Project>

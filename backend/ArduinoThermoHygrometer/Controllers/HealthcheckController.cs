@@ -10,9 +10,9 @@ namespace ArduinoThermoHygrometer.Api.Controllers;
 [Route("api/v{version:apiVersion}/health")]
 public class HealthCheckController : ControllerBase
 {
-    private readonly IHealthCheckService _healthcheckService;
+    private readonly IHealthcheckService _healthcheckService;
 
-    public HealthCheckController(IHealthCheckService healthcheckService)
+    public HealthCheckController(IHealthcheckService healthcheckService)
     {
         _healthcheckService = healthcheckService;
     }

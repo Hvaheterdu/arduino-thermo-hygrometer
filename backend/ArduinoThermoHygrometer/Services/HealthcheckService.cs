@@ -4,7 +4,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace ArduinoThermoHygrometer.Api.Services;
 
-public class HealthcheckService : IHealthCheckService
+public class HealthcheckService : IHealthcheckService
 {
     private readonly HealthCheckService _healthCheckService;
     private readonly ILogger<HealthcheckService> _logger;
