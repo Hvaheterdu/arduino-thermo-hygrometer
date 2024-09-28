@@ -8,11 +8,11 @@ namespace ArduinoThermoHygrometer.Api.Controllers;
 [ApiController]
 [ApiVersion(0.1)]
 [Route("api/v{version:apiVersion}/health")]
-public class HealthCheckController : ControllerBase
+public class HealthcheckController : ControllerBase
 {
     private readonly IHealthcheckService _healthcheckService;
 
-    public HealthCheckController(IHealthcheckService healthcheckService)
+    public HealthcheckController(IHealthcheckService healthcheckService)
     {
         _healthcheckService = healthcheckService;
     }
@@ -27,9 +27,9 @@ public class HealthCheckController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetHealthCheckReport()
+    public async Task<IActionResult> GetHealthCheckReportAsync()
     {
-        HealthReport healthReport = await _healthcheckService.GetHealthCheckReport();
+        HealthReport healthReport = await _healthcheckService.GetHealthCheckReportAsync();
 
         if (healthReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {
