@@ -58,6 +58,8 @@ builder.Services.AddScoped<IBatteryRepository, BatteryRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 
+builder.Services.AddScoped<IHealthCheckService, HealthCheckServiceWrapper>();
+
 builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
 builder.Services.AddScoped<IValidator<HumidityDto>, HumidityDtoValidator>();
 builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>();

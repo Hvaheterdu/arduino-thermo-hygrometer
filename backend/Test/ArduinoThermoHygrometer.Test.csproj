@@ -47,4 +47,8 @@
     <PackageReference Include="Testcontainers.Redis" Version="3.10.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ArduinoThermoHygrometer\ArduinoThermoHygrometer.Api.csproj" />
+  </ItemGroup>
+
 </Project>

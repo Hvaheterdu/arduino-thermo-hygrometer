@@ -1,4 +1,4 @@
-﻿using ArduinoThermoHygrometer.Api.Extensions;
+﻿using ArduinoThermoHygrometer.Api.Services.Contracts;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -10,13 +10,11 @@ namespace ArduinoThermoHygrometer.Api.Controllers;
 [Route("api/v{version:apiVersion}/health")]
 public class HealthCheckController : ControllerBase
 {
-    private readonly HealthCheckService _healthCheckService;
-    private readonly ILogger<HealthCheckController> _logger;
+    private readonly IHealthCheckService _healthCheckService;
 
-    public HealthCheckController(HealthCheckService healthCheckService, ILogger<HealthCheckController> logger)
+    public HealthCheckController(IHealthCheckService healthCheckService)
     {
         _healthCheckService = healthCheckService;
-        _logger = logger;
     }
 
     /// <summary>
@@ -31,17 +29,12 @@ public class HealthCheckController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetHealthCheckReportAsync()
     {
-        LoggingExtensions.LogHealthCheckReportRetrieving(_logger);
-
-        HealthReport healthCheckReport = await _healthCheckService.CheckHealthAsync();
+        HealthReport healthCheckReport = await _healthCheckService.GetHealthCheckReportAsync();
 
         if (healthCheckReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {
-            LoggingExtensions.LogHealthCheckReportStatus(_logger, healthCheckReport.Status);
             return StatusCode(StatusCodes.Status500InternalServerError, healthCheckReport);
         }
-
-        LoggingExtensions.LogHealthCheckReportRetrieved(_logger);
 
         return Ok(healthCheckReport);
     }
