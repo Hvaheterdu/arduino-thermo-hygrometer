@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\ArduinoThermoHygrometer.Domain.csproj" />
+    <ProjectReference Include="..\ArduinoThermoHygrometer.Domain\ArduinoThermoHygrometer.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ArduinoThermoHygrometer.Domain.Entities;
 
@@ -12,6 +13,9 @@ public class Temperature
     public DateTimeOffset RegisteredAt { get; init; } = DateTimeOffset.Now;
 
     [Required]
+    [RegularExpression(@"^(?!\s*$).*")]
+    [Range(-55, 125)]
+    [NotNull]
     public decimal Temp { get; set; }
 
     [Timestamp]

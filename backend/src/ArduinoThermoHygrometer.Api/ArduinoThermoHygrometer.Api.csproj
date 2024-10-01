@@ -31,7 +31,6 @@
     <PackageReference Include="Azure.Identity" Version="1.12.1" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.2.0" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.3.0" />
-    <PackageReference Include="FluentValidation" Version="11.10.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -47,8 +46,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\ArduinoThermoHygrometer.Domain.csproj" />
-    <ProjectReference Include="..\Infrastructure\ArduinoThermoHygrometer.Infrastructure.csproj" />
+    <ProjectReference Include="..\ArduinoThermoHygrometer.Domain\ArduinoThermoHygrometer.Domain.csproj" />
+    <ProjectReference Include="..\ArduinoThermoHygrometer.Infrastructure\ArduinoThermoHygrometer.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

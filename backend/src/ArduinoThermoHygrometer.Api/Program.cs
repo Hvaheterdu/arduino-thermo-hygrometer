@@ -1,4 +1,3 @@
-using ArduinoThermoHygrometer.Api.DTOs;
 using ArduinoThermoHygrometer.Api.Extensions;
 using ArduinoThermoHygrometer.Api.Middleware;
 using ArduinoThermoHygrometer.Api.OpenApi;
@@ -6,11 +5,9 @@ using ArduinoThermoHygrometer.Api.Repositories;
 using ArduinoThermoHygrometer.Api.Repositories.Contracts;
 using ArduinoThermoHygrometer.Api.Services;
 using ArduinoThermoHygrometer.Api.Services.Contracts;
-using ArduinoThermoHygrometer.Api.Validators;
 using ArduinoThermoHygrometer.Infrastructure;
 using ArduinoThermoHygrometer.Infrastructure.Data;
 using Asp.Versioning.ApiExplorer;
-using FluentValidation;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -59,10 +56,6 @@ builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 
 builder.Services.AddScoped<IHealthCheckService, HealthCheckServiceWrapper>();
-
-builder.Services.AddScoped<IValidator<BatteryDto>, BatteryDtoValidator>();
-builder.Services.AddScoped<IValidator<HumidityDto>, HumidityDtoValidator>();
-builder.Services.AddScoped<IValidator<TemperatureDto>, TemperatureDtoValidator>();
 
 // Exception handling service.
 builder.Services.AddExceptionHandler<GlobalExceptionHandlerMiddleware>();
