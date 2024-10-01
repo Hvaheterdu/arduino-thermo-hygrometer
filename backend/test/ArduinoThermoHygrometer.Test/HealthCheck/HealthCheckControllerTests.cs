@@ -73,7 +73,7 @@ public class HealthCheckControllerTests
         OkObjectResult? act = await _healthCheckController.GetHealthCheckReportAsync() as OkObjectResult;
 
         // Assert
-        Assert.That(healthyReport, Is.EqualTo(act?.Value));
+        Assert.That(act?.Value, Is.EqualTo(healthyReport));
     }
 
     [Test]
@@ -87,7 +87,7 @@ public class HealthCheckControllerTests
         ObjectResult? act = await _healthCheckController.GetHealthCheckReportAsync() as ObjectResult;
 
         // Assert
-        Assert.That(degradedReport, Is.EqualTo(act?.Value));
+        Assert.That(act?.Value, Is.EqualTo(degradedReport));
     }
 
     [Test]
@@ -101,6 +101,6 @@ public class HealthCheckControllerTests
         ObjectResult? act = await _healthCheckController.GetHealthCheckReportAsync() as ObjectResult;
 
         // Assert
-        Assert.That(unhealthyReport, Is.EqualTo(act?.Value));
+        Assert.That(act?.Value, Is.EqualTo(unhealthyReport));
     }
 }

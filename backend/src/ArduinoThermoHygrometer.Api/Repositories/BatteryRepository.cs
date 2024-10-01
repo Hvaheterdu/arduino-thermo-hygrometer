@@ -14,37 +14,34 @@ public class BatteryRepository : IBatteryRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Battery?>> GetAllBatteriesAsync()
-    {
-        IEnumerable<Battery?> batteries = await _dbContext.Batteries.ToListAsync();
-
-        return batteries;
-    }
-
     public async Task<Battery?> GetBatteryByIdAsync(Guid id)
     {
-        Battery? battery = await _dbContext.Batteries.FindAsync(id);
+        Battery? battery = await _dbContext.Batteries
+            .FindAsync(id);
 
         return battery;
     }
 
     public async Task<Battery?> GetBatteryByDateAndTimeAsync(DateTimeOffset registeredAt)
     {
-        Battery? battery = await _dbContext.Batteries.FirstOrDefaultAsync(b => b.RegisteredAt == registeredAt);
+        Battery? battery = await _dbContext.Batteries
+            .FirstOrDefaultAsync(b => b.RegisteredAt == registeredAt);
 
         return battery;
+    }
+
+    public async Task<IEnumerable<Battery?>> GetAllBatteriesWithinTimestampRangeAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
+    {
+        IEnumerable<Battery?> batteries = await _dbContext.Batteries
+            .Where(b => b.RegisteredAt >= startTimestamp && b.RegisteredAt <= endTimestamp)
+            .ToListAsync();
+
+        return batteries;
     }
 
     public async Task<Battery?> AddBatteryAsync(Battery battery)
     {
-        await _dbContext.AddAsync(battery);
-
-        return battery;
-    }
-
-    public Battery? UpdateBattery(Battery battery)
-    {
-        _dbContext.Batteries.Update(battery);
+        await _dbContext.Batteries.AddAsync(battery);
 
         return battery;
     }

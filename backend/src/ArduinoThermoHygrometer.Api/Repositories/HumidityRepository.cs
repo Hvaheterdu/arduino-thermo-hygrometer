@@ -14,37 +14,34 @@ public class HumidityRepository : IHumidityRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Humidity?>> GetAllHumiditiesAsync()
-    {
-        IEnumerable<Humidity?> humidities = await _dbContext.Humidities.ToListAsync();
-
-        return humidities;
-    }
-
     public async Task<Humidity?> GetHumidityByIdAsync(Guid id)
     {
-        Humidity? humidity = await _dbContext.Humidities.FindAsync(id);
+        Humidity? humidity = await _dbContext.Humidities
+            .FindAsync(id);
 
         return humidity;
     }
 
     public async Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset registeredAt)
     {
-        Humidity? humidity = await _dbContext.Humidities.FirstOrDefaultAsync(h => h.RegisteredAt == registeredAt);
+        Humidity? humidity = await _dbContext.Humidities
+            .FirstOrDefaultAsync(h => h.RegisteredAt == registeredAt);
 
         return humidity;
+    }
+
+    public async Task<IEnumerable<Humidity?>> GetAllHumiditiesWithinTimestampRangeAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
+    {
+        IEnumerable<Humidity?> humidities = await _dbContext.Humidities
+            .Where(h => h.RegisteredAt >= startTimestamp && h.RegisteredAt <= endTimestamp)
+            .ToListAsync();
+
+        return humidities;
     }
 
     public async Task<Humidity?> AddHumidityAsync(Humidity humidity)
     {
         await _dbContext.Humidities.AddAsync(humidity);
-
-        return humidity;
-    }
-
-    public Humidity? UpdateHumidity(Humidity humidity)
-    {
-        _dbContext.Humidities.Update(humidity);
 
         return humidity;
     }

@@ -1,4 +1,5 @@
-﻿using ArduinoThermoHygrometer.Api.Repositories.Contracts;
+﻿using ArduinoThermoHygrometer.Api.DTOs;
+using ArduinoThermoHygrometer.Api.Repositories.Contracts;
 using ArduinoThermoHygrometer.Api.Services.Contracts;
 
 namespace ArduinoThermoHygrometer.Api.Services;
@@ -14,7 +15,32 @@ public class HumidityService : IHumidityService
         _logger = logger;
     }
 
-    public void Dummy()
+    public Task<HumidityDto?> GetHumidityDtoByIdAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<HumidityDto?> GetHumidityDtoByDateAndTimeAsync(DateTimeOffset registeredAt)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<HumidityDto?>> GetAllBatteryDtosWithinTimestampRangeAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<HumidityDto?> AddHumidityDtoAsync(HumidityDto humidityDto)
+    {
+        throw new NotImplementedException();
+    }
+
+    public HumidityDto? RemoveHumidityDto(HumidityDto humidityDto)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SaveChangesAsync()
     {
         throw new NotImplementedException();
     }

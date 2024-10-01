@@ -14,37 +14,34 @@ public class TemperatureRepository : ITemperatureRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Temperature?>> GetAllTemperaturesAsync()
-    {
-        IEnumerable<Temperature?> temperatures = await _dbContext.Temperatures.ToListAsync();
-
-        return temperatures;
-    }
-
     public async Task<Temperature?> GetTemperatureByIdAsync(Guid id)
     {
-        Temperature? temperature = await _dbContext.Temperatures.FindAsync(id);
+        Temperature? temperature = await _dbContext.Temperatures
+            .FindAsync(id);
 
         return temperature;
     }
 
     public async Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset registeredAt)
     {
-        Temperature? temperature = await _dbContext.Temperatures.FirstOrDefaultAsync(t => t.RegisteredAt == registeredAt);
+        Temperature? temperature = await _dbContext.Temperatures
+            .FirstOrDefaultAsync(t => t.RegisteredAt == registeredAt);
 
         return temperature;
+    }
+
+    public async Task<IEnumerable<Temperature?>> GetAllTemperaturesWithinTimestampRangeAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
+    {
+        IEnumerable<Temperature?> temperatures = await _dbContext.Temperatures
+            .Where(t => t.RegisteredAt >= startTimestamp && t.RegisteredAt <= endTimestamp)
+            .ToListAsync();
+
+        return temperatures;
     }
 
     public async Task<Temperature?> AddTemperatureAsync(Temperature temperature)
     {
         await _dbContext.Temperatures.AddAsync(temperature);
-
-        return temperature;
-    }
-
-    public Temperature? UpdateTemperature(Temperature temperature)
-    {
-        _dbContext.Temperatures.Update(temperature);
 
         return temperature;
     }
