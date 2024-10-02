@@ -12,7 +12,6 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
@@ -215,29 +214,38 @@ public static class ProgramExtensions
 
         builder.Logging.ClearProviders();
 
-        Assembly? assembly = Assembly.GetAssembly(typeof(Program));
-
         if (!builder.Environment.IsProduction())
         {
             builder.Logging.AddOpenTelemetry(configure =>
             {
+                configure.AddConsoleExporter();
                 configure.SetResourceBuilder(ResourceBuilder.CreateDefault()
-                    .AddService(nameof(ArduinoThermoHygrometer))
+                    .AddService(builder.Environment.ApplicationName)
                     .AddAttributes(new Dictionary<string, object>()
                     {
                         ["deployment.environment"] = builder.Environment.EnvironmentName,
-                        ["service.version"] = assembly?.GetName()?.Version?.ToString() ?? string.Empty
                     }));
 
                 configure.IncludeFormattedMessage = true;
                 configure.IncludeScopes = true;
             });
-
-            builder.Services.AddOpenTelemetry()
-                .ConfigureResource(configure => configure.AddService(nameof(ArduinoThermoHygrometer)))
-                .WithLogging(configure => configure.AddConsoleExporter());
         }
-        // TODO: Add else statement with logging, metrics and tracing for production environment.
+        //else
+        //{
+        //    builder.Services.AddOpenTelemetry()
+        //        .ConfigureResource(configure => configure.AddService(builder.Environment.ApplicationName))
+        //        .UseAzureMonitor();
+
+        //    builder.Logging.AddOpenTelemetry(configure =>
+        //    {
+        //        configure.SetResourceBuilder(ResourceBuilder.CreateDefault()
+        //            .AddService(builder.Environment.ApplicationName)
+        //            .AddAttributes(new Dictionary<string, object>()
+        //            {
+        //                ["deployment.environment"] = builder.Environment.EnvironmentName,
+        //            }));
+        //    });
+        //}
 
         return builder;
     }
@@ -273,8 +281,8 @@ public static class ProgramExtensions
     private static void LoggerForRateLimiter(string requestMethod, string requestPath, string retryRequestAfter)
     {
         using ILoggerFactory loggerFactory = LoggerFactory.Create(configure => configure.AddOpenTelemetry());
-
         ILogger logger = loggerFactory.CreateLogger("LogRateLimitExceeded");
+
         LoggingExtensions.LogRateLimitExceeded(logger, requestMethod, requestPath, retryRequestAfter);
     }
 }
