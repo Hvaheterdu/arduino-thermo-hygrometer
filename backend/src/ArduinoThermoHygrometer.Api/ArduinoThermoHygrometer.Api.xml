@@ -12,7 +12,7 @@
             <response code="200">Returns the health check report if the system is healthy.</response>
             <response code="500">Returns a <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> object if the system is degraded or unhealthy.</response>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddHsts(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddHsts(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds HTTP Strict Transport Security (HSTS) service to the WebApplicationBuilder.
             </summary>
@@ -20,7 +20,7 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddHttpsRedirection(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddHttpsRedirection(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds HTTP redirection service to the WebApplicationBuilder.
             </summary>
@@ -28,7 +28,7 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddRateLimiter(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddRateLimiter(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds fixed window rate limiter service to the WebApplicationBuilder.
             </summary>
@@ -36,7 +36,7 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddApiVersioning(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddApiVersioning(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds API versioning service to the WebApplicationBuilder.
             </summary>
@@ -44,7 +44,7 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.RegisterDatabaseAndRunMigrationsOnStartup``1(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.RegisterDatabaseAndRunMigrationsOnStartup``1(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Registers database and runs migrations on application startup.
             </summary>
@@ -55,7 +55,7 @@
             <exception cref="T:System.NotImplementedException">Thrown when the database connection string cannot be found.</exception>
             <exception cref="T:System.NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.AddOpenTelemetryLogging(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddOpenTelemetryLogging(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Configures OpenTelemetry logging for the provided <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> instance.
             </summary>
@@ -63,7 +63,7 @@
             <returns>The same <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> instance, allowing for method chaining.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if the <paramref name="builder"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.CreateProblemDetailsForRateLimiter(Microsoft.AspNetCore.RateLimiting.OnRejectedContext,System.String,System.String)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.CreateProblemDetailsForRateLimiter(Microsoft.AspNetCore.RateLimiting.OnRejectedContext,System.String,System.String)">
             <summary>
             Creates a <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> instance for a rate limiter rejection.
             </summary>
@@ -72,7 +72,7 @@
             <param name="retryRequestAfter">The time in minutes after which the request can be retried.</param>
             <returns>A <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> instance containing details about the rate limit rejection.</returns>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Extensions.ProgramExtensions.LoggerForRateLimiter(System.String,System.String,System.String)">
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.LoggerForRateLimiter(System.String,System.String,System.String)">
             <summary>
             Logs a warning message when a rate limit is reached.
             </summary>

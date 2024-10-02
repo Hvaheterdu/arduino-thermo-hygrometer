@@ -56,6 +56,11 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
             }
         };
 
+        if (apiDescription.IsDeprecated)
+        {
+            openApiInfo.Description += $"<b> API version {apiDescription.ApiVersion} has been deprecated. Please select a newer version from the definition.</b>";
+        }
+
         return openApiInfo;
     }
 

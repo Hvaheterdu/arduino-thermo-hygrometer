@@ -18,7 +18,7 @@ using System.Threading.RateLimiting;
 
 namespace ArduinoThermoHygrometer.Api.Extensions;
 
-public static class ProgramExtensions
+internal static class WebApplicationBuilderExtensions
 {
     /// <summary>
     /// Adds HTTP Strict Transport Security (HSTS) service to the WebApplicationBuilder.
@@ -26,7 +26,7 @@ public static class ProgramExtensions
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
-    public static WebApplicationBuilder AddHsts(this WebApplicationBuilder builder)
+    internal static WebApplicationBuilder AddHsts(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
@@ -56,7 +56,7 @@ public static class ProgramExtensions
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
-    public static WebApplicationBuilder AddHttpsRedirection(this WebApplicationBuilder builder)
+    internal static WebApplicationBuilder AddHttpsRedirection(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
@@ -86,7 +86,7 @@ public static class ProgramExtensions
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
-    public static WebApplicationBuilder AddRateLimiter(this WebApplicationBuilder builder)
+    internal static WebApplicationBuilder AddRateLimiter(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
@@ -148,7 +148,7 @@ public static class ProgramExtensions
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
-    public static WebApplicationBuilder AddApiVersioning(this WebApplicationBuilder builder)
+    internal static WebApplicationBuilder AddApiVersioning(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
@@ -178,7 +178,7 @@ public static class ProgramExtensions
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
     /// <exception cref="NotImplementedException">Thrown when the database connection string cannot be found.</exception>
     /// <exception cref="NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
-    public static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
+    internal static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
@@ -208,7 +208,7 @@ public static class ProgramExtensions
     /// <param name="builder">The <see cref="WebApplicationBuilder"/> to configure OpenTelemetry logging for.</param>
     /// <returns>The same <see cref="WebApplicationBuilder"/> instance, allowing for method chaining.</returns>
     /// <exception cref="ArgumentNullException">Thrown if the <paramref name="builder"/> is null.</exception>
-    public static WebApplicationBuilder AddOpenTelemetryLogging(this WebApplicationBuilder builder)
+    internal static WebApplicationBuilder AddOpenTelemetryLogging(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
@@ -232,10 +232,6 @@ public static class ProgramExtensions
         }
         //else
         //{
-        //    builder.Services.AddOpenTelemetry()
-        //        .ConfigureResource(configure => configure.AddService(builder.Environment.ApplicationName))
-        //        .UseAzureMonitor();
-
         //    builder.Logging.AddOpenTelemetry(configure =>
         //    {
         //        configure.SetResourceBuilder(ResourceBuilder.CreateDefault()
@@ -245,6 +241,10 @@ public static class ProgramExtensions
         //                ["deployment.environment"] = builder.Environment.EnvironmentName,
         //            }));
         //    });
+
+        //    builder.Services.AddOpenTelemetry()
+        //        .ConfigureResource(configure => configure.AddService(builder.Environment.ApplicationName))
+        //        .UseAzureMonitor();
         //}
 
         return builder;
