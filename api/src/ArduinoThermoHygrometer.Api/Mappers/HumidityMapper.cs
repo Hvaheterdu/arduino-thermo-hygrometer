@@ -1,4 +1,4 @@
-﻿using ArduinoThermoHygrometer.Api.DTOs;
+﻿using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 
 namespace ArduinoThermoHygrometer.Api.Mappers;

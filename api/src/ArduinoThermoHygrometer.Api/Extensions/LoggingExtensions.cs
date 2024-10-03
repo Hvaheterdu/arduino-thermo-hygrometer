@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace ArduinoThermoHygrometer.Api.Extensions;
+
 internal static partial class LoggingExtensions
 {
     // GLOBAL EXCEPTION HANDLER LOGGING

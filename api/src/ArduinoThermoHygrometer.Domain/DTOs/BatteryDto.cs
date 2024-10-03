@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace ArduinoThermoHygrometer.Api.DTOs;
+namespace ArduinoThermoHygrometer.Domain.DTOs;
 
 public record BatteryDto
 {

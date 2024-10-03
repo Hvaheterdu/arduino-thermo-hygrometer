@@ -80,7 +80,7 @@
             <param name="requestPath">The path of the request that was rate limited.</param>
             <param name="retryRequestAfter">The time in minutes after which the request can be retried.</param>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Mappers.BatteryMapper.GetBatteryFromBatteryDto(ArduinoThermoHygrometer.Api.DTOs.BatteryDto)">
+        <member name="M:ArduinoThermoHygrometer.Api.Mappers.BatteryMapper.GetBatteryFromBatteryDto(ArduinoThermoHygrometer.Domain.DTOs.BatteryDto)">
             <summary>
             Converts a BatteryDto object to a Battery object.
             </summary>
@@ -96,7 +96,7 @@
             <returns>The converted BatteryDto object.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="battery"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Mappers.HumidityMapper.GetHumidityFromHumidityDto(ArduinoThermoHygrometer.Api.DTOs.HumidityDto)">
+        <member name="M:ArduinoThermoHygrometer.Api.Mappers.HumidityMapper.GetHumidityFromHumidityDto(ArduinoThermoHygrometer.Domain.DTOs.HumidityDto)">
             <summary>
             Converts a HumidityDto object to a Humidity object.
             </summary>
@@ -112,7 +112,7 @@
             <returns>The converted HumidityDto object.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="humidity"/> is null.</exception>
         </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Mappers.TemperatureMapper.GetTemperatureFromTemperatureDto(ArduinoThermoHygrometer.Api.DTOs.TemperatureDto)">
+        <member name="M:ArduinoThermoHygrometer.Api.Mappers.TemperatureMapper.GetTemperatureFromTemperatureDto(ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto)">
             <summary>
             Converts a TemperatureDto object to a Temperature object.
             </summary>

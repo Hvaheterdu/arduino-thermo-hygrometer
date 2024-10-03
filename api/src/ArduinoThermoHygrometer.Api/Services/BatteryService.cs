@@ -1,6 +1,6 @@
-﻿using ArduinoThermoHygrometer.Api.DTOs;
-using ArduinoThermoHygrometer.Api.Repositories.Contracts;
+﻿using ArduinoThermoHygrometer.Api.Repositories.Contracts;
 using ArduinoThermoHygrometer.Api.Services.Contracts;
+using ArduinoThermoHygrometer.Domain.DTOs;
 
 namespace ArduinoThermoHygrometer.Api.Services;
 

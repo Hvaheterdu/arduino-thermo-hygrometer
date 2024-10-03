@@ -2,9 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace ArduinoThermoHygrometer.Api.DTOs;
+namespace ArduinoThermoHygrometer.Domain.DTOs;
 
-public class HumidityDto
+public record TemperatureDto
 {
     [JsonIgnore]
     public Guid Id { get; set; } = default!;
@@ -14,7 +14,7 @@ public class HumidityDto
 
     [Required]
     [RegularExpression(@"^(?!\s*$).*")]
-    [Range(20, 90)]
+    [Range(-55, 125)]
     [NotNull]
-    public decimal AirHumidity { get; set; } = default!;
+    public decimal Temp { get; set; } = default!;
 }
