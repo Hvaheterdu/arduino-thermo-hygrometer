@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "declaration": false,
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "target": "ES2023",
+    "useDefineForClassFields": true,
+
+    /* Bundler mode */
+    "downlevelIteration": true,
+    "isolatedModules": true,
+    "importHelpers": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "noEmitOnError": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "verbatimModuleSyntax": true,
+
+    /* Linting */
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true
+  },
+  "include": ["src"]
+}

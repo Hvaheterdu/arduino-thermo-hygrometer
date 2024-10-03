@@ -1,0 +1,16 @@
+# Default
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+
+# Ignore artifacts
+build
+coverage
+dist
+
+# Ignore generated file
+**/*.generated.ts
+
+# Ignore package-lock.json
+package-lock.json
