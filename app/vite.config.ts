@@ -26,8 +26,8 @@ export default defineConfig({
   ],
   build: {
     outDir: "./dist",
+    sourcemap: true,
     reportCompressedSize: true,
-    minify: true,
   },
   server: {
     host: "localhost",
