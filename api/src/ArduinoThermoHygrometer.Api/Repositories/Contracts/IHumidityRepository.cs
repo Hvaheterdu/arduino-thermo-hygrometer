@@ -6,7 +6,7 @@ public interface IHumidityRepository
 {
     Task<Humidity?> GetHumidityByIdAsync(Guid id);
 
-    Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset registeredAt);
+    Task<Humidity?> GetHumidityByTimestampAsync(DateTimeOffset registeredAt);
 
     Task<IEnumerable<Humidity?>> GetAllHumiditiesWithinTimestampRangeAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp);
 

@@ -1,6 +1,8 @@
 ﻿using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 
+#pragma warning disable CA1062
+
 namespace ArduinoThermoHygrometer.Api.Mappers;
 
 public static class HumidityMapper
@@ -10,11 +12,8 @@ public static class HumidityMapper
     /// </summary>
     /// <param name="humidityDto">The HumidityDto object to convert.</param>
     /// <returns>The converted Humidity object.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="humidityDto"/> is null.</exception>
     public static Humidity GetHumidityFromHumidityDto(HumidityDto humidityDto)
     {
-        ArgumentNullException.ThrowIfNull(humidityDto, nameof(humidityDto));
-
         Humidity humidity = new(humidityDto.RegisteredAt, humidityDto.AirHumidity)
         {
             Id = humidityDto.Id,
@@ -30,11 +29,8 @@ public static class HumidityMapper
     /// </summary>
     /// <param name="humidity">The Humidity object to convert.</param>
     /// <returns>The converted HumidityDto object.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="humidity"/> is null.</exception>
     public static HumidityDto GetHumidityDtoFromHumidity(Humidity humidity)
     {
-        ArgumentNullException.ThrowIfNull(humidity, nameof(humidity));
-
         return new HumidityDto
         {
             Id = humidity.Id,

@@ -20,7 +20,7 @@ public class HumidityService : IHumidityService
         throw new NotImplementedException();
     }
 
-    public Task<HumidityDto?> GetHumidityDtoByDateAndTimeAsync(DateTimeOffset registeredAt)
+    public Task<HumidityDto?> GetHumidityDtoByTimestampAsync(DateTimeOffset registeredAt)
     {
         throw new NotImplementedException();
     }
@@ -36,11 +36,6 @@ public class HumidityService : IHumidityService
     }
 
     public HumidityDto? RemoveHumidityDto(HumidityDto humidityDto)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SaveChangesAsync()
     {
         throw new NotImplementedException();
     }

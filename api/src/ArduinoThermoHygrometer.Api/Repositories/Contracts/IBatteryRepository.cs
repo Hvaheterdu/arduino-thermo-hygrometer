@@ -6,7 +6,7 @@ public interface IBatteryRepository
 {
     Task<Battery?> GetBatteryByIdAsync(Guid id);
 
-    Task<Battery?> GetBatteryByDateAndTimeAsync(DateTimeOffset registeredAt);
+    Task<Battery?> GetBatteryByTimestampAsync(DateTimeOffset registeredAt);
 
     Task<IEnumerable<Battery?>> GetAllBatteriesWithinTimestampRangeAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp);
 

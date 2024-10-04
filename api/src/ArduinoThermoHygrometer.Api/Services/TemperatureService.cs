@@ -20,7 +20,7 @@ public class TemperatureService : ITemperatureService
         throw new NotImplementedException();
     }
 
-    public Task<TemperatureDto?> GetTemperatureDtoByDateAndTimeAsync(DateTimeOffset registeredAt)
+    public Task<TemperatureDto?> GetTemperatureDtoByTimestampAsync(DateTimeOffset registeredAt)
     {
         throw new NotImplementedException();
     }
@@ -36,11 +36,6 @@ public class TemperatureService : ITemperatureService
     }
 
     public TemperatureDto? RemoveTemperatureDto(TemperatureDto temperatureDto)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SaveChangesAsync()
     {
         throw new NotImplementedException();
     }

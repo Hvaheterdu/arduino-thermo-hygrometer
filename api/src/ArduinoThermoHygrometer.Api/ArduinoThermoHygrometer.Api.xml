@@ -4,13 +4,22 @@
         <name>ArduinoThermoHygrometer.Api</name>
     </assembly>
     <members>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.GetBatteryDtoByIdAsync(System.Guid)">
+            <summary>
+            Retrieves a battery object by its unique identifier.
+            </summary>
+            <param name="id">The unique Guid identifier of the battery to retrieve.</param>
+            <returns>Returns battery or bad request.</returns>
+            <response code="200">Returns the battery if found.</response>
+            <response code="400">Returns a bad request if the battery is not found or if the input is invalid.</response>
+        </member>
         <member name="M:ArduinoThermoHygrometer.Api.Controllers.HealthCheckController.GetHealthCheckReportAsync">
             <summary>
             Retrieves the health check report for the system.
             </summary>
-            <returns>An <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/> containing the health check report.</returns>
+            <returns>The health check report.</returns>
             <response code="200">Returns the health check report if the system is healthy.</response>
-            <response code="500">Returns a <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> object if the system is degraded or unhealthy.</response>
+            <response code="500">Returns a ProblemDetails object if the system is degraded or unhealthy.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddHsts(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
@@ -86,7 +95,6 @@
             </summary>
             <param name="batteryDto">The BatteryDto object to convert.</param>
             <returns>The converted Battery object.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="batteryDto"/> is null.</exception>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Mappers.BatteryMapper.GetBatteryDtoFromBattery(ArduinoThermoHygrometer.Domain.Entities.Battery)">
             <summary>
@@ -94,7 +102,6 @@
             </summary>
             <param name="battery">The Battery object to convert.</param>
             <returns>The converted BatteryDto object.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="battery"/> is null.</exception>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Mappers.HumidityMapper.GetHumidityFromHumidityDto(ArduinoThermoHygrometer.Domain.DTOs.HumidityDto)">
             <summary>
@@ -102,7 +109,6 @@
             </summary>
             <param name="humidityDto">The HumidityDto object to convert.</param>
             <returns>The converted Humidity object.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="humidityDto"/> is null.</exception>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Mappers.HumidityMapper.GetHumidityDtoFromHumidity(ArduinoThermoHygrometer.Domain.Entities.Humidity)">
             <summary>
@@ -110,7 +116,6 @@
             </summary>
             <param name="humidity">The Humidity object to convert.</param>
             <returns>The converted HumidityDto object.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="humidity"/> is null.</exception>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Mappers.TemperatureMapper.GetTemperatureFromTemperatureDto(ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto)">
             <summary>
@@ -118,7 +123,6 @@
             </summary>
             <param name="temperatureDto">The TemperatureDto object to convert.</param>
             <returns>The converted Temperature object.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="temperatureDto"/> is null.</exception>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Mappers.TemperatureMapper.GetTemperatureDtoFromTemperature(ArduinoThermoHygrometer.Domain.Entities.Temperature)">
             <summary>
@@ -126,7 +130,6 @@
             </summary>
             <param name="temperature">The Temperature object to convert.</param>
             <returns>The converted TemperatureDto object.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="temperature"/> is null.</exception>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Middleware.GlobalExceptionHandlerMiddleware.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
             <summary>
@@ -167,6 +170,14 @@
             </summary>
             <param name="name">The name of the options instance to configure.</param>
             <param name="options">The SwaggerGenOptions to configure.</param>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.GetBatteryDtoByIdAsync(System.Guid)">
+            <summary>
+            Retrieves a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object by its unique identifier (ID) asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the battery to retrieve. Must not be an empty or invalid GUID.</param>
+            <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object if found; otherwise, <c>null</c>.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when the provided ID is not a valid <see cref="T:System.Guid"/>.</exception>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.HealthCheckServiceWrapper.GetHealthCheckReportAsync">
             <summary>

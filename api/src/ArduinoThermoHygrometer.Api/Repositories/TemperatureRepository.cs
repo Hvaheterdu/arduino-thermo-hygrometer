@@ -22,7 +22,7 @@ public class TemperatureRepository : ITemperatureRepository
         return temperature;
     }
 
-    public async Task<Temperature?> GetTemperatureByDateAndTimeAsync(DateTimeOffset registeredAt)
+    public async Task<Temperature?> GetTemperatureByTimestampAsync(DateTimeOffset registeredAt)
     {
         Temperature? temperature = await _dbContext.Temperatures
             .FirstOrDefaultAsync(t => t.RegisteredAt == registeredAt);

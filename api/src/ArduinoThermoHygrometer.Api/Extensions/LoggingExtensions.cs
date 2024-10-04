@@ -4,29 +4,63 @@ namespace ArduinoThermoHygrometer.Api.Extensions;
 
 internal static partial class LoggingExtensions
 {
-    // GLOBAL EXCEPTION HANDLER LOGGING
+    // GLOBAL EXCEPTION HANDLER
 
-    [LoggerMessage(EventId = 4, EventName = "LogUnexpectedException", Level = LogLevel.Error,
+    [LoggerMessage(EventId = 5, EventName = "UnexpectedServerError", Level = LogLevel.Error,
     Message = "An unexpected server error has occurred. Exception: {ExceptionMessage}\n InnerException: {InnerExceptionMessage}")]
     internal static partial void LogUnexpectedException(this ILogger logger, string exceptionMessage, string? innerExceptionMessage);
 
-    // RATE LIMIT SERVICE LOGGING
+    // RATE LIMIT SERVICE
 
-    [LoggerMessage(EventId = 1003, EventName = "LogRateLimitExceeded", Level = LogLevel.Warning,
+    [LoggerMessage(EventId = 1003, EventName = "RateLimit", Level = LogLevel.Warning,
     Message = "Rate limit reached for {RequestMethod} request to {RequestPath}. Please try again after {RetryRequestAfter} minute.")]
     internal static partial void LogRateLimitExceeded(this ILogger logger, string requestMethod, string requestPath, string retryRequestAfter);
 
-    // HEALTHCHECK SERVICE LOGGING
+    // HEALTHCHECK SERVICE
 
-    [LoggerMessage(EventId = 2002, EventName = "LogHealthCheckReportRetrieving", Level = LogLevel.Information,
+    [LoggerMessage(EventId = 2002, EventName = "RetrievingHealthCheckReport", Level = LogLevel.Information,
     Message = "Retrieving health check report.")]
-    internal static partial void LogHealthCheckReportRetrieving(this ILogger logger);
+    internal static partial void LogRetrievingHealthCheckReport(this ILogger logger);
 
-    [LoggerMessage(EventId = 2002, EventName = "LogHealthCheckReportRetrived", Level = LogLevel.Information,
+    [LoggerMessage(EventId = 2002, EventName = "RetrievedHealthCheckReport", Level = LogLevel.Information,
     Message = "Retrived health check report.")]
-    internal static partial void LogHealthCheckReportRetrieved(this ILogger logger);
+    internal static partial void LogRetrievedHealthCheckReport(this ILogger logger);
 
-    [LoggerMessage(EventId = 2004, EventName = "LogHealthCheckReportStatus", Level = LogLevel.Error,
+    [LoggerMessage(EventId = 2004, EventName = "HealthCheckStatusUnhealthyOrDegraded", Level = LogLevel.Error,
     Message = "Health check report status is {Status}.")]
-    internal static partial void LogHealthCheckReportStatus(this ILogger logger, HealthStatus status);
+    internal static partial void LogUnhealthyOrDegradedHealthCheckReportStatus(this ILogger logger, HealthStatus status);
+
+    // GUID ID
+
+    [LoggerMessage(EventId = 3004, EventName = "EmptyId", Level = LogLevel.Error,
+    Message = "The {Id} is empty.")]
+    internal static partial void LogEmptyId(this ILogger logger, Guid id);
+
+    [LoggerMessage(EventId = 3004, EventName = "InvalidId", Level = LogLevel.Error,
+    Message = "The {Id} is not valid.")]
+    internal static partial void LogInvalidId(this ILogger logger, Guid id);
+
+    // NULL OBJECT
+
+    [LoggerMessage(EventId = 4004, EventName = "BatteryIsNull", Level = LogLevel.Error,
+    Message = "Battery not found.")]
+    internal static partial void LogBatteryIsNull(this ILogger logger);
+
+    // BATTERY SERVICE
+
+    [LoggerMessage(EventId = 5002, EventName = "RetrievingBatteryServiceById", Level = LogLevel.Information,
+    Message = "Retrieving battery dto by id.")]
+    internal static partial void LogRetrievingBatteryDtoById(this ILogger logger);
+
+    [LoggerMessage(EventId = 5002, EventName = "RetrievedBatteryServiceById", Level = LogLevel.Information,
+    Message = "Retrieved battery dto by id.")]
+    internal static partial void LogRetrievedBatteryDtoById(this ILogger logger);
+
+    [LoggerMessage(EventId = 5002, EventName = "RetrievingBatteryServiceByDateAndTime", Level = LogLevel.Information,
+    Message = "Retrieving battery dto by timestamp.")]
+    internal static partial void LogRetrievingBatteryDtoByTimestamp(this ILogger logger);
+
+    [LoggerMessage(EventId = 5002, EventName = "RetrievedBatteryServiceByDateAndTime", Level = LogLevel.Information,
+    Message = "Retrieved battery dto by timestamp.")]
+    internal static partial void LogRetrievedBatteryDtoByTimestamp(this ILogger logger);
 }

@@ -22,7 +22,7 @@ public class BatteryRepository : IBatteryRepository
         return battery;
     }
 
-    public async Task<Battery?> GetBatteryByDateAndTimeAsync(DateTimeOffset registeredAt)
+    public async Task<Battery?> GetBatteryByTimestampAsync(DateTimeOffset registeredAt)
     {
         Battery? battery = await _dbContext.Batteries
             .FirstOrDefaultAsync(b => b.RegisteredAt == registeredAt);

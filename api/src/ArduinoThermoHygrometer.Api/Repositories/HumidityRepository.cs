@@ -22,7 +22,7 @@ public class HumidityRepository : IHumidityRepository
         return humidity;
     }
 
-    public async Task<Humidity?> GetHumidityByDateAndTimeAsync(DateTimeOffset registeredAt)
+    public async Task<Humidity?> GetHumidityByTimestampAsync(DateTimeOffset registeredAt)
     {
         Humidity? humidity = await _dbContext.Humidities
             .FirstOrDefaultAsync(h => h.RegisteredAt == registeredAt);

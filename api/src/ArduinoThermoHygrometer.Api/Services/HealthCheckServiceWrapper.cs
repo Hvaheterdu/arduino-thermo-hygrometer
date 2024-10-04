@@ -21,16 +21,16 @@ public class HealthCheckServiceWrapper : IHealthCheckService
     /// <returns>Returns the <see cref="HealthReport"/> which provides the health check status.</returns>
     public async Task<HealthReport> GetHealthCheckReportAsync()
     {
-        LoggingExtensions.LogHealthCheckReportRetrieving(_logger);
+        LoggingExtensions.LogRetrievingHealthCheckReport(_logger);
 
         HealthReport healthReport = await _healthCheckService.CheckHealthAsync();
 
         if (healthReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {
-            LoggingExtensions.LogHealthCheckReportStatus(_logger, healthReport.Status);
+            LoggingExtensions.LogUnhealthyOrDegradedHealthCheckReportStatus(_logger, healthReport.Status);
         }
 
-        LoggingExtensions.LogHealthCheckReportRetrieved(_logger);
+        LoggingExtensions.LogRetrievedHealthCheckReport(_logger);
 
         return healthReport;
     }
