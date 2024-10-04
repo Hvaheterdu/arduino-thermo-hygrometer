@@ -56,11 +56,11 @@ internal static partial class LoggingExtensions
     Message = "Retrieved battery dto by id.")]
     internal static partial void LogRetrievedBatteryDtoById(this ILogger logger);
 
-    [LoggerMessage(EventId = 5002, EventName = "RetrievingBatteryServiceByDateAndTime", Level = LogLevel.Information,
+    [LoggerMessage(EventId = 5002, EventName = "RetrievingBatteryServiceTimestamp", Level = LogLevel.Information,
     Message = "Retrieving battery dto by timestamp.")]
     internal static partial void LogRetrievingBatteryDtoByTimestamp(this ILogger logger);
 
-    [LoggerMessage(EventId = 5002, EventName = "RetrievedBatteryServiceByDateAndTime", Level = LogLevel.Information,
+    [LoggerMessage(EventId = 5002, EventName = "RetrievedBatteryServiceByTimestamp", Level = LogLevel.Information,
     Message = "Retrieved battery dto by timestamp.")]
     internal static partial void LogRetrievedBatteryDtoByTimestamp(this ILogger logger);
 }
