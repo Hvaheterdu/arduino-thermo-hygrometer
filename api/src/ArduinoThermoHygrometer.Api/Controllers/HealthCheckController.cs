@@ -18,11 +18,11 @@ public class HealthCheckController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves the health check report for the system.
+    /// Retrieves the healthcheck report for the system.
     /// </summary>
-    /// <returns>The health check report.</returns>
-    /// <response code="200">Returns the health check report if the system is healthy.</response>
-    /// <response code="500">Returns a ProblemDetails object if the system is degraded or unhealthy.</response>
+    /// <returns>The healthcheck report.</returns>
+    /// <response code="200">Returns <c>HealthReport</c> if the system is healthy.</response>
+    /// <response code="500">Returns <c>ProblemDetails</c> if the system is degraded or unhealthy.</response>
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]

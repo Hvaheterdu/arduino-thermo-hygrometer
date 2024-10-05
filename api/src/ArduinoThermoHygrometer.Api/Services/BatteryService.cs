@@ -19,23 +19,15 @@ public class BatteryService : IBatteryService
     }
 
     /// <summary>
-    /// Retrieves a <see cref="BatteryDto"/> object by its unique identifier (ID) asynchronously.
+    /// Retrieves a BatteryDto object by its id asynchronously.
     /// </summary>
-    /// <param name="id">The <see cref="Guid"/> of the battery to retrieve. Must not be an empty or invalid GUID.</param>
-    /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, <c>null</c>.</returns>
-    /// <exception cref="ArgumentException">Thrown when the provided ID is not a valid <see cref="Guid"/>.</exception>
+    /// <param name="id">The <see cref="Guid"/> of the battery to retrieve.</param>
+    /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
     public async Task<BatteryDto?> GetBatteryDtoByIdAsync(Guid id)
     {
         LoggingExtensions.LogRetrievingBatteryDtoById(_logger);
 
         if (id == Guid.Empty)
-        {
-            LoggingExtensions.LogEmptyId(_logger, id);
-            return null;
-        }
-
-        bool isIdValidGuid = Guid.TryParse(id.ToString(), out _);
-        if (!isIdValidGuid)
         {
             LoggingExtensions.LogInvalidId(_logger, id);
             return null;

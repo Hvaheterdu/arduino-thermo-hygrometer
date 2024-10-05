@@ -16,9 +16,9 @@ public class HealthCheckServiceWrapper : IHealthCheckService
     }
 
     /// <summary>
-    /// Asynchronously retrieves a health check report.
+    /// Retrieves a healthcheck report asynchronously.
     /// </summary>
-    /// <returns>Returns the <see cref="HealthReport"/> which provides the health check status.</returns>
+    /// <returns>Returns the <see cref="HealthReport"/> which provides the healthcheck status.</returns>
     public async Task<HealthReport> GetHealthCheckReportAsync()
     {
         LoggingExtensions.LogRetrievingHealthCheckReport(_logger);
@@ -27,7 +27,7 @@ public class HealthCheckServiceWrapper : IHealthCheckService
 
         if (healthReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {
-            LoggingExtensions.LogUnhealthyOrDegradedHealthCheckReportStatus(_logger, healthReport.Status);
+            LoggingExtensions.LogHealthCheckReportStatus(_logger, healthReport.Status);
         }
 
         LoggingExtensions.LogRetrievedHealthCheckReport(_logger);

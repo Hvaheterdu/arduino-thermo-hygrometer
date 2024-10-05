@@ -4,22 +4,22 @@
         <name>ArduinoThermoHygrometer.Api</name>
     </assembly>
     <members>
-        <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.GetBatteryDtoByIdAsync(System.Guid)">
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.GetBatteryByIdAsync(System.Guid)">
             <summary>
-            Retrieves a battery object by its unique identifier.
+            Retrieves a battery object by its id.
             </summary>
-            <param name="id">The unique Guid identifier of the battery to retrieve.</param>
-            <returns>Returns battery or bad request.</returns>
-            <response code="200">Returns the battery if found.</response>
-            <response code="400">Returns a bad request if the battery is not found or if the input is invalid.</response>
+            <param name="id">The id of the battery to retrieve.</param>
+            <returns>Returns battery or not found.</returns>
+            <response code="200">Returns <c>Battery</c>.</response>
+            <response code="404">Returns a <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Controllers.HealthCheckController.GetHealthCheckReportAsync">
             <summary>
-            Retrieves the health check report for the system.
+            Retrieves the healthcheck report for the system.
             </summary>
-            <returns>The health check report.</returns>
-            <response code="200">Returns the health check report if the system is healthy.</response>
-            <response code="500">Returns a ProblemDetails object if the system is degraded or unhealthy.</response>
+            <returns>The healthcheck report.</returns>
+            <response code="200">Returns <c>HealthReport</c> if the system is healthy.</response>
+            <response code="500">Returns <c>ProblemDetails</c> if the system is degraded or unhealthy.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddHsts(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
@@ -55,7 +55,7 @@
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.RegisterDatabaseAndRunMigrationsOnStartup``1(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
-            Registers database and runs migrations on application startup.
+            Adds database to the WebApplicationBuilder and run migrations on startup.
             </summary>
             <typeparam name="T">The type of the DbContext.</typeparam>
             <param name="builder">The WebApplicationBuilder instance.</param>
@@ -66,15 +66,15 @@
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddOpenTelemetryLogging(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
-            Configures OpenTelemetry logging for the provided <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> instance.
+            Adds OpenTelemetry logging to the WebApplicationBuilder.
             </summary>
-            <param name="builder">The <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> to configure OpenTelemetry logging for.</param>
-            <returns>The same <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> instance, allowing for method chaining.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the <paramref name="builder"/> is null.</exception>
+            <param name="builder">The WebApplicationBuilder instance.</param>
+            <returns>The updated WebApplicationBuilder instance.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.CreateProblemDetailsForRateLimiter(Microsoft.AspNetCore.RateLimiting.OnRejectedContext,System.String,System.String)">
             <summary>
-            Creates a <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> instance for a rate limiter rejection.
+            Creates a ProblemDetails instance for a rate limiter rejection.
             </summary>
             <param name="context">The context of the rejected request.</param>
             <param name="requestMethod">The HTTP method of the rejected request.</param>
@@ -158,7 +158,7 @@
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.OpenApi.ConfigureSwaggerGenOptions.CreateOpenApiInfoForVersion(Asp.Versioning.ApiExplorer.ApiVersionDescription)">
             <summary>
-            Creates an instance of <see cref="T:Microsoft.OpenApi.Models.OpenApiInfo"/> for the specified <paramref name="apiDescription"/>.
+            Creates an instance of OpenApiInfo for the specified <paramref name="apiDescription"/>.
             </summary>
             <param name="apiDescription">The <see cref="T:Asp.Versioning.ApiExplorer.ApiVersionDescription"/> object.</param>
             <returns>An instance of <see cref="T:Microsoft.OpenApi.Models.OpenApiInfo"/>.</returns>
@@ -173,17 +173,16 @@
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.GetBatteryDtoByIdAsync(System.Guid)">
             <summary>
-            Retrieves a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object by its unique identifier (ID) asynchronously.
+            Retrieves a BatteryDto object by its id asynchronously.
             </summary>
-            <param name="id">The <see cref="T:System.Guid"/> of the battery to retrieve. Must not be an empty or invalid GUID.</param>
-            <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object if found; otherwise, <c>null</c>.</returns>
-            <exception cref="T:System.ArgumentException">Thrown when the provided ID is not a valid <see cref="T:System.Guid"/>.</exception>
+            <param name="id">The <see cref="T:System.Guid"/> of the battery to retrieve.</param>
+            <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object if found; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.HealthCheckServiceWrapper.GetHealthCheckReportAsync">
             <summary>
-            Asynchronously retrieves a health check report.
+            Retrieves a healthcheck report asynchronously.
             </summary>
-            <returns>Returns the <see cref="T:Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport"/> which provides the health check status.</returns>
+            <returns>Returns the <see cref="T:Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport"/> which provides the healthcheck status.</returns>
         </member>
     </members>
 </doc>

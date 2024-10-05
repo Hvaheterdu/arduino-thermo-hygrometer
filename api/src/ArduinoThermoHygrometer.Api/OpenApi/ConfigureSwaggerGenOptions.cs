@@ -33,7 +33,7 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
     }
 
     /// <summary>
-    /// Creates an instance of <see cref="OpenApiInfo"/> for the specified <paramref name="apiDescription"/>.
+    /// Creates an instance of OpenApiInfo for the specified <paramref name="apiDescription"/>.
     /// </summary>
     /// <param name="apiDescription">The <see cref="ApiVersionDescription"/> object.</param>
     /// <returns>An instance of <see cref="OpenApiInfo"/>.</returns>

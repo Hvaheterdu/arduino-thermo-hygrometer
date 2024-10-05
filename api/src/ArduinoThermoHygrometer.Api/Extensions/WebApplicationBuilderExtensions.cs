@@ -170,7 +170,7 @@ internal static class WebApplicationBuilderExtensions
     }
 
     /// <summary>
-    /// Registers database and runs migrations on application startup.
+    /// Adds database to the WebApplicationBuilder and run migrations on startup.
     /// </summary>
     /// <typeparam name="T">The type of the DbContext.</typeparam>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
@@ -203,11 +203,11 @@ internal static class WebApplicationBuilderExtensions
     }
 
     /// <summary>
-    /// Configures OpenTelemetry logging for the provided <see cref="WebApplicationBuilder"/> instance.
+    /// Adds OpenTelemetry logging to the WebApplicationBuilder.
     /// </summary>
-    /// <param name="builder">The <see cref="WebApplicationBuilder"/> to configure OpenTelemetry logging for.</param>
-    /// <returns>The same <see cref="WebApplicationBuilder"/> instance, allowing for method chaining.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="builder"/> is null.</exception>
+    /// <param name="builder">The WebApplicationBuilder instance.</param>
+    /// <returns>The updated WebApplicationBuilder instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
     internal static WebApplicationBuilder AddOpenTelemetryLogging(this WebApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
@@ -251,7 +251,7 @@ internal static class WebApplicationBuilderExtensions
     }
 
     /// <summary>
-    /// Creates a <see cref="ProblemDetails"/> instance for a rate limiter rejection.
+    /// Creates a ProblemDetails instance for a rate limiter rejection.
     /// </summary>
     /// <param name="context">The context of the rejected request.</param>
     /// <param name="requestMethod">The HTTP method of the rejected request.</param>

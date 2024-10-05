@@ -18,23 +18,23 @@ public class BatteryController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves a battery object by its unique identifier.
+    /// Retrieves a battery object by its id.
     /// </summary>
-    /// <param name="id">The unique Guid identifier of the battery to retrieve.</param>
-    /// <returns>Returns battery or bad request.</returns>
-    /// <response code="200">Returns the battery if found.</response>
-    /// <response code="400">Returns a bad request if the battery is not found or if the input is invalid.</response>
+    /// <param name="id">The id of the battery to retrieve.</param>
+    /// <returns>Returns battery or not found.</returns>
+    /// <response code="200">Returns <c>Battery</c>.</response>
+    /// <response code="404">Returns a <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
     [HttpGet("{id:Guid}")]
     [Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<BatteryDto>> GetBatteryDtoByIdAsync(Guid id)
+    [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<BatteryDto>> GetBatteryByIdAsync(Guid id)
     {
         BatteryDto? batteryDto = await _batteryService.GetBatteryDtoByIdAsync(id);
 
         if (batteryDto == null)
         {
-            return BadRequest("Battery not found.");
+            return NotFound(batteryDto);
         }
 
         return Ok(batteryDto);
