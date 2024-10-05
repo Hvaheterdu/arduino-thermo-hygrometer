@@ -6,9 +6,13 @@ public interface ITemperatureRepository
 {
     Task<Temperature?> GetTemperatureByIdAsync(Guid id);
 
+    Task<Temperature?> GetTemperatureByDateAsync(DateTimeOffset registeredAt);
+
+    Task<IEnumerable<Temperature?>> GetTemperaturesByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate);
+
     Task<Temperature?> GetTemperatureByTimestampAsync(DateTimeOffset registeredAt);
 
-    Task<IEnumerable<Temperature?>> GetAllTemperaturesWithinTimestampRangeAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp);
+    Task<IEnumerable<Temperature?>> GetTemperaturesByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp);
 
     Task<Temperature?> AddTemperatureAsync(Temperature temperature);
 

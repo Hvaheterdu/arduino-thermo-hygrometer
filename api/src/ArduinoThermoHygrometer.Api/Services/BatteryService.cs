@@ -48,12 +48,22 @@ public class BatteryService : IBatteryService
         return batteryDto;
     }
 
+    public Task<BatteryDto?> GetBatteryDtoByDateAsync(DateTimeOffset registeredAt)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<BatteryDto?>> GetBatteryDtosByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<BatteryDto?> GetBatteryDtoByTimestampAsync(DateTimeOffset registeredAt)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<BatteryDto?>> GetAllBatteryDtosWithinTimestampRangeAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
+    public Task<IEnumerable<BatteryDto?>> GetBatteryDtosByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
     {
         throw new NotImplementedException();
     }

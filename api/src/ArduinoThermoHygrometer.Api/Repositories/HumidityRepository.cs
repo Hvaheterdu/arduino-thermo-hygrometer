@@ -22,6 +22,23 @@ public class HumidityRepository : IHumidityRepository
         return humidity;
     }
 
+    public async Task<Humidity?> GetHumidityByDateAsync(DateTimeOffset registeredAt)
+    {
+        Humidity? humidity = await _dbContext.Humidities
+            .FirstOrDefaultAsync(h => h.RegisteredAt.Date == registeredAt.Date);
+
+        return humidity;
+    }
+
+    public async Task<IEnumerable<Humidity?>> GetHumiditiesByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
+    {
+        IEnumerable<Humidity?> humidities = await _dbContext.Humidities
+            .Where(h => h.RegisteredAt.Date >= startDate.Date && h.RegisteredAt <= endDate.Date)
+            .ToListAsync();
+
+        return humidities;
+    }
+
     public async Task<Humidity?> GetHumidityByTimestampAsync(DateTimeOffset registeredAt)
     {
         Humidity? humidity = await _dbContext.Humidities
@@ -30,7 +47,7 @@ public class HumidityRepository : IHumidityRepository
         return humidity;
     }
 
-    public async Task<IEnumerable<Humidity?>> GetAllHumiditiesWithinTimestampRangeAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
+    public async Task<IEnumerable<Humidity?>> GetHumiditiesByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
     {
         IEnumerable<Humidity?> humidities = await _dbContext.Humidities
             .Where(h => h.RegisteredAt >= startTimestamp && h.RegisteredAt <= endTimestamp)
