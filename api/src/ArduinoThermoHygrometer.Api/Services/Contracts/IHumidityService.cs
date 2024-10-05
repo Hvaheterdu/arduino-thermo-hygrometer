@@ -8,9 +8,7 @@ public interface IHumidityService
 
     Task<HumidityDto?> GetHumidityDtoByTimestampAsync(DateTimeOffset registeredAt);
 
-    Task<IEnumerable<HumidityDto?>> GetHumidityDtosByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp);
-
-    Task<IEnumerable<HumidityDto?>> GetHumidityDtosByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate);
+    Task<IEnumerable<HumidityDto>?> GetHumidityDtosByDateAsync(DateTimeOffset dateTimeOffset);
 
     Task<HumidityDto?> AddHumidityDtoAsync(HumidityDto humidityDto);
 

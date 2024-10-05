@@ -25,12 +25,7 @@ public class TemperatureService : ITemperatureService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<TemperatureDto?>> GetTemperatureDtosByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<TemperatureDto?>> GetTemperatureDtosByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
+    public Task<IEnumerable<TemperatureDto>?> GetTemperatureDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
         throw new NotImplementedException();
     }

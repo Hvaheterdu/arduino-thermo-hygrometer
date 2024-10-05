@@ -4,6 +4,7 @@ using ArduinoThermoHygrometer.Api.Repositories.Contracts;
 using ArduinoThermoHygrometer.Api.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ArduinoThermoHygrometer.Api.Services;
 
@@ -72,14 +73,27 @@ public class BatteryService : IBatteryService
         return batteryDto;
     }
 
-    public Task<IEnumerable<BatteryDto?>> GetBatteryDtosByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
+    public async Task<IEnumerable<BatteryDto>?> GetBatteryDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
-        throw new NotImplementedException();
-    }
+        LoggingExtensions.LogRetrievingBatteryDtoByDate(_logger);
 
-    public Task<IEnumerable<BatteryDto?>> GetBatteryDtosByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
-    {
-        throw new NotImplementedException();
+        IEnumerable<Battery> batteries = await _batteryRepository.GetBatteriesByDateAsync(dateTimeOffset);
+
+        if (batteries.IsNullOrEmpty())
+        {
+            LoggingExtensions.LogBatteryIsNull(_logger);
+            return null;
+        }
+
+        List<BatteryDto> batteryDtos = new();
+        foreach (Battery battery in batteries)
+        {
+            batteryDtos.Add(BatteryMapper.GetBatteryDtoFromBattery(battery));
+        }
+
+        LoggingExtensions.LogRetrievedBatteryDtoByDate(_logger);
+
+        return batteryDtos;
     }
 
     public Task<BatteryDto?> AddBatteryDtoAsync(BatteryDto batteryDto)

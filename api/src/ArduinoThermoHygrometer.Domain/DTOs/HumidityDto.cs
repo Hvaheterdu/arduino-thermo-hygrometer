@@ -9,7 +9,6 @@ public class HumidityDto
     [JsonIgnore]
     public Guid Id { get; set; } = default!;
 
-    [JsonIgnore]
     public DateTimeOffset RegisteredAt { get; set; } = default!;
 
     [Required]

@@ -30,19 +30,10 @@ public class TemperatureRepository : ITemperatureRepository
         return temperature;
     }
 
-    public async Task<IEnumerable<Temperature?>> GetTemperaturesByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
+    public async Task<IEnumerable<Temperature>> GetTemperaturesByDateAsync(DateTimeOffset dateTimeOffset)
     {
-        IEnumerable<Temperature?> temperatures = await _dbContext.Temperatures
-            .Where(t => t.RegisteredAt >= startTimestamp && t.RegisteredAt <= endTimestamp)
-            .ToListAsync();
-
-        return temperatures;
-    }
-
-    public async Task<IEnumerable<Temperature?>> GetTemperaturesByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
-    {
-        IEnumerable<Temperature?> temperatures = await _dbContext.Temperatures
-            .Where(t => t.RegisteredAt.Date >= startDate.Date && t.RegisteredAt <= endDate.Date)
+        IEnumerable<Temperature> temperatures = await _dbContext.Temperatures
+            .Where(t => t.RegisteredAt.Date == dateTimeOffset.Date)
             .ToListAsync();
 
         return temperatures;

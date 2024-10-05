@@ -8,9 +8,7 @@ public interface ITemperatureRepository
 
     Task<Temperature?> GetTemperatureByTimestampAsync(DateTimeOffset registeredAt);
 
-    Task<IEnumerable<Temperature?>> GetTemperaturesByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp);
-
-    Task<IEnumerable<Temperature?>> GetTemperaturesByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate);
+    Task<IEnumerable<Temperature>> GetTemperaturesByDateAsync(DateTimeOffset dateTimeOffset);
 
     Task<Temperature?> AddTemperatureAsync(Temperature temperature);
 

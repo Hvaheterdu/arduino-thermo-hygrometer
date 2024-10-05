@@ -8,9 +8,7 @@ public interface IBatteryService
 
     Task<BatteryDto?> GetBatteryDtoByTimestampAsync(DateTimeOffset registeredAt);
 
-    Task<IEnumerable<BatteryDto?>> GetBatteryDtosByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp);
-
-    Task<IEnumerable<BatteryDto?>> GetBatteryDtosByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate);
+    Task<IEnumerable<BatteryDto>?> GetBatteryDtosByDateAsync(DateTimeOffset dateTimeOffset);
 
     Task<BatteryDto?> AddBatteryDtoAsync(BatteryDto batteryDto);
 

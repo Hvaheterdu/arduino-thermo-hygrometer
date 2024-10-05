@@ -2,6 +2,7 @@
 using ArduinoThermoHygrometer.Domain.DTOs;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ArduinoThermoHygrometer.Api.Controllers;
 
@@ -47,7 +48,7 @@ public class BatteryController : ControllerBase
     /// <returns>Returns battery or NotFound</returns>
     /// <response code="200">Returns <c>Battery</c>.</response>
     /// <response code="404">Returns a <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
-    [HttpGet("{registeredAt:datetime}")]
+    [HttpGet("get-by-timestamp/{registeredAt:datetime}")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -56,6 +57,29 @@ public class BatteryController : ControllerBase
         BatteryDto? batteryDto = await _batteryService.GetBatteryDtoByTimestampAsync(registeredAt);
 
         if (batteryDto == null)
+        {
+            return NotFound(batteryDto);
+        }
+
+        return Ok(batteryDto);
+    }
+
+    /// <summary>
+    /// Retrieves a battery object by date.
+    /// </summary>
+    /// <param name="dateTimeOffset">The date of the battery to retrieve.</param>
+    /// <returns>Returns battery or NotFound</returns>
+    /// <response code="200">Returns <c>Battery</c>.</response>
+    /// <response code="404">Returns a <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+    [HttpGet("get-by-date/{dateTimeOffset:datetime}")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<BatteryDto>>> GetByDateAsync(DateTimeOffset dateTimeOffset)
+    {
+        IEnumerable<BatteryDto>? batteryDto = await _batteryService.GetBatteryDtosByDateAsync(dateTimeOffset);
+
+        if (batteryDto.IsNullOrEmpty())
         {
             return NotFound(batteryDto);
         }
