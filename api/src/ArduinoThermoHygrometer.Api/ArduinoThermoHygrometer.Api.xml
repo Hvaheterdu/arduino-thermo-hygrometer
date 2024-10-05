@@ -4,7 +4,7 @@
         <name>ArduinoThermoHygrometer.Api</name>
     </assembly>
     <members>
-        <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.GetBatteryByIdAsync(System.Guid)">
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.GetByIdAsync(System.Guid)">
             <summary>
             Retrieves a battery object by its id.
             </summary>
