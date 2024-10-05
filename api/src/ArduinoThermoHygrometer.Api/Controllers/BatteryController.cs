@@ -28,7 +28,7 @@ public class BatteryController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<BatteryDto>> GetBatteryByIdAsync(Guid id)
+    public async Task<ActionResult<BatteryDto>> GetByIdAsync(Guid id)
     {
         BatteryDto? batteryDto = await _batteryService.GetBatteryDtoByIdAsync(id);
 
