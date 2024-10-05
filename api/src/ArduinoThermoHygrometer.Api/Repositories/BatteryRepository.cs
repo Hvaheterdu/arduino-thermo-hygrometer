@@ -22,23 +22,6 @@ public class BatteryRepository : IBatteryRepository
         return battery;
     }
 
-    public async Task<Battery?> GetBatteryByDateAsync(DateTimeOffset registeredAt)
-    {
-        Battery? battery = await _dbContext.Batteries
-            .FirstOrDefaultAsync(b => b.RegisteredAt.Date == registeredAt.Date);
-
-        return battery;
-    }
-
-    public async Task<IEnumerable<Battery?>> GetBatteriesByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
-    {
-        IEnumerable<Battery?> batteries = await _dbContext.Batteries
-            .Where(b => b.RegisteredAt.Date >= startDate.Date && b.RegisteredAt <= endDate.Date)
-            .ToListAsync();
-
-        return batteries;
-    }
-
     public async Task<Battery?> GetBatteryByTimestampAsync(DateTimeOffset registeredAt)
     {
         Battery? battery = await _dbContext.Batteries
@@ -51,6 +34,15 @@ public class BatteryRepository : IBatteryRepository
     {
         IEnumerable<Battery?> batteries = await _dbContext.Batteries
             .Where(b => b.RegisteredAt >= startTimestamp && b.RegisteredAt <= endTimestamp)
+            .ToListAsync();
+
+        return batteries;
+    }
+
+    public async Task<IEnumerable<Battery?>> GetBatteriesByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
+    {
+        IEnumerable<Battery?> batteries = await _dbContext.Batteries
+            .Where(b => b.RegisteredAt.Date >= startDate.Date && b.RegisteredAt <= endDate.Date)
             .ToListAsync();
 
         return batteries;

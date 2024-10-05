@@ -48,22 +48,36 @@ public class BatteryService : IBatteryService
         return batteryDto;
     }
 
-    public Task<BatteryDto?> GetBatteryDtoByDateAsync(DateTimeOffset registeredAt)
+    /// <summary>
+    /// Retrieves a BatteryDto object by its registered timestamp asynchronously.
+    /// </summary>
+    /// <param name="registeredAt">The <see cref="DateTimeOffset"/> of the battery to retrieve.</param>
+    /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
+    public async Task<BatteryDto?> GetBatteryDtoByTimestampAsync(DateTimeOffset registeredAt)
+    {
+        LoggingExtensions.LogRetrievingBatteryDtoByTimestamp(_logger);
+
+        Battery? battery = await _batteryRepository.GetBatteryByTimestampAsync(registeredAt);
+
+        if (battery == null)
+        {
+            LoggingExtensions.LogBatteryIsNull(_logger);
+            return null;
+        }
+
+        BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
+
+        LoggingExtensions.LogRetrievedBatteryDtoByTimestamp(_logger);
+
+        return batteryDto;
+    }
+
+    public Task<IEnumerable<BatteryDto?>> GetBatteryDtosByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
     {
         throw new NotImplementedException();
     }
 
     public Task<IEnumerable<BatteryDto?>> GetBatteryDtosByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<BatteryDto?> GetBatteryDtoByTimestampAsync(DateTimeOffset registeredAt)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<BatteryDto?>> GetBatteryDtosByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
     {
         throw new NotImplementedException();
     }

@@ -20,22 +20,17 @@ public class HumidityService : IHumidityService
         throw new NotImplementedException();
     }
 
-    public Task<HumidityDto?> GetHumidityByDateAsync(DateTimeOffset registeredAt)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<HumidityDto?>> GetHumidityDtosByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<HumidityDto?> GetHumidityDtoByTimestampAsync(DateTimeOffset registeredAt)
     {
         throw new NotImplementedException();
     }
 
     public Task<IEnumerable<HumidityDto?>> GetHumidityDtosByTimestampsAsync(DateTimeOffset startTimestamp, DateTimeOffset endTimestamp)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<HumidityDto?>> GetHumidityDtosByDatesAsync(DateTimeOffset startDate, DateTimeOffset endDate)
     {
         throw new NotImplementedException();
     }
