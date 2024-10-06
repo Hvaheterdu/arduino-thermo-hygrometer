@@ -65,12 +65,12 @@ public class BatteryController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves a battery object by date.
+    /// Retrieves a list of battery objects by its date.
     /// </summary>
     /// <param name="dateTimeOffset">The date of the battery to retrieve.</param>
     /// <returns>Returns battery or NotFound</returns>
-    /// <response code="200">Returns <c>Battery</c>.</response>
-    /// <response code="404">Returns a <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+    /// <response code="200">Returns a list of <c>Batteries</c>.</response>
+    /// <response code="404">Returns a <c>NotFound</c> if the list of batteries is empty or if the input is invalid.</response>
     [HttpGet("get-by-date/{dateTimeOffset:datetime}")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]

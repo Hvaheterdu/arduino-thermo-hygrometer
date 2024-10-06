@@ -73,6 +73,11 @@ public class BatteryService : IBatteryService
         return batteryDto;
     }
 
+    /// <summary>
+    /// Retrieves a list of BatteryDto objects by its date asynchronously.
+    /// </summary>
+    /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the battery to retrieve.</param>
+    /// <returns>Returns a list of <see cref="BatteryDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<BatteryDto>?> GetBatteryDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
         LoggingExtensions.LogRetrievingBatteryDtoByDate(_logger);
