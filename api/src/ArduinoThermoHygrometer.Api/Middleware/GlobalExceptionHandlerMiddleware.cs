@@ -1,11 +1,11 @@
-﻿using ArduinoThermoHygrometer.Api.Extensions;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using ArduinoThermoHygrometer.Api.Extensions;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ArduinoThermoHygrometer.Api.Middleware;
 

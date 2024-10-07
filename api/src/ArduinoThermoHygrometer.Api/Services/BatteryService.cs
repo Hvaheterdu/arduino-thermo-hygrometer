@@ -101,13 +101,7 @@ public class BatteryService : IBatteryService
         return batteryDtos;
     }
 
-    public Task<BatteryDto?> AddBatteryDtoAsync(BatteryDto batteryDto)
-    {
-        throw new NotImplementedException();
-    }
+    public Task<BatteryDto?> AddBatteryDtoAsync(BatteryDto batteryDto) => throw new NotImplementedException();
 
-    public BatteryDto? RemoveBatteryDto(BatteryDto batteryDto)
-    {
-        throw new NotImplementedException();
-    }
+    public BatteryDto? RemoveBatteryDto(BatteryDto batteryDto) => throw new NotImplementedException();
 }

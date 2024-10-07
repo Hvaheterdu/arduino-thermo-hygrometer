@@ -9,12 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Dom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Infrastructure", "src\ArduinoThermoHygrometer.Infrastructure\ArduinoThermoHygrometer.Infrastructure.csproj", "{5D3509A9-7527-487F-B689-25A36588DF7F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1D2D0E15-17FA-422A-8611-729673C2760F}"
-	ProjectSection(SolutionItems) = preProject
-		src\ArduinoThermoHygrometer.Api\.editorconfig = src\ArduinoThermoHygrometer.Api\.editorconfig
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Test", "test\ArduinoThermoHygrometer.Test\ArduinoThermoHygrometer.Test.csproj", "{A6B05FD3-1418-473F-AB9E-586036D8C963}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F6BEF056-44CA-4EB3-8B30-A0DFA0D8256F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

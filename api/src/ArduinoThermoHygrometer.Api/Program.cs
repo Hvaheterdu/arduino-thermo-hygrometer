@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using ArduinoThermoHygrometer.Api.Extensions;
 using ArduinoThermoHygrometer.Api.Middleware;
 using ArduinoThermoHygrometer.Api.OpenApi;
@@ -12,7 +13,6 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Text.Json.Serialization;
 
 // Services.
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
