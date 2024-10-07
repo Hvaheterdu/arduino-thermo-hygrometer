@@ -1,4 +1,9 @@
-﻿using ArduinoThermoHygrometer.Api.Extensions;
+﻿using System.Diagnostics;
+using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
+using ArduinoThermoHygrometer.Api.Extensions;
 using ArduinoThermoHygrometer.Api.Options;
 using ArduinoThermoHygrometer.Infrastructure;
 using ArduinoThermoHygrometer.Infrastructure.Data;
@@ -10,11 +15,6 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using System.Diagnostics;
-using System.Globalization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.RateLimiting;
 
 namespace ArduinoThermoHygrometer.Api.Extensions;
 
