@@ -101,7 +101,77 @@ public class BatteryService : IBatteryService
         return batteryDtos;
     }
 
-    public Task<BatteryDto?> AddBatteryDtoAsync(BatteryDto batteryDto) => throw new NotImplementedException();
+    /// <summary>
+    /// Adds a BatteryDto object asynchronously.
+    /// </summary>
+    /// <param name="batteryDto">The <see cref="BatteryDto"/> object to add.</param>
+    public async Task AddBatteryDtoAsync(BatteryDto batteryDto)
+    {
+        LoggingExtensions.LogAddingBattery(_logger);
 
-    public BatteryDto? RemoveBatteryDto(BatteryDto batteryDto) => throw new NotImplementedException();
+        Battery? battery = BatteryMapper.GetBatteryFromBatteryDto(batteryDto);
+
+        await _batteryRepository.AddBatteryAsync(battery);
+        await _batteryRepository.SaveChangesAsync();
+
+        LoggingExtensions.LogAddedBattery(_logger);
+    }
+
+    /// <summary>
+    /// Removes a BatteryDto object by its id asynchronously.
+    /// </summary>
+    /// <param name="id">The <see cref="Guid"/> of the object to remove.</param>
+    /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
+    public async Task<BatteryDto?> RemoveBatteryByIdAsync(Guid id)
+    {
+        LoggingExtensions.LogDeletingBattery(_logger);
+
+        if (id == Guid.Empty)
+        {
+            LoggingExtensions.LogInvalidId(_logger, id);
+            return null;
+        }
+
+        Battery? battery = await _batteryRepository.RemoveBatteryByIdAsync(id);
+
+        if (battery == null)
+        {
+            LoggingExtensions.LogBatteryIsNull(_logger);
+            return null;
+        }
+
+        BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
+
+        await _batteryRepository.SaveChangesAsync();
+
+        LoggingExtensions.LogDeletedBattery(_logger);
+
+        return batteryDto;
+    }
+
+    /// <summary>
+    /// Removes a BatteryDto object by its registered timestamp asynchronously.
+    /// </summary>
+    /// <param name="registeredAt">The <see cref="DateTimeOffset"/> of the object to remove.</param>
+    /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
+    public async Task<BatteryDto?> RemoveBatteryByTimestampAsync(DateTimeOffset registeredAt)
+    {
+        LoggingExtensions.LogDeletingBattery(_logger);
+
+        Battery? battery = await _batteryRepository.RemoveBatteryByTimestampAsync(registeredAt);
+
+        if (battery == null)
+        {
+            LoggingExtensions.LogBatteryIsNull(_logger);
+            return null;
+        }
+
+        BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
+
+        await _batteryRepository.SaveChangesAsync();
+
+        LoggingExtensions.LogDeletedBattery(_logger);
+
+        return batteryDto;
+    }
 }

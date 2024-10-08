@@ -42,29 +42,49 @@ internal static partial class LoggingExtensions
         Message = "Battery not found.")]
     internal static partial void LogBatteryIsNull(this ILogger logger);
 
-    // Battery service.
+    // GET - Battery service.
 
-    [LoggerMessage(EventId = 31, EventName = "RetrievingBatteryDtoById", Level = LogLevel.Information,
+    [LoggerMessage(EventId = 41, EventName = "RetrievingBatteryDtoById", Level = LogLevel.Information,
         Message = "Retrieving battery dto by id.")]
     internal static partial void LogRetrievingBatteryDtoById(this ILogger logger);
 
-    [LoggerMessage(EventId = 32, EventName = "RetrievedBatteryDtoById", Level = LogLevel.Information,
+    [LoggerMessage(EventId = 42, EventName = "RetrievedBatteryDtoById", Level = LogLevel.Information,
         Message = "Retrieved battery dto by id.")]
     internal static partial void LogRetrievedBatteryDtoById(this ILogger logger);
 
-    [LoggerMessage(EventId = 41, EventName = "RetrievingBatteryDtoByTimestamp", Level = LogLevel.Information,
-        Message = "Retrieving battery dto by timestamp")]
+    [LoggerMessage(EventId = 51, EventName = "RetrievingBatteryDtoByTimestamp", Level = LogLevel.Information,
+        Message = "Retrieving battery dto by timestamp.")]
     internal static partial void LogRetrievingBatteryDtoByTimestamp(this ILogger logger);
 
-    [LoggerMessage(EventId = 42, EventName = "RetrievedBatteryDtoByTimestamp", Level = LogLevel.Information,
-        Message = "Retrieved battery dto by timestamp")]
+    [LoggerMessage(EventId = 52, EventName = "RetrievedBatteryDtoByTimestamp", Level = LogLevel.Information,
+        Message = "Retrieved battery dto by timestamp.")]
     internal static partial void LogRetrievedBatteryDtoByTimestamp(this ILogger logger);
 
-    [LoggerMessage(EventId = 51, EventName = "RetrievingBatteryDtosByDate", Level = LogLevel.Information,
-    Message = "Retrieving battery dto by date")]
+    [LoggerMessage(EventId = 61, EventName = "RetrievingBatteryDtosByDate", Level = LogLevel.Information,
+    Message = "Retrieving battery dto by date.")]
     internal static partial void LogRetrievingBatteryDtoByDate(this ILogger logger);
 
-    [LoggerMessage(EventId = 52, EventName = "RetrievedBatteryDtosByDate", Level = LogLevel.Information,
-        Message = "Retrieved battery dto by date")]
+    [LoggerMessage(EventId = 62, EventName = "RetrievedBatteryDtosByDate", Level = LogLevel.Information,
+        Message = "Retrieved battery dto by date.")]
     internal static partial void LogRetrievedBatteryDtoByDate(this ILogger logger);
+
+    // POST - Battery service.
+
+    [LoggerMessage(EventId = 71, EventName = "AddingBattery", Level = LogLevel.Information,
+        Message = "Adding battery dto to database.")]
+    internal static partial void LogAddingBattery(this ILogger logger);
+
+    [LoggerMessage(EventId = 72, EventName = "AddedBattery", Level = LogLevel.Information,
+    Message = "Added battery dto to database.")]
+    internal static partial void LogAddedBattery(this ILogger logger);
+
+    // DELETE - Battery service.
+
+    [LoggerMessage(EventId = 81, EventName = "DeletingBattery", Level = LogLevel.Information,
+    Message = "Deleting battery dto from database.")]
+    internal static partial void LogDeletingBattery(this ILogger logger);
+
+    [LoggerMessage(EventId = 82, EventName = "DeletedBattery", Level = LogLevel.Information,
+    Message = "Deleted battery dto from database.")]
+    internal static partial void LogDeletedBattery(this ILogger logger);
 }

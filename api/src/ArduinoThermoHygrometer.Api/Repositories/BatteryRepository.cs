@@ -39,22 +39,35 @@ public class BatteryRepository : IBatteryRepository
         return batteries;
     }
 
-    public async Task<Battery?> AddBatteryAsync(Battery battery)
+    public async Task AddBatteryAsync(Battery battery) => await _dbContext.Batteries.AddAsync(battery);
+
+    public async Task<Battery?> RemoveBatteryByIdAsync(Guid id)
     {
-        await _dbContext.Batteries.AddAsync(battery);
+        Battery? battery = await _dbContext.Batteries.FindAsync(id);
+
+        if (battery == null)
+        {
+            return null;
+        }
+
+        _dbContext.Remove(battery);
 
         return battery;
     }
 
-    public Battery? RemoveBattery(Battery battery)
+    public async Task<Battery?> RemoveBatteryByTimestampAsync(DateTimeOffset registeredAt)
     {
-        _dbContext.Batteries.Remove(battery);
+        Battery? battery = await _dbContext.Batteries.FirstOrDefaultAsync(b => b.RegisteredAt == registeredAt);
+
+        if (battery == null)
+        {
+            return null;
+        }
+
+        _dbContext.Remove(battery);
 
         return battery;
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _dbContext.SaveChangesAsync();
-    }
+    public async Task SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 }

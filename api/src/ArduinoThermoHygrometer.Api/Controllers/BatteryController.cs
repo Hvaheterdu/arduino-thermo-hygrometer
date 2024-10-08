@@ -86,4 +86,73 @@ public class BatteryController : ControllerBase
 
         return Ok(batteryDto);
     }
+
+    /// <summary>
+    /// Adds a battery object.
+    /// </summary>
+    /// <param name="batteryDto">The battery to add.</param>
+    /// <returns>Returns Created or BadRequest</returns>
+    /// <response code="201">Returns a <c>Created</c>.</response>
+    /// <response code="400">Returns a <c>BadRequest</c> if the input is invalid.</response>
+    [HttpPost("add")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<BatteryDto>> AddAsync(BatteryDto batteryDto)
+    {
+        await _batteryService.AddBatteryDtoAsync(batteryDto);
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(batteryDto);
+        }
+
+        return Created();
+    }
+
+    /// <summary>
+    /// Deletes a battery object by its id.
+    /// </summary>
+    /// <param name="id">The id of the battery to delete.</param>
+    /// <returns>Returns NoContent or NotFound.</returns>
+    /// <response code="204">Returns <c>NoContent</c>.</response>
+    /// <response code="404">Returns a <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+    [HttpDelete("delete/{id:guid}")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<BatteryDto>> RemoveByIdAsync(Guid id)
+    {
+        BatteryDto? batteryDto = await _batteryService.RemoveBatteryByIdAsync(id);
+
+        if (batteryDto == null)
+        {
+            return NotFound(batteryDto);
+        }
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Deletes a battery object by its registration timestamp.
+    /// </summary>
+    /// <param name="registeredAt">The timestamp of the battery to delete.</param>
+    /// <returns>Returns NoContent or NotFound</returns>
+    /// <response code="204">Returns <c>NoContent</c>.</response>
+    /// <response code="404">Returns a <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+    [HttpDelete("delete/{registeredAt:datetime}")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<BatteryDto>> RemoveByTimestampAsync(DateTimeOffset registeredAt)
+    {
+        BatteryDto? batteryDto = await _batteryService.RemoveBatteryByTimestampAsync(registeredAt);
+
+        if (batteryDto == null)
+        {
+            return NotFound(batteryDto);
+        }
+
+        return NoContent();
+    }
 }

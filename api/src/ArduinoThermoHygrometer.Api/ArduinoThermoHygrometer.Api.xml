@@ -31,6 +31,33 @@
             <response code="200">Returns a list of <c>Batteries</c>.</response>
             <response code="404">Returns a <c>NotFound</c> if the list of batteries is empty or if the input is invalid.</response>
         </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.AddAsync(ArduinoThermoHygrometer.Domain.DTOs.BatteryDto)">
+            <summary>
+            Adds a battery object.
+            </summary>
+            <param name="batteryDto">The battery to add.</param>
+            <returns>Returns Created or BadRequest</returns>
+            <response code="201">Returns a <c>Created</c>.</response>
+            <response code="400">Returns a <c>BadRequest</c> if the input is invalid.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.RemoveByIdAsync(System.Guid)">
+            <summary>
+            Deletes a battery object by its id.
+            </summary>
+            <param name="id">The id of the battery to delete.</param>
+            <returns>Returns NoContent or NotFound.</returns>
+            <response code="204">Returns <c>NoContent</c>.</response>
+            <response code="404">Returns a <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.RemoveByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Deletes a battery object by its registration timestamp.
+            </summary>
+            <param name="registeredAt">The timestamp of the battery to delete.</param>
+            <returns>Returns NoContent or NotFound</returns>
+            <response code="204">Returns <c>NoContent</c>.</response>
+            <response code="404">Returns a <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+        </member>
         <member name="M:ArduinoThermoHygrometer.Api.Controllers.HealthCheckController.GetHealthCheckReportAsync">
             <summary>
             Retrieves the healthcheck report for the system.
@@ -209,6 +236,26 @@
             </summary>
             <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the battery to retrieve.</param>
             <returns>Returns a list of <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> objects if non-empty list; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.AddBatteryDtoAsync(ArduinoThermoHygrometer.Domain.DTOs.BatteryDto)">
+            <summary>
+            Adds a BatteryDto object asynchronously.
+            </summary>
+            <param name="batteryDto">The <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object to add.</param>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.RemoveBatteryByIdAsync(System.Guid)">
+            <summary>
+            Removes a BatteryDto object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to remove.</param>
+            <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.RemoveBatteryByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Removes a BatteryDto object by its registered timestamp asynchronously.
+            </summary>
+            <param name="registeredAt">The <see cref="T:System.DateTimeOffset"/> of the object to remove.</param>
+            <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object if found; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.HealthCheckServiceWrapper.GetHealthCheckReportAsync">
             <summary>

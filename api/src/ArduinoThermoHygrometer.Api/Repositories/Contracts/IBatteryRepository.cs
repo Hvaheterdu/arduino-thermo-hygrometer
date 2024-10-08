@@ -10,9 +10,11 @@ public interface IBatteryRepository
 
     Task<IEnumerable<Battery>> GetBatteriesByDateAsync(DateTimeOffset dateTimeOffset);
 
-    Task<Battery?> AddBatteryAsync(Battery battery);
+    Task AddBatteryAsync(Battery battery);
 
-    Battery? RemoveBattery(Battery battery);
+    Task<Battery?> RemoveBatteryByIdAsync(Guid id);
+
+    Task<Battery?> RemoveBatteryByTimestampAsync(DateTimeOffset registeredAt);
 
     Task SaveChangesAsync();
 }
