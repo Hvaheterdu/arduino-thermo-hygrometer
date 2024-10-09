@@ -8,16 +8,16 @@ namespace ArduinoThermoHygrometer.Api.Mappers;
 public static class HumidityMapper
 {
     /// <summary>
-    /// Converts a HumidityDto object to a Humidity object.
+    /// Maps a HumidityDto object to a Humidity object.
     /// </summary>
-    /// <param name="humidityDto">The HumidityDto object to convert.</param>
-    /// <returns>The converted Humidity object.</returns>
+    /// <param name="humidityDto">The HumidityDto object to map.</param>
+    /// <returns>The mapped Humidity object.</returns>
     public static Humidity GetHumidityFromHumidityDto(HumidityDto humidityDto)
     {
         Humidity humidity = new(humidityDto.RegisteredAt, humidityDto.AirHumidity)
         {
             Id = humidityDto.Id,
-            RegisteredAt = humidityDto.RegisteredAt,
+            RegisteredAt = DateTimeOffset.Now,
             AirHumidity = humidityDto.AirHumidity
         };
 
@@ -25,17 +25,14 @@ public static class HumidityMapper
     }
 
     /// <summary>
-    /// Converts a Humidity object to a HumidityDto object.
+    /// Maps a Humidity object to a HumidityDto object.
     /// </summary>
-    /// <param name="humidity">The Humidity object to convert.</param>
-    /// <returns>The converted HumidityDto object.</returns>
-    public static HumidityDto GetHumidityDtoFromHumidity(Humidity humidity)
+    /// <param name="humidity">The Humidity object to map.</param>
+    /// <returns>The mapped HumidityDto object.</returns>
+    public static HumidityDto GetHumidityDtoFromHumidity(Humidity humidity) => new()
     {
-        return new HumidityDto
-        {
-            Id = humidity.Id,
-            RegisteredAt = humidity.RegisteredAt,
-            AirHumidity = humidity.AirHumidity
-        };
-    }
+        Id = humidity.Id,
+        RegisteredAt = DateTimeOffset.Now,
+        AirHumidity = humidity.AirHumidity
+    };
 }

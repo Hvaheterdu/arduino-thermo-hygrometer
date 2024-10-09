@@ -52,13 +52,13 @@ public class BatteryService : IBatteryService
     /// <summary>
     /// Retrieves a BatteryDto object by its registered timestamp asynchronously.
     /// </summary>
-    /// <param name="registeredAt">The <see cref="DateTimeOffset"/> of the battery to retrieve.</param>
+    /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the battery to retrieve.</param>
     /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
-    public async Task<BatteryDto?> GetBatteryDtoByTimestampAsync(DateTimeOffset registeredAt)
+    public async Task<BatteryDto?> GetBatteryDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         LoggingExtensions.LogRetrievingBatteryDtoByTimestamp(_logger);
 
-        Battery? battery = await _batteryRepository.GetBatteryByTimestampAsync(registeredAt);
+        Battery? battery = await _batteryRepository.GetBatteryByTimestampAsync(timestamp);
 
         if (battery == null)
         {
@@ -74,9 +74,9 @@ public class BatteryService : IBatteryService
     }
 
     /// <summary>
-    /// Retrieves a list of BatteryDto objects by its date asynchronously.
+    /// Retrieves a list of all BatteryDto objects of a date asynchronously.
     /// </summary>
-    /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the battery to retrieve.</param>
+    /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the batteries to retrieve.</param>
     /// <returns>Returns a list of <see cref="BatteryDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<BatteryDto>?> GetBatteryDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
@@ -102,27 +102,30 @@ public class BatteryService : IBatteryService
     }
 
     /// <summary>
-    /// Adds a BatteryDto object asynchronously.
+    /// Creates a BatteryDto object asynchronously.
     /// </summary>
     /// <param name="batteryDto">The <see cref="BatteryDto"/> object to add.</param>
-    public async Task AddBatteryDtoAsync(BatteryDto batteryDto)
+    /// <returns>Returns the <see cref="BatteryDto"/> object if created; otherwise, null.</returns>
+    public async Task<BatteryDto> CreateBatteryDtoAsync(BatteryDto batteryDto)
     {
-        LoggingExtensions.LogAddingBattery(_logger);
+        LoggingExtensions.LogCreatingBattery(_logger);
 
         Battery? battery = BatteryMapper.GetBatteryFromBatteryDto(batteryDto);
 
-        await _batteryRepository.AddBatteryAsync(battery);
+        await _batteryRepository.CreateBatteryAsync(battery);
         await _batteryRepository.SaveChangesAsync();
 
-        LoggingExtensions.LogAddedBattery(_logger);
+        LoggingExtensions.LogCreatedBattery(_logger);
+
+        return batteryDto;
     }
 
     /// <summary>
-    /// Removes a BatteryDto object by its id asynchronously.
+    /// Deletes a BatteryDto object by its id asynchronously.
     /// </summary>
-    /// <param name="id">The <see cref="Guid"/> of the object to remove.</param>
-    /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
-    public async Task<BatteryDto?> RemoveBatteryByIdAsync(Guid id)
+    /// <param name="id">The <see cref="Guid"/> of the object to delete.</param>
+    /// <returns>Returns the <see cref="BatteryDto"/> object if deleted; otherwise, null.</returns>
+    public async Task<BatteryDto?> DeleteBatteryDtoByIdAsync(Guid id)
     {
         LoggingExtensions.LogDeletingBattery(_logger);
 
@@ -132,7 +135,7 @@ public class BatteryService : IBatteryService
             return null;
         }
 
-        Battery? battery = await _batteryRepository.RemoveBatteryByIdAsync(id);
+        Battery? battery = await _batteryRepository.DeleteBatteryByIdAsync(id);
 
         if (battery == null)
         {
@@ -150,15 +153,15 @@ public class BatteryService : IBatteryService
     }
 
     /// <summary>
-    /// Removes a BatteryDto object by its registered timestamp asynchronously.
+    /// Deletes a BatteryDto object by its registered timestamp asynchronously.
     /// </summary>
-    /// <param name="registeredAt">The <see cref="DateTimeOffset"/> of the object to remove.</param>
-    /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
-    public async Task<BatteryDto?> RemoveBatteryByTimestampAsync(DateTimeOffset registeredAt)
+    /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the object to delete.</param>
+    /// <returns>Returns the <see cref="BatteryDto"/> object if deleted; otherwise, null.</returns>
+    public async Task<BatteryDto?> DeleteBatteryDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         LoggingExtensions.LogDeletingBattery(_logger);
 
-        Battery? battery = await _batteryRepository.RemoveBatteryByTimestampAsync(registeredAt);
+        Battery? battery = await _batteryRepository.DeleteBatteryByTimestampAsync(timestamp);
 
         if (battery == null)
         {

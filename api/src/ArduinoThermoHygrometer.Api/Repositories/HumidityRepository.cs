@@ -22,10 +22,10 @@ public class HumidityRepository : IHumidityRepository
         return humidity;
     }
 
-    public async Task<Humidity?> GetHumidityByTimestampAsync(DateTimeOffset registeredAt)
+    public async Task<Humidity?> GetHumidityByTimestampAsync(DateTimeOffset timestamp)
     {
         Humidity? humidity = await _dbContext.Humidities
-            .FirstOrDefaultAsync(h => h.RegisteredAt == registeredAt);
+            .FirstOrDefaultAsync(h => h.RegisteredAt == timestamp);
 
         return humidity;
     }
@@ -39,22 +39,35 @@ public class HumidityRepository : IHumidityRepository
         return humidities;
     }
 
-    public async Task<Humidity?> AddHumidityAsync(Humidity humidity)
+    public async Task CreateHumidityAsync(Humidity humidity) => await _dbContext.Humidities.AddAsync(humidity);
+
+    public async Task<Humidity?> DeleteHumidityByIdAsync(Guid id)
     {
-        await _dbContext.Humidities.AddAsync(humidity);
+        Humidity? humidity = await _dbContext.Humidities.FindAsync(id);
+
+        if (humidity == null)
+        {
+            return null;
+        }
+
+        _dbContext.Remove(humidity);
 
         return humidity;
     }
 
-    public Humidity? RemoveHumidity(Humidity humidity)
+    public async Task<Humidity?> DeleteHumidityByTimestampAsync(DateTimeOffset timestamp)
     {
-        _dbContext.Humidities.Remove(humidity);
+        Humidity? humidity = await _dbContext.Humidities.FirstOrDefaultAsync(h => h.RegisteredAt == timestamp);
+
+        if (humidity == null)
+        {
+            return null;
+        }
+
+        _dbContext.Remove(humidity);
 
         return humidity;
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _dbContext.SaveChangesAsync();
-    }
+    public async Task SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 }

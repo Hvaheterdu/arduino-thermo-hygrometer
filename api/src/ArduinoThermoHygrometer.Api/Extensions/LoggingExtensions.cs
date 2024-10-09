@@ -70,13 +70,13 @@ internal static partial class LoggingExtensions
 
     // POST - Battery service.
 
-    [LoggerMessage(EventId = 71, EventName = "AddingBattery", Level = LogLevel.Information,
-        Message = "Adding battery dto to database.")]
-    internal static partial void LogAddingBattery(this ILogger logger);
+    [LoggerMessage(EventId = 71, EventName = "CreatingBattery", Level = LogLevel.Information,
+        Message = "Creating battery dto for database.")]
+    internal static partial void LogCreatingBattery(this ILogger logger);
 
-    [LoggerMessage(EventId = 72, EventName = "AddedBattery", Level = LogLevel.Information,
-    Message = "Added battery dto to database.")]
-    internal static partial void LogAddedBattery(this ILogger logger);
+    [LoggerMessage(EventId = 72, EventName = "CreatedBattery", Level = LogLevel.Information,
+    Message = "Created battery dto for database.")]
+    internal static partial void LogCreatedBattery(this ILogger logger);
 
     // DELETE - Battery service.
 

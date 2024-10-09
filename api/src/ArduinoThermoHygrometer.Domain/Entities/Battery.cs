@@ -10,7 +10,7 @@ public class Battery
     public Guid Id { get; init; }
 
     [Required]
-    public DateTimeOffset RegisteredAt { get; set; } = DateTimeOffset.Now;
+    public DateTimeOffset RegisteredAt { get; set; }
 
     [Required]
     [RegularExpression(@"^(?!\s*$).*")]

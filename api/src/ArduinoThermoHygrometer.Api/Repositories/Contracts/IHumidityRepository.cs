@@ -6,13 +6,15 @@ public interface IHumidityRepository
 {
     Task<Humidity?> GetHumidityByIdAsync(Guid id);
 
-    Task<Humidity?> GetHumidityByTimestampAsync(DateTimeOffset registeredAt);
+    Task<Humidity?> GetHumidityByTimestampAsync(DateTimeOffset timestamp);
 
     Task<IEnumerable<Humidity>> GetHumiditiesByDateAsync(DateTimeOffset dateTimeOffset);
 
-    Task<Humidity?> AddHumidityAsync(Humidity humidity);
+    Task CreateHumidityAsync(Humidity humidity);
 
-    Humidity? RemoveHumidity(Humidity humidity);
+    Task<Humidity?> DeleteHumidityByIdAsync(Guid id);
+
+    Task<Humidity?> DeleteHumidityByTimestampAsync(DateTimeOffset timestamp);
 
     Task SaveChangesAsync();
 }

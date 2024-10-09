@@ -39,22 +39,35 @@ public class TemperatureRepository : ITemperatureRepository
         return temperatures;
     }
 
-    public async Task<Temperature?> AddTemperatureAsync(Temperature temperature)
+    public async Task CreateTemperatureAsync(Temperature temperature) => await _dbContext.Temperatures.AddAsync(temperature);
+
+    public async Task<Temperature?> DeleteTemperatureByIdAsync(Guid id)
     {
-        await _dbContext.Temperatures.AddAsync(temperature);
+        Temperature? temperature = await _dbContext.Temperatures.FindAsync(id);
+
+        if (temperature == null)
+        {
+            return null;
+        }
+
+        _dbContext.Remove(temperature);
 
         return temperature;
     }
 
-    public Temperature? RemoveTemperature(Temperature temperature)
+    public async Task<Temperature?> DeleteTemperatureByTimestampAsync(DateTimeOffset timestamp)
     {
-        _dbContext.Temperatures.Remove(temperature);
+        Temperature? temperature = await _dbContext.Temperatures.FirstOrDefaultAsync(t => t.RegisteredAt == timestamp);
+
+        if (temperature == null)
+        {
+            return null;
+        }
+
+        _dbContext.Remove(temperature);
 
         return temperature;
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _dbContext.SaveChangesAsync();
-    }
+    public async Task SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 }

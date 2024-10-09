@@ -8,16 +8,16 @@ namespace ArduinoThermoHygrometer.Api.Mappers;
 public static class TemperatureMapper
 {
     /// <summary>
-    /// Converts a TemperatureDto object to a Temperature object.
+    /// Maps a TemperatureDto object to a Temperature object.
     /// </summary>
-    /// <param name="temperatureDto">The TemperatureDto object to convert.</param>
-    /// <returns>The converted Temperature object.</returns>
+    /// <param name="temperatureDto">The TemperatureDto object to map.</param>
+    /// <returns>The mapped Temperature object.</returns>
     public static Temperature GetTemperatureFromTemperatureDto(TemperatureDto temperatureDto)
     {
         Temperature temperature = new(temperatureDto.RegisteredAt, temperatureDto.Temp)
         {
             Id = temperatureDto.Id,
-            RegisteredAt = temperatureDto.RegisteredAt,
+            RegisteredAt = DateTimeOffset.Now,
             Temp = temperatureDto.Temp,
         };
 
@@ -25,17 +25,14 @@ public static class TemperatureMapper
     }
 
     /// <summary>
-    /// Converts a Temperature object to a TemperatureDto object.
+    /// Maps a Temperature object to a TemperatureDto object.
     /// </summary>
-    /// <param name="temperature">The Temperature object to convert.</param>
-    /// <returns>The converted TemperatureDto object.</returns>
-    public static TemperatureDto GetTemperatureDtoFromTemperature(Temperature temperature)
+    /// <param name="temperature">The Temperature object to map.</param>
+    /// <returns>The mapped TemperatureDto object.</returns>
+    public static TemperatureDto GetTemperatureDtoFromTemperature(Temperature temperature) => new()
     {
-        return new TemperatureDto
-        {
-            Id = temperature.Id,
-            RegisteredAt = temperature.RegisteredAt,
-            Temp = temperature.Temp,
-        };
-    }
+        Id = temperature.Id,
+        RegisteredAt = DateTimeOffset.Now,
+        Temp = temperature.Temp,
+    };
 }

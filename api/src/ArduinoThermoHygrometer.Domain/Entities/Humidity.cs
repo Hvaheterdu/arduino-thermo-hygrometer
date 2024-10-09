@@ -10,7 +10,7 @@ public class Humidity
     public Guid Id { get; init; }
 
     [Required]
-    public DateTimeOffset RegisteredAt { get; init; } = DateTimeOffset.Now;
+    public DateTimeOffset RegisteredAt { get; set; }
 
     [Required]
     [RegularExpression(@"^(?!\s*$).*")]

@@ -22,10 +22,10 @@ public class BatteryRepository : IBatteryRepository
         return battery;
     }
 
-    public async Task<Battery?> GetBatteryByTimestampAsync(DateTimeOffset registeredAt)
+    public async Task<Battery?> GetBatteryByTimestampAsync(DateTimeOffset timestamp)
     {
         Battery? battery = await _dbContext.Batteries
-            .FirstOrDefaultAsync(b => b.RegisteredAt == registeredAt);
+            .FirstOrDefaultAsync(b => b.RegisteredAt == timestamp);
 
         return battery;
     }
@@ -39,9 +39,9 @@ public class BatteryRepository : IBatteryRepository
         return batteries;
     }
 
-    public async Task AddBatteryAsync(Battery battery) => await _dbContext.Batteries.AddAsync(battery);
+    public async Task CreateBatteryAsync(Battery battery) => await _dbContext.Batteries.AddAsync(battery);
 
-    public async Task<Battery?> RemoveBatteryByIdAsync(Guid id)
+    public async Task<Battery?> DeleteBatteryByIdAsync(Guid id)
     {
         Battery? battery = await _dbContext.Batteries.FindAsync(id);
 
@@ -55,9 +55,9 @@ public class BatteryRepository : IBatteryRepository
         return battery;
     }
 
-    public async Task<Battery?> RemoveBatteryByTimestampAsync(DateTimeOffset registeredAt)
+    public async Task<Battery?> DeleteBatteryByTimestampAsync(DateTimeOffset timestamp)
     {
-        Battery? battery = await _dbContext.Batteries.FirstOrDefaultAsync(b => b.RegisteredAt == registeredAt);
+        Battery? battery = await _dbContext.Batteries.FirstOrDefaultAsync(b => b.RegisteredAt == timestamp);
 
         if (battery == null)
         {

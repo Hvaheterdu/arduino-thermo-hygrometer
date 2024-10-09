@@ -10,9 +10,11 @@ public interface ITemperatureRepository
 
     Task<IEnumerable<Temperature>> GetTemperaturesByDateAsync(DateTimeOffset dateTimeOffset);
 
-    Task<Temperature?> AddTemperatureAsync(Temperature temperature);
+    Task CreateTemperatureAsync(Temperature temperature);
 
-    Temperature? RemoveTemperature(Temperature temperature);
+    Task<Temperature?> DeleteTemperatureByIdAsync(Guid id);
+
+    Task<Temperature?> DeleteTemperatureByTimestampAsync(DateTimeOffset timestamp);
 
     Task SaveChangesAsync();
 }
