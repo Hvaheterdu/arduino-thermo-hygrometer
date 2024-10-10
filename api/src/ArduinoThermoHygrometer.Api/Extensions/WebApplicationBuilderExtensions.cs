@@ -257,20 +257,17 @@ internal static class WebApplicationBuilderExtensions
     /// <param name="requestMethod">The HTTP method of the rejected request.</param>
     /// <param name="retryRequestAfter">The time in minutes after which the request can be retried.</param>
     /// <returns>A <see cref="ProblemDetails"/> instance containing details about the rate limit rejection.</returns>
-    private static ProblemDetails CreateProblemDetailsForRateLimiter(OnRejectedContext context, string requestMethod, string retryRequestAfter)
+    private static ProblemDetails CreateProblemDetailsForRateLimiter(OnRejectedContext context, string requestMethod, string retryRequestAfter) => new()
     {
-        return new()
+        Type = context.HttpContext.Request.Path,
+        Title = "Rate limit reached.",
+        Detail = $"Rate limit reached for {requestMethod} method. Please try again after {retryRequestAfter} minute.",
+        Status = StatusCodes.Status429TooManyRequests,
+        Extensions =
         {
-            Type = context.HttpContext.Request.Path,
-            Title = "Rate limit reached.",
-            Detail = $"Rate limit reached for {requestMethod} method. Please try again after {retryRequestAfter} minute.",
-            Status = StatusCodes.Status429TooManyRequests,
-            Extensions =
-            {
-                ["traceId"] = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier,
-            },
-        };
-    }
+            ["traceId"] = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier,
+        },
+    };
 
     /// <summary>
     /// Logs a warning message when a rate limit is reached.

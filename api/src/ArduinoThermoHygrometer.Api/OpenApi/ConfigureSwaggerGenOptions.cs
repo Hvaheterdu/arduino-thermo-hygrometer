@@ -66,12 +66,8 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
 
     /// <summary>
     /// Has to be implemented because of the interface.
-    /// Calls the Configure method without the name parameter.
     /// </summary>
     /// <param name="name">The name of the options instance to configure.</param>
     /// <param name="options">The SwaggerGenOptions to configure.</param>
-    public void Configure(string? name, SwaggerGenOptions options)
-    {
-        Configure(options);
-    }
+    public void Configure(string? name, SwaggerGenOptions options) => Configure(options);
 }
