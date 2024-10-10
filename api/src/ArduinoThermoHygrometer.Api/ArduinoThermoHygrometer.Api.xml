@@ -311,7 +311,7 @@
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.OpenApi.ConfigureSwaggerGenOptions.CreateOpenApiInfoForVersion(Asp.Versioning.ApiExplorer.ApiVersionDescription)">
             <summary>
-            Creates an instance of OpenApiInfo for the specified <paramref name="apiDescription"/>.
+            Creates an instance of OpenApiInfo for the specified apiDescription.
             </summary>
             <param name="apiDescription">The <see cref="T:Asp.Versioning.ApiExplorer.ApiVersionDescription"/> object.</param>
             <returns>An instance of <see cref="T:Microsoft.OpenApi.Models.OpenApiInfo"/>.</returns>
@@ -319,37 +319,177 @@
         <member name="M:ArduinoThermoHygrometer.Api.OpenApi.ConfigureSwaggerGenOptions.Configure(System.String,Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
             <summary>
             Has to be implemented because of the interface.
-            Calls the Configure method without the name parameter.
             </summary>
             <param name="name">The name of the options instance to configure.</param>
             <param name="options">The SwaggerGenOptions to configure.</param>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.BatteryRepository.GetBatteryByIdAsync(System.Guid)">
+            <summary>
+            Retrieves a Battery object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to retrieve.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Battery"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.BatteryRepository.GetBatteryByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a Battery object by its registered timestamp asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to retrieve.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Battery"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.BatteryRepository.GetBatteriesByDateAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a list of all Battery objects of a date.
+            </summary>
+            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the objects to retrieve.</param>
+            <returns>Returns a list of <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Battery"/> objects if non-empty list; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.BatteryRepository.CreateBatteryAsync(ArduinoThermoHygrometer.Domain.Entities.Battery)">
+            <summary>
+            Creates a Battery object asynchronously.
+            </summary>
+            <param name="battery">The <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Battery"/> object to create.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Battery"/> object if created; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.BatteryRepository.DeleteBatteryByIdAsync(System.Guid)">
+            <summary>
+            Deletes a Battery object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Battery"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.BatteryRepository.DeleteBatteryByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Deletes a Battery object by its id asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Battery"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.BatteryRepository.SaveChangesAsync">
+            <summary>
+            Save all changes made in this context to the database.
+            </summary>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.HumidityRepository.GetHumidityByIdAsync(System.Guid)">
+            <summary>
+            Retrieves a Humidity object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to retrieve.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Humidity"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.HumidityRepository.GetHumidityByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a Humidity object by its registered timestamp asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to retrieve.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Humidity"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.HumidityRepository.GetHumiditiesByDateAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a list of all Humidity objects of a date.
+            </summary>
+            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the objects to retrieve.</param>
+            <returns>Returns a list of <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Humidity"/> objects if non-empty list; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.HumidityRepository.CreateHumidityAsync(ArduinoThermoHygrometer.Domain.Entities.Humidity)">
+            <summary>
+            Creates a Humidity object asynchronously.
+            </summary>
+            <param name="humidity">The <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Humidity"/> object to create.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Humidity"/> object if created; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.HumidityRepository.DeleteHumidityByIdAsync(System.Guid)">
+            <summary>
+            Deletes a Humidity object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Humidity"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.HumidityRepository.DeleteHumidityByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Deletes a Humidity object by its id asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Humidity"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.HumidityRepository.SaveChangesAsync">
+            <summary>
+            Save all changes made in this context to the database.
+            </summary>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.TemperatureRepository.GetTemperatureByIdAsync(System.Guid)">
+            <summary>
+            Retrieves a Temperature object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to retrieve.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Temperature"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.TemperatureRepository.GetTemperatureByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a Temperature object by its registered timestamp asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to retrieve.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Temperature"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.TemperatureRepository.GetTemperaturesByDateAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a list of all Temperature objects of a date.
+            </summary>
+            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the objects to retrieve.</param>
+            <returns>Returns a list of <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Temperature"/> objects if non-empty list; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.TemperatureRepository.CreateTemperatureAsync(ArduinoThermoHygrometer.Domain.Entities.Temperature)">
+            <summary>
+            Creates a Temperature object asynchronously.
+            </summary>
+            <param name="temperature">The <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Temperature"/> object to create.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Temperature"/> object if created; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.TemperatureRepository.DeleteTemperatureByIdAsync(System.Guid)">
+            <summary>
+            Deletes a Temperature object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Temperature"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.TemperatureRepository.DeleteTemperatureByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Deletes a Temperature object by its id asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.Entities.Temperature"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Repositories.TemperatureRepository.SaveChangesAsync">
+            <summary>
+            Save all changes made in this context to the database.
+            </summary>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.GetBatteryDtoByIdAsync(System.Guid)">
             <summary>
             Retrieves a BatteryDto object by its id asynchronously.
             </summary>
-            <param name="id">The <see cref="T:System.Guid"/> of the battery to retrieve.</param>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to retrieve.</param>
             <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object if found; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.GetBatteryDtoByTimestampAsync(System.DateTimeOffset)">
             <summary>
             Retrieves a BatteryDto object by its registered timestamp asynchronously.
             </summary>
-            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the battery to retrieve.</param>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to retrieve.</param>
             <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object if found; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.GetBatteryDtosByDateAsync(System.DateTimeOffset)">
             <summary>
             Retrieves a list of all BatteryDto objects of a date asynchronously.
             </summary>
-            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the batteries to retrieve.</param>
+            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the objects to retrieve.</param>
             <returns>Returns a list of <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> objects if non-empty list; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.CreateBatteryDtoAsync(ArduinoThermoHygrometer.Domain.DTOs.BatteryDto)">
             <summary>
             Creates a BatteryDto object asynchronously.
             </summary>
-            <param name="batteryDto">The <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object to add.</param>
+            <param name="batteryDto">The <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object to create.</param>
             <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.BatteryDto"/> object if created; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.BatteryService.DeleteBatteryDtoByIdAsync(System.Guid)">
@@ -376,28 +516,28 @@
             <summary>
             Retrieves a HumidityDto object by its id asynchronously.
             </summary>
-            <param name="id">The <see cref="T:System.Guid"/> of the humidity to retrieve.</param>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to retrieve.</param>
             <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object if found; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.GetHumidityDtoByTimestampAsync(System.DateTimeOffset)">
             <summary>
             Retrieves a HumidityDto object by its registered timestamp asynchronously.
             </summary>
-            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the humidity to retrieve.</param>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to retrieve.</param>
             <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object if found; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.GetHumidityDtosByDateAsync(System.DateTimeOffset)">
             <summary>
             Retrieves a list of all HumidityDto objects of a date asynchronously.
             </summary>
-            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the humidities to retrieve.</param>
+            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the objects to retrieve.</param>
             <returns>Returns a list of <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> objects if non-empty list; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.CreateHumidityDtoAsync(ArduinoThermoHygrometer.Domain.DTOs.HumidityDto)">
             <summary>
             Creates a HumidityDto object asynchronously.
             </summary>
-            <param name="humidityDto">The <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object to add.</param>
+            <param name="humidityDto">The <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object to create.</param>
             <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object if created; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.DeleteHumidityDtoByIdAsync(System.Guid)">
@@ -418,28 +558,28 @@
             <summary>
             Retrieves a TemperatureDto object by its id asynchronously.
             </summary>
-            <param name="id">The <see cref="T:System.Guid"/> of the temperature to retrieve.</param>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to retrieve.</param>
             <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object if found; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.GetTemperatureDtoByTimestampAsync(System.DateTimeOffset)">
             <summary>
             Retrieves a TemperatureDto object by its registered timestamp asynchronously.
             </summary>
-            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the temperature to retrieve.</param>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to retrieve.</param>
             <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object if found; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.GetTemperatureDtosByDateAsync(System.DateTimeOffset)">
             <summary>
             Retrieves a list of all TemperatureDto objects of a date asynchronously.
             </summary>
-            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the temperatures to retrieve.</param>
+            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the objects to retrieve.</param>
             <returns>Returns a list of <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> objects if non-empty list; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.CreateTemperatureDtoAsync(ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto)">
             <summary>
             Creates a TemperatureDto object asynchronously.
             </summary>
-            <param name="temperatureDto">The <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object to add.</param>
+            <param name="temperatureDto">The <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object to create.</param>
             <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object if created; otherwise, null.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.DeleteTemperatureDtoByIdAsync(System.Guid)">
@@ -458,10 +598,10 @@
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Utilities.StringUtilities.CapitaliseFirstLetter(System.String)">
             <summary>
-            Capitalizes the first letter of a string.
+            Capitalises the first letter of a string.
             </summary>
             <param name="str">The string to capitalize.</param>
-            <returns>The string with the first letter capitalized.</returns>
+            <returns>The string with the first letter capitalised.</returns>
         </member>
     </members>
 </doc>
