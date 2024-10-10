@@ -23,7 +23,7 @@ public class TemperatureService : ITemperatureService
     /// <summary>
     /// Retrieves a TemperatureDto object by its id asynchronously.
     /// </summary>
-    /// <param name="id">The <see cref="Guid"/> of the temperature to retrieve.</param>
+    /// <param name="id">The <see cref="Guid"/> of the object to retrieve.</param>
     /// <returns>Returns a <see cref="TemperatureDto"/> object if found; otherwise, null.</returns>
     public async Task<TemperatureDto?> GetTemperatureDtoByIdAsync(Guid id)
     {
@@ -53,7 +53,7 @@ public class TemperatureService : ITemperatureService
     /// <summary>
     /// Retrieves a TemperatureDto object by its registered timestamp asynchronously.
     /// </summary>
-    /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the temperature to retrieve.</param>
+    /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the object to retrieve.</param>
     /// <returns>Returns a <see cref="TemperatureDto"/> object if found; otherwise, null.</returns>
     public async Task<TemperatureDto?> GetTemperatureDtoByTimestampAsync(DateTimeOffset timestamp)
     {
@@ -77,7 +77,7 @@ public class TemperatureService : ITemperatureService
     /// <summary>
     /// Retrieves a list of all TemperatureDto objects of a date asynchronously.
     /// </summary>
-    /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the temperatures to retrieve.</param>
+    /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the objects to retrieve.</param>
     /// <returns>Returns a list of <see cref="TemperatureDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<TemperatureDto>?> GetTemperatureDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
@@ -106,7 +106,7 @@ public class TemperatureService : ITemperatureService
     /// <summary>
     /// Creates a TemperatureDto object asynchronously.
     /// </summary>
-    /// <param name="temperatureDto">The <see cref="TemperatureDto"/> object to add.</param>
+    /// <param name="temperatureDto">The <see cref="TemperatureDto"/> object to create.</param>
     /// <returns>Returns the <see cref="TemperatureDto"/> object if created; otherwise, null.</returns>
     public async Task<TemperatureDto> CreateTemperatureDtoAsync(TemperatureDto temperatureDto)
     {

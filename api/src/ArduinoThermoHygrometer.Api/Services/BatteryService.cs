@@ -23,7 +23,7 @@ public class BatteryService : IBatteryService
     /// <summary>
     /// Retrieves a BatteryDto object by its id asynchronously.
     /// </summary>
-    /// <param name="id">The <see cref="Guid"/> of the battery to retrieve.</param>
+    /// <param name="id">The <see cref="Guid"/> of the object to retrieve.</param>
     /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
     public async Task<BatteryDto?> GetBatteryDtoByIdAsync(Guid id)
     {
@@ -53,7 +53,7 @@ public class BatteryService : IBatteryService
     /// <summary>
     /// Retrieves a BatteryDto object by its registered timestamp asynchronously.
     /// </summary>
-    /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the battery to retrieve.</param>
+    /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the object to retrieve.</param>
     /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
     public async Task<BatteryDto?> GetBatteryDtoByTimestampAsync(DateTimeOffset timestamp)
     {
@@ -77,7 +77,7 @@ public class BatteryService : IBatteryService
     /// <summary>
     /// Retrieves a list of all BatteryDto objects of a date asynchronously.
     /// </summary>
-    /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the batteries to retrieve.</param>
+    /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the objects to retrieve.</param>
     /// <returns>Returns a list of <see cref="BatteryDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<BatteryDto>?> GetBatteryDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
@@ -106,7 +106,7 @@ public class BatteryService : IBatteryService
     /// <summary>
     /// Creates a BatteryDto object asynchronously.
     /// </summary>
-    /// <param name="batteryDto">The <see cref="BatteryDto"/> object to add.</param>
+    /// <param name="batteryDto">The <see cref="BatteryDto"/> object to create.</param>
     /// <returns>Returns the <see cref="BatteryDto"/> object if created; otherwise, null.</returns>
     public async Task<BatteryDto> CreateBatteryDtoAsync(BatteryDto batteryDto)
     {

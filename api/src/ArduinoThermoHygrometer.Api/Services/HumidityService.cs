@@ -23,7 +23,7 @@ public class HumidityService : IHumidityService
     /// <summary>
     /// Retrieves a HumidityDto object by its id asynchronously.
     /// </summary>
-    /// <param name="id">The <see cref="Guid"/> of the humidity to retrieve.</param>
+    /// <param name="id">The <see cref="Guid"/> of the object to retrieve.</param>
     /// <returns>Returns a <see cref="HumidityDto"/> object if found; otherwise, null.</returns>
     public async Task<HumidityDto?> GetHumidityDtoByIdAsync(Guid id)
     {
@@ -53,7 +53,7 @@ public class HumidityService : IHumidityService
     /// <summary>
     /// Retrieves a HumidityDto object by its registered timestamp asynchronously.
     /// </summary>
-    /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the humidity to retrieve.</param>
+    /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the object to retrieve.</param>
     /// <returns>Returns a <see cref="HumidityDto"/> object if found; otherwise, null.</returns>
     public async Task<HumidityDto?> GetHumidityDtoByTimestampAsync(DateTimeOffset timestamp)
     {
@@ -77,7 +77,7 @@ public class HumidityService : IHumidityService
     /// <summary>
     /// Retrieves a list of all HumidityDto objects of a date asynchronously.
     /// </summary>
-    /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the humidities to retrieve.</param>
+    /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the objects to retrieve.</param>
     /// <returns>Returns a list of <see cref="HumidityDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<HumidityDto>?> GetHumidityDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
@@ -106,7 +106,7 @@ public class HumidityService : IHumidityService
     /// <summary>
     /// Creates a HumidityDto object asynchronously.
     /// </summary>
-    /// <param name="humidityDto">The <see cref="HumidityDto"/> object to add.</param>
+    /// <param name="humidityDto">The <see cref="HumidityDto"/> object to create.</param>
     /// <returns>Returns the <see cref="HumidityDto"/> object if created; otherwise, null.</returns>
     public async Task<HumidityDto> CreateHumidityDtoAsync(HumidityDto humidityDto)
     {

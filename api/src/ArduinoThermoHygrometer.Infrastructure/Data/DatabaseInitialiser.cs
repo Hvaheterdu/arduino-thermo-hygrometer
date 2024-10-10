@@ -1,6 +1,7 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
 
 namespace ArduinoThermoHygrometer.Infrastructure.Data;
+
 public static class DatabaseInitialiser
 {
     /// <summary>

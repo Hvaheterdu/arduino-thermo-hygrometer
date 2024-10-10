@@ -157,5 +157,4 @@ public class HumidityController : ControllerBase
 
         return NoContent();
     }
-
 }
