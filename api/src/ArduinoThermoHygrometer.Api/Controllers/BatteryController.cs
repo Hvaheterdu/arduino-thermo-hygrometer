@@ -21,10 +21,10 @@ public class BatteryController : ControllerBase
     /// <summary>
     /// Retrieves a battery object by its id.
     /// </summary>
-    /// <param name="id">The id of the battery to retrieve.</param>
-    /// <returns>Returns battery or NotFound.</returns>
-    /// <response code="200">Returns <c>Battery</c>.</response>
-    /// <response code="404">Returns <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+    /// <param name="id">The id of the battery object to retrieve.</param>
+    /// <returns>Returns battery object or NotFound.</returns>
+    /// <response code="200">Returns <c>Battery</c> object.</response>
+    /// <response code="404">Returns <c>NotFound</c> if invalid id or the battery object is not found.</response>
     [HttpGet("{id:Guid}")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
@@ -44,10 +44,10 @@ public class BatteryController : ControllerBase
     /// <summary>
     /// Retrieves a battery object by its registration timestamp.
     /// </summary>
-    /// <param name="timestamp">The timestamp of the battery to retrieve.</param>
-    /// <returns>Returns battery or NotFound</returns>
-    /// <response code="200">Returns <c>Battery</c>.</response>
-    /// <response code="404">Returns <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+    /// <param name="timestamp">The timestamp of the battery object to retrieve.</param>
+    /// <returns>Returns battery object or NotFound</returns>
+    /// <response code="200">Returns <c>Battery</c> object.</response>
+    /// <response code="404">Returns <c>NotFound</c> if invalid timestamp or the battery object is not found.</response>
     [HttpGet("get-by-timestamp/{timestamp:datetime}")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
@@ -67,10 +67,10 @@ public class BatteryController : ControllerBase
     /// <summary>
     /// Retrieves a list of battery objects by its date.
     /// </summary>
-    /// <param name="date">The date of the battery to retrieve.</param>
-    /// <returns>Returns battery or NotFound</returns>
-    /// <response code="200">Returns a list of <c>Batteries</c>.</response>
-    /// <response code="404">Returns <c>NotFound</c> if the list of batteries is empty or if the input is invalid.</response>
+    /// <param name="date">The date of the battery objects to retrieve.</param>
+    /// <returns>Returns battery objects or NotFound</returns>
+    /// <response code="200">Returns a list of <c>Battery</c> objects.</response>
+    /// <response code="404">Returns <c>NotFound</c> if invalid date or list of battery objects is empty.</response>
     [HttpGet("get-by-date/{date:datetime}")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
@@ -90,10 +90,10 @@ public class BatteryController : ControllerBase
     /// <summary>
     /// Creates a battery object.
     /// </summary>
-    /// <param name="batteryDto">The battery to create.</param>
+    /// <param name="batteryDto">The battery object to create.</param>
     /// <returns>Returns Created or BadRequest</returns>
     /// <response code="201">Returns <c>Created</c>.</response>
-    /// <response code="400">Returns <c>BadRequest</c> if the input is invalid.</response>
+    /// <response code="400">Returns <c>BadRequest</c> if invalid batteryDto object.</response>
     [HttpPost("add")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -115,10 +115,10 @@ public class BatteryController : ControllerBase
     /// <summary>
     /// Deletes a battery object by its id.
     /// </summary>
-    /// <param name="id">The id of the battery to delete.</param>
+    /// <param name="id">The id of the battery object to delete.</param>
     /// <returns>Returns NoContent or NotFound.</returns>
     /// <response code="204">Returns <c>NoContent</c>.</response>
-    /// <response code="404">Returns <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+    /// <response code="404">Returns <c>NotFound</c> if invalid id or the battery object is not found.</response>
     [HttpDelete("delete/{id:guid}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -138,10 +138,10 @@ public class BatteryController : ControllerBase
     /// <summary>
     /// Deletes a battery object by its registration timestamp.
     /// </summary>
-    /// <param name="timestamp">The timestamp of the battery to delete.</param>
+    /// <param name="timestamp">The timestamp of the battery object to delete.</param>
     /// <returns>Returns NoContent or NotFound</returns>
     /// <response code="204">Returns <c>NoContent</c>.</response>
-    /// <response code="404">Returns <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+    /// <response code="404">Returns <c>NotFound</c> if invalid timestamp or the battery object is not found.</response>
     [HttpDelete("delete/{timestamp:datetime}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
