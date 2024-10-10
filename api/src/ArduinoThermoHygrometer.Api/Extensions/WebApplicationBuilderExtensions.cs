@@ -176,7 +176,7 @@ internal static class WebApplicationBuilderExtensions
     /// <param name="builder">The WebApplicationBuilder instance.</param>
     /// <returns>The updated WebApplicationBuilder instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
-    /// <exception cref="NotImplementedException">Thrown when the database connection string cannot be found.</exception>
+    /// <exception cref="NotImplementedException">Thrown when the database connection string is not found.</exception>
     /// <exception cref="NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
     internal static WebApplicationBuilder RegisterDatabaseAndRunMigrationsOnStartup<T>(this WebApplicationBuilder builder) where T : DbContext
     {

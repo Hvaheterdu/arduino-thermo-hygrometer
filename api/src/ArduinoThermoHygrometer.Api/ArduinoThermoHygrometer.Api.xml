@@ -8,55 +8,55 @@
             <summary>
             Retrieves a battery object by its id.
             </summary>
-            <param name="id">The id of the battery to retrieve.</param>
-            <returns>Returns battery or NotFound.</returns>
-            <response code="200">Returns <c>Battery</c>.</response>
-            <response code="404">Returns <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+            <param name="id">The id of the battery object to retrieve.</param>
+            <returns>Returns battery object or NotFound.</returns>
+            <response code="200">Returns <c>Battery</c> object.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid id or the battery object is not found.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.GetByTimestampAsync(System.DateTimeOffset)">
             <summary>
             Retrieves a battery object by its registration timestamp.
             </summary>
-            <param name="timestamp">The timestamp of the battery to retrieve.</param>
-            <returns>Returns battery or NotFound</returns>
-            <response code="200">Returns <c>Battery</c>.</response>
-            <response code="404">Returns <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+            <param name="timestamp">The timestamp of the battery object to retrieve.</param>
+            <returns>Returns battery object or NotFound</returns>
+            <response code="200">Returns <c>Battery</c> object.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid timestamp or the battery object is not found.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.GetByDateAsync(System.DateTimeOffset)">
             <summary>
             Retrieves a list of battery objects by its date.
             </summary>
-            <param name="date">The date of the battery to retrieve.</param>
-            <returns>Returns battery or NotFound</returns>
-            <response code="200">Returns a list of <c>Batteries</c>.</response>
-            <response code="404">Returns <c>NotFound</c> if the list of batteries is empty or if the input is invalid.</response>
+            <param name="date">The date of the battery objects to retrieve.</param>
+            <returns>Returns battery objects or NotFound</returns>
+            <response code="200">Returns a list of <c>Battery</c> objects.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid date or list of battery objects is empty.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.CreateAsync(ArduinoThermoHygrometer.Domain.DTOs.BatteryDto)">
             <summary>
             Creates a battery object.
             </summary>
-            <param name="batteryDto">The battery to create.</param>
+            <param name="batteryDto">The battery object to create.</param>
             <returns>Returns Created or BadRequest</returns>
             <response code="201">Returns <c>Created</c>.</response>
-            <response code="400">Returns <c>BadRequest</c> if the input is invalid.</response>
+            <response code="400">Returns <c>BadRequest</c> if invalid batteryDto object.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.DeleteByIdAsync(System.Guid)">
             <summary>
             Deletes a battery object by its id.
             </summary>
-            <param name="id">The id of the battery to delete.</param>
+            <param name="id">The id of the battery object to delete.</param>
             <returns>Returns NoContent or NotFound.</returns>
             <response code="204">Returns <c>NoContent</c>.</response>
-            <response code="404">Returns <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid id or the battery object is not found.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Controllers.BatteryController.DeleteByTimestampAsync(System.DateTimeOffset)">
             <summary>
             Deletes a battery object by its registration timestamp.
             </summary>
-            <param name="timestamp">The timestamp of the battery to delete.</param>
+            <param name="timestamp">The timestamp of the battery object to delete.</param>
             <returns>Returns NoContent or NotFound</returns>
             <response code="204">Returns <c>NoContent</c>.</response>
-            <response code="404">Returns <c>NotFound</c> if the battery is not found or if the input is invalid.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid timestamp or the battery object is not found.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Controllers.HealthCheckController.GetHealthCheckReportAsync">
             <summary>
@@ -65,6 +65,114 @@
             <returns>The healthcheck report.</returns>
             <response code="200">Returns <c>HealthReport</c> if the system is healthy.</response>
             <response code="500">Returns <c>ProblemDetails</c> if the system is degraded or unhealthy.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.HumidityController.GetByIdAsync(System.Guid)">
+            <summary>
+            Retrieves a humidity object by its id.
+            </summary>
+            <param name="id">The id of the humidity object to retrieve.</param>
+            <returns>Returns humidity object or NotFound.</returns>
+            <response code="200">Returns <c>Humidity</c> object.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid id or the humidity object is not found.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.HumidityController.GetByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a humidity object by its registration timestamp.
+            </summary>
+            <param name="timestamp">The timestamp of the humidity object to retrieve.</param>
+            <returns>Returns humidity object or NotFound</returns>
+            <response code="200">Returns <c>Humidity</c> object.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid timestamp or the humidity object is not found.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.HumidityController.GetByDateAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a list of humidity objects by its date.
+            </summary>
+            <param name="date">The date of the humidity objects to retrieve.</param>
+            <returns>Returns humidity objects or NotFound</returns>
+            <response code="200">Returns a list of <c>Humidity</c> objects.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid date or list of humidity objects is empty.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.HumidityController.CreateAsync(ArduinoThermoHygrometer.Domain.DTOs.HumidityDto)">
+            <summary>
+            Creates a humidity object.
+            </summary>
+            <param name="humidityDto">The humidity object to create.</param>
+            <returns>Returns Created or BadRequest</returns>
+            <response code="201">Returns <c>Created</c>.</response>
+            <response code="400">Returns <c>BadRequest</c> if invalid humidityDto object.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.HumidityController.DeleteByIdAsync(System.Guid)">
+            <summary>
+            Deletes a humidity object by its id.
+            </summary>
+            <param name="id">The id of the humidity object to delete.</param>
+            <returns>Returns NoContent or NotFound.</returns>
+            <response code="204">Returns <c>NoContent</c>.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid id or the humidity object is not found.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.HumidityController.DeleteByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Deletes a humidity object by its registration timestamp.
+            </summary>
+            <param name="timestamp">The timestamp of the humidity object to delete.</param>
+            <returns>Returns NoContent or NotFound</returns>
+            <response code="204">Returns <c>NoContent</c>.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid timestamp or the humidity object is not found.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.TemperatureController.GetByIdAsync(System.Guid)">
+            <summary>
+            Retrieves a temperature object by its id.
+            </summary>
+            <param name="id">The id of the temperature object to retrieve.</param>
+            <returns>Returns temperature object or NotFound.</returns>
+            <response code="200">Returns <c>Temperature</c> object.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid id or the temperature object is not found.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.TemperatureController.GetByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a temperature object by its registration timestamp.
+            </summary>
+            <param name="timestamp">The timestamp of the temperature object to retrieve.</param>
+            <returns>Returns temperature object or NotFound</returns>
+            <response code="200">Returns <c>Temperature</c> object.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid timestamp or the temperature object is not found.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.TemperatureController.GetByDateAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a list of temperature objects by its date.
+            </summary>
+            <param name="date">The date of the temperature objects to retrieve.</param>
+            <returns>Returns temperature objects or NotFound</returns>
+            <response code="200">Returns a list of <c>Temperature</c> objects.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid date or list of temperature objects is empty.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.TemperatureController.CreateAsync(ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto)">
+            <summary>
+            Creates a temperature object.
+            </summary>
+            <param name="temperatureDto">The temperature object to create.</param>
+            <returns>Returns Created or BadRequest</returns>
+            <response code="201">Returns <c>Created</c>.</response>
+            <response code="400">Returns <c>BadRequest</c> if invalid temperatureDto object.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.TemperatureController.DeleteByIdAsync(System.Guid)">
+            <summary>
+            Deletes a temperature object by its id.
+            </summary>
+            <param name="id">The id of the temperature object to delete.</param>
+            <returns>Returns NoContent or NotFound.</returns>
+            <response code="204">Returns <c>NoContent</c>.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid id or the temperature object is not found.</response>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Controllers.TemperatureController.DeleteByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Deletes a temperature object by its registration timestamp.
+            </summary>
+            <param name="timestamp">The timestamp of the temperature object to delete.</param>
+            <returns>Returns NoContent or NotFound</returns>
+            <response code="204">Returns <c>NoContent</c>.</response>
+            <response code="404">Returns <c>NotFound</c> if invalid timestamp or the temperature object is not found.</response>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddHsts(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
@@ -106,7 +214,7 @@
             <param name="builder">The WebApplicationBuilder instance.</param>
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
-            <exception cref="T:System.NotImplementedException">Thrown when the database connection string cannot be found.</exception>
+            <exception cref="T:System.NotImplementedException">Thrown when the database connection string is not found.</exception>
             <exception cref="T:System.NotSupportedException">Thrown when the database provider currently in use is not the SQL Server provider.</exception>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddOpenTelemetryLogging(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
@@ -263,6 +371,97 @@
             Retrieves a healthcheck report asynchronously.
             </summary>
             <returns>Returns the <see cref="T:Microsoft.Extensions.Diagnostics.HealthChecks.HealthReport"/> which provides the healthcheck status.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.GetHumidityDtoByIdAsync(System.Guid)">
+            <summary>
+            Retrieves a HumidityDto object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the humidity to retrieve.</param>
+            <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.GetHumidityDtoByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a HumidityDto object by its registered timestamp asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the humidity to retrieve.</param>
+            <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.GetHumidityDtosByDateAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a list of all HumidityDto objects of a date asynchronously.
+            </summary>
+            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the humidities to retrieve.</param>
+            <returns>Returns a list of <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> objects if non-empty list; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.CreateHumidityDtoAsync(ArduinoThermoHygrometer.Domain.DTOs.HumidityDto)">
+            <summary>
+            Creates a HumidityDto object asynchronously.
+            </summary>
+            <param name="humidityDto">The <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object to add.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object if created; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.DeleteHumidityDtoByIdAsync(System.Guid)">
+            <summary>
+            Deletes a HumidityDto object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.HumidityService.DeleteHumidityDtoByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Deletes a HumidityDto object by its registered timestamp asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.HumidityDto"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.GetTemperatureDtoByIdAsync(System.Guid)">
+            <summary>
+            Retrieves a TemperatureDto object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the temperature to retrieve.</param>
+            <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.GetTemperatureDtoByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a TemperatureDto object by its registered timestamp asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the temperature to retrieve.</param>
+            <returns>Returns a <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object if found; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.GetTemperatureDtosByDateAsync(System.DateTimeOffset)">
+            <summary>
+            Retrieves a list of all TemperatureDto objects of a date asynchronously.
+            </summary>
+            <param name="dateTimeOffset">The <see cref="T:System.DateTimeOffset"/> of the temperatures to retrieve.</param>
+            <returns>Returns a list of <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> objects if non-empty list; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.CreateTemperatureDtoAsync(ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto)">
+            <summary>
+            Creates a TemperatureDto object asynchronously.
+            </summary>
+            <param name="temperatureDto">The <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object to add.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object if created; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.DeleteTemperatureDtoByIdAsync(System.Guid)">
+            <summary>
+            Deletes a TemperatureDto object by its id asynchronously.
+            </summary>
+            <param name="id">The <see cref="T:System.Guid"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Services.TemperatureService.DeleteTemperatureDtoByTimestampAsync(System.DateTimeOffset)">
+            <summary>
+            Deletes a TemperatureDto object by its registered timestamp asynchronously.
+            </summary>
+            <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to delete.</param>
+            <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object if deleted; otherwise, null.</returns>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Utilities.StringUtilities.CapitaliseFirstLetter(System.String)">
+            <summary>
+            Capitalizes the first letter of a string.
+            </summary>
+            <param name="str">The string to capitalize.</param>
+            <returns>The string with the first letter capitalized.</returns>
         </member>
     </members>
 </doc>
