@@ -17,6 +17,6 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "nuget"
-    directory: "/api/ArduinoThermoHygrometer"
+    directory: "/api"
     schedule:
       interval: "weekly"
