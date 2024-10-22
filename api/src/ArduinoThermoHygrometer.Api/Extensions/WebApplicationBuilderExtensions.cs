@@ -30,15 +30,7 @@ internal static class WebApplicationBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
-        if (builder.Environment.IsDevelopment())
-        {
-            builder.Services.AddHsts(configureOptions =>
-            {
-                configureOptions.IncludeSubDomains = true;
-                configureOptions.MaxAge = TimeSpan.FromSeconds(60);
-            });
-        }
-        else
+        if (!builder.Environment.IsDevelopment())
         {
             builder.Services.AddHsts(configureOptions =>
             {
@@ -72,7 +64,7 @@ internal static class WebApplicationBuilderExtensions
         {
             builder.Services.AddHttpsRedirection(configureOptions =>
             {
-                configureOptions.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORT:Production");
+                configureOptions.HttpsPort = builder.Configuration.GetValue<int>("HTTPS_PORT:StagingAndProduction");
                 configureOptions.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
             });
         }
