@@ -4,10 +4,7 @@
 * @Hvaheterdu
 
 # Owner for frontend project
-frontend/ @Hvaheterdu
+app/ @Hvaheterdu
 
 # Owner for backend project
-backend/ @Hvaheterdu
-
-# Owner for docs directory
-docs/ @Hvaheterdu
+api/ @Hvaheterdu
