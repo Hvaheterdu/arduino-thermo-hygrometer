@@ -12,7 +12,7 @@ import tseslint from "typescript-eslint";
 
 export default [
   js.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
+  tseslint.configs.eslintRecommended,
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   eslintPluginImportX.flatConfigs.errors,
@@ -40,6 +40,7 @@ export default [
     linterOptions: {
       reportUnusedDisableDirectives: "error",
     },
+    files: ["**/*.ts", "**/*.tsx"],
     ignores: [
       "**/build",
       "**/coverage",
@@ -60,6 +61,7 @@ export default [
       "check-file": checkFile,
       "react-hooks": eslintPluginHooks,
       "react-refresh": reactRefresh,
+      "@typescript-eslint": tseslint.plugin,
       react: reactPlugin,
     },
     rules: {
@@ -68,7 +70,7 @@ export default [
         "error",
         {
           "**/*.{tsx}": "PASCAL_CASE",
-          "**/*.{ts}": "KEBAB_CASE",
+          "**/*.{ts}": "CAMEL_CASE",
           "**/*.{d.ts}": "KEBAB_CASE",
         },
       ],
@@ -117,6 +119,10 @@ export default [
         {
           selector: "interface",
           format: ["PascalCase"],
+        },
+        {
+          selector: "import",
+          format: ["camelCase", "PascalCase"],
         },
         {
           selector: "typeProperty",
