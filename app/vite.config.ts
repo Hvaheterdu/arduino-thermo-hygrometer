@@ -1,4 +1,5 @@
 /* eslint import-x/no-default-export: 0 */
+/* eslint @typescript-eslint/naming-convention: 0 */
 
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
@@ -17,7 +18,7 @@ export default defineConfig({
       typescript: true,
       eslint: {
         useFlatConfig: true,
-        lintCommand: 'eslint "src/**" --max-warnings 0',
+        lintCommand: 'eslint "**/*.{ts,tsx}" --max-warnings 0',
       },
     }),
     plugin_default(),
@@ -38,7 +39,7 @@ export default defineConfig({
     },
     headers: {
       "content-security-policy":
-        "base-uri 'self'; default-src 'self'; frame-ancestors 'none'; manifest-src 'none'; script-src 'self'; style-src 'self'",
+        "base-uri 'self'; default-src 'self'; frame-ancestors 'none'; manifest-src 'none'; script-src 'unsafe-inline' 'self'; style-src 'unsafe-inline' 'self'",
       "permissions-policy":
         "accelerometer=(), autoplay=(), bluetooth=(), camera=(), compute-pressure=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), hid=(), identity-credentials-get=(), idle-detection=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-create=(), publickey-credentials-get=(), screen-wake-lock=(), storage-access=(), sync-xhr=(), usb=(), web-share=(), window-management=(), xr-spatial-tracking=()",
       "referrer-policy": "no-referrer",

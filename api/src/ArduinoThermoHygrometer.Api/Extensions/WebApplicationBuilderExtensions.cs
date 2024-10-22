@@ -223,7 +223,7 @@ internal static class WebApplicationBuilderExtensions
                     .AddService(builder.Environment.ApplicationName)
                     .AddAttributes(new Dictionary<string, object>()
                     {
-                        ["deployment.environment"] = builder.Environment.EnvironmentName,
+                        ["environment.name"] = builder.Environment.EnvironmentName,
                     }));
 
                 configure.IncludeFormattedMessage = true;
@@ -232,19 +232,19 @@ internal static class WebApplicationBuilderExtensions
         }
         //else
         //{
+        //    builder.Services.AddOpenTelemetry()
+        //        .ConfigureResource(configure => configure.AddService(builder.Environment.ApplicationName))
+        //        .UseAzureMonitor();
+
         //    builder.Logging.AddOpenTelemetry(configure =>
         //    {
         //        configure.SetResourceBuilder(ResourceBuilder.CreateDefault()
         //            .AddService(builder.Environment.ApplicationName)
         //            .AddAttributes(new Dictionary<string, object>()
         //            {
-        //                ["deployment.environment"] = builder.Environment.EnvironmentName,
+        //                ["environment.name"] = builder.Environment.EnvironmentName,
         //            }));
         //    });
-
-        //    builder.Services.AddOpenTelemetry()
-        //        .ConfigureResource(configure => configure.AddService(builder.Environment.ApplicationName))
-        //        .UseAzureMonitor();
         //}
 
         return builder;

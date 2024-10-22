@@ -21,7 +21,10 @@ public static class InfrastructureDependencyInjection
             throw new NotImplementedException("Connection string is not found in appsettings.Development.json");
         }
 
-        IServiceCollection sqlServer = services.AddDbContext<ArduinoThermoHygrometerDbContext>(optionsAction => optionsAction.UseSqlServer(connectionString));
+        IServiceCollection sqlServer = services.AddDbContext<ArduinoThermoHygrometerDbContext>(optionsAction =>
+        {
+            optionsAction.UseSqlServer(connectionString, sqlServerOptionsAction => sqlServerOptionsAction.EnableRetryOnFailure(3));
+        });
 
         return sqlServer;
     }
