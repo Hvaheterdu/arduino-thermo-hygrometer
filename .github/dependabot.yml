@@ -12,11 +12,11 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "npm"
-    directory: "/frontend"
+    directory: "/app"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "nuget"
-    directory: "/backend/ArduinoThermoHygrometer"
+    directory: "/api/ArduinoThermoHygrometer"
     schedule:
       interval: "weekly"
