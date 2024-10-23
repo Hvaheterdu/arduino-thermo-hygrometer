@@ -45,7 +45,7 @@ public class BatteryService : IBatteryService
 
         BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
-        LoggingExtensions.LogRetrievingDtoById(_logger, nameof(BatteryDto));
+        LoggingExtensions.LogRetrievedDtoById(_logger, nameof(BatteryDto));
 
         return batteryDto;
     }

@@ -45,7 +45,7 @@ public class TemperatureService : ITemperatureService
 
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
-        LoggingExtensions.LogRetrievingDtoById(_logger, nameof(TemperatureDto));
+        LoggingExtensions.LogRetrievedDtoById(_logger, nameof(TemperatureDto));
 
         return temperatureDto;
     }

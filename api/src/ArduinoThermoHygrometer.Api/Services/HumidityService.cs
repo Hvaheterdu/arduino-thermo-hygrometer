@@ -45,7 +45,7 @@ public class HumidityService : IHumidityService
 
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
-        LoggingExtensions.LogRetrievingDtoById(_logger, nameof(HumidityDto));
+        LoggingExtensions.LogRetrievedDtoById(_logger, nameof(HumidityDto));
 
         return humidityDto;
     }
