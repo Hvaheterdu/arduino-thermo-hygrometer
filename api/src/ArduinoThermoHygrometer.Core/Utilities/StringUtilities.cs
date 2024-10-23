@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace ArduinoThermoHygrometer.Api.Utilities;
+namespace ArduinoThermoHygrometer.Core.Utilities;
 
 public static class StringUtilities
 {

@@ -225,6 +225,14 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddSwagger(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Adds Swagger generation to the WebApplicationBuilder.
+            </summary>
+            <param name="builder">The WebApplicationBuilder instance.</param>
+            <returns>The updated WebApplicationBuilder instance.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
+        </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.CreateProblemDetailsForRateLimiter(Microsoft.AspNetCore.RateLimiting.OnRejectedContext,System.String,System.String)">
             <summary>
             Creates a ProblemDetails instance for a rate limiter rejection.
@@ -241,48 +249,6 @@
             <param name="requestMethod">The HTTP method of the request that was rate limited.</param>
             <param name="requestPath">The path of the request that was rate limited.</param>
             <param name="retryRequestAfter">The time in minutes after which the request can be retried.</param>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Mappers.BatteryMapper.GetBatteryFromBatteryDto(ArduinoThermoHygrometer.Domain.DTOs.BatteryDto)">
-            <summary>
-            Maps a BatteryDto object to a Battery object.
-            </summary>
-            <param name="batteryDto">The BatteryDto object to map.</param>
-            <returns>The mapped Battery object.</returns>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Mappers.BatteryMapper.GetBatteryDtoFromBattery(ArduinoThermoHygrometer.Domain.Entities.Battery)">
-            <summary>
-            Maps a Battery object to a BatteryDto object.
-            </summary>
-            <param name="battery">The Battery object to map.</param>
-            <returns>The mapped BatteryDto object.</returns>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Mappers.HumidityMapper.GetHumidityFromHumidityDto(ArduinoThermoHygrometer.Domain.DTOs.HumidityDto)">
-            <summary>
-            Maps a HumidityDto object to a Humidity object.
-            </summary>
-            <param name="humidityDto">The HumidityDto object to map.</param>
-            <returns>The mapped Humidity object.</returns>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Mappers.HumidityMapper.GetHumidityDtoFromHumidity(ArduinoThermoHygrometer.Domain.Entities.Humidity)">
-            <summary>
-            Maps a Humidity object to a HumidityDto object.
-            </summary>
-            <param name="humidity">The Humidity object to map.</param>
-            <returns>The mapped HumidityDto object.</returns>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Mappers.TemperatureMapper.GetTemperatureFromTemperatureDto(ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto)">
-            <summary>
-            Maps a TemperatureDto object to a Temperature object.
-            </summary>
-            <param name="temperatureDto">The TemperatureDto object to map.</param>
-            <returns>The mapped Temperature object.</returns>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Mappers.TemperatureMapper.GetTemperatureDtoFromTemperature(ArduinoThermoHygrometer.Domain.Entities.Temperature)">
-            <summary>
-            Maps a Temperature object to a TemperatureDto object.
-            </summary>
-            <param name="temperature">The Temperature object to map.</param>
-            <returns>The mapped TemperatureDto object.</returns>
         </member>
         <member name="M:ArduinoThermoHygrometer.Api.Middleware.GlobalExceptionHandlerMiddleware.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
             <summary>
@@ -595,13 +561,6 @@
             </summary>
             <param name="timestamp">The <see cref="T:System.DateTimeOffset"/> of the object to delete.</param>
             <returns>Returns the <see cref="T:ArduinoThermoHygrometer.Domain.DTOs.TemperatureDto"/> object if deleted; otherwise, null.</returns>
-        </member>
-        <member name="M:ArduinoThermoHygrometer.Api.Utilities.StringUtilities.CapitaliseFirstLetter(System.String)">
-            <summary>
-            Capitalises the first letter of a string.
-            </summary>
-            <param name="str">The string to capitalize.</param>
-            <returns>The string with the first letter capitalised.</returns>
         </member>
     </members>
 </doc>

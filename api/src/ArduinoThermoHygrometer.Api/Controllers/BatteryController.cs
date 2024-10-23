@@ -2,7 +2,6 @@
 using ArduinoThermoHygrometer.Domain.DTOs;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ArduinoThermoHygrometer.Api.Controllers;
 
@@ -79,7 +78,7 @@ public class BatteryController : ControllerBase
     {
         IEnumerable<BatteryDto>? batteryDto = await _batteryService.GetBatteryDtosByDateAsync(date);
 
-        if (batteryDto.IsNullOrEmpty())
+        if (batteryDto == null || !batteryDto.Any())
         {
             return NotFound(batteryDto);
         }

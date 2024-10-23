@@ -1,11 +1,10 @@
 ﻿using ArduinoThermoHygrometer.Api.Extensions;
-using ArduinoThermoHygrometer.Api.Mappers;
 using ArduinoThermoHygrometer.Api.Repositories.Contracts;
 using ArduinoThermoHygrometer.Api.Services.Contracts;
-using ArduinoThermoHygrometer.Api.Utilities;
+using ArduinoThermoHygrometer.Core.Mappers;
+using ArduinoThermoHygrometer.Core.Utilities;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ArduinoThermoHygrometer.Api.Services;
 
@@ -86,7 +85,7 @@ public class BatteryService : IBatteryService
         IEnumerable<Battery> batteries = await _batteryRepository.GetBatteriesByDateAsync(dateTimeOffset);
 
         string? capitaliseBatteries = StringUtilities.CapitaliseFirstLetter(nameof(batteries));
-        if (batteries.IsNullOrEmpty())
+        if (batteries == null || !batteries.Any())
         {
             LoggingExtensions.LogIsNullOrEmpty(_logger, capitaliseBatteries, dateTimeOffset.Date.ToShortDateString());
             return null;

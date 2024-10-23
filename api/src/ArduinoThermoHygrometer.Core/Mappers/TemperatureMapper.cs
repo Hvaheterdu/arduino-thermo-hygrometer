@@ -3,7 +3,7 @@ using ArduinoThermoHygrometer.Domain.Entities;
 
 #pragma warning disable CA1062
 
-namespace ArduinoThermoHygrometer.Api.Mappers;
+namespace ArduinoThermoHygrometer.Core.Mappers;
 
 public static class TemperatureMapper
 {
