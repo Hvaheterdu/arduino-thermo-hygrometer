@@ -43,10 +43,6 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .HasColumnType("int")
                 .IsRequired();
 
-            entity.Property(b => b.Version)
-                .HasColumnType("rowversion")
-                .IsRowVersion();
-
             entity.HasIndex(b => b.RegisteredAt)
                 .IsClustered()
                 .IsUnique()
@@ -83,10 +79,6 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .HasPrecision(4, 2)
                 .IsRequired();
 
-            entity.Property(t => t.Version)
-                .HasColumnType("rowversion")
-                .IsRowVersion();
-
             entity.HasIndex(t => t.RegisteredAt)
                 .IsClustered()
                 .IsUnique()
@@ -122,10 +114,6 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .HasColumnType("decimal")
                 .HasPrecision(5, 2)
                 .IsRequired();
-
-            entity.Property(t => t.Version)
-                .HasColumnType("rowversion")
-                .IsRowVersion();
 
             entity.HasIndex(t => t.RegisteredAt)
                 .IsClustered()

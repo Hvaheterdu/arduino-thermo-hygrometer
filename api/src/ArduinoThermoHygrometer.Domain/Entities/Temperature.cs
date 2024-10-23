@@ -18,9 +18,6 @@ public class Temperature
     [NotNull]
     public decimal Temp { get; set; }
 
-    [Timestamp]
-    public byte[]? Version { get; set; }
-
     public Temperature(DateTimeOffset registeredAt, decimal temp)
     {
         Id = Guid.NewGuid();
