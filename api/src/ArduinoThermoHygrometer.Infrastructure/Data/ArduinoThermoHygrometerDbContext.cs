@@ -14,10 +14,6 @@ public class ArduinoThermoHygrometerDbContext : DbContext
 
     public ArduinoThermoHygrometerDbContext(DbContextOptions<ArduinoThermoHygrometerDbContext> options) : base(options)
     {
-        if (EF.IsDesignTime)
-        {
-            Database.SetCommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds);
-        }
     }
 
     /// <summary>
