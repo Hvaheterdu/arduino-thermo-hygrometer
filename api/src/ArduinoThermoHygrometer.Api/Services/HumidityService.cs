@@ -26,8 +26,6 @@ public class HumidityService : IHumidityService
     /// <returns>Returns a <see cref="HumidityDto"/> object if found; otherwise, null.</returns>
     public async Task<HumidityDto?> GetHumidityDtoByIdAsync(Guid id)
     {
-        LoggingExtensions.LogRetrievingDtoById(_logger, nameof(HumidityDto));
-
         if (id == Guid.Empty)
         {
             LoggingExtensions.LogInvalidId(_logger, id);
@@ -44,8 +42,6 @@ public class HumidityService : IHumidityService
 
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
-        LoggingExtensions.LogRetrievedDtoById(_logger, nameof(HumidityDto));
-
         return humidityDto;
     }
 
@@ -56,8 +52,6 @@ public class HumidityService : IHumidityService
     /// <returns>Returns a <see cref="HumidityDto"/> object if found; otherwise, null.</returns>
     public async Task<HumidityDto?> GetHumidityDtoByTimestampAsync(DateTimeOffset timestamp)
     {
-        LoggingExtensions.LogRetrievingDtoByTimestamp(_logger, nameof(HumidityDto));
-
         Humidity? humidity = await _humidityRepository.GetHumidityByTimestampAsync(timestamp);
 
         if (humidity == null)
@@ -67,8 +61,6 @@ public class HumidityService : IHumidityService
         }
 
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
-
-        LoggingExtensions.LogRetrievedDtoByTimestamp(_logger, nameof(HumidityDto));
 
         return humidityDto;
     }
@@ -80,8 +72,6 @@ public class HumidityService : IHumidityService
     /// <returns>Returns a list of <see cref="HumidityDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<HumidityDto>?> GetHumidityDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
-        LoggingExtensions.LogRetrievingDtoByDate(_logger, $"{nameof(HumidityDto)}s");
-
         IEnumerable<Humidity> humidities = await _humidityRepository.GetHumiditiesByDateAsync(dateTimeOffset);
 
         string? capitaliseHumidities = StringUtilities.CapitaliseFirstLetter(nameof(humidities));
@@ -97,8 +87,6 @@ public class HumidityService : IHumidityService
             humidityDtos.Add(HumidityMapper.GetHumidityDtoFromHumidity(humidity));
         }
 
-        LoggingExtensions.LogRetrievedDtoByDate(_logger, $"{nameof(HumidityDto)}s");
-
         return humidityDtos;
     }
 
@@ -109,14 +97,10 @@ public class HumidityService : IHumidityService
     /// <returns>Returns the <see cref="HumidityDto"/> object if created; otherwise, null.</returns>
     public async Task<HumidityDto> CreateHumidityDtoAsync(HumidityDto humidityDto)
     {
-        LoggingExtensions.LogCreating(_logger, nameof(HumidityDto));
-
         Humidity? humidity = HumidityMapper.GetHumidityFromHumidityDto(humidityDto);
 
         await _humidityRepository.CreateHumidityAsync(humidity);
         await _humidityRepository.SaveChangesAsync();
-
-        LoggingExtensions.LogCreated(_logger, nameof(HumidityDto));
 
         return humidityDto;
     }
@@ -128,8 +112,6 @@ public class HumidityService : IHumidityService
     /// <returns>Returns the <see cref="HumidityDto"/> object if deleted; otherwise, null.</returns>
     public async Task<HumidityDto?> DeleteHumidityDtoByIdAsync(Guid id)
     {
-        LoggingExtensions.LogDeletingById(_logger, nameof(HumidityDto));
-
         if (id == Guid.Empty)
         {
             LoggingExtensions.LogInvalidId(_logger, id);
@@ -148,8 +130,6 @@ public class HumidityService : IHumidityService
 
         await _humidityRepository.SaveChangesAsync();
 
-        LoggingExtensions.LogDeletedById(_logger, nameof(HumidityDto));
-
         return humidityDto;
     }
 
@@ -160,8 +140,6 @@ public class HumidityService : IHumidityService
     /// <returns>Returns the <see cref="HumidityDto"/> object if deleted; otherwise, null.</returns>
     public async Task<HumidityDto?> DeleteHumidityDtoByTimestampAsync(DateTimeOffset timestamp)
     {
-        LoggingExtensions.LogDeletingByTimestamp(_logger, nameof(HumidityDto));
-
         Humidity? humidity = await _humidityRepository.DeleteHumidityByTimestampAsync(timestamp);
 
         if (humidity == null)
@@ -173,8 +151,6 @@ public class HumidityService : IHumidityService
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
         await _humidityRepository.SaveChangesAsync();
-
-        LoggingExtensions.LogDeletedByTimestamp(_logger, nameof(HumidityDto));
 
         return humidityDto;
     }

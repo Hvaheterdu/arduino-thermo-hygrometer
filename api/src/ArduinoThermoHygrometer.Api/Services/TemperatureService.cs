@@ -26,8 +26,6 @@ public class TemperatureService : ITemperatureService
     /// <returns>Returns a <see cref="TemperatureDto"/> object if found; otherwise, null.</returns>
     public async Task<TemperatureDto?> GetTemperatureDtoByIdAsync(Guid id)
     {
-        LoggingExtensions.LogRetrievingDtoById(_logger, nameof(TemperatureDto));
-
         if (id == Guid.Empty)
         {
             LoggingExtensions.LogInvalidId(_logger, id);
@@ -44,8 +42,6 @@ public class TemperatureService : ITemperatureService
 
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
-        LoggingExtensions.LogRetrievedDtoById(_logger, nameof(TemperatureDto));
-
         return temperatureDto;
     }
 
@@ -56,8 +52,6 @@ public class TemperatureService : ITemperatureService
     /// <returns>Returns a <see cref="TemperatureDto"/> object if found; otherwise, null.</returns>
     public async Task<TemperatureDto?> GetTemperatureDtoByTimestampAsync(DateTimeOffset timestamp)
     {
-        LoggingExtensions.LogRetrievingDtoByTimestamp(_logger, nameof(TemperatureDto));
-
         Temperature? temperature = await _temperatureRepository.GetTemperatureByTimestampAsync(timestamp);
 
         if (temperature == null)
@@ -67,8 +61,6 @@ public class TemperatureService : ITemperatureService
         }
 
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
-
-        LoggingExtensions.LogRetrievedDtoByTimestamp(_logger, nameof(TemperatureDto));
 
         return temperatureDto;
     }
@@ -80,8 +72,6 @@ public class TemperatureService : ITemperatureService
     /// <returns>Returns a list of <see cref="TemperatureDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<TemperatureDto>?> GetTemperatureDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
-        LoggingExtensions.LogRetrievingDtoByDate(_logger, $"{nameof(TemperatureDto)}s");
-
         IEnumerable<Temperature> temperatures = await _temperatureRepository.GetTemperaturesByDateAsync(dateTimeOffset);
 
         string? capitaliseTemperatures = StringUtilities.CapitaliseFirstLetter(nameof(temperatures));
@@ -97,8 +87,6 @@ public class TemperatureService : ITemperatureService
             temperatureDtos.Add(TemperatureMapper.GetTemperatureDtoFromTemperature(temperature));
         }
 
-        LoggingExtensions.LogRetrievedDtoByDate(_logger, $"{nameof(TemperatureDto)}s");
-
         return temperatureDtos;
     }
 
@@ -109,14 +97,10 @@ public class TemperatureService : ITemperatureService
     /// <returns>Returns the <see cref="TemperatureDto"/> object if created; otherwise, null.</returns>
     public async Task<TemperatureDto> CreateTemperatureDtoAsync(TemperatureDto temperatureDto)
     {
-        LoggingExtensions.LogCreating(_logger, nameof(TemperatureDto));
-
         Temperature? temperature = TemperatureMapper.GetTemperatureFromTemperatureDto(temperatureDto);
 
         await _temperatureRepository.CreateTemperatureAsync(temperature);
         await _temperatureRepository.SaveChangesAsync();
-
-        LoggingExtensions.LogCreated(_logger, nameof(TemperatureDto));
 
         return temperatureDto;
     }
@@ -128,8 +112,6 @@ public class TemperatureService : ITemperatureService
     /// <returns>Returns the <see cref="TemperatureDto"/> object if deleted; otherwise, null.</returns>
     public async Task<TemperatureDto?> DeleteTemperatureDtoByIdAsync(Guid id)
     {
-        LoggingExtensions.LogDeletingById(_logger, nameof(TemperatureDto));
-
         if (id == Guid.Empty)
         {
             LoggingExtensions.LogInvalidId(_logger, id);
@@ -148,8 +130,6 @@ public class TemperatureService : ITemperatureService
 
         await _temperatureRepository.SaveChangesAsync();
 
-        LoggingExtensions.LogDeletedById(_logger, nameof(TemperatureDto));
-
         return temperatureDto;
     }
 
@@ -160,8 +140,6 @@ public class TemperatureService : ITemperatureService
     /// <returns>Returns the <see cref="TemperatureDto"/> object if deleted; otherwise, null.</returns>
     public async Task<TemperatureDto?> DeleteTemperatureDtoByTimestampAsync(DateTimeOffset timestamp)
     {
-        LoggingExtensions.LogDeletingByTimestamp(_logger, nameof(TemperatureDto));
-
         Temperature? temperature = await _temperatureRepository.DeleteTemperatureByTimestampAsync(timestamp);
 
         if (temperature == null)
@@ -173,8 +151,6 @@ public class TemperatureService : ITemperatureService
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
         await _temperatureRepository.SaveChangesAsync();
-
-        LoggingExtensions.LogDeletedByTimestamp(_logger, nameof(TemperatureDto));
 
         return temperatureDto;
     }
