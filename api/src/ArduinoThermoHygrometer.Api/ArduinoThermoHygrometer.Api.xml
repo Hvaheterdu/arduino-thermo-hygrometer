@@ -174,6 +174,14 @@
             <response code="204">Returns <c>NoContent</c>.</response>
             <response code="404">Returns <c>NotFound</c> if invalid timestamp or the temperature object is not found.</response>
         </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddAuthentication(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Adds Authentication service to the WebApplicationBuilder.
+            </summary>
+            <param name="builder">The WebApplicationBuilder instance.</param>
+            <returns>The updated WebApplicationBuilder instance.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
+        </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddHsts(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds HTTP Strict Transport Security (HSTS) service to the WebApplicationBuilder.
@@ -220,6 +228,14 @@
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddOpenTelemetryLogging(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Adds OpenTelemetry logging to the WebApplicationBuilder.
+            </summary>
+            <param name="builder">The WebApplicationBuilder instance.</param>
+            <returns>The updated WebApplicationBuilder instance.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
+        </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddSwagger(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Adds Swagger generation to the WebApplicationBuilder.
             </summary>
             <param name="builder">The WebApplicationBuilder instance.</param>
             <returns>The updated WebApplicationBuilder instance.</returns>
