@@ -26,8 +26,6 @@ public class BatteryService : IBatteryService
     /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
     public async Task<BatteryDto?> GetBatteryDtoByIdAsync(Guid id)
     {
-        LoggingExtensions.LogRetrievingDtoById(_logger, nameof(BatteryDto));
-
         if (id == Guid.Empty)
         {
             LoggingExtensions.LogInvalidId(_logger, id);
@@ -44,8 +42,6 @@ public class BatteryService : IBatteryService
 
         BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
-        LoggingExtensions.LogRetrievedDtoById(_logger, nameof(BatteryDto));
-
         return batteryDto;
     }
 
@@ -56,8 +52,6 @@ public class BatteryService : IBatteryService
     /// <returns>Returns a <see cref="BatteryDto"/> object if found; otherwise, null.</returns>
     public async Task<BatteryDto?> GetBatteryDtoByTimestampAsync(DateTimeOffset timestamp)
     {
-        LoggingExtensions.LogRetrievingDtoByTimestamp(_logger, nameof(BatteryDto));
-
         Battery? battery = await _batteryRepository.GetBatteryByTimestampAsync(timestamp);
 
         if (battery == null)
@@ -67,8 +61,6 @@ public class BatteryService : IBatteryService
         }
 
         BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
-
-        LoggingExtensions.LogRetrievedDtoByTimestamp(_logger, nameof(BatteryDto));
 
         return batteryDto;
     }
@@ -80,8 +72,6 @@ public class BatteryService : IBatteryService
     /// <returns>Returns a list of <see cref="BatteryDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<BatteryDto>?> GetBatteryDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
-        LoggingExtensions.LogRetrievingDtoByDate(_logger, $"{nameof(BatteryDto)}s");
-
         IEnumerable<Battery> batteries = await _batteryRepository.GetBatteriesByDateAsync(dateTimeOffset);
 
         string? capitaliseBatteries = StringUtilities.CapitaliseFirstLetter(nameof(batteries));
@@ -97,8 +87,6 @@ public class BatteryService : IBatteryService
             batteryDtos.Add(BatteryMapper.GetBatteryDtoFromBattery(battery));
         }
 
-        LoggingExtensions.LogRetrievedDtoByDate(_logger, $"{nameof(BatteryDto)}s");
-
         return batteryDtos;
     }
 
@@ -109,14 +97,10 @@ public class BatteryService : IBatteryService
     /// <returns>Returns the <see cref="BatteryDto"/> object if created; otherwise, null.</returns>
     public async Task<BatteryDto> CreateBatteryDtoAsync(BatteryDto batteryDto)
     {
-        LoggingExtensions.LogCreating(_logger, nameof(BatteryDto));
-
         Battery? battery = BatteryMapper.GetBatteryFromBatteryDto(batteryDto);
 
         await _batteryRepository.CreateBatteryAsync(battery);
         await _batteryRepository.SaveChangesAsync();
-
-        LoggingExtensions.LogCreated(_logger, nameof(BatteryDto));
 
         return batteryDto;
     }
@@ -128,8 +112,6 @@ public class BatteryService : IBatteryService
     /// <returns>Returns the <see cref="BatteryDto"/> object if deleted; otherwise, null.</returns>
     public async Task<BatteryDto?> DeleteBatteryDtoByIdAsync(Guid id)
     {
-        LoggingExtensions.LogDeletingById(_logger, nameof(BatteryDto));
-
         if (id == Guid.Empty)
         {
             LoggingExtensions.LogInvalidId(_logger, id);
@@ -148,8 +130,6 @@ public class BatteryService : IBatteryService
 
         await _batteryRepository.SaveChangesAsync();
 
-        LoggingExtensions.LogDeletedById(_logger, nameof(BatteryDto));
-
         return batteryDto;
     }
 
@@ -160,8 +140,6 @@ public class BatteryService : IBatteryService
     /// <returns>Returns the <see cref="BatteryDto"/> object if deleted; otherwise, null.</returns>
     public async Task<BatteryDto?> DeleteBatteryDtoByTimestampAsync(DateTimeOffset timestamp)
     {
-        LoggingExtensions.LogDeletingByTimestamp(_logger, nameof(BatteryDto));
-
         Battery? battery = await _batteryRepository.DeleteBatteryByTimestampAsync(timestamp);
 
         if (battery == null)
@@ -173,8 +151,6 @@ public class BatteryService : IBatteryService
         BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
         await _batteryRepository.SaveChangesAsync();
-
-        LoggingExtensions.LogDeletedByTimestamp(_logger, nameof(BatteryDto));
 
         return batteryDto;
     }
