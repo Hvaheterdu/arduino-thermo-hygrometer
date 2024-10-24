@@ -21,8 +21,7 @@ public class TemperatureRepository : ITemperatureRepository
     /// <returns>Returns the <see cref="Temperature"/> object if found; otherwise, null.</returns>
     public async Task<Temperature?> GetTemperatureByIdAsync(Guid id)
     {
-        Temperature? temperature = await _dbContext.Temperatures
-            .FindAsync(id);
+        Temperature? temperature = await _dbContext.Temperatures.FindAsync(id);
 
         return temperature;
     }
@@ -35,6 +34,7 @@ public class TemperatureRepository : ITemperatureRepository
     public async Task<Temperature?> GetTemperatureByTimestampAsync(DateTimeOffset timestamp)
     {
         Temperature? temperature = await _dbContext.Temperatures
+            .AsNoTracking()
             .FirstOrDefaultAsync(t => t.RegisteredAt == timestamp);
 
         return temperature;
@@ -49,6 +49,7 @@ public class TemperatureRepository : ITemperatureRepository
     {
         IEnumerable<Temperature> temperatures = await _dbContext.Temperatures
             .Where(t => t.RegisteredAt.Date == dateTimeOffset.Date)
+            .AsNoTracking()
             .ToListAsync();
 
         return temperatures;
@@ -87,7 +88,8 @@ public class TemperatureRepository : ITemperatureRepository
     /// <returns>Returns the <see cref="Temperature"/> object if deleted; otherwise, null.</returns>
     public async Task<Temperature?> DeleteTemperatureByTimestampAsync(DateTimeOffset timestamp)
     {
-        Temperature? temperature = await _dbContext.Temperatures.FirstOrDefaultAsync(t => t.RegisteredAt == timestamp);
+        Temperature? temperature = await _dbContext.Temperatures
+            .FirstOrDefaultAsync(t => t.RegisteredAt == timestamp);
 
         if (temperature == null)
         {

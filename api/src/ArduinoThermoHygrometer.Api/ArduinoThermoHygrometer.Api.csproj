@@ -28,15 +28,15 @@
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
-    <PackageReference Include="Azure.Identity" Version="1.13.0" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.2.0" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.10" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.66.0" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="3.2.2" />
     <PackageReference Include="OpenTelemetry" Version="1.9.0" />
     <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.9.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.16" />
@@ -44,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ArduinoThermoHygrometer.Core\ArduinoThermoHygrometer.Core.csproj" />
     <ProjectReference Include="..\ArduinoThermoHygrometer.Domain\ArduinoThermoHygrometer.Domain.csproj" />
     <ProjectReference Include="..\ArduinoThermoHygrometer.Infrastructure\ArduinoThermoHygrometer.Infrastructure.csproj" />
   </ItemGroup>

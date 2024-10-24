@@ -18,9 +18,6 @@ public class Battery
     [NotNull]
     public int BatteryStatus { get; set; }
 
-    [Timestamp]
-    public byte[]? Version { get; set; }
-
     public Battery(DateTimeOffset registeredAt, int batteryStatus)
     {
         Id = Guid.NewGuid();

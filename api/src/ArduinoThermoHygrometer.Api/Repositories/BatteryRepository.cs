@@ -21,8 +21,7 @@ public class BatteryRepository : IBatteryRepository
     /// <returns>Returns the <see cref="Battery"/> object if found; otherwise, null.</returns>
     public async Task<Battery?> GetBatteryByIdAsync(Guid id)
     {
-        Battery? battery = await _dbContext.Batteries
-            .FindAsync(id);
+        Battery? battery = await _dbContext.Batteries.FindAsync(id);
 
         return battery;
     }
@@ -35,6 +34,7 @@ public class BatteryRepository : IBatteryRepository
     public async Task<Battery?> GetBatteryByTimestampAsync(DateTimeOffset timestamp)
     {
         Battery? battery = await _dbContext.Batteries
+            .AsNoTracking()
             .FirstOrDefaultAsync(b => b.RegisteredAt == timestamp);
 
         return battery;
@@ -49,6 +49,7 @@ public class BatteryRepository : IBatteryRepository
     {
         IEnumerable<Battery> batteries = await _dbContext.Batteries
             .Where(b => b.RegisteredAt.Date == dateTimeOffset.Date)
+            .AsNoTracking()
             .ToListAsync();
 
         return batteries;
@@ -87,7 +88,8 @@ public class BatteryRepository : IBatteryRepository
     /// <returns>Returns the <see cref="Battery"/> object if deleted; otherwise, null.</returns>
     public async Task<Battery?> DeleteBatteryByTimestampAsync(DateTimeOffset timestamp)
     {
-        Battery? battery = await _dbContext.Batteries.FirstOrDefaultAsync(b => b.RegisteredAt == timestamp);
+        Battery? battery = await _dbContext.Batteries
+            .FirstOrDefaultAsync(b => b.RegisteredAt == timestamp);
 
         if (battery == null)
         {

@@ -1,11 +1,10 @@
 ﻿using ArduinoThermoHygrometer.Api.Extensions;
-using ArduinoThermoHygrometer.Api.Mappers;
 using ArduinoThermoHygrometer.Api.Repositories.Contracts;
 using ArduinoThermoHygrometer.Api.Services.Contracts;
-using ArduinoThermoHygrometer.Api.Utilities;
+using ArduinoThermoHygrometer.Core.Mappers;
+using ArduinoThermoHygrometer.Core.Utilities;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ArduinoThermoHygrometer.Api.Services;
 
@@ -45,7 +44,7 @@ public class TemperatureService : ITemperatureService
 
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
-        LoggingExtensions.LogRetrievingDtoById(_logger, nameof(TemperatureDto));
+        LoggingExtensions.LogRetrievedDtoById(_logger, nameof(TemperatureDto));
 
         return temperatureDto;
     }
@@ -86,7 +85,7 @@ public class TemperatureService : ITemperatureService
         IEnumerable<Temperature> temperatures = await _temperatureRepository.GetTemperaturesByDateAsync(dateTimeOffset);
 
         string? capitaliseTemperatures = StringUtilities.CapitaliseFirstLetter(nameof(temperatures));
-        if (temperatures.IsNullOrEmpty())
+        if (temperatures == null || !temperatures.Any())
         {
             LoggingExtensions.LogIsNullOrEmpty(_logger, capitaliseTemperatures, dateTimeOffset.Date.ToShortDateString());
             return null;

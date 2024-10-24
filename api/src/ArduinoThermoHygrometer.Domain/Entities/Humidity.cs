@@ -18,9 +18,6 @@ public class Humidity
     [NotNull]
     public decimal AirHumidity { get; set; }
 
-    [Timestamp]
-    public byte[]? Version { get; set; }
-
     public Humidity(DateTimeOffset registeredAt, decimal airHumidity)
     {
         Id = Guid.NewGuid();

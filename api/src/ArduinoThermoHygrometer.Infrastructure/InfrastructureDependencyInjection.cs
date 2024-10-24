@@ -15,7 +15,7 @@ public static class InfrastructureDependencyInjection
     /// <returns>The modified <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddSqlServer(this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = configuration.GetConnectionString("DefaultConnection");
+        string? connectionString = configuration.GetConnectionString("ArduinoThermoHygrometerLocal");
         if (connectionString is null)
         {
             throw new NotImplementedException("Connection string is not found in appsettings.Development.json");
@@ -36,7 +36,7 @@ public static class InfrastructureDependencyInjection
     /// <param name="configuration">The <see cref="IConfiguration"/> instance.</param>
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = configuration.GetConnectionString("DefaultConnection")!;
+        string? connectionString = configuration.GetConnectionString("ArduinoThermoHygrometerLocal")!;
 
         services.AddHealthChecks()
             .AddSqlServer(connectionString)

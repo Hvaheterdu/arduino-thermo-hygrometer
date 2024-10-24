@@ -2,7 +2,6 @@
 using ArduinoThermoHygrometer.Domain.DTOs;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ArduinoThermoHygrometer.Api.Controllers;
 
@@ -79,7 +78,7 @@ public class TemperatureController : ControllerBase
     {
         IEnumerable<TemperatureDto>? temperatureDto = await _temperatureService.GetTemperatureDtosByDateAsync(date);
 
-        if (temperatureDto.IsNullOrEmpty())
+        if (temperatureDto == null || !temperatureDto.Any())
         {
             return NotFound(temperatureDto);
         }

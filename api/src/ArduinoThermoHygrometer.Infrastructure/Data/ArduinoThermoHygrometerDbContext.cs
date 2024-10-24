@@ -1,15 +1,16 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ArduinoThermoHygrometer.Infrastructure.Data;
 
 public class ArduinoThermoHygrometerDbContext : DbContext
 {
-    public DbSet<Battery> Batteries { get; set; } = null!;
+    public DbSet<Battery> Batteries { get; set; }
 
-    public DbSet<Humidity> Humidities { get; set; } = null!;
+    public DbSet<Humidity> Humidities { get; set; }
 
-    public DbSet<Temperature> Temperatures { get; set; } = null!;
+    public DbSet<Temperature> Temperatures { get; set; }
 
     public ArduinoThermoHygrometerDbContext(DbContextOptions<ArduinoThermoHygrometerDbContext> options) : base(options)
     {
@@ -26,17 +27,6 @@ public class ArduinoThermoHygrometerDbContext : DbContext
 
         modelBuilder.Entity<Battery>(entity =>
         {
-            entity.ToTable("Batteries", buildAction =>
-            {
-                buildAction.HasCheckConstraint(
-                    name: "CK_BatteryStatus_GreaterThanOrEqualToZero",
-                    sql: $"{nameof(Battery.BatteryStatus)} >= 0");
-
-                buildAction.HasCheckConstraint(
-                    name: "CK_BatteryStatus_LessThanOrEqualToOneHundred",
-                    sql: $"{nameof(Battery.BatteryStatus)} <= 100");
-            });
-
             entity.HasKey(b => b.Id)
                 .IsClustered(clustered: false);
 
@@ -50,21 +40,51 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .HasDefaultValueSql("SYSDATETIMEOFFSET()")
                 .IsRequired();
 
-            entity.HasIndex(b => b.RegisteredAt)
-                .IsClustered()
-                .IsUnique();
-
             entity.Property(b => b.BatteryStatus)
                 .HasColumnType("int")
                 .IsRequired();
 
-            entity.Property(b => b.Version)
-                .HasColumnType("rowversion")
-                .IsRowVersion();
-        });
+            entity.HasIndex(b => b.RegisteredAt)
+                .IsClustered()
+                .IsUnique()
+                .IsDescending();
 
-        modelBuilder.Entity<Humidity>(entity =>
+            entity.ToTable("Batteries", buildAction =>
+            {
+                buildAction.HasCheckConstraint(
+                    name: "CK_BatteryStatus_GreaterThanOrEqualToZero",
+                    sql: $"{nameof(Battery.BatteryStatus)} >= 0");
+
+                buildAction.HasCheckConstraint(
+                    name: "CK_BatteryStatus_LessThanOrEqualToOneHundred",
+                    sql: $"{nameof(Battery.BatteryStatus)} <= 100");
+            });
+        })
+        .Entity<Humidity>(entity =>
         {
+            entity.HasKey(t => t.Id)
+                .IsClustered(clustered: false);
+
+            entity.Property(t => t.Id)
+                .HasColumnType("uniqueidentifier")
+                .HasDefaultValueSql("NEWID()")
+                .IsRequired();
+
+            entity.Property(t => t.RegisteredAt)
+                .HasColumnType("datetimeoffset")
+                .HasDefaultValueSql("SYSDATETIMEOFFSET()")
+                .IsRequired();
+
+            entity.Property(t => t.AirHumidity)
+                .HasColumnType("decimal")
+                .HasPrecision(4, 2)
+                .IsRequired();
+
+            entity.HasIndex(t => t.RegisteredAt)
+                .IsClustered()
+                .IsUnique()
+                .IsDescending();
+
             entity.ToTable("Humidities", buildAction =>
             {
                 buildAction.HasCheckConstraint(
@@ -75,7 +95,9 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                     name: "CK_AirHumidity_LessThanOrEqualToNinety",
                     sql: $"{nameof(Humidity.AirHumidity)} <= 90");
             });
-
+        })
+        .Entity<Temperature>(entity =>
+        {
             entity.HasKey(t => t.Id)
                 .IsClustered(clustered: false);
 
@@ -89,22 +111,16 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                 .HasDefaultValueSql("SYSDATETIMEOFFSET()")
                 .IsRequired();
 
-            entity.HasIndex(t => t.RegisteredAt)
-                .IsClustered()
-                .IsUnique();
-
-            entity.Property(t => t.AirHumidity)
+            entity.Property(t => t.Temp)
                 .HasColumnType("decimal")
-                .HasPrecision(4, 2)
+                .HasPrecision(5, 2)
                 .IsRequired();
 
-            entity.Property(t => t.Version)
-                .HasColumnType("rowversion")
-                .IsRowVersion();
-        });
+            entity.HasIndex(t => t.RegisteredAt)
+                .IsClustered()
+                .IsUnique()
+                .IsDescending();
 
-        modelBuilder.Entity<Temperature>(entity =>
-        {
             entity.ToTable("Temperatures", buildAction =>
             {
                 buildAction.HasCheckConstraint(
@@ -115,32 +131,6 @@ public class ArduinoThermoHygrometerDbContext : DbContext
                     name: "CK_Temp_LessThanOrEqualToOneHundredAndTwentyFive",
                     sql: $"{nameof(Temperature.Temp)} <= 125");
             });
-
-            entity.HasKey(t => t.Id)
-                .IsClustered(clustered: false);
-
-            entity.Property(t => t.Id)
-                .HasColumnType("uniqueidentifier")
-                .HasDefaultValueSql("NEWID()")
-                .IsRequired();
-
-            entity.Property(t => t.RegisteredAt)
-                .HasColumnType("datetimeoffset")
-                .HasDefaultValueSql("SYSDATETIMEOFFSET()")
-                .IsRequired();
-
-            entity.HasIndex(t => t.RegisteredAt)
-                .IsClustered()
-                .IsUnique();
-
-            entity.Property(t => t.Temp)
-                .HasColumnType("decimal")
-                .HasPrecision(5, 2)
-                .IsRequired();
-
-            entity.Property(t => t.Version)
-                .HasColumnType("rowversion")
-                .IsRowVersion();
         });
 
         base.OnModelCreating(modelBuilder);
