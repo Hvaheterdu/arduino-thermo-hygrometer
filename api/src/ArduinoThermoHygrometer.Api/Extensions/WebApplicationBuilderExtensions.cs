@@ -23,35 +23,6 @@ namespace ArduinoThermoHygrometer.Api.Extensions;
 internal static class WebApplicationBuilderExtensions
 {
     /// <summary>
-    /// Adds Authentication service to the WebApplicationBuilder.
-    /// </summary>
-    /// <param name="builder">The WebApplicationBuilder instance.</param>
-    /// <returns>The updated WebApplicationBuilder instance.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
-    internal static WebApplicationBuilder AddAuthentication(this WebApplicationBuilder builder)
-    {
-        string? allowedTenant = builder.Configuration.GetSection("EntraId:TenantId").Value;
-
-        List<string?> validAudiences = new()
-        {
-            $"api://{builder.Configuration.GetSection("EntraId:Instance").Value}",
-            builder.Configuration.GetSection("EntraId:ClientId").Value
-        };
-        string instance = $"{builder.Configuration.GetSection("EntraId:Instance").Value}";
-
-        List<string> validIssuers = new()
-        {
-            $"{instance}{allowedTenant}",
-            $"{instance}{allowedTenant}/",
-            $"{instance}{allowedTenant}/v2.0",
-            $"https://sts.windows.net/{allowedTenant}",
-            $"https://sts.windows.net/{allowedTenant}/",
-        };
-
-        return builder;
-    }
-
-    /// <summary>
     /// Adds HTTP Strict Transport Security (HSTS) service to the WebApplicationBuilder.
     /// </summary>
     /// <param name="builder">The WebApplicationBuilder instance.</param>
@@ -269,60 +240,6 @@ internal static class WebApplicationBuilderExtensions
         //            }));
         //    });
         //}
-
-        return builder;
-    }
-
-    /// <summary>
-    /// Adds Swagger generation to the WebApplicationBuilder.
-    /// </summary>
-    /// <param name="builder">The WebApplicationBuilder instance.</param>
-    /// <returns>The updated WebApplicationBuilder instance.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
-    internal static WebApplicationBuilder AddSwagger(this WebApplicationBuilder builder)
-    {
-        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
-
-        builder.Services.AddSwaggerGen(setupAction =>
-        {
-            EntraIdConfiguration? entraIdConfiguration = builder.Configuration.GetSection(EntraIdConfiguration.EntraId).Get<EntraIdConfiguration>();
-            setupAction.SupportNonNullableReferenceTypes();
-
-            setupAction.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
-                {
-                    AuthorizationCode = new OpenApiOAuthFlow
-                    {
-                        AuthorizationUrl = entraIdConfiguration?.AuthorizationUrl,
-                        TokenUrl = entraIdConfiguration?.TokenUrl,
-                        Scopes = new Dictionary<string, string>
-                        {
-                            { $"api://{entraIdConfiguration?.ClientId}/access_as_user", "Access the API as a user." }
-                        }
-                    }
-                }
-            });
-
-            setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement()
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "oauth2"
-                        },
-                        Scheme = "oauth2",
-                        Name = "oauth2",
-                        In = ParameterLocation.Header
-                    },
-                    new List<string>()
-                }
-            });
-        });
 
         return builder;
     }
