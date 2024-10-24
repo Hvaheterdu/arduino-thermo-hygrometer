@@ -23,11 +23,7 @@ public static class InfrastructureDependencyInjection
 
         IServiceCollection sqlServer = services.AddDbContext<ArduinoThermoHygrometerDbContext>(optionsAction =>
         {
-            optionsAction.UseSqlServer(connectionString, sqlServerOptionsAction =>
-            {
-                sqlServerOptionsAction.EnableRetryOnFailure(3);
-                sqlServerOptionsAction.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds);
-            });
+            optionsAction.UseSqlServer(connectionString, sqlServerOptionsAction => sqlServerOptionsAction.EnableRetryOnFailure(3));
         });
 
         return sqlServer;

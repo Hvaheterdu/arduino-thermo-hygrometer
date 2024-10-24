@@ -1,5 +1,6 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ArduinoThermoHygrometer.Infrastructure.Data;
 
@@ -13,6 +14,10 @@ public class ArduinoThermoHygrometerDbContext : DbContext
 
     public ArduinoThermoHygrometerDbContext(DbContextOptions<ArduinoThermoHygrometerDbContext> options) : base(options)
     {
+        if (EF.IsDesignTime)
+        {
+            Database.SetCommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds);
+        }
     }
 
     /// <summary>

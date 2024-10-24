@@ -21,8 +21,7 @@ public class HumidityRepository : IHumidityRepository
     /// <returns>Returns the <see cref="Humidity"/> object if found; otherwise, null.</returns>
     public async Task<Humidity?> GetHumidityByIdAsync(Guid id)
     {
-        Humidity? humidity = await _dbContext.Humidities
-            .FindAsync(id);
+        Humidity? humidity = await _dbContext.Humidities.FindAsync(id);
 
         return humidity;
     }
@@ -35,6 +34,7 @@ public class HumidityRepository : IHumidityRepository
     public async Task<Humidity?> GetHumidityByTimestampAsync(DateTimeOffset timestamp)
     {
         Humidity? humidity = await _dbContext.Humidities
+            .AsNoTracking()
             .FirstOrDefaultAsync(h => h.RegisteredAt == timestamp);
 
         return humidity;
@@ -49,6 +49,7 @@ public class HumidityRepository : IHumidityRepository
     {
         IEnumerable<Humidity> humidities = await _dbContext.Humidities
             .Where(h => h.RegisteredAt.Date == dateTimeOffset.Date)
+            .AsNoTracking()
             .ToListAsync();
 
         return humidities;
@@ -87,7 +88,8 @@ public class HumidityRepository : IHumidityRepository
     /// <returns>Returns the <see cref="Humidity"/> object if deleted; otherwise, null.</returns>
     public async Task<Humidity?> DeleteHumidityByTimestampAsync(DateTimeOffset timestamp)
     {
-        Humidity? humidity = await _dbContext.Humidities.FirstOrDefaultAsync(h => h.RegisteredAt == timestamp);
+        Humidity? humidity = await _dbContext.Humidities
+            .FirstOrDefaultAsync(h => h.RegisteredAt == timestamp);
 
         if (humidity == null)
         {
