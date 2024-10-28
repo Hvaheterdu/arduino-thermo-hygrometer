@@ -94,10 +94,10 @@ public class BatteryController : ControllerBase
     /// <response code="201">Returns <c>Created</c>.</response>
     /// <response code="400">Returns <c>BadRequest</c> if invalid batteryDto object.</response>
     [HttpPost("add")]
-    [Produces("application/json")]
+    [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<BatteryDto>> CreateAsync(BatteryDto batteryDto)
+    public async Task<ActionResult<BatteryDto>> CreateAsync([FromBody] BatteryDto batteryDto)
     {
         BatteryDto batteryDtoCreated = await _batteryService.CreateBatteryDtoAsync(batteryDto);
 

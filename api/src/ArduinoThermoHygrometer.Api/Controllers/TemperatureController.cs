@@ -94,10 +94,10 @@ public class TemperatureController : ControllerBase
     /// <response code="201">Returns <c>Created</c>.</response>
     /// <response code="400">Returns <c>BadRequest</c> if invalid temperatureDto object.</response>
     [HttpPost("add")]
-    [Produces("application/json")]
+    [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<TemperatureDto>> CreateAsync(TemperatureDto temperatureDto)
+    public async Task<ActionResult<TemperatureDto>> CreateAsync([FromBody] TemperatureDto temperatureDto)
     {
         TemperatureDto temperatureDtoCreated = await _temperatureService.CreateTemperatureDtoAsync(temperatureDto);
 
