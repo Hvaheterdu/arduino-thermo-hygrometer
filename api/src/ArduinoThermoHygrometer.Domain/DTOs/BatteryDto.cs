@@ -7,13 +7,13 @@ namespace ArduinoThermoHygrometer.Domain.DTOs;
 public record BatteryDto
 {
     [JsonIgnore]
-    public Guid Id { get; set; } = default!;
+    public Guid Id { get; set; }
 
-    public DateTimeOffset RegisteredAt { get; set; } = default!;
+    public DateTimeOffset RegisteredAt { get; set; }
 
     [Required]
     [RegularExpression(@"^(?!\s*$).*")]
     [Range(0, 100)]
     [NotNull]
-    public int BatteryStatus { get; set; } = default!;
+    public int BatteryStatus { get; set; }
 }

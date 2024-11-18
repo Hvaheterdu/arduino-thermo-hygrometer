@@ -6,11 +6,11 @@ namespace ArduinoThermoHygrometer.Infrastructure.Data;
 
 public class ArduinoThermoHygrometerDbContext : DbContext
 {
-    public DbSet<Battery> Batteries { get; set; }
+    public DbSet<Battery> Batteries { get; set; } = default!;
 
-    public DbSet<Humidity> Humidities { get; set; }
+    public DbSet<Humidity> Humidities { get; set; } = default!;
 
-    public DbSet<Temperature> Temperatures { get; set; }
+    public DbSet<Temperature> Temperatures { get; set; } = default!;
 
     public ArduinoThermoHygrometerDbContext(DbContextOptions<ArduinoThermoHygrometerDbContext> options) : base(options)
     {

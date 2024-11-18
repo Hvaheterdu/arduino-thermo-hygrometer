@@ -7,13 +7,13 @@ namespace ArduinoThermoHygrometer.Domain.DTOs;
 public class HumidityDto
 {
     [JsonIgnore]
-    public Guid Id { get; set; } = default!;
+    public Guid Id { get; set; }
 
-    public DateTimeOffset RegisteredAt { get; set; } = default!;
+    public DateTimeOffset RegisteredAt { get; set; }
 
     [Required]
     [RegularExpression(@"^(?!\s*$).*")]
     [Range(20, 90)]
     [NotNull]
-    public decimal AirHumidity { get; set; } = default!;
+    public decimal AirHumidity { get; set; }
 }
