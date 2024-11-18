@@ -6,11 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-	<AnalysisLevel>latest</AnalysisLevel>
-	<AnalysisMode>all</AnalysisMode>
-	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	<AssemblyName>ArduinoThermoHygrometer.Test</AssemblyName>
-	<RootNamespace>ArduinoThermoHygrometer.Test</RootNamespace>
+	  <AnalysisLevel>latest</AnalysisLevel>
+	  <AnalysisMode>all</AnalysisMode>
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	  <AssemblyName>ArduinoThermoHygrometer.Test</AssemblyName>
+	  <RootNamespace>ArduinoThermoHygrometer.Test</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,7 +28,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.11" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.48.0" />
     <PackageReference Include="NSubstitute" Version="5.3.0" />
@@ -37,7 +37,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NUnit" Version="4.2.2" />
-    <PackageReference Include="NUnit.Analyzers" Version="4.3.0">
+    <PackageReference Include="NUnit.Analyzers" Version="4.4.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

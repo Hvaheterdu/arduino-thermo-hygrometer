@@ -16,12 +16,12 @@ public static class DatabaseInitialiser
         {
             List<Battery> batteries = new()
             {
-                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(12), 90),
-                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(13), 90),
-                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(14), 89),
-                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(15), 89),
-                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(16), 89),
-                new Battery(DateTimeOffset.Now.AddDays(-2).AddHours(17), 88),
+                new Battery(90),
+                new Battery(90),
+                new Battery(89),
+                new Battery(89),
+                new Battery(89),
+                new Battery(88),
             };
 
             dbContext.AddRange(batteries);
@@ -32,12 +32,12 @@ public static class DatabaseInitialiser
         {
             List<Temperature> temperatures = new()
             {
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(12), 14),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(13), 15),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(14), 16),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(15), 16),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(16), 16),
-                new Temperature(DateTimeOffset.Now.AddDays(-2).AddHours(17), 16),
+                new Temperature(14),
+                new Temperature(15),
+                new Temperature(16),
+                new Temperature(16),
+                new Temperature(16),
+                new Temperature(16),
             };
 
             dbContext.AddRange(temperatures);
@@ -48,12 +48,12 @@ public static class DatabaseInitialiser
         {
             List<Humidity> humidities = new()
             {
-                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(12), 83),
-                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(13), 86),
-                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(14), 88),
-                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(15), 89),
-                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(16), 87),
-                new Humidity(DateTimeOffset.Now.AddDays(-2).AddHours(17), 87),
+                new Humidity(83),
+                new Humidity(86),
+                new Humidity(88),
+                new Humidity(89),
+                new Humidity(87),
+                new Humidity(87),
             };
 
             dbContext.AddRange(humidities);

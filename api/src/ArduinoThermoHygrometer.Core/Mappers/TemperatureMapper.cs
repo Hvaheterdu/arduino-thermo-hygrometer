@@ -14,10 +14,10 @@ public static class TemperatureMapper
     /// <returns>The mapped Temperature object.</returns>
     public static Temperature GetTemperatureFromTemperatureDto(TemperatureDto temperatureDto)
     {
-        Temperature temperature = new(temperatureDto.RegisteredAt, temperatureDto.Temp)
+        Temperature temperature = new(temperatureDto.Temp)
         {
             Id = temperatureDto.Id,
-            RegisteredAt = DateTimeOffset.Now,
+            RegisteredAt = temperatureDto.RegisteredAt,
             Temp = temperatureDto.Temp,
         };
 
@@ -32,7 +32,7 @@ public static class TemperatureMapper
     public static TemperatureDto GetTemperatureDtoFromTemperature(Temperature temperature) => new()
     {
         Id = temperature.Id,
-        RegisteredAt = DateTimeOffset.Now,
+        RegisteredAt = temperature.RegisteredAt,
         Temp = temperature.Temp,
     };
 }

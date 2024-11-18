@@ -10,7 +10,7 @@ public class Battery
     public Guid Id { get; init; }
 
     [Required]
-    public DateTimeOffset RegisteredAt { get; set; }
+    public DateTimeOffset RegisteredAt { get; init; }
 
     [Required]
     [RegularExpression(@"^(?!\s*$).*")]
@@ -18,10 +18,10 @@ public class Battery
     [NotNull]
     public int BatteryStatus { get; set; }
 
-    public Battery(DateTimeOffset registeredAt, int batteryStatus)
+    public Battery(int batteryStatus)
     {
         Id = Guid.NewGuid();
-        RegisteredAt = registeredAt;
+        RegisteredAt = DateTimeOffset.Now;
         BatteryStatus = batteryStatus;
     }
 }

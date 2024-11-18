@@ -14,10 +14,10 @@ public static class HumidityMapper
     /// <returns>The mapped Humidity object.</returns>
     public static Humidity GetHumidityFromHumidityDto(HumidityDto humidityDto)
     {
-        Humidity humidity = new(humidityDto.RegisteredAt, humidityDto.AirHumidity)
+        Humidity humidity = new(humidityDto.AirHumidity)
         {
             Id = humidityDto.Id,
-            RegisteredAt = DateTimeOffset.Now,
+            RegisteredAt = humidityDto.RegisteredAt,
             AirHumidity = humidityDto.AirHumidity
         };
 
@@ -32,7 +32,7 @@ public static class HumidityMapper
     public static HumidityDto GetHumidityDtoFromHumidity(Humidity humidity) => new()
     {
         Id = humidity.Id,
-        RegisteredAt = DateTimeOffset.Now,
+        RegisteredAt = humidity.RegisteredAt,
         AirHumidity = humidity.AirHumidity
     };
 }

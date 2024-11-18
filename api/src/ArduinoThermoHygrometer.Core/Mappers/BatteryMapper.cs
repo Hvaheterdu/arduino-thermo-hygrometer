@@ -15,10 +15,10 @@ public static class BatteryMapper
     /// <returns>The mapped Battery object.</returns>
     public static Battery GetBatteryFromBatteryDto(BatteryDto batteryDto)
     {
-        Battery battery = new(batteryDto.RegisteredAt, batteryDto.BatteryStatus)
+        Battery battery = new(batteryDto.BatteryStatus)
         {
             Id = batteryDto.Id,
-            RegisteredAt = DateTimeOffset.Now,
+            RegisteredAt = batteryDto.RegisteredAt,
             BatteryStatus = batteryDto.BatteryStatus
         };
 
@@ -33,7 +33,7 @@ public static class BatteryMapper
     public static BatteryDto GetBatteryDtoFromBattery(Battery battery) => new()
     {
         Id = battery.Id,
-        RegisteredAt = DateTimeOffset.Now,
+        RegisteredAt = battery.RegisteredAt,
         BatteryStatus = battery.BatteryStatus
     };
 }

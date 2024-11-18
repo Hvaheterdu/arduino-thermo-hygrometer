@@ -10,7 +10,7 @@ public class Temperature
     public Guid Id { get; init; }
 
     [Required]
-    public DateTimeOffset RegisteredAt { get; set; }
+    public DateTimeOffset RegisteredAt { get; init; }
 
     [Required]
     [RegularExpression(@"^(?!\s*$).*")]
@@ -18,10 +18,10 @@ public class Temperature
     [NotNull]
     public decimal Temp { get; set; }
 
-    public Temperature(DateTimeOffset registeredAt, decimal temp)
+    public Temperature(decimal temp)
     {
         Id = Guid.NewGuid();
-        RegisteredAt = registeredAt;
+        RegisteredAt = DateTimeOffset.Now;
         Temp = temp;
     }
 }

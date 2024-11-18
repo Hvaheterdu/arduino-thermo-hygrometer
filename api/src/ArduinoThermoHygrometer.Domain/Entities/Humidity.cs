@@ -10,7 +10,7 @@ public class Humidity
     public Guid Id { get; init; }
 
     [Required]
-    public DateTimeOffset RegisteredAt { get; set; }
+    public DateTimeOffset RegisteredAt { get; init; }
 
     [Required]
     [RegularExpression(@"^(?!\s*$).*")]
@@ -18,10 +18,10 @@ public class Humidity
     [NotNull]
     public decimal AirHumidity { get; set; }
 
-    public Humidity(DateTimeOffset registeredAt, decimal airHumidity)
+    public Humidity(decimal airHumidity)
     {
         Id = Guid.NewGuid();
-        RegisteredAt = registeredAt;
+        RegisteredAt = DateTimeOffset.Now;
         AirHumidity = airHumidity;
     }
 }
