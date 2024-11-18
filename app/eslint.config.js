@@ -83,7 +83,7 @@ export default [
       "no-console": "error",
       "no-debugger": "error",
       "no-unused-vars": "off",
-      "no-use-before-define": "error",
+      "no-use-before-define": "off",
       "import-x/no-default-export": "error",
       "import-x/no-unresolved": "error",
       "import-x/no-rename-default": "error",
@@ -102,6 +102,7 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
+      "@typescript-eslint/no-use-before-define": "error",
       "@typescript-eslint/naming-convention": [
         "error",
         {
