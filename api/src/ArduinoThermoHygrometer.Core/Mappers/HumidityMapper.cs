@@ -1,8 +1,6 @@
 ﻿using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 
-#pragma warning disable CA1062
-
 namespace ArduinoThermoHygrometer.Core.Mappers;
 
 public static class HumidityMapper
@@ -14,10 +12,11 @@ public static class HumidityMapper
     /// <returns>The mapped Humidity object.</returns>
     public static Humidity GetHumidityFromHumidityDto(HumidityDto humidityDto)
     {
+        ArgumentNullException.ThrowIfNull(humidityDto, nameof(humidityDto));
+
         Humidity humidity = new(humidityDto.AirHumidity)
         {
             Id = humidityDto.Id,
-            RegisteredAt = humidityDto.RegisteredAt,
             AirHumidity = humidityDto.AirHumidity
         };
 
@@ -29,10 +28,15 @@ public static class HumidityMapper
     /// </summary>
     /// <param name="humidity">The Humidity object to map.</param>
     /// <returns>The mapped HumidityDto object.</returns>
-    public static HumidityDto GetHumidityDtoFromHumidity(Humidity humidity) => new()
+    public static HumidityDto GetHumidityDtoFromHumidity(Humidity humidity)
     {
-        Id = humidity.Id,
-        RegisteredAt = humidity.RegisteredAt,
-        AirHumidity = humidity.AirHumidity
-    };
+        ArgumentNullException.ThrowIfNull(humidity, nameof(humidity));
+
+        return new HumidityDto()
+        {
+            Id = humidity.Id,
+            RegisteredAt = humidity.RegisteredAt,
+            AirHumidity = humidity.AirHumidity
+        };
+    }
 }

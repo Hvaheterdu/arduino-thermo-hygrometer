@@ -1,8 +1,6 @@
 ﻿using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 
-#pragma warning disable CA1062
-
 namespace ArduinoThermoHygrometer.Core.Mappers;
 
 public static class TemperatureMapper
@@ -14,10 +12,11 @@ public static class TemperatureMapper
     /// <returns>The mapped Temperature object.</returns>
     public static Temperature GetTemperatureFromTemperatureDto(TemperatureDto temperatureDto)
     {
+        ArgumentNullException.ThrowIfNull(temperatureDto, nameof(temperatureDto));
+
         Temperature temperature = new(temperatureDto.Temp)
         {
             Id = temperatureDto.Id,
-            RegisteredAt = temperatureDto.RegisteredAt,
             Temp = temperatureDto.Temp,
         };
 
@@ -29,10 +28,15 @@ public static class TemperatureMapper
     /// </summary>
     /// <param name="temperature">The Temperature object to map.</param>
     /// <returns>The mapped TemperatureDto object.</returns>
-    public static TemperatureDto GetTemperatureDtoFromTemperature(Temperature temperature) => new()
+    public static TemperatureDto GetTemperatureDtoFromTemperature(Temperature temperature)
     {
-        Id = temperature.Id,
-        RegisteredAt = temperature.RegisteredAt,
-        Temp = temperature.Temp,
-    };
+        ArgumentNullException.ThrowIfNull(temperature, nameof(temperature));
+
+        return new TemperatureDto()
+        {
+            Id = temperature.Id,
+            RegisteredAt = temperature.RegisteredAt,
+            Temp = temperature.Temp
+        };
+    }
 }
