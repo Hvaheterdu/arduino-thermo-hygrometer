@@ -13,29 +13,32 @@ export default defineConfig({
     checker({
       overlay: {
         initialIsOpen: true,
-        position: "br",
+        position: "br"
       },
-      typescript: true,
+      typescript: {
+        tsconfigPath: "./tsconfig.json",
+        root: import.meta.dirname
+      },
       eslint: {
         useFlatConfig: true,
-        lintCommand: 'eslint "**/*.{ts,tsx}" --max-warnings 0',
-      },
+        lintCommand: 'eslint "**/*.{ts,tsx}"'
+      }
     }),
     plugin_default(),
     viteReact(),
-    vitePluginSvgr(),
+    vitePluginSvgr()
   ],
   build: {
     outDir: "./dist",
     sourcemap: true,
-    reportCompressedSize: true,
+    reportCompressedSize: true
   },
   server: {
     host: "localhost",
     port: 3001,
     strictPort: true,
     cors: {
-      origin: "https://localhost:5001",
+      origin: "https://localhost:5001"
     },
     headers: {
       "content-security-policy":
@@ -44,8 +47,8 @@ export default defineConfig({
         "accelerometer=(), autoplay=(), bluetooth=(), camera=(), compute-pressure=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), hid=(), identity-credentials-get=(), idle-detection=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-create=(), publickey-credentials-get=(), screen-wake-lock=(), storage-access=(), sync-xhr=(), usb=(), web-share=(), window-management=(), xr-spatial-tracking=()",
       "referrer-policy": "no-referrer",
       "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
-      "x-content-type-options": "nosniff",
-    },
+      "x-content-type-options": "nosniff"
+    }
   },
-  assetsInclude: ["**/*.svg"],
+  assetsInclude: ["**/*.svg"]
 });

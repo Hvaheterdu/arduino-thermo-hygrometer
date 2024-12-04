@@ -33,12 +33,12 @@ export default [
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
           jsx: true,
-          impliedStrict: true,
-        },
-      },
+          impliedStrict: true
+        }
+      }
     },
     linterOptions: {
-      reportUnusedDisableDirectives: "error",
+      reportUnusedDisableDirectives: "error"
     },
     files: ["**/*.ts", "**/*.tsx"],
     ignores: [
@@ -50,19 +50,19 @@ export default [
       "**/*.generated.ts",
       "**/.git",
       "**/.svn",
-      "**/.hg",
+      "**/.hg"
     ],
     settings: {
       react: {
-        version: "18.3",
-      },
+        version: "18.3"
+      }
     },
     plugins: {
       "check-file": checkFile,
       "react-hooks": eslintPluginHooks,
       "react-refresh": reactRefresh,
       "@typescript-eslint": tseslint.plugin,
-      react: reactPlugin,
+      react: reactPlugin
     },
     rules: {
       ...eslintPluginHooks.configs.recommended.rules,
@@ -71,14 +71,14 @@ export default [
         {
           "**/*.{tsx}": "PASCAL_CASE",
           "**/*.{ts}": "CAMEL_CASE",
-          "**/*.{d.ts}": "KEBAB_CASE",
-        },
+          "**/*.{d.ts}": "KEBAB_CASE"
+        }
       ],
       "check-file/folder-naming-convention": [
         "error",
         {
-          "src/**/": "FLAT_CASE",
-        },
+          "src/**/": "FLAT_CASE"
+        }
       ],
       "no-console": "error",
       "no-debugger": "error",
@@ -99,45 +99,45 @@ export default [
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
-          ignoreRestSiblings: true,
-        },
+          ignoreRestSiblings: true
+        }
       ],
       "@typescript-eslint/no-use-before-define": "error",
       "@typescript-eslint/naming-convention": [
         "error",
         {
           selector: "enum",
-          format: ["PascalCase"],
+          format: ["PascalCase"]
         },
         {
           selector: "enumMember",
-          format: ["PascalCase"],
+          format: ["PascalCase"]
         },
         {
           selector: "function",
-          format: ["camelCase", "PascalCase"],
+          format: ["camelCase", "PascalCase"]
         },
         {
           selector: "interface",
-          format: ["PascalCase"],
+          format: ["PascalCase"]
         },
         {
           selector: "import",
-          format: ["camelCase", "PascalCase"],
+          format: ["camelCase", "PascalCase"]
         },
         {
           selector: "typeProperty",
-          format: ["snake_case", "UPPER_CASE"],
+          format: ["snake_case", "UPPER_CASE"]
         },
         {
           selector: "enum",
-          format: ["PascalCase"],
+          format: ["PascalCase"]
         },
         {
           selector: "variable",
-          format: ["camelCase", "PascalCase"],
-        },
-      ],
-    },
-  },
+          format: ["camelCase", "PascalCase"]
+        }
+      ]
+    }
+  }
 ];
