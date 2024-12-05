@@ -36,8 +36,8 @@
     "last 1 edge version"
   ],
   "lint-staged": {
-    "*.{ts,tsx}": "eslint \"**/*.{ts,tsx}\" ",
-    "*.{ts,tsx,html,css,json,md}": "prettier --write ."
+    "*.{ts,tsx}": "eslint",
+    "*.{ts,tsx,html,css,json,md}": "prettier --write"
   },
   "scripts": {
     "build:dev": "vite build --mode development",
