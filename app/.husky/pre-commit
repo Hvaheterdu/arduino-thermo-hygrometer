@@ -1,4 +1,0 @@
-cd app/
-if git status --porcelain | grep 'app/'; then
-  npm run lint-staged
-fi
