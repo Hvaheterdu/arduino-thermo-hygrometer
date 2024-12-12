@@ -1,6 +1,6 @@
 ﻿using ArduinoThermoHygrometer.Domain.DTOs;
 
-namespace ArduinoThermoHygrometer.Api.Services.Contracts;
+namespace ArduinoThermoHygrometer.Core.Services.Contracts;
 
 public interface ITemperatureService
 {

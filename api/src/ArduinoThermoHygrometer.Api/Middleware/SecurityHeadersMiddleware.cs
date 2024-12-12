@@ -24,6 +24,6 @@ public class SecurityHeadersMiddleware
         httpContext.Response.Headers.Append("Referrer-Policy", "no-referrer");
         httpContext.Response.Headers.Append("X-Content-Type-Options", "nosniff");
 
-        await _next(httpContext);
+        await _next(httpContext).ConfigureAwait(false);
     }
 }

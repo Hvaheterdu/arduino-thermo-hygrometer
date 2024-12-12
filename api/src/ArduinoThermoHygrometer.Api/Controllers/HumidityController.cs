@@ -1,4 +1,4 @@
-﻿using ArduinoThermoHygrometer.Api.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +28,7 @@ public class HumidityController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(HumidityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<HumidityDto>> GetByIdAsync(Guid id)
+    public async Task<ActionResult<HumidityDto>> GetByIdAsync([FromRoute] Guid id)
     {
         HumidityDto? humidityDto = await _humidityService.GetHumidityDtoByIdAsync(id);
 
@@ -51,7 +51,7 @@ public class HumidityController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(HumidityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<HumidityDto>> GetByTimestampAsync(DateTimeOffset timestamp)
+    public async Task<ActionResult<HumidityDto>> GetByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         HumidityDto? humidityDto = await _humidityService.GetHumidityDtoByTimestampAsync(timestamp);
 
@@ -74,7 +74,7 @@ public class HumidityController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(HumidityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<HumidityDto>>> GetByDateAsync(DateTimeOffset date)
+    public async Task<ActionResult<IEnumerable<HumidityDto>>> GetByDateAsync([FromRoute] DateTimeOffset date)
     {
         IEnumerable<HumidityDto>? humidityDto = await _humidityService.GetHumidityDtosByDateAsync(date);
 
@@ -122,7 +122,7 @@ public class HumidityController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<HumidityDto>> DeleteByIdAsync(Guid id)
+    public async Task<ActionResult<HumidityDto>> DeleteByIdAsync([FromRoute] Guid id)
     {
         HumidityDto? humidityDto = await _humidityService.DeleteHumidityDtoByIdAsync(id);
 
@@ -145,7 +145,7 @@ public class HumidityController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<HumidityDto>> DeleteByTimestampAsync(DateTimeOffset timestamp)
+    public async Task<ActionResult<HumidityDto>> DeleteByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         HumidityDto? humidityDto = await _humidityService.DeleteHumidityDtoByTimestampAsync(timestamp);
 

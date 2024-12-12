@@ -3,7 +3,7 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using ArduinoThermoHygrometer.Api.Extensions;
+using ArduinoThermoHygrometer.Core.Logging;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,7 +53,7 @@ public class GlobalExceptionHandlerMiddleware : IExceptionHandler
             Converters = { new JsonStringEnumConverter() }
         };
 
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, jsonOptions, contentType, cancellationToken);
+        await httpContext.Response.WriteAsJsonAsync(problemDetails, jsonOptions, contentType, cancellationToken).ConfigureAwait(false);
 
         return true;
     }

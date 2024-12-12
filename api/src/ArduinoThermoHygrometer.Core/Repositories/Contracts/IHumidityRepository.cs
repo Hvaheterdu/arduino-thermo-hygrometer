@@ -1,6 +1,6 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
 
-namespace ArduinoThermoHygrometer.Api.Repositories.Contracts;
+namespace ArduinoThermoHygrometer.Core.Repositories.Contracts;
 
 public interface IHumidityRepository
 {

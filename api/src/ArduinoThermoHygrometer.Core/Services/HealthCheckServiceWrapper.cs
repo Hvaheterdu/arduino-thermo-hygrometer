@@ -1,8 +1,9 @@
-﻿using ArduinoThermoHygrometer.Api.Extensions;
-using ArduinoThermoHygrometer.Api.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Core.Logging;
+using ArduinoThermoHygrometer.Core.Services.Contracts;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Logging;
 
-namespace ArduinoThermoHygrometer.Api.Services;
+namespace ArduinoThermoHygrometer.Core.Services;
 
 public class HealthCheckServiceWrapper : IHealthCheckService
 {

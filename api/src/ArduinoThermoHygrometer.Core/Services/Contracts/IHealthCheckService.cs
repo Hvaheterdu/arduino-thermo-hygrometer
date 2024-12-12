@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace ArduinoThermoHygrometer.Api.Services.Contracts;
+namespace ArduinoThermoHygrometer.Core.Services.Contracts;
 
 public interface IHealthCheckService
 {

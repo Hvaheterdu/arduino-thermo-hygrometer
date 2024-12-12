@@ -1,10 +1,11 @@
-﻿using ArduinoThermoHygrometer.Api.Extensions;
-using ArduinoThermoHygrometer.Api.Repositories.Contracts;
-using ArduinoThermoHygrometer.Api.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Core.Logging;
 using ArduinoThermoHygrometer.Core.Mappers;
+using ArduinoThermoHygrometer.Core.Repositories.Contracts;
+using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Core.Utilities;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace ArduinoThermoHygrometer.Api.Services;
 

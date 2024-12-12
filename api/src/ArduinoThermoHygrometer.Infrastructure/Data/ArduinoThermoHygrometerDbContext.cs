@@ -1,6 +1,5 @@
 ﻿using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace ArduinoThermoHygrometer.Infrastructure.Data;
 

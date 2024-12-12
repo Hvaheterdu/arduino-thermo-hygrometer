@@ -1,4 +1,4 @@
-﻿using ArduinoThermoHygrometer.Api.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +28,7 @@ public class TemperatureController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(TemperatureDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TemperatureDto>> GetByIdAsync(Guid id)
+    public async Task<ActionResult<TemperatureDto>> GetByIdAsync([FromRoute] Guid id)
     {
         TemperatureDto? temperatureDto = await _temperatureService.GetTemperatureDtoByIdAsync(id);
 
@@ -51,7 +51,7 @@ public class TemperatureController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(TemperatureDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TemperatureDto>> GetByTimestampAsync(DateTimeOffset timestamp)
+    public async Task<ActionResult<TemperatureDto>> GetByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         TemperatureDto? temperatureDto = await _temperatureService.GetTemperatureDtoByTimestampAsync(timestamp);
 
@@ -74,7 +74,7 @@ public class TemperatureController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(TemperatureDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<TemperatureDto>>> GetByDateAsync(DateTimeOffset date)
+    public async Task<ActionResult<IEnumerable<TemperatureDto>>> GetByDateAsync([FromRoute] DateTimeOffset date)
     {
         IEnumerable<TemperatureDto>? temperatureDto = await _temperatureService.GetTemperatureDtosByDateAsync(date);
 
@@ -122,7 +122,7 @@ public class TemperatureController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TemperatureDto>> DeleteByIdAsync(Guid id)
+    public async Task<ActionResult<TemperatureDto>> DeleteByIdAsync([FromRoute] Guid id)
     {
         TemperatureDto? temperatureDto = await _temperatureService.DeleteTemperatureDtoByIdAsync(id);
 

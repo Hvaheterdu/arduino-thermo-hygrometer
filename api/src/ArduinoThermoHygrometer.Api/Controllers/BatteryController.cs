@@ -1,4 +1,4 @@
-﻿using ArduinoThermoHygrometer.Api.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +28,7 @@ public class BatteryController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<BatteryDto>> GetByIdAsync(Guid id)
+    public async Task<ActionResult<BatteryDto>> GetByIdAsync([FromRoute] Guid id)
     {
         BatteryDto? batteryDto = await _batteryService.GetBatteryDtoByIdAsync(id);
 
@@ -51,7 +51,7 @@ public class BatteryController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<BatteryDto>> GetByTimestampAsync(DateTimeOffset timestamp)
+    public async Task<ActionResult<BatteryDto>> GetByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         BatteryDto? batteryDto = await _batteryService.GetBatteryDtoByTimestampAsync(timestamp);
 
@@ -74,7 +74,7 @@ public class BatteryController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(BatteryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<BatteryDto>>> GetByDateAsync(DateTimeOffset date)
+    public async Task<ActionResult<IEnumerable<BatteryDto>>> GetByDateAsync([FromRoute] DateTimeOffset date)
     {
         IEnumerable<BatteryDto>? batteryDto = await _batteryService.GetBatteryDtosByDateAsync(date);
 
@@ -122,7 +122,7 @@ public class BatteryController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<BatteryDto>> DeleteByIdAsync(Guid id)
+    public async Task<ActionResult<BatteryDto>> DeleteByIdAsync([FromRoute] Guid id)
     {
         BatteryDto? batteryDto = await _batteryService.DeleteBatteryDtoByIdAsync(id);
 
@@ -145,7 +145,7 @@ public class BatteryController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<BatteryDto>> DeleteByTimestampAsync(DateTimeOffset timestamp)
+    public async Task<ActionResult<BatteryDto>> DeleteByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         BatteryDto? batteryDto = await _batteryService.DeleteBatteryDtoByTimestampAsync(timestamp);
 

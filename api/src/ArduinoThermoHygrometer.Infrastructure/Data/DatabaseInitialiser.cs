@@ -16,12 +16,7 @@ public static class DatabaseInitialiser
         {
             List<Battery> batteries = new()
             {
-                new Battery(90),
-                new Battery(90),
-                new Battery(89),
-                new Battery(89),
-                new Battery(89),
-                new Battery(88),
+                new Battery(90)
             };
 
             dbContext.AddRange(batteries);
@@ -32,12 +27,7 @@ public static class DatabaseInitialiser
         {
             List<Temperature> temperatures = new()
             {
-                new Temperature(14),
-                new Temperature(15),
-                new Temperature(16),
-                new Temperature(16),
-                new Temperature(16),
-                new Temperature(16),
+                new Temperature(14)
             };
 
             dbContext.AddRange(temperatures);
@@ -48,12 +38,7 @@ public static class DatabaseInitialiser
         {
             List<Humidity> humidities = new()
             {
-                new Humidity(83),
-                new Humidity(86),
-                new Humidity(88),
-                new Humidity(89),
-                new Humidity(87),
-                new Humidity(87),
+                new Humidity(83)
             };
 
             dbContext.AddRange(humidities);

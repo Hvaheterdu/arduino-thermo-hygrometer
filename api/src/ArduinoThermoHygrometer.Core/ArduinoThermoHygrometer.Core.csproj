@@ -11,8 +11,19 @@
     <RootNamespace>ArduinoThermoHygrometer.Core</RootNamespace>
   </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>CA2007</NoWarn>
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>CA2007</NoWarn>
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\ArduinoThermoHygrometer.Domain\ArduinoThermoHygrometer.Domain.csproj" />
+    <ProjectReference Include="..\ArduinoThermoHygrometer.Infrastructure\ArduinoThermoHygrometer.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

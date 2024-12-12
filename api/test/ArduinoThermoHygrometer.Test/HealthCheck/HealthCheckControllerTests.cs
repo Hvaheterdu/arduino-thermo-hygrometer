@@ -1,5 +1,5 @@
 ﻿using ArduinoThermoHygrometer.Api.Controllers;
-using ArduinoThermoHygrometer.Api.Services.Contracts;
+using ArduinoThermoHygrometer.Core.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NSubstitute;
@@ -10,8 +10,8 @@ namespace ArduinoThermoHygrometer.Test.HealthCheck;
 [TestFixture]
 public class HealthCheckControllerTests
 {
-    private IHealthCheckService _healthCheckService;
-    private HealthCheckController _healthCheckController;
+    private IHealthCheckService _healthCheckService = null!;
+    private HealthCheckController _healthCheckController = null!;
 
     [SetUp]
     public void Setup()
