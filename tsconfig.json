@@ -8,5 +8,5 @@
       "path": "tsconfig.node.json"
     }
   ],
-  "exclude": [".cert", "dist", "node_modules"]
+  "exclude": [".cert", "api", "dist", "node_modules"]
 }
