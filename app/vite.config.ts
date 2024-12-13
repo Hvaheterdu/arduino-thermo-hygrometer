@@ -2,6 +2,8 @@
 /* eslint @typescript-eslint/naming-convention: 0 */
 
 import viteReact from "@vitejs/plugin-react";
+import fs from "fs";
+import path from "path";
 import { defineConfig } from "vite";
 import { checker } from "vite-plugin-checker";
 import plugin_default from "vite-plugin-mkcert";
@@ -21,19 +23,26 @@ export default defineConfig({
       },
       eslint: {
         useFlatConfig: true,
-        lintCommand: 'eslint "**/*.{ts,tsx}"'
+        lintCommand: 'eslint "./**/*.{ts,tsx}"'
       }
     }),
-    plugin_default(),
+    plugin_default({
+      savePath: ".cert"
+    }),
     viteReact(),
     vitePluginSvgr()
   ],
   build: {
-    outDir: "./dist",
+    outDir: "../dist",
     sourcemap: true,
     reportCompressedSize: true
   },
+  cacheDir: "../node_modules/.vite",
   server: {
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, "../.cert/dev.pem")),
+      cert: fs.readFileSync(path.resolve(__dirname, "../.cert/cert.pem"))
+    },
     host: "localhost",
     port: 3001,
     strictPort: true,

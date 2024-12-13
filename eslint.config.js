@@ -1,5 +1,3 @@
-// @ts-check
-
 import js from "@eslint/js";
 import checkFile from "eslint-plugin-check-file";
 import eslintPluginImportX from "eslint-plugin-import-x";
@@ -8,13 +6,14 @@ import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
 import reactPlugin from "eslint-plugin-react";
 import eslintPluginHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default [
   js.configs.recommended,
-  tseslint.configs.eslintRecommended,
-  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.recommendedTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
+  ...tseslint.configs.strictTypeChecked,
   eslintPluginImportX.flatConfigs.errors,
   eslintPluginImportX.flatConfigs.recommended,
   eslintPluginImportX.flatConfigs.typescript,
@@ -26,10 +25,14 @@ export default [
   {
     languageOptions: {
       parser: tseslint.parser,
+      globals: {
+        ...globals.browser
+      },
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
         projectService: "./tsconfig.json",
+        project: true,
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
           jsx: true,
@@ -41,17 +44,6 @@ export default [
       reportUnusedDisableDirectives: "error"
     },
     files: ["**/*.ts", "**/*.tsx"],
-    ignores: [
-      "**/build",
-      "**/coverage",
-      "**/dist",
-      "**/node_modules",
-      "**/*.js",
-      "**/*.generated.ts",
-      "**/.git",
-      "**/.svn",
-      "**/.hg"
-    ],
     settings: {
       react: {
         version: "19.0"
@@ -139,5 +131,20 @@ export default [
         }
       ]
     }
+  },
+  {
+    ignores: [
+      "api",
+      "api/**/bin",
+      "build",
+      "coverage",
+      "dist",
+      "node_modules",
+      "**/*.js",
+      "**/*.generated.ts",
+      "**/.git",
+      "**/.svn",
+      "**/.hg"
+    ]
   }
 ];

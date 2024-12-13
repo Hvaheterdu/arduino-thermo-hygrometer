@@ -2,20 +2,20 @@
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Api", "src\ArduinoThermoHygrometer.Api\ArduinoThermoHygrometer.Api.csproj", "{FFE132A1-8009-419E-9F34-DE0FDA29921D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Api", "api\src\ArduinoThermoHygrometer.Api\ArduinoThermoHygrometer.Api.csproj", "{FFE132A1-8009-419E-9F34-DE0FDA29921D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Domain", "src\ArduinoThermoHygrometer.Domain\ArduinoThermoHygrometer.Domain.csproj", "{2A81770B-6F1B-4517-9E7A-355E0245FA02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Domain", "api\src\ArduinoThermoHygrometer.Domain\ArduinoThermoHygrometer.Domain.csproj", "{2A81770B-6F1B-4517-9E7A-355E0245FA02}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Infrastructure", "src\ArduinoThermoHygrometer.Infrastructure\ArduinoThermoHygrometer.Infrastructure.csproj", "{5D3509A9-7527-487F-B689-25A36588DF7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Infrastructure", "api\src\ArduinoThermoHygrometer.Infrastructure\ArduinoThermoHygrometer.Infrastructure.csproj", "{5D3509A9-7527-487F-B689-25A36588DF7F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Test", "test\ArduinoThermoHygrometer.Test\ArduinoThermoHygrometer.Test.csproj", "{A6B05FD3-1418-473F-AB9E-586036D8C963}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Test", "api\test\ArduinoThermoHygrometer.Test\ArduinoThermoHygrometer.Test.csproj", "{A6B05FD3-1418-473F-AB9E-586036D8C963}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Core", "api\src\ArduinoThermoHygrometer.Core\ArduinoThermoHygrometer.Core.csproj", "{AF23A7AB-2B3C-4AC2-9400-D6B7A3208554}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F6BEF056-44CA-4EB3-8B30-A0DFA0D8256F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArduinoThermoHygrometer.Core", "src\ArduinoThermoHygrometer.Core\ArduinoThermoHygrometer.Core.csproj", "{AF23A7AB-2B3C-4AC2-9400-D6B7A3208554}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

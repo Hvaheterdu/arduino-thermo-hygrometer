@@ -35,5 +35,6 @@
     "noUnusedParameters": true,
     "strict": true
   },
-  "include": ["src"]
+  "exclude": ["api", "node_modules"],
+  "include": ["./app/src/"]
 }
