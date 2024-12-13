@@ -18,7 +18,7 @@ export default defineConfig({
         position: "br"
       },
       typescript: {
-        tsconfigPath: "./tsconfig.json",
+        tsconfigPath: "../tsconfig.json",
         root: import.meta.dirname
       },
       eslint: {

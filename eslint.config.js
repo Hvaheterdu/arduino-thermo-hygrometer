@@ -46,7 +46,7 @@ export default [
     files: ["**/*.ts", "**/*.tsx"],
     settings: {
       react: {
-        version: "19.0"
+        version: "18.3"
       }
     },
     plugins: {
@@ -61,15 +61,15 @@ export default [
       "check-file/filename-naming-convention": [
         "error",
         {
-          "**/*.{tsx}": "PASCAL_CASE",
-          "**/*.{ts}": "CAMEL_CASE",
-          "**/*.{d.ts}": "KEBAB_CASE"
+          "./app/**/*.{tsx}": "PASCAL_CASE",
+          "./app/**/*.{ts}": "CAMEL_CASE",
+          "./app/**/*.{d.ts}": "KEBAB_CASE"
         }
       ],
       "check-file/folder-naming-convention": [
         "error",
         {
-          "src/**/": "FLAT_CASE"
+          "./app/src/**/": "FLAT_CASE"
         }
       ],
       "no-console": "error",
