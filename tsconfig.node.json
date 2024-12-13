@@ -3,11 +3,12 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "moduleDetection": "force",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
-    "strict": true
+    "strict": true,
+    "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.node.tsbuildinfo"
   },
-  "exclude": ["api", "node_modules"],
-  "include": ["./app/vite.config.ts"]
+  "exclude": ["api", "node_modules"]
 }

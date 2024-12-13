@@ -1,12 +1,12 @@
 {
   "files": [],
-  "exclude": ["api", "node_modules"],
   "references": [
     {
-      "path": "./tsconfig.app.json"
+      "path": "tsconfig.app.json"
     },
     {
-      "path": "./tsconfig.node.json"
+      "path": "tsconfig.node.json"
     }
-  ]
+  ],
+  "exclude": [".cert", "dist", "node_modules"]
 }

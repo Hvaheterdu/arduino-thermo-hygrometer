@@ -25,14 +25,11 @@ export default [
   {
     languageOptions: {
       parser: tseslint.parser,
-      globals: {
-        ...globals.browser
-      },
+      globals: globals.browser,
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
-        projectService: "./tsconfig.json",
-        project: true,
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
           jsx: true,
@@ -43,10 +40,9 @@ export default [
     linterOptions: {
       reportUnusedDisableDirectives: "error"
     },
-    files: ["**/*.ts", "**/*.tsx"],
     settings: {
       react: {
-        version: "18.3"
+        version: "19.0"
       }
     },
     plugins: {
@@ -61,15 +57,15 @@ export default [
       "check-file/filename-naming-convention": [
         "error",
         {
-          "./app/**/*.{tsx}": "PASCAL_CASE",
-          "./app/**/*.{ts}": "CAMEL_CASE",
-          "./app/**/*.{d.ts}": "KEBAB_CASE"
+          "app/**/*.{tsx}": "PASCAL_CASE",
+          "app/**/*.{ts}": "CAMEL_CASE",
+          "app/**/*.{d.ts}": "KEBAB_CASE"
         }
       ],
       "check-file/folder-naming-convention": [
         "error",
         {
-          "./app/src/**/": "FLAT_CASE"
+          "app/src/**/": "FLAT_CASE"
         }
       ],
       "no-console": "error",
@@ -135,11 +131,11 @@ export default [
   {
     ignores: [
       "api",
-      "api/**/bin",
       "build",
       "coverage",
       "dist",
       "node_modules",
+      "**/*.d.ts",
       "**/*.js",
       "**/*.generated.ts",
       "**/.git",

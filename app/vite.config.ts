@@ -11,6 +11,7 @@ import vitePluginSvgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  root: import.meta.dirname,
   plugins: [
     checker({
       overlay: {
@@ -18,30 +19,32 @@ export default defineConfig({
         position: "br"
       },
       typescript: {
-        tsconfigPath: "../tsconfig.json",
+        tsconfigPath: "./tsconfig.json",
         root: import.meta.dirname
       },
       eslint: {
         useFlatConfig: true,
-        lintCommand: 'eslint "./**/*.{ts,tsx}"'
+        lintCommand: `eslint ${import.meta.dirname}`
       }
     }),
     plugin_default({
-      savePath: ".cert"
+      savePath: "../.cert"
     }),
     viteReact(),
-    vitePluginSvgr()
+    vitePluginSvgr({
+      include: "**/*.svg"
+    })
   ],
   build: {
-    outDir: "../dist",
+    outDir: "dist",
     sourcemap: true,
     reportCompressedSize: true
   },
-  cacheDir: "../node_modules/.vite",
+  cacheDir: "../node_modules/.vite/app",
   server: {
     https: {
-      key: fs.readFileSync(path.resolve(__dirname, "../.cert/dev.pem")),
-      cert: fs.readFileSync(path.resolve(__dirname, "../.cert/cert.pem"))
+      key: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/dev.pem")),
+      cert: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/cert.pem"))
     },
     host: "localhost",
     port: 3001,
@@ -58,6 +61,5 @@ export default defineConfig({
       "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
       "x-content-type-options": "nosniff"
     }
-  },
-  assetsInclude: ["**/*.svg"]
+  }
 });

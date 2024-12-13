@@ -3,6 +3,9 @@
 **/.svn
 **/.hg
 **/node_modules
+**/api
+**/.husky
+**/.cert
 
 # Ignore artifacts
 build
@@ -11,6 +14,6 @@ dist
 
 # Ignore generated file
 **/*.generated.ts
-
-# Ignore package-lock.json
+**/*.d.ts
 package-lock.json
+
