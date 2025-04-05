@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 import { defineConfig } from "vite";
 import { checker } from "vite-plugin-checker";
-import plugin_default from "vite-plugin-mkcert";
+import plugin from "vite-plugin-mkcert";
 import vitePluginSvgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
@@ -27,7 +27,7 @@ export default defineConfig({
         lintCommand: `eslint ${import.meta.dirname}`
       }
     }),
-    plugin_default({
+    plugin({
       savePath: "../arduino-thermo-hygrometer/.cert"
     }),
     viteReact(),
