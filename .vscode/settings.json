@@ -12,6 +12,7 @@
   "files.insertFinalNewline": true,
   "path-intellisense.autoSlashAfterDirectory": true,
   "path-intellisense.absolutePathToWorkspace": true,
+  "prettier.enable": true,
   "[csharp]": {
     "editor.maxTokenizationLineLength": 2500,
     "editor.inlineSuggest.suppressSuggestions": false,
@@ -99,5 +100,7 @@
       "source.unusedImports": "explicit"
     }
   },
-  "prettier.enable": true
+  "dataworkspace.excludedProjects": [
+    "ArduinoThermoHygrometerLocal/ArduinoThermoHygrometerLocal.sqlproj"
+  ]
 }

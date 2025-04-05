@@ -28,7 +28,7 @@ export default defineConfig({
       }
     }),
     plugin_default({
-      savePath: "../.cert"
+      savePath: "../arduino-thermo-hygrometer/.cert"
     }),
     viteReact(),
     vitePluginSvgr({
