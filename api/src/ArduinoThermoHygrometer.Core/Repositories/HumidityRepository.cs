@@ -82,7 +82,7 @@ public class HumidityRepository : IHumidityRepository
     }
 
     /// <summary>
-    /// Deletes a Humidity object by its id asynchronously.
+    /// Deletes a Humidity object by its timestamp asynchronously.
     /// </summary>
     /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the object to delete.</param>
     /// <returns>Returns the <see cref="Humidity"/> object if deleted; otherwise, null.</returns>

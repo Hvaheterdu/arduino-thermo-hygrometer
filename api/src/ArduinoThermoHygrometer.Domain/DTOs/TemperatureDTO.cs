@@ -28,6 +28,6 @@ public record TemperatureDto
     /// <summary
     /// Measured outside temperature.
     /// </summary>
-    /// <example>-35.74</example>
+    /// <example> -35.74 </example>
     public decimal Temp { get; set; }
 }

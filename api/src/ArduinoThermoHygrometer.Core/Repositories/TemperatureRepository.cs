@@ -82,7 +82,7 @@ public class TemperatureRepository : ITemperatureRepository
     }
 
     /// <summary>
-    /// Deletes a Temperature object by its id asynchronously.
+    /// Deletes a Temperature object by its timestamp asynchronously.
     /// </summary>
     /// <param name="timestamp">The <see cref="DateTimeOffset"/> of the object to delete.</param>
     /// <returns>Returns the <see cref="Temperature"/> object if deleted; otherwise, null.</returns>
