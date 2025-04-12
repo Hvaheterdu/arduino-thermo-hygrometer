@@ -51,12 +51,11 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IBatteryService, BatteryService>();
 builder.Services.AddScoped<IHumidityService, HumidityService>();
 builder.Services.AddScoped<ITemperatureService, TemperatureService>();
+builder.Services.AddScoped<IHealthCheckService, HealthCheckServiceWrapper>();
 
 builder.Services.AddScoped<IBatteryRepository, BatteryRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
-
-builder.Services.AddScoped<IHealthCheckService, HealthCheckServiceWrapper>();
 
 // Exception handling service.
 builder.Services.AddExceptionHandler<GlobalExceptionHandlerMiddleware>();
