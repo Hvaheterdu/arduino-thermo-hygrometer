@@ -85,7 +85,7 @@ builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwa
 
 // Swagger/OpenAPI service (https://aka.ms/aspnetcore/swashbuckle).
 builder.Services.AddEndpointsApiExplorer();
-builder.AddSwaggerGen();
+builder.Services.AddSwaggerGen();
 
 // Middleware.
 WebApplication app = builder.Build();
