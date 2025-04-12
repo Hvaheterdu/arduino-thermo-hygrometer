@@ -27,7 +27,7 @@ public class ConfigureSwaggerGenOptions : IConfigureNamedOptions<SwaggerGenOptio
         }
 
         string xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        string xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+        string xmlCommentsFullPath = Path.Join(AppContext.BaseDirectory, xmlCommentsFile);
 
         options.IncludeXmlComments(xmlCommentsFullPath);
     }
