@@ -47,7 +47,7 @@ builder.AddOpenTelemetryLogging();
 // Dependency injection from other projects.
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Dependency injection DTOs, services, repositories, validators and filters.
+// Dependency injection DTOs, services, repositories and validators.
 builder.Services.AddScoped<IBatteryService, BatteryService>();
 builder.Services.AddScoped<IHumidityService, HumidityService>();
 builder.Services.AddScoped<ITemperatureService, TemperatureService>();
