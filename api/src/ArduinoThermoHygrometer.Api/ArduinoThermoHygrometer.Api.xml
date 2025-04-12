@@ -225,6 +225,14 @@
             <returns>The updated WebApplicationBuilder instance.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
         </member>
+        <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.AddSwaggerGen(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
+            <summary>
+            Adds SwaggerGen documentation and authorization to the WebApplicationBuilder.
+            </summary>
+            <param name="builder">The WebApplicationBuilder instance.</param>
+            <returns>The updated WebApplicationBuilder instance.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
+        </member>
         <member name="M:ArduinoThermoHygrometer.Api.Extensions.WebApplicationBuilderExtensions.CreateProblemDetailsForRateLimiter(Microsoft.AspNetCore.RateLimiting.OnRejectedContext,System.String,System.String)">
             <summary>
             Creates a ProblemDetails instance for a rate limiter rejection.

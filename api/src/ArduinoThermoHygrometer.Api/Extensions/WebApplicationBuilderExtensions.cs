@@ -12,6 +12,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -239,6 +240,45 @@ internal static class WebApplicationBuilderExtensions
         //            }));
         //    });
         //}
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds SwaggerGen documentation and authorization to the WebApplicationBuilder.
+    /// </summary>
+    /// <param name="builder">The WebApplicationBuilder instance.</param>
+    /// <returns>The updated WebApplicationBuilder instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="builder"/> is null.</exception>
+    internal static WebApplicationBuilder AddSwaggerGen(this WebApplicationBuilder builder)
+    {
+        ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+
+        builder.Services.AddSwaggerGen(setupAction =>
+        {
+            setupAction.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+            {
+                Description = "The API key required to access the POST and DELETE resources of this API.",
+                Type = SecuritySchemeType.ApiKey,
+                Name = "x-api-key",
+                In = ParameterLocation.Header,
+                Scheme = "ApiKeyScheme"
+            });
+            OpenApiSecurityScheme scheme = new()
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                },
+                In = ParameterLocation.Header
+            };
+            OpenApiSecurityRequirement requirement = new()
+            {
+                { scheme, new List<string>() }
+            };
+            setupAction.AddSecurityRequirement(requirement);
+        });
 
         return builder;
     }

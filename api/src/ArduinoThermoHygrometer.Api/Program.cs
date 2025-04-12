@@ -47,16 +47,15 @@ builder.AddOpenTelemetryLogging();
 // Dependency injection from other projects.
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Dependency injection DTOs, services, repositories and validators.
+// Dependency injection DTOs, services, repositories, validators and filters.
 builder.Services.AddScoped<IBatteryService, BatteryService>();
 builder.Services.AddScoped<IHumidityService, HumidityService>();
 builder.Services.AddScoped<ITemperatureService, TemperatureService>();
+builder.Services.AddScoped<IHealthCheckService, HealthCheckServiceWrapper>();
 
 builder.Services.AddScoped<IBatteryRepository, BatteryRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
-
-builder.Services.AddScoped<IHealthCheckService, HealthCheckServiceWrapper>();
 
 // Exception handling service.
 builder.Services.AddExceptionHandler<GlobalExceptionHandlerMiddleware>();
@@ -86,7 +85,7 @@ builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwa
 
 // Swagger/OpenAPI service (https://aka.ms/aspnetcore/swashbuckle).
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.AddSwaggerGen();
 
 // Middleware.
 WebApplication app = builder.Build();
