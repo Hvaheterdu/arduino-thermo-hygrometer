@@ -1,5 +1,4 @@
-﻿using ArduinoThermoHygrometer.Api.Attributes;
-using ArduinoThermoHygrometer.Core.Services.Contracts;
+﻿using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -94,7 +93,6 @@ public class TemperatureController : ControllerBase
     /// <returns>Returns Created or BadRequest</returns>
     /// <response code="201">Returns <c>Created</c>.</response>
     /// <response code="400">Returns <c>BadRequest</c> if invalid temperatureDto object.</response>
-    [ApiKeyAuthorization]
     [HttpPost("add")]
     [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -120,7 +118,6 @@ public class TemperatureController : ControllerBase
     /// <returns>Returns NoContent or NotFound.</returns>
     /// <response code="204">Returns <c>NoContent</c>.</response>
     /// <response code="404">Returns <c>NotFound</c> if invalid id or the temperature object is not found.</response>
-    [ApiKeyAuthorization]
     [HttpDelete("delete/{id:guid}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -144,7 +141,6 @@ public class TemperatureController : ControllerBase
     /// <returns>Returns NoContent or NotFound</returns>
     /// <response code="204">Returns <c>NoContent</c>.</response>
     /// <response code="404">Returns <c>NotFound</c> if invalid timestamp or the temperature object is not found.</response>
-    [ApiKeyAuthorization]
     [HttpDelete("delete/{timestamp:datetime}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
