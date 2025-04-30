@@ -5,7 +5,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace ArduinoThermoHygrometer.Test.HealthCheck;
+namespace ArduinoThermoHygrometer.Test.Controllers;
 
 [TestFixture]
 public class HealthCheckControllerTests
