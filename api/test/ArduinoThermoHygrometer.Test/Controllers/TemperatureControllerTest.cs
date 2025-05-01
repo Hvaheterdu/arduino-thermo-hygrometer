@@ -5,6 +5,7 @@ using ArduinoThermoHygrometer.Test.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 
 namespace ArduinoThermoHygrometer.Test.Controllers;
@@ -36,14 +37,14 @@ public class TemperatureControllerTest
 
         Assert.That(okObjectResult, Is.Not.Null);
         Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
-        Assert.That(okObjectResult.Value, Is.EqualTo(temperatureDto));
+        Assert.That(okObjectResult!.Value, Is.EqualTo(temperatureDto));
     }
 
     [Test]
     public async Task GetByIdAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundById()
     {
         Guid id = Guid.NewGuid();
-        _temperatureService.GetTemperatureDtoByIdAsync(id).Returns((TemperatureDto?)null);
+        _temperatureService.GetTemperatureDtoByIdAsync(id).ReturnsNull();
 
         ActionResult<TemperatureDto> act = await _temperatureController.GetByIdAsync(id);
 
@@ -51,7 +52,7 @@ public class TemperatureControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -67,14 +68,14 @@ public class TemperatureControllerTest
 
         Assert.That(okObjectResult, Is.Not.Null);
         Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
-        Assert.That(okObjectResult.Value, Is.EqualTo(temperatureDto));
+        Assert.That(okObjectResult!.Value, Is.EqualTo(temperatureDto));
     }
 
     [Test]
     public async Task GetByTimestampAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        _temperatureService.GetTemperatureDtoByTimestampAsync(timestamp).Returns((TemperatureDto?)null);
+        _temperatureService.GetTemperatureDtoByTimestampAsync(timestamp).ReturnsNull();
 
         ActionResult<TemperatureDto> act = await _temperatureController.GetByTimestampAsync(timestamp);
 
@@ -82,7 +83,7 @@ public class TemperatureControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -98,7 +99,7 @@ public class TemperatureControllerTest
 
         Assert.That(okObjectResult, Is.Not.Null);
         Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
-        Assert.That(okObjectResult.Value, Is.EqualTo(temperatureDto));
+        Assert.That(okObjectResult!.Value, Is.EqualTo(temperatureDto));
     }
 
     [Test]
@@ -113,7 +114,7 @@ public class TemperatureControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -128,7 +129,7 @@ public class TemperatureControllerTest
 
         Assert.That(createdAtActionResult, Is.Not.Null);
         Assert.That(createdAtActionResult!.StatusCode, Is.EqualTo(StatusCodes.Status201Created));
-        Assert.That(createdAtActionResult.Value, Is.EqualTo(temperatureDto));
+        Assert.That(createdAtActionResult!.Value, Is.EqualTo(temperatureDto));
     }
 
     [Test]
@@ -143,7 +144,7 @@ public class TemperatureControllerTest
 
         Assert.That(badRequestResult, Is.Not.Null);
         Assert.That(badRequestResult!.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
-        Assert.That(badRequestResult.Value, Is.EqualTo(temperatureDto));
+        Assert.That(badRequestResult!.Value, Is.EqualTo(temperatureDto));
     }
 
     [Test]
@@ -165,7 +166,7 @@ public class TemperatureControllerTest
     public async Task DeleteByIdAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundById()
     {
         Guid id = Guid.NewGuid();
-        _temperatureService.DeleteTemperatureDtoByIdAsync(id).Returns((TemperatureDto?)null);
+        _temperatureService.DeleteTemperatureDtoByIdAsync(id).ReturnsNull();
 
         ActionResult<TemperatureDto> act = await _temperatureController.DeleteByIdAsync(id);
 
@@ -173,7 +174,7 @@ public class TemperatureControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -195,7 +196,7 @@ public class TemperatureControllerTest
     public async Task DeleteByTimestampAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        _temperatureService.DeleteTemperatureDtoByTimestampAsync(timestamp).Returns((TemperatureDto?)null);
+        _temperatureService.DeleteTemperatureDtoByTimestampAsync(timestamp).ReturnsNull();
 
         ActionResult<TemperatureDto> act = await _temperatureController.DeleteByTimestampAsync(timestamp);
 
@@ -203,6 +204,6 @@ public class TemperatureControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 }

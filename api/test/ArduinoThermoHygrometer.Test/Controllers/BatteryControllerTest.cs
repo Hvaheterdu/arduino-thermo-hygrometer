@@ -5,6 +5,7 @@ using ArduinoThermoHygrometer.Test.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 
 namespace ArduinoThermoHygrometer.Test.Controllers;
@@ -39,7 +40,7 @@ public class BatteryControllerTest
 
         Assert.That(okObjectResult, Is.Not.Null);
         Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
-        Assert.That(okObjectResult.Value, Is.EqualTo(batteryDto));
+        Assert.That(okObjectResult!.Value, Is.EqualTo(batteryDto));
     }
 
     [Test]
@@ -47,7 +48,7 @@ public class BatteryControllerTest
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        _batteryService.GetBatteryDtoByIdAsync(id).Returns((BatteryDto?)null);
+        _batteryService.GetBatteryDtoByIdAsync(id).ReturnsNull();
 
         // Act
         ActionResult<BatteryDto> act = await _batteryController.GetByIdAsync(id);
@@ -57,7 +58,7 @@ public class BatteryControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -76,7 +77,7 @@ public class BatteryControllerTest
 
         Assert.That(okObjectResult, Is.Not.Null);
         Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
-        Assert.That(okObjectResult.Value, Is.EqualTo(batteryDto));
+        Assert.That(okObjectResult!.Value, Is.EqualTo(batteryDto));
     }
 
     [Test]
@@ -84,7 +85,7 @@ public class BatteryControllerTest
     {
         // Arrange
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        _batteryService.GetBatteryDtoByTimestampAsync(timestamp).Returns((BatteryDto?)null);
+        _batteryService.GetBatteryDtoByTimestampAsync(timestamp).ReturnsNull();
 
         // Act
         ActionResult<BatteryDto> act = await _batteryController.GetByTimestampAsync(timestamp);
@@ -94,7 +95,7 @@ public class BatteryControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -113,7 +114,7 @@ public class BatteryControllerTest
 
         Assert.That(okObjectResult, Is.Not.Null);
         Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
-        Assert.That(okObjectResult.Value, Is.EqualTo(batteryDto));
+        Assert.That(okObjectResult!.Value, Is.EqualTo(batteryDto));
     }
 
     [Test]
@@ -121,7 +122,7 @@ public class BatteryControllerTest
     {
         // Arrange
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
-        _batteryService.GetBatteryDtosByDateAsync(dateTimeOffset).Returns((IEnumerable<BatteryDto>?)null);
+        _batteryService.GetBatteryDtosByDateAsync(dateTimeOffset).ReturnsNull();
 
         // Act
         ActionResult<IEnumerable<BatteryDto>> act = await _batteryController.GetByDateAsync(dateTimeOffset);
@@ -131,7 +132,7 @@ public class BatteryControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -149,7 +150,7 @@ public class BatteryControllerTest
 
         Assert.That(createdAtActionResult, Is.Not.Null);
         Assert.That(createdAtActionResult!.StatusCode, Is.EqualTo(StatusCodes.Status201Created));
-        Assert.That(createdAtActionResult.Value, Is.EqualTo(batteryDto));
+        Assert.That(createdAtActionResult!.Value, Is.EqualTo(batteryDto));
     }
 
     [Test]
@@ -167,7 +168,7 @@ public class BatteryControllerTest
 
         Assert.That(badRequestResult, Is.Not.Null);
         Assert.That(badRequestResult!.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
-        Assert.That(badRequestResult.Value, Is.EqualTo(batteryDto));
+        Assert.That(badRequestResult!.Value, Is.EqualTo(batteryDto));
     }
 
     [Test]
@@ -193,7 +194,7 @@ public class BatteryControllerTest
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        _batteryService.DeleteBatteryDtoByIdAsync(id).Returns((BatteryDto?)null);
+        _batteryService.DeleteBatteryDtoByIdAsync(id).ReturnsNull();
 
         // Act
         ActionResult<BatteryDto> act = await _batteryController.DeleteByIdAsync(id);
@@ -203,7 +204,7 @@ public class BatteryControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -229,7 +230,7 @@ public class BatteryControllerTest
     {
         // Arrange
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        _batteryService.DeleteBatteryDtoByTimestampAsync(timestamp).Returns((BatteryDto?)null);
+        _batteryService.DeleteBatteryDtoByTimestampAsync(timestamp).ReturnsNull();
 
         // Act
         ActionResult<BatteryDto> act = await _batteryController.DeleteByTimestampAsync(timestamp);
@@ -239,6 +240,6 @@ public class BatteryControllerTest
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
         Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 }
