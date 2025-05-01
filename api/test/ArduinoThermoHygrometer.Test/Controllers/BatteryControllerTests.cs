@@ -4,7 +4,6 @@ using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Test.Data;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 
 namespace ArduinoThermoHygrometer.Test.Controllers;

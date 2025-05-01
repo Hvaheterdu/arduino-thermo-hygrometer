@@ -103,7 +103,9 @@ public class BatteryService : IBatteryService
         await _batteryRepository.CreateBatteryAsync(battery);
         await _batteryRepository.SaveChangesAsync();
 
-        return batteryDto;
+        BatteryDto? createdBatteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
+
+        return createdBatteryDto;
     }
 
     /// <summary>

@@ -103,7 +103,9 @@ public class TemperatureService : ITemperatureService
         await _temperatureRepository.CreateTemperatureAsync(temperature);
         await _temperatureRepository.SaveChangesAsync();
 
-        return temperatureDto;
+        TemperatureDto createdTemperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
+
+        return createdTemperatureDto;
     }
 
     /// <summary>

@@ -103,7 +103,9 @@ public class HumidityService : IHumidityService
         await _humidityRepository.CreateHumidityAsync(humidity);
         await _humidityRepository.SaveChangesAsync();
 
-        return humidityDto;
+        HumidityDto createdHumidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
+
+        return createdHumidityDto;
     }
 
     /// <summary>
