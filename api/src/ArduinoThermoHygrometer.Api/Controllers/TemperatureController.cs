@@ -99,14 +99,14 @@ public class TemperatureController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<TemperatureDto>> CreateAsync([FromBody] TemperatureDto temperatureDto)
     {
-        TemperatureDto temperatureDtoCreated = await _temperatureService.CreateTemperatureDtoAsync(temperatureDto);
-
         if (!ModelState.IsValid)
         {
             return BadRequest(temperatureDto);
         }
 
-        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}");
+        TemperatureDto temperatureDtoCreated = await _temperatureService.CreateTemperatureDtoAsync(temperatureDto);
+
+        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}/{temperatureDtoCreated.Id}");
 
         return Created(uri, temperatureDtoCreated);
     }

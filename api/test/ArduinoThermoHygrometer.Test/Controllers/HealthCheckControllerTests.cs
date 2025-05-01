@@ -8,13 +8,14 @@ using NUnit.Framework;
 namespace ArduinoThermoHygrometer.Test.Controllers;
 
 [TestFixture]
+[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 public class HealthCheckControllerTests
 {
     private IHealthCheckService _healthCheckService = null!;
     private HealthCheckController _healthCheckController = null!;
 
     [SetUp]
-    public void Setup()
+    public void Init()
     {
         _healthCheckService = Substitute.For<IHealthCheckService>();
         _healthCheckController = new HealthCheckController(_healthCheckService);
@@ -73,6 +74,7 @@ public class HealthCheckControllerTests
         OkObjectResult? act = await _healthCheckController.GetHealthCheckReportAsync() as OkObjectResult;
 
         // Assert
+        Assert.That(act, Is.Not.Null);
         Assert.That(act?.Value, Is.EqualTo(healthyReport));
     }
 
@@ -87,6 +89,7 @@ public class HealthCheckControllerTests
         ObjectResult? act = await _healthCheckController.GetHealthCheckReportAsync() as ObjectResult;
 
         // Assert
+        Assert.That(act, Is.Not.Null);
         Assert.That(act?.Value, Is.EqualTo(degradedReport));
     }
 
@@ -101,6 +104,7 @@ public class HealthCheckControllerTests
         ObjectResult? act = await _healthCheckController.GetHealthCheckReportAsync() as ObjectResult;
 
         // Assert
+        Assert.That(act, Is.Not.Null);
         Assert.That(act?.Value, Is.EqualTo(unhealthyReport));
     }
 }

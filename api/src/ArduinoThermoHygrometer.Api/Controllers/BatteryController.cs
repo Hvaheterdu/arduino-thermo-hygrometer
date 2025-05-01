@@ -99,14 +99,14 @@ public class BatteryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BatteryDto>> CreateAsync([FromBody] BatteryDto batteryDto)
     {
-        BatteryDto batteryDtoCreated = await _batteryService.CreateBatteryDtoAsync(batteryDto);
-
         if (!ModelState.IsValid)
         {
             return BadRequest(batteryDto);
         }
 
-        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}");
+        BatteryDto batteryDtoCreated = await _batteryService.CreateBatteryDtoAsync(batteryDto);
+
+        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}/{batteryDtoCreated.Id}");
 
         return Created(uri, batteryDtoCreated);
     }
