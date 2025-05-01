@@ -1,5 +1,6 @@
 ﻿using ArduinoThermoHygrometer.Api.Controllers;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NSubstitute;
@@ -32,7 +33,11 @@ public class HealthCheckControllerTests
         IActionResult act = await _healthCheckController.GetHealthCheckReportAsync();
 
         // Assert
-        Assert.That(act, Is.TypeOf<OkObjectResult>());
+        OkObjectResult? okObjectResult = act as OkObjectResult;
+
+        Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
+        Assert.That(okObjectResult, Is.Not.Null);
+        Assert.That(okObjectResult.Value, Is.EqualTo(healthyReport));
     }
 
     [Test]
@@ -46,7 +51,11 @@ public class HealthCheckControllerTests
         IActionResult act = await _healthCheckController.GetHealthCheckReportAsync();
 
         // Assert
-        Assert.That(act, Is.TypeOf<ObjectResult>());
+        ObjectResult? objectResult = act as ObjectResult;
+
+        Assert.That(objectResult!.StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
+        Assert.That(objectResult, Is.Not.Null);
+        Assert.That(objectResult.Value, Is.EqualTo(degradedReport));
     }
 
     [Test]
@@ -60,51 +69,10 @@ public class HealthCheckControllerTests
         IActionResult act = await _healthCheckController.GetHealthCheckReportAsync();
 
         // Assert
-        Assert.That(act, Is.TypeOf<ObjectResult>());
-    }
+        ObjectResult? objectResult = act as ObjectResult;
 
-    [Test]
-    public async Task GetHealthCheckReportAsync_Should_ReturnHealthReportWithHealthStatusOfHealthy_When_HealthStatusIsHealthy()
-    {
-        // Arrange
-        HealthReport healthyReport = new(new Dictionary<string, HealthReportEntry>(), HealthStatus.Healthy, TimeSpan.Zero);
-        _healthCheckService.GetHealthCheckReportAsync().Returns(healthyReport);
-
-        // Act
-        OkObjectResult? act = await _healthCheckController.GetHealthCheckReportAsync() as OkObjectResult;
-
-        // Assert
-        Assert.That(act, Is.Not.Null);
-        Assert.That(act?.Value, Is.EqualTo(healthyReport));
-    }
-
-    [Test]
-    public async Task GetHealthCheckReportAsync_Should_ReturnHealthReportWithHealthStatusOfDegraded_When_HealthStatusIsDegraded()
-    {
-        // Arrange
-        HealthReport degradedReport = new(new Dictionary<string, HealthReportEntry>(), HealthStatus.Degraded, TimeSpan.Zero);
-        _healthCheckService.GetHealthCheckReportAsync().Returns(degradedReport);
-
-        // Act
-        ObjectResult? act = await _healthCheckController.GetHealthCheckReportAsync() as ObjectResult;
-
-        // Assert
-        Assert.That(act, Is.Not.Null);
-        Assert.That(act?.Value, Is.EqualTo(degradedReport));
-    }
-
-    [Test]
-    public async Task GetHealthCheckReportAsync_Should_ReturnHealthReportWithHealthStatusOfUnhealthy_When_HealthStatusIsUnhealthy()
-    {
-        // Arrange
-        HealthReport unhealthyReport = new(new Dictionary<string, HealthReportEntry>(), HealthStatus.Unhealthy, TimeSpan.Zero);
-        _healthCheckService.GetHealthCheckReportAsync().Returns(unhealthyReport);
-
-        // Act
-        ObjectResult? act = await _healthCheckController.GetHealthCheckReportAsync() as ObjectResult;
-
-        // Assert
-        Assert.That(act, Is.Not.Null);
-        Assert.That(act?.Value, Is.EqualTo(unhealthyReport));
+        Assert.That(objectResult!.StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
+        Assert.That(objectResult, Is.Not.Null);
+        Assert.That(objectResult.Value, Is.EqualTo(unhealthyReport));
     }
 }

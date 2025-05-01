@@ -2,6 +2,7 @@
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Test.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NUnit.Framework;
@@ -37,9 +38,9 @@ public class BatteryControllerTests
         // Assert
         OkObjectResult? okObjectResult = act.Result as OkObjectResult;
 
-        Assert.That(act.Result, Is.TypeOf<OkObjectResult>());
+        Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
         Assert.That(okObjectResult, Is.Not.Null);
-        Assert.That(okObjectResult.Value, Is.EqualTo(batteryDto));
+        Assert.That(okObjectResult!.Value, Is.EqualTo(batteryDto));
     }
 
     [Test]
@@ -55,9 +56,9 @@ public class BatteryControllerTests
         // Assert
         NotFoundObjectResult? notFoundObjectResult = act.Result as NotFoundObjectResult;
 
-        Assert.That(act.Result, Is.TypeOf<NotFoundObjectResult>());
+        Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         Assert.That(notFoundObjectResult, Is.Not.Null);
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -74,9 +75,9 @@ public class BatteryControllerTests
         // Assert
         OkObjectResult? okObjectResult = act.Result as OkObjectResult;
 
-        Assert.That(act.Result, Is.TypeOf<OkObjectResult>());
+        Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
         Assert.That(okObjectResult, Is.Not.Null);
-        Assert.That(okObjectResult.Value, Is.EqualTo(batteryDto));
+        Assert.That(okObjectResult!.Value, Is.EqualTo(batteryDto));
     }
 
     [Test]
@@ -92,9 +93,9 @@ public class BatteryControllerTests
         // Assert
         NotFoundObjectResult? notFoundObjectResult = act.Result as NotFoundObjectResult;
 
-        Assert.That(act.Result, Is.TypeOf<NotFoundObjectResult>());
+        Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         Assert.That(notFoundObjectResult, Is.Not.Null);
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 
     [Test]
@@ -111,9 +112,9 @@ public class BatteryControllerTests
         // Assert
         OkObjectResult? okObjectResult = act.Result as OkObjectResult;
 
-        Assert.That(act.Result, Is.TypeOf<OkObjectResult>());
+        Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
         Assert.That(okObjectResult, Is.Not.Null);
-        Assert.That(okObjectResult.Value, Is.EqualTo(batteryDto));
+        Assert.That(okObjectResult!.Value, Is.EqualTo(batteryDto));
     }
 
     [Test]
@@ -129,8 +130,8 @@ public class BatteryControllerTests
         // Assert
         NotFoundObjectResult? notFoundObjectResult = act.Result as NotFoundObjectResult;
 
-        Assert.That(act.Result, Is.TypeOf<NotFoundObjectResult>());
+        Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         Assert.That(notFoundObjectResult, Is.Not.Null);
-        Assert.That(notFoundObjectResult.Value, Is.Null);
+        Assert.That(notFoundObjectResult!.Value, Is.Null);
     }
 }
