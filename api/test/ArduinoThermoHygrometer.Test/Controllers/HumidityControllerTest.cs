@@ -35,7 +35,7 @@ public class HumidityControllerTest
         OkObjectResult? okObjectResult = act.Result as OkObjectResult;
 
         Assert.That(okObjectResult, Is.Not.Null);
-        Assert.That(okObjectResult.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
+        Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
         Assert.That(okObjectResult.Value, Is.EqualTo(humidityDto));
     }
 
@@ -50,7 +50,7 @@ public class HumidityControllerTest
         NotFoundObjectResult? notFoundObjectResult = act.Result as NotFoundObjectResult;
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
-        Assert.That(notFoundObjectResult.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
+        Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         Assert.That(notFoundObjectResult.Value, Is.Null);
     }
 
@@ -66,7 +66,7 @@ public class HumidityControllerTest
         OkObjectResult? okObjectResult = act.Result as OkObjectResult;
 
         Assert.That(okObjectResult, Is.Not.Null);
-        Assert.That(okObjectResult.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
+        Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
         Assert.That(okObjectResult.Value, Is.EqualTo(humidityDto));
     }
 
@@ -81,7 +81,7 @@ public class HumidityControllerTest
         NotFoundObjectResult? notFoundObjectResult = act.Result as NotFoundObjectResult;
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
-        Assert.That(notFoundObjectResult.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
+        Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         Assert.That(notFoundObjectResult.Value, Is.Null);
     }
 
@@ -97,7 +97,7 @@ public class HumidityControllerTest
         OkObjectResult? okObjectResult = act.Result as OkObjectResult;
 
         Assert.That(okObjectResult, Is.Not.Null);
-        Assert.That(okObjectResult.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
+        Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
         Assert.That(okObjectResult.Value, Is.EqualTo(humidityDto));
     }
 
@@ -112,7 +112,7 @@ public class HumidityControllerTest
         NotFoundObjectResult? notFoundObjectResult = act.Result as NotFoundObjectResult;
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
-        Assert.That(notFoundObjectResult.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
+        Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         Assert.That(notFoundObjectResult.Value, Is.Null);
     }
 
@@ -127,7 +127,7 @@ public class HumidityControllerTest
         CreatedAtActionResult? createdAtActionResult = act.Result as CreatedAtActionResult;
 
         Assert.That(createdAtActionResult, Is.Not.Null);
-        Assert.That(createdAtActionResult.StatusCode, Is.EqualTo(StatusCodes.Status201Created));
+        Assert.That(createdAtActionResult!.StatusCode, Is.EqualTo(StatusCodes.Status201Created));
         Assert.That(createdAtActionResult.Value, Is.EqualTo(humidityDto));
     }
 
@@ -142,7 +142,7 @@ public class HumidityControllerTest
         BadRequestObjectResult? badRequestResult = act.Result as BadRequestObjectResult;
 
         Assert.That(badRequestResult, Is.Not.Null);
-        Assert.That(badRequestResult.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
+        Assert.That(badRequestResult!.StatusCode, Is.EqualTo(StatusCodes.Status400BadRequest));
         Assert.That(badRequestResult.Value, Is.EqualTo(humidityDto));
     }
 
@@ -158,7 +158,7 @@ public class HumidityControllerTest
         NoContentResult? noContentResult = act.Result as NoContentResult;
 
         Assert.That(noContentResult, Is.Not.Null);
-        Assert.That(noContentResult.StatusCode, Is.EqualTo(StatusCodes.Status204NoContent));
+        Assert.That(noContentResult!.StatusCode, Is.EqualTo(StatusCodes.Status204NoContent));
     }
 
     [Test]
@@ -172,7 +172,7 @@ public class HumidityControllerTest
         NotFoundObjectResult? notFoundObjectResult = act.Result as NotFoundObjectResult;
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
-        Assert.That(notFoundObjectResult.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
+        Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         Assert.That(notFoundObjectResult.Value, Is.Null);
     }
 
@@ -188,7 +188,7 @@ public class HumidityControllerTest
         NoContentResult? noContentResult = act.Result as NoContentResult;
 
         Assert.That(noContentResult, Is.Not.Null);
-        Assert.That(noContentResult.StatusCode, Is.EqualTo(StatusCodes.Status204NoContent));
+        Assert.That(noContentResult!.StatusCode, Is.EqualTo(StatusCodes.Status204NoContent));
     }
 
     [Test]
@@ -202,7 +202,7 @@ public class HumidityControllerTest
         NotFoundObjectResult? notFoundObjectResult = act.Result as NotFoundObjectResult;
 
         Assert.That(notFoundObjectResult, Is.Not.Null);
-        Assert.That(notFoundObjectResult.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
+        Assert.That(notFoundObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
         Assert.That(notFoundObjectResult.Value, Is.Null);
     }
 }

@@ -36,7 +36,7 @@ public class HealthCheckControllerTest
         OkObjectResult? okObjectResult = act as OkObjectResult;
 
         Assert.That(okObjectResult, Is.Not.Null);
-        Assert.That(okObjectResult.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
+        Assert.That(okObjectResult!.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
         Assert.That(okObjectResult.Value, Is.EqualTo(healthyReport));
     }
 
@@ -54,7 +54,7 @@ public class HealthCheckControllerTest
         ObjectResult? objectResult = act as ObjectResult;
 
         Assert.That(objectResult, Is.Not.Null);
-        Assert.That(objectResult.StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
+        Assert.That(objectResult!.StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
         Assert.That(objectResult.Value, Is.EqualTo(degradedReport));
     }
 
@@ -72,7 +72,7 @@ public class HealthCheckControllerTest
         ObjectResult? objectResult = act as ObjectResult;
 
         Assert.That(objectResult, Is.Not.Null);
-        Assert.That(objectResult.StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
+        Assert.That(objectResult!.StatusCode, Is.EqualTo(StatusCodes.Status500InternalServerError));
         Assert.That(objectResult.Value, Is.EqualTo(unhealthyReport));
     }
 }
