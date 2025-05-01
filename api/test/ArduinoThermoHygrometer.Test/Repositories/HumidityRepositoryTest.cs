@@ -1,5 +1,5 @@
 ﻿namespace ArduinoThermoHygrometer.Test.Repositories;
 
-public class TemperatureRepositoryTests
+public class HumidityRepositoryTest
 {
 }

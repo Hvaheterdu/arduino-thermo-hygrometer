@@ -10,7 +10,7 @@ namespace ArduinoThermoHygrometer.Test.Controllers;
 
 [TestFixture]
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
-public class HealthCheckControllerTests
+public class HealthCheckControllerTest
 {
     private IHealthCheckService _healthCheckService = null!;
     private HealthCheckController _healthCheckController = null!;

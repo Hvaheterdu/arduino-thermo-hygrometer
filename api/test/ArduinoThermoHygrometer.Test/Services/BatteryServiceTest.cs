@@ -1,5 +1,5 @@
 ﻿namespace ArduinoThermoHygrometer.Test.Services;
 
-public class HumidityServiceTests
+public class BatteryServiceTest
 {
 }
