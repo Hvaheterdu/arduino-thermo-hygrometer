@@ -16,7 +16,6 @@ public static class HumidityMapper
 
         Humidity humidity = new(humidityDto.AirHumidity)
         {
-            Id = humidityDto.Id,
             AirHumidity = humidityDto.AirHumidity
         };
 

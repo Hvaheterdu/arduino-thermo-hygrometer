@@ -99,14 +99,14 @@ public class HumidityController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<HumidityDto>> CreateAsync([FromBody] HumidityDto humidityDto)
     {
-        HumidityDto humidityDtoCreated = await _humidityService.CreateHumidityDtoAsync(humidityDto);
-
         if (!ModelState.IsValid)
         {
             return BadRequest(humidityDto);
         }
 
-        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}");
+        HumidityDto humidityDtoCreated = await _humidityService.CreateHumidityDtoAsync(humidityDto);
+
+        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}/{humidityDtoCreated.Id}");
 
         return Created(uri, humidityDtoCreated);
     }
