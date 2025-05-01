@@ -106,7 +106,7 @@ public class TemperatureControllerTest
     public async Task GetByDateAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundByDate()
     {
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
-        _temperatureService.GetTemperatureDtosByDateAsync(dateTimeOffset).Returns((IEnumerable<TemperatureDto>?)null);
+        _temperatureService.GetTemperatureDtosByDateAsync(dateTimeOffset).ReturnsNull();
 
         ActionResult<IEnumerable<TemperatureDto>> act = await _temperatureController.GetByDateAsync(dateTimeOffset);
 

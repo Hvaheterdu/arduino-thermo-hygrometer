@@ -106,7 +106,7 @@ public class HumidityControllerTest
     public async Task GetByDateAsync_Should_Return404NotFound_When_HumidityDtoNotFoundByDate()
     {
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
-        _humidityService.GetHumidityDtosByDateAsync(dateTimeOffset).Returns((IEnumerable<HumidityDto>?)null);
+        _humidityService.GetHumidityDtosByDateAsync(dateTimeOffset).ReturnsNull();
 
         ActionResult<IEnumerable<HumidityDto>> act = await _humidityController.GetByDateAsync(dateTimeOffset);
 
