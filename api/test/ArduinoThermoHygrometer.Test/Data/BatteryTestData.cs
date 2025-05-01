@@ -33,4 +33,18 @@ public static class BatteryTestData
             BatteryStatus = 89
         }
     };
+
+    public static BatteryDto CreateValidBatteryDtoTestObject() => new()
+    {
+        Id = Guid.NewGuid(),
+        RegisteredAt = DateTimeOffset.Now,
+        BatteryStatus = 85
+    };
+
+    public static BatteryDto CreateInvalidBatteryDtoTestObject() => new()
+    {
+        Id = Guid.NewGuid(),
+        RegisteredAt = DateTimeOffset.Now,
+        BatteryStatus = -10
+    };
 }
