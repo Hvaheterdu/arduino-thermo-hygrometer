@@ -16,6 +16,8 @@ public static class BatteryMapper
 
         Battery battery = new(batteryDto.BatteryStatus)
         {
+            Id = batteryDto.Id,
+            RegisteredAt = batteryDto.RegisteredAt,
             BatteryStatus = batteryDto.BatteryStatus
         };
 

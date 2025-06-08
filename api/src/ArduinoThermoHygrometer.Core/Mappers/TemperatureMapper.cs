@@ -16,6 +16,8 @@ public static class TemperatureMapper
 
         Temperature temperature = new(temperatureDto.Temp)
         {
+            Id = temperatureDto.Id,
+            RegisteredAt = temperatureDto.RegisteredAt,
             Temp = temperatureDto.Temp,
         };
 
