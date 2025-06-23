@@ -7,7 +7,7 @@ using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
-namespace ArduinoThermoHygrometer.Api.Services;
+namespace ArduinoThermoHygrometer.Core.Services;
 
 public class BatteryService : IBatteryService
 {
@@ -43,6 +43,10 @@ public class BatteryService : IBatteryService
 
         BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
+        LoggingExtensions.LogDtoObjectToReturn(
+            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
+        );
+
         return batteryDto;
     }
 
@@ -62,6 +66,10 @@ public class BatteryService : IBatteryService
         }
 
         BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
+
+        LoggingExtensions.LogDtoObjectToReturn(
+            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
+        );
 
         return batteryDto;
     }
@@ -85,7 +93,12 @@ public class BatteryService : IBatteryService
         List<BatteryDto> batteryDtos = new();
         foreach (Battery battery in batteries)
         {
-            batteryDtos.Add(BatteryMapper.GetBatteryDtoFromBattery(battery));
+            BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
+            batteryDtos.Add(batteryDto);
+
+            LoggingExtensions.LogDtoObjectToReturn(
+                _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
+            );
         }
 
         return batteryDtos;
@@ -104,6 +117,10 @@ public class BatteryService : IBatteryService
         await _batteryRepository.SaveChangesAsync();
 
         BatteryDto? createdBatteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
+
+        LoggingExtensions.LogDtoObjectToCreate(
+            _logger, nameof(BatteryDto), createdBatteryDto.Id, createdBatteryDto.RegisteredAt.Date.ToShortDateString()
+        );
 
         return createdBatteryDto;
     }
@@ -133,6 +150,10 @@ public class BatteryService : IBatteryService
 
         await _batteryRepository.SaveChangesAsync();
 
+        LoggingExtensions.LogDtoObjectToDelete(
+            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
+        );
+
         return batteryDto;
     }
 
@@ -154,6 +175,10 @@ public class BatteryService : IBatteryService
         BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
         await _batteryRepository.SaveChangesAsync();
+
+        LoggingExtensions.LogDtoObjectToDelete(
+            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
+        );
 
         return batteryDto;
     }

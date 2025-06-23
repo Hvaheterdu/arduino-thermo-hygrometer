@@ -33,9 +33,23 @@ public static partial class LoggingExtensions
         Message = "{ObjectIsNullOrEmpty} for {DateTimeOffset} not found.")]
     public static partial void LogIsNullOrEmpty(this ILogger logger, string? objectIsNullOrEmpty, string dateTimeOffset);
 
+    // Returned object
+
+    [LoggerMessage(EventId = 20, EventName = "LogDtoObjectToReturn", Level = LogLevel.Information,
+        Message = "{LogDtoObjectToReturn} with Id={Id} and RegisteredAt={DateTimeOffset} is found.")]
+    public static partial void LogDtoObjectToReturn(this ILogger logger, string? LogDtoObjectToReturn, Guid? id, string dateTimeOffset);
+
+    [LoggerMessage(EventId = 21, EventName = "LogDtoObjectToCreate", Level = LogLevel.Information,
+        Message = "{LogDtoObjectToCreate} with Id={Id} and RegisteredAt={DateTimeOffset} is created.")]
+    public static partial void LogDtoObjectToCreate(this ILogger logger, string? LogDtoObjectToCreate, Guid? id, string dateTimeOffset);
+
+    [LoggerMessage(EventId = 22, EventName = "LogDtoObjectToDelete", Level = LogLevel.Information,
+        Message = "{LogDtoObjectToDelete} with Id={Id} and RegisteredAt={DateTimeOffset} is deleted.")]
+    public static partial void LogDtoObjectToDelete(this ILogger logger, string? LogDtoObjectToDelete, Guid? id, string dateTimeOffset);
+
     // Healthcheck service.
 
-    [LoggerMessage(EventId = 20, EventName = "HealthCheckStatusDegradedOrUnhealthy", Level = LogLevel.Error,
+    [LoggerMessage(EventId = 30, EventName = "HealthCheckStatusDegradedOrUnhealthy", Level = LogLevel.Error,
         Message = "Healthcheck report status is {Status}.")]
     public static partial void LogHealthCheckStatusDegradedOrUnhealthy(this ILogger logger, HealthStatus status);
 }

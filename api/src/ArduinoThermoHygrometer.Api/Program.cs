@@ -2,7 +2,6 @@ using System.Text.Json.Serialization;
 using ArduinoThermoHygrometer.Api.Extensions;
 using ArduinoThermoHygrometer.Api.Middleware;
 using ArduinoThermoHygrometer.Api.OpenApi;
-using ArduinoThermoHygrometer.Api.Services;
 using ArduinoThermoHygrometer.Core.Repositories;
 using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services;

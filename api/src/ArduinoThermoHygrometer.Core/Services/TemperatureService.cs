@@ -7,7 +7,7 @@ using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
-namespace ArduinoThermoHygrometer.Api.Services;
+namespace ArduinoThermoHygrometer.Core.Services;
 
 public class TemperatureService : ITemperatureService
 {
@@ -43,6 +43,10 @@ public class TemperatureService : ITemperatureService
 
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
+        LoggingExtensions.LogDtoObjectToReturn(
+            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+        );
+
         return temperatureDto;
     }
 
@@ -62,6 +66,10 @@ public class TemperatureService : ITemperatureService
         }
 
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
+
+        LoggingExtensions.LogDtoObjectToReturn(
+            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+        );
 
         return temperatureDto;
     }
@@ -85,7 +93,12 @@ public class TemperatureService : ITemperatureService
         List<TemperatureDto> temperatureDtos = new();
         foreach (Temperature temperature in temperatures)
         {
-            temperatureDtos.Add(TemperatureMapper.GetTemperatureDtoFromTemperature(temperature));
+            TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
+            temperatureDtos.Add(temperatureDto);
+
+            LoggingExtensions.LogDtoObjectToReturn(
+                _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+            );
         }
 
         return temperatureDtos;
@@ -104,6 +117,10 @@ public class TemperatureService : ITemperatureService
         await _temperatureRepository.SaveChangesAsync();
 
         TemperatureDto createdTemperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
+
+        LoggingExtensions.LogDtoObjectToCreate(
+            _logger, nameof(BatteryDto), createdTemperatureDto.Id, createdTemperatureDto.RegisteredAt.Date.ToShortDateString()
+        );
 
         return createdTemperatureDto;
     }
@@ -133,6 +150,10 @@ public class TemperatureService : ITemperatureService
 
         await _temperatureRepository.SaveChangesAsync();
 
+        LoggingExtensions.LogDtoObjectToDelete(
+            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+        );
+
         return temperatureDto;
     }
 
@@ -154,6 +175,10 @@ public class TemperatureService : ITemperatureService
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
         await _temperatureRepository.SaveChangesAsync();
+
+        LoggingExtensions.LogDtoObjectToDelete(
+            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+        );
 
         return temperatureDto;
     }

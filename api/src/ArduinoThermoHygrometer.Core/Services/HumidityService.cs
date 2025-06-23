@@ -7,7 +7,7 @@ using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
-namespace ArduinoThermoHygrometer.Api.Services;
+namespace ArduinoThermoHygrometer.Core.Services;
 
 public class HumidityService : IHumidityService
 {
@@ -43,6 +43,10 @@ public class HumidityService : IHumidityService
 
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
+        LoggingExtensions.LogDtoObjectToReturn(
+            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+        );
+
         return humidityDto;
     }
 
@@ -62,6 +66,10 @@ public class HumidityService : IHumidityService
         }
 
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
+
+        LoggingExtensions.LogDtoObjectToReturn(
+            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+        );
 
         return humidityDto;
     }
@@ -85,7 +93,12 @@ public class HumidityService : IHumidityService
         List<HumidityDto> humidityDtos = new();
         foreach (Humidity humidity in humidities)
         {
-            humidityDtos.Add(HumidityMapper.GetHumidityDtoFromHumidity(humidity));
+            HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
+            humidityDtos.Add(humidityDto);
+
+            LoggingExtensions.LogDtoObjectToReturn(
+                _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+            );
         }
 
         return humidityDtos;
@@ -104,6 +117,10 @@ public class HumidityService : IHumidityService
         await _humidityRepository.SaveChangesAsync();
 
         HumidityDto createdHumidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
+
+        LoggingExtensions.LogDtoObjectToCreate(
+            _logger, nameof(BatteryDto), createdHumidityDto.Id, createdHumidityDto.RegisteredAt.Date.ToShortDateString()
+        );
 
         return createdHumidityDto;
     }
@@ -133,6 +150,10 @@ public class HumidityService : IHumidityService
 
         await _humidityRepository.SaveChangesAsync();
 
+        LoggingExtensions.LogDtoObjectToDelete(
+            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+        );
+
         return humidityDto;
     }
 
@@ -154,6 +175,10 @@ public class HumidityService : IHumidityService
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
         await _humidityRepository.SaveChangesAsync();
+
+        LoggingExtensions.LogDtoObjectToDelete(
+            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+        );
 
         return humidityDto;
     }
