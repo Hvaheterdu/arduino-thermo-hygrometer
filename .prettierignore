@@ -6,6 +6,7 @@
 **/api
 **/.husky
 **/.cert
+**/.github
 
 # Ignore artifacts
 build

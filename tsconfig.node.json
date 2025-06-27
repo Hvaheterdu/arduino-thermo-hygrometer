@@ -10,5 +10,5 @@
     "strict": true,
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.node.tsbuildinfo"
   },
-  "exclude": [".cert", "api", "dist", "node_modules"]
+  "exclude": [".cert", ".github", "api", "dist", "node_modules"]
 }

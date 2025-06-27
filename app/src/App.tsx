@@ -11,9 +11,9 @@ export const App = (): JSX.Element => {
       <h6>React 18 Hexagon</h6>
       <p>React 18 font test</p>
       <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam voluptatum tenetur
-        veritatis, quidem dicta suscipit modi pariatur, eos, obcaecati aut voluptatem quibusdam?
-        Similique totam ex repellat excepturi eveniet enim quis?
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam voluptatum tenetur veritatis, quidem dicta
+        suscipit modi pariatur, eos, obcaecati aut voluptatem quibusdam? Similique totam ex repellat excepturi eveniet
+        enim quis?
       </p>
     </>
   );

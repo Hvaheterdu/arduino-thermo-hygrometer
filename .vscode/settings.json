@@ -100,7 +100,5 @@
       "source.unusedImports": "explicit"
     }
   },
-  "dataworkspace.excludedProjects": [
-    "ArduinoThermoHygrometerLocal/ArduinoThermoHygrometerLocal.sqlproj"
-  ]
+  "dataworkspace.excludedProjects": ["ArduinoThermoHygrometerLocal/ArduinoThermoHygrometerLocal.sqlproj"]
 }
