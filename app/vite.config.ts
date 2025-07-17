@@ -47,10 +47,10 @@ export default defineConfig({
       cert: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/cert.pem"))
     },
     host: "localhost",
-    port: 3001,
+    port: 3000,
     strictPort: true,
     cors: {
-      origin: "https://localhost:5001"
+      origin: "https://localhost:5000"
     },
     headers: {
       "content-security-policy":

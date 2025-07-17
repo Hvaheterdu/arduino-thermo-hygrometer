@@ -106,7 +106,9 @@ public class BatteryController : ControllerBase
 
         BatteryDto batteryDtoCreated = await _batteryService.CreateBatteryDtoAsync(batteryDto);
 
-        return CreatedAtAction(nameof(GetByIdAsync), new { id = batteryDtoCreated.Id }, batteryDtoCreated);
+        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}");
+
+        return Created(uri, batteryDtoCreated);
     }
 
     /// <summary>

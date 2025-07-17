@@ -106,7 +106,9 @@ public class HumidityController : ControllerBase
 
         HumidityDto humidityDtoCreated = await _humidityService.CreateHumidityDtoAsync(humidityDto);
 
-        return CreatedAtAction(nameof(GetByIdAsync), new { id = humidityDtoCreated.Id }, humidityDtoCreated);
+        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}");
+
+        return Created(uri, humidityDtoCreated);
     }
 
     /// <summary>

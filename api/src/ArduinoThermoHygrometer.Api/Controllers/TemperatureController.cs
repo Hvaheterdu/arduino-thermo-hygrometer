@@ -106,7 +106,9 @@ public class TemperatureController : ControllerBase
 
         TemperatureDto temperatureDtoCreated = await _temperatureService.CreateTemperatureDtoAsync(temperatureDto);
 
-        return CreatedAtAction(nameof(GetByIdAsync), new { id = temperatureDtoCreated.Id }, temperatureDtoCreated);
+        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}");
+
+        return Created(uri, temperatureDtoCreated);
     }
 
     /// <summary>
