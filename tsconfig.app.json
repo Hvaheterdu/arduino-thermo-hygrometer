@@ -4,7 +4,7 @@
     "declaration": true,
     "declarationDir": "dist/types",
     "declarationMap": true,
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "outDir": "dist",
     "rootDir": ".",
