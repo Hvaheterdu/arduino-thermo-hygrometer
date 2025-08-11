@@ -10,7 +10,7 @@
     "rootDir": ".",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "target": "ES2023",
+    "target": "esnext",
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.app.tsbuildinfo",
     "useDefineForClassFields": true,
 
