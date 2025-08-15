@@ -1,5 +1,5 @@
 {
-  "version": "0.0.01",
+  "version": "0.0.52",
   "name": "app",
   "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@outlook.com>",
   "description": "The frontend application for a ASP.NET Core Web API that measures temperature and air humidity through a Arduino thermo hygrometer IoT device.",
