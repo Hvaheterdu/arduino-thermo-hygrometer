@@ -1,6 +1,6 @@
 import { createBrowserRouter, redirect, type DataRouter, type RouteObject } from "react-router";
-import { About } from "./pages/About.page";
-import { Home } from "./pages/Home.page";
+import { About } from "./pages/about/About.page";
+import { Home } from "./pages/home/Home.page";
 
 const basename = "/arduinothermohygrometer";
 
