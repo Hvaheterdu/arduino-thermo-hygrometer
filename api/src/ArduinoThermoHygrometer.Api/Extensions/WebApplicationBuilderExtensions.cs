@@ -31,12 +31,15 @@ internal static class WebApplicationBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
+        HstsOptions hstsOptions = new();
+        builder.Configuration.GetSection(HstsOptions.SectionName).Bind(hstsOptions);
+
         if (!builder.Environment.IsDevelopment())
         {
             builder.Services.AddHsts(configureOptions =>
             {
-                configureOptions.IncludeSubDomains = true;
-                configureOptions.MaxAge = TimeSpan.FromSeconds(31536000);
+                configureOptions.IncludeSubDomains = hstsOptions.IncludeSubDomains;
+                configureOptions.MaxAge = TimeSpan.FromSeconds(hstsOptions.MaxAge);
             });
         }
 
@@ -83,8 +86,8 @@ internal static class WebApplicationBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
-        ApiRateLimiterOptions myOptions = new();
-        builder.Configuration.GetSection(ApiRateLimiterOptions.RateLimit).Bind(myOptions);
+        ApiRateLimiterOptions apiRateLimiterOptions = new();
+        builder.Configuration.GetSection(ApiRateLimiterOptions.SectionName).Bind(apiRateLimiterOptions);
 
         builder.Services.AddRateLimiter(configureOptions =>
         {
@@ -125,8 +128,8 @@ internal static class WebApplicationBuilderExtensions
                     httpContext.User.Identity?.Name?.ToString() ?? factory,
                     _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = myOptions.PermitLimit,
-                        Window = TimeSpan.FromSeconds(myOptions.Window),
+                        PermitLimit = apiRateLimiterOptions.PermitLimit,
+                        Window = TimeSpan.FromSeconds(apiRateLimiterOptions.Window),
                     }
                 );
             });

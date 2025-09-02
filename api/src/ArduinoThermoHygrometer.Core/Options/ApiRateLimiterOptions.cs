@@ -2,9 +2,9 @@
 
 public sealed class ApiRateLimiterOptions
 {
-    public const string RateLimit = "RateLimit";
+    public const string SectionName = "RateLimit";
 
-    public int PermitLimit { get; set; } = 60;
+    public int PermitLimit { get; set; }
 
-    public int Window { get; set; } = 60;
+    public int Window { get; set; }
 }
