@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ArduinoThermoHygrometer.Infrastructure;
 
-public static class InfrastructureDependencyInjection
+public static class DependencyInjectionInfrastructure
 {
     /// <summary>
     /// Add SQL Server database configuration to the specified IServiceCollection.
