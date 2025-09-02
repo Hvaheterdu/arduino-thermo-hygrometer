@@ -1,4 +1,5 @@
 ﻿using ArduinoThermoHygrometer.Infrastructure.Data;
+using ArduinoThermoHygrometer.Infrastructure.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,13 @@ public static class InfrastructureDependencyInjection
     /// <returns>The modified <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddSqlServer(this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = configuration.GetConnectionString("ArduinoThermoHygrometerLocal");
+        DatabaseOptions databaseOptions = new();
+        configuration.GetSection(DatabaseOptions.SectionName).Bind(databaseOptions);
+
+        ConnectionStringsOptions connectionStringsOptions = new();
+        configuration.GetSection(ConnectionStringsOptions.SectionName).Bind(connectionStringsOptions);
+
+        string connectionString = connectionStringsOptions.ArduinoThermoHygrometerLocal;
         if (connectionString is null)
         {
             throw new NotImplementedException("Connection string is not found in appsettings.Development.json");
@@ -23,7 +30,7 @@ public static class InfrastructureDependencyInjection
 
         IServiceCollection sqlServer = services.AddDbContext<ArduinoThermoHygrometerDbContext>(optionsAction =>
         {
-            optionsAction.UseSqlServer(connectionString, sqlServerOptionsAction => sqlServerOptionsAction.EnableRetryOnFailure(3));
+            optionsAction.UseSqlServer(connectionString, sqlServerOptionsAction => sqlServerOptionsAction.EnableRetryOnFailure(databaseOptions.RetryOnFailureAttempts));
         });
 
         return sqlServer;

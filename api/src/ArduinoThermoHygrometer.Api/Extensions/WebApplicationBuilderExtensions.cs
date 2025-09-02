@@ -8,6 +8,7 @@ using ArduinoThermoHygrometer.Core.Logging;
 using ArduinoThermoHygrometer.Core.Options;
 using ArduinoThermoHygrometer.Infrastructure;
 using ArduinoThermoHygrometer.Infrastructure.Data;
+using ArduinoThermoHygrometer.Infrastructure.Options;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -180,8 +181,8 @@ internal static class WebApplicationBuilderExtensions
 
         builder.Services.AddSqlServer(builder.Configuration);
 
-        IConfigurationSection databaseConfiguration = builder.Configuration.GetSection("Database");
-        databaseConfiguration.GetValue("RunMigrationsOnStartup", true);
+        DatabaseOptions databaseOptions = new();
+        builder.Configuration.GetSection(DatabaseOptions.SectionName).Bind(databaseOptions);
 
         using ServiceProvider serviceProvider = builder.Services.BuildServiceProvider();
         using IServiceScope scope = serviceProvider.CreateScope();
