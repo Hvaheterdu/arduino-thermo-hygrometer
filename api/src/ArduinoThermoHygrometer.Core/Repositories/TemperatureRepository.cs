@@ -45,7 +45,7 @@ public class TemperatureRepository : ITemperatureRepository
     /// </summary>
     /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the objects to retrieve.</param>
     /// <returns>Returns a list of <see cref="Temperature"/> objects if non-empty list; otherwise, null.</returns>
-    public async Task<IEnumerable<Temperature>> GetTemperaturesByDateAsync(DateTimeOffset dateTimeOffset)
+    public async Task<IEnumerable<Temperature>> GetTemperatureByDateAsync(DateTimeOffset dateTimeOffset)
     {
         IEnumerable<Temperature> temperatures = await _dbContext.Temperatures
             .Where(t => t.RegisteredAt.Date == dateTimeOffset.Date)

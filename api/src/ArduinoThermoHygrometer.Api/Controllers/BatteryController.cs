@@ -93,6 +93,7 @@ public class BatteryController : ControllerBase
     /// <returns>Returns Created or BadRequest</returns>
     /// <response code="201">Returns <c>Created</c>.</response>
     /// <response code="400">Returns <c>BadRequest</c> if invalid batteryDto object.</response>
+    [ActionName("CreateBattery")]
     [HttpPost("add")]
     [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -106,9 +107,9 @@ public class BatteryController : ControllerBase
 
         BatteryDto batteryDtoCreated = await _batteryService.CreateBatteryDtoAsync(batteryDto);
 
-        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}");
+        string actionName = "CreateBattery";
 
-        return Created(uri, batteryDtoCreated);
+        return CreatedAtAction(actionName, batteryDtoCreated);
     }
 
     /// <summary>

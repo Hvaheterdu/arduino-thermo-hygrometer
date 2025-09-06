@@ -29,7 +29,7 @@ public class TemperatureControllerTest
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        TemperatureDto temperatureDto = TemperatureTestData.GetTemperatureDtoTestObjectById(id);
+        TemperatureDto temperatureDto = TemperatureTestData.GetTemperatureDtoById(id);
         _temperatureService.GetTemperatureDtoByIdAsync(id).Returns(temperatureDto);
 
         // Act
@@ -70,7 +70,7 @@ public class TemperatureControllerTest
     {
         // Arrange
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        TemperatureDto temperatureDto = TemperatureTestData.GetTemperatureDtoTestObjectByTimestamp(timestamp);
+        TemperatureDto temperatureDto = TemperatureTestData.GetTemperatureDtoByTimestamp(timestamp);
         _temperatureService.GetTemperatureDtoByTimestampAsync(timestamp).Returns(temperatureDto);
 
         // Act
@@ -111,7 +111,7 @@ public class TemperatureControllerTest
     {
         // Arrange
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
-        IEnumerable<TemperatureDto> temperatureDto = TemperatureTestData.GetTemperatureDtoTestObjectByDate(dateTimeOffset);
+        IEnumerable<TemperatureDto> temperatureDto = TemperatureTestData.GetTemperatureDtoByDate(dateTimeOffset);
         _temperatureService.GetTemperatureDtosByDateAsync(dateTimeOffset).Returns(temperatureDto);
 
         // Act
@@ -151,7 +151,7 @@ public class TemperatureControllerTest
     public async Task CreateAsync_Should_Return201Created_When_TemperatureDtoModelstateIsValid()
     {
         // Arrange
-        TemperatureDto temperatureDto = TemperatureTestData.CreateValidTemperatureDtoTestObject();
+        TemperatureDto temperatureDto = TemperatureTestData.CreateValidTemperatureDto();
         _temperatureService.CreateTemperatureDtoAsync(Arg.Any<TemperatureDto>()).Returns(Task.FromResult(temperatureDto));
 
         // Act
@@ -171,7 +171,7 @@ public class TemperatureControllerTest
     public async Task CreateAsync_Should_Return400BadRequest_When_TemperatureDtoModelstateIsInvalid()
     {
         // Arrange
-        TemperatureDto temperatureDto = TemperatureTestData.CreateInvalidTemperatureDtoTestObject();
+        TemperatureDto temperatureDto = TemperatureTestData.CreateInvalidTemperatureDto();
         _temperatureController.ModelState.AddModelError(nameof(temperatureDto.Temp), "Temperature cannot be a negative number.");
 
         // Act
@@ -192,7 +192,7 @@ public class TemperatureControllerTest
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        TemperatureDto temperatureDto = TemperatureTestData.GetTemperatureDtoTestObjectById(id);
+        TemperatureDto temperatureDto = TemperatureTestData.GetTemperatureDtoById(id);
         _temperatureService.DeleteTemperatureDtoByIdAsync(id).Returns(temperatureDto);
 
         // Act
@@ -229,7 +229,7 @@ public class TemperatureControllerTest
     {
         // Arrange
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        TemperatureDto temperatureDto = TemperatureTestData.GetTemperatureDtoTestObjectByTimestamp(timestamp);
+        TemperatureDto temperatureDto = TemperatureTestData.GetTemperatureDtoByTimestamp(timestamp);
         _temperatureService.DeleteTemperatureDtoByTimestampAsync(timestamp).Returns(temperatureDto);
 
         // Act

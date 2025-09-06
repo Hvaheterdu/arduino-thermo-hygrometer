@@ -8,7 +8,7 @@ public interface IBatteryRepository
 
     Task<Battery?> GetBatteryByTimestampAsync(DateTimeOffset timestamp);
 
-    Task<IEnumerable<Battery>> GetBatteriesByDateAsync(DateTimeOffset dateTimeOffset);
+    Task<IEnumerable<Battery>> GetBatteryByDateAsync(DateTimeOffset dateTimeOffset);
 
     Task CreateBatteryAsync(Battery battery);
 

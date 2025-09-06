@@ -93,6 +93,7 @@ public class TemperatureController : ControllerBase
     /// <returns>Returns Created or BadRequest</returns>
     /// <response code="201">Returns <c>Created</c>.</response>
     /// <response code="400">Returns <c>BadRequest</c> if invalid temperatureDto object.</response>
+    [ActionName("CreateTemperature")]
     [HttpPost("add")]
     [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -106,9 +107,9 @@ public class TemperatureController : ControllerBase
 
         TemperatureDto temperatureDtoCreated = await _temperatureService.CreateTemperatureDtoAsync(temperatureDto);
 
-        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}");
+        string actionName = "CreateTemperature";
 
-        return Created(uri, temperatureDtoCreated);
+        return CreatedAtAction(actionName, temperatureDtoCreated);
     }
 
     /// <summary>

@@ -93,6 +93,7 @@ public class HumidityController : ControllerBase
     /// <returns>Returns Created or BadRequest</returns>
     /// <response code="201">Returns <c>Created</c>.</response>
     /// <response code="400">Returns <c>BadRequest</c> if invalid humidityDto object.</response>
+    [ActionName("CreateHumidity")]
     [HttpPost("add")]
     [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -106,9 +107,9 @@ public class HumidityController : ControllerBase
 
         HumidityDto humidityDtoCreated = await _humidityService.CreateHumidityDtoAsync(humidityDto);
 
-        Uri uri = new($"{Request.Scheme}://{Request.Host}{Request.Path}");
+        string actionName = "CreateHumidity";
 
-        return Created(uri, humidityDtoCreated);
+        return CreatedAtAction(actionName, humidityDtoCreated);
     }
 
     /// <summary>

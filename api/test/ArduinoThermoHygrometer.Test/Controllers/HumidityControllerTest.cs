@@ -29,7 +29,7 @@ public class HumidityControllerTest
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        HumidityDto humidityDto = HumidityTestData.GetHumidityDtoTestObjectById(id);
+        HumidityDto humidityDto = HumidityTestData.GetHumidityDtoById(id);
         _humidityService.GetHumidityDtoByIdAsync(id).Returns(humidityDto);
 
         // Act
@@ -70,7 +70,7 @@ public class HumidityControllerTest
     {
         // Arrange
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        HumidityDto humidityDto = HumidityTestData.GetHumidityDtoTestObjectByTimestamp(timestamp);
+        HumidityDto humidityDto = HumidityTestData.GetHumidityDtoByTimestamp(timestamp);
         _humidityService.GetHumidityDtoByTimestampAsync(timestamp).Returns(humidityDto);
 
         // Act
@@ -111,7 +111,7 @@ public class HumidityControllerTest
     {
         // Arrange
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
-        IEnumerable<HumidityDto> humidityDto = HumidityTestData.GetHumidityDtoTestObjectByDate(dateTimeOffset);
+        IEnumerable<HumidityDto> humidityDto = HumidityTestData.GetHumidityDtoByDate(dateTimeOffset);
         _humidityService.GetHumidityDtosByDateAsync(dateTimeOffset).Returns(humidityDto);
 
         // Act
@@ -151,7 +151,7 @@ public class HumidityControllerTest
     public async Task CreateAsync_Should_Return201Created_When_HumidityDtoModelstateIsValid()
     {
         // Arrange
-        HumidityDto humidityDto = HumidityTestData.CreateValidHumidityDtoTestObject();
+        HumidityDto humidityDto = HumidityTestData.CreateValidHumidityDto();
         _humidityService.CreateHumidityDtoAsync(Arg.Any<HumidityDto>()).Returns(Task.FromResult(humidityDto));
 
         // Act
@@ -171,7 +171,7 @@ public class HumidityControllerTest
     public async Task CreateAsync_Should_Return400BadRequest_When_HumidityDtoModelstateIsInvalid()
     {
         // Arrange
-        HumidityDto humidityDto = HumidityTestData.CreateInvalidHumidityDtoTestObject();
+        HumidityDto humidityDto = HumidityTestData.CreateInvalidHumidityDto();
         _humidityController.ModelState.AddModelError(nameof(humidityDto.AirHumidity), "AirHumidity cannot be a negative number.");
 
         // Act
@@ -192,7 +192,7 @@ public class HumidityControllerTest
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        HumidityDto humidityDto = HumidityTestData.GetHumidityDtoTestObjectById(id);
+        HumidityDto humidityDto = HumidityTestData.GetHumidityDtoById(id);
         _humidityService.DeleteHumidityDtoByIdAsync(id).Returns(humidityDto);
 
         // Act
@@ -229,7 +229,7 @@ public class HumidityControllerTest
     {
         // Arrange
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        HumidityDto humidityDto = HumidityTestData.GetHumidityDtoTestObjectByTimestamp(timestamp);
+        HumidityDto humidityDto = HumidityTestData.GetHumidityDtoByTimestamp(timestamp);
         _humidityService.DeleteHumidityDtoByTimestampAsync(timestamp).Returns(humidityDto);
 
         // Act

@@ -1,8 +1,8 @@
-﻿using ArduinoThermoHygrometer.Core.Logging;
+﻿using System.Globalization;
+using ArduinoThermoHygrometer.Core.Logging;
 using ArduinoThermoHygrometer.Core.Mappers;
 using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
-using ArduinoThermoHygrometer.Core.Utilities;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.Extensions.Logging;
@@ -44,7 +44,7 @@ public class BatteryService : IBatteryService
         BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return batteryDto;
@@ -68,7 +68,7 @@ public class BatteryService : IBatteryService
         BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return batteryDto;
@@ -81,12 +81,11 @@ public class BatteryService : IBatteryService
     /// <returns>Returns a list of <see cref="BatteryDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<BatteryDto>?> GetBatteryDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
-        IEnumerable<Battery> batteries = await _batteryRepository.GetBatteriesByDateAsync(dateTimeOffset);
+        IEnumerable<Battery> batteries = await _batteryRepository.GetBatteryByDateAsync(dateTimeOffset);
 
-        string? capitaliseBatteries = StringUtilities.CapitaliseFirstLetter(nameof(batteries));
         if (batteries == null || !batteries.Any())
         {
-            LoggingExtensions.LogIsNullOrEmpty(_logger, capitaliseBatteries, dateTimeOffset.Date.ToShortDateString());
+            LoggingExtensions.LogIsNullOrEmpty(_logger, nameof(Battery), dateTimeOffset.Date.ToShortDateString());
             return null;
         }
 
@@ -119,7 +118,7 @@ public class BatteryService : IBatteryService
         BatteryDto? createdBatteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
         LoggingExtensions.LogDtoObjectToCreate(
-            _logger, nameof(BatteryDto), createdBatteryDto.Id, createdBatteryDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), createdBatteryDto.Id, createdBatteryDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return createdBatteryDto;
@@ -151,7 +150,7 @@ public class BatteryService : IBatteryService
         await _batteryRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return batteryDto;
@@ -177,7 +176,7 @@ public class BatteryService : IBatteryService
         await _batteryRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return batteryDto;

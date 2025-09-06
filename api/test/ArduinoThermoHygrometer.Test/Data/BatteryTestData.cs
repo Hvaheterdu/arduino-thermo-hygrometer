@@ -5,33 +5,33 @@ namespace ArduinoThermoHygrometer.Test.Data;
 
 public static class BatteryTestData
 {
-    public static BatteryDto GetBatteryDtoTestObjectById(Guid id) => new()
+    public static BatteryDto GetBatteryDtoById(Guid id) => new()
     {
         Id = id,
         RegisteredAt = DateTimeOffset.Now,
         BatteryStatus = 100
     };
 
-    public static Battery GetBatteryTestObjectById(Guid id) => new(100)
+    public static Battery GetBatteryById(Guid id) => new(100)
     {
         Id = id,
         RegisteredAt = DateTimeOffset.Now,
     };
 
-    public static BatteryDto GetBatteryDtoTestObjectByTimestamp(DateTimeOffset timestamp) => new()
+    public static BatteryDto GetBatteryDtoByTimestamp(DateTimeOffset timestamp) => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = timestamp,
         BatteryStatus = 95
     };
 
-    public static Battery GetBatteryTestObjectByTimestamp(DateTimeOffset timestamp) => new(95)
+    public static Battery GetBatteryByTimestamp(DateTimeOffset timestamp) => new(95)
     {
         Id = Guid.NewGuid(),
         RegisteredAt = timestamp,
     };
 
-    public static IEnumerable<BatteryDto> GetBatteryDtoTestObjectByDate(DateTimeOffset dateTimeOffset) => new List<BatteryDto>()
+    public static IEnumerable<BatteryDto> GetBatteryDtoByDate(DateTimeOffset dateTimeOffset) => new List<BatteryDto>()
     {
         new()
         {
@@ -47,7 +47,7 @@ public static class BatteryTestData
         }
     };
 
-    public static IEnumerable<Battery> GetBatteryTestObjectByDate(DateTimeOffset dateTimeOffset) => new List<Battery>()
+    public static IEnumerable<Battery> GetBatteryByDate(DateTimeOffset dateTimeOffset) => new List<Battery>()
     {
         new(90)
         {
@@ -61,27 +61,27 @@ public static class BatteryTestData
         }
     };
 
-    public static BatteryDto CreateValidBatteryDtoTestObject() => new()
+    public static BatteryDto CreateValidBatteryDto() => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,
         BatteryStatus = 85
     };
 
-    public static Battery CreateValidBatteryTestObject() => new(85)
+    public static Battery CreateValidBattery() => new(85)
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,
     };
 
-    public static BatteryDto CreateInvalidBatteryDtoTestObject() => new()
+    public static BatteryDto CreateInvalidBatteryDto() => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,
         BatteryStatus = -10
     };
 
-    public static Battery CreateInvalidBatteryTestObject() => new(-10)
+    public static Battery CreateInvalidBattery() => new(-10)
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,

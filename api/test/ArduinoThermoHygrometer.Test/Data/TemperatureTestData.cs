@@ -4,21 +4,21 @@ namespace ArduinoThermoHygrometer.Test.Data;
 
 public static class TemperatureTestData
 {
-    public static TemperatureDto GetTemperatureDtoTestObjectById(Guid id) => new()
+    public static TemperatureDto GetTemperatureDtoById(Guid id) => new()
     {
         Id = id,
         RegisteredAt = DateTimeOffset.Now,
         Temp = 120.25M
     };
 
-    public static TemperatureDto GetTemperatureDtoTestObjectByTimestamp(DateTimeOffset timestamp) => new()
+    public static TemperatureDto GetTemperatureDtoByTimestamp(DateTimeOffset timestamp) => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = timestamp,
         Temp = 115.35M
     };
 
-    public static IEnumerable<TemperatureDto> GetTemperatureDtoTestObjectByDate(DateTimeOffset dateTimeOffset) => new List<TemperatureDto>()
+    public static IEnumerable<TemperatureDto> GetTemperatureDtoByDate(DateTimeOffset dateTimeOffset) => new List<TemperatureDto>()
     {
         new()
         {
@@ -34,14 +34,14 @@ public static class TemperatureTestData
         }
     };
 
-    public static TemperatureDto CreateValidTemperatureDtoTestObject() => new()
+    public static TemperatureDto CreateValidTemperatureDto() => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,
         Temp = 100.52M
     };
 
-    public static TemperatureDto CreateInvalidTemperatureDtoTestObject() => new()
+    public static TemperatureDto CreateInvalidTemperatureDto() => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,

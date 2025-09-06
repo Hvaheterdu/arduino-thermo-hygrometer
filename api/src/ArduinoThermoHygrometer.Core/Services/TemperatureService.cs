@@ -1,8 +1,8 @@
-﻿using ArduinoThermoHygrometer.Core.Logging;
+﻿using System.Globalization;
+using ArduinoThermoHygrometer.Core.Logging;
 using ArduinoThermoHygrometer.Core.Mappers;
 using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
-using ArduinoThermoHygrometer.Core.Utilities;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.Extensions.Logging;
@@ -44,7 +44,7 @@ public class TemperatureService : ITemperatureService
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return temperatureDto;
@@ -68,7 +68,7 @@ public class TemperatureService : ITemperatureService
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return temperatureDto;
@@ -81,12 +81,11 @@ public class TemperatureService : ITemperatureService
     /// <returns>Returns a list of <see cref="TemperatureDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<TemperatureDto>?> GetTemperatureDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
-        IEnumerable<Temperature> temperatures = await _temperatureRepository.GetTemperaturesByDateAsync(dateTimeOffset);
+        IEnumerable<Temperature> temperatures = await _temperatureRepository.GetTemperatureByDateAsync(dateTimeOffset);
 
-        string? capitaliseTemperatures = StringUtilities.CapitaliseFirstLetter(nameof(temperatures));
         if (temperatures == null || !temperatures.Any())
         {
-            LoggingExtensions.LogIsNullOrEmpty(_logger, capitaliseTemperatures, dateTimeOffset.Date.ToShortDateString());
+            LoggingExtensions.LogIsNullOrEmpty(_logger, nameof(Humidity), dateTimeOffset.Date.ToShortDateString());
             return null;
         }
 
@@ -119,7 +118,7 @@ public class TemperatureService : ITemperatureService
         TemperatureDto createdTemperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
         LoggingExtensions.LogDtoObjectToCreate(
-            _logger, nameof(BatteryDto), createdTemperatureDto.Id, createdTemperatureDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), createdTemperatureDto.Id, createdTemperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return createdTemperatureDto;
@@ -151,7 +150,7 @@ public class TemperatureService : ITemperatureService
         await _temperatureRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return temperatureDto;
@@ -177,7 +176,7 @@ public class TemperatureService : ITemperatureService
         await _temperatureRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return temperatureDto;

@@ -1,8 +1,8 @@
-﻿using ArduinoThermoHygrometer.Core.Logging;
+﻿using System.Globalization;
+using ArduinoThermoHygrometer.Core.Logging;
 using ArduinoThermoHygrometer.Core.Mappers;
 using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
-using ArduinoThermoHygrometer.Core.Utilities;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 using Microsoft.Extensions.Logging;
@@ -44,7 +44,7 @@ public class HumidityService : IHumidityService
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return humidityDto;
@@ -68,7 +68,7 @@ public class HumidityService : IHumidityService
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return humidityDto;
@@ -81,12 +81,11 @@ public class HumidityService : IHumidityService
     /// <returns>Returns a list of <see cref="HumidityDto"/> objects if non-empty list; otherwise, null.</returns>
     public async Task<IEnumerable<HumidityDto>?> GetHumidityDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
-        IEnumerable<Humidity> humidities = await _humidityRepository.GetHumiditiesByDateAsync(dateTimeOffset);
+        IEnumerable<Humidity> humidities = await _humidityRepository.GetHumidityByDateAsync(dateTimeOffset);
 
-        string? capitaliseHumidities = StringUtilities.CapitaliseFirstLetter(nameof(humidities));
         if (humidities == null || !humidities.Any())
         {
-            LoggingExtensions.LogIsNullOrEmpty(_logger, capitaliseHumidities, dateTimeOffset.Date.ToShortDateString());
+            LoggingExtensions.LogIsNullOrEmpty(_logger, nameof(Humidity), dateTimeOffset.Date.ToShortDateString());
             return null;
         }
 
@@ -119,7 +118,7 @@ public class HumidityService : IHumidityService
         HumidityDto createdHumidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
         LoggingExtensions.LogDtoObjectToCreate(
-            _logger, nameof(BatteryDto), createdHumidityDto.Id, createdHumidityDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), createdHumidityDto.Id, createdHumidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return createdHumidityDto;
@@ -151,7 +150,7 @@ public class HumidityService : IHumidityService
         await _humidityRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return humidityDto;
@@ -177,7 +176,7 @@ public class HumidityService : IHumidityService
         await _humidityRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return humidityDto;

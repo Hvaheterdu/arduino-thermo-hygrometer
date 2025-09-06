@@ -45,7 +45,7 @@ public class HumidityRepository : IHumidityRepository
     /// </summary>
     /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the objects to retrieve.</param>
     /// <returns>Returns a list of <see cref="Humidity"/> objects if non-empty list; otherwise, null.</returns>
-    public async Task<IEnumerable<Humidity>> GetHumiditiesByDateAsync(DateTimeOffset dateTimeOffset)
+    public async Task<IEnumerable<Humidity>> GetHumidityByDateAsync(DateTimeOffset dateTimeOffset)
     {
         IEnumerable<Humidity> humidities = await _dbContext.Humidities
             .Where(h => h.RegisteredAt.Date == dateTimeOffset.Date)

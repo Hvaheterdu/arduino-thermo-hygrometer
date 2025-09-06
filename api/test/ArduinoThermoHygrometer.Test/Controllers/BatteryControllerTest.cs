@@ -29,7 +29,7 @@ public class BatteryControllerTest
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        BatteryDto batteryDto = BatteryTestData.GetBatteryDtoTestObjectById(id);
+        BatteryDto batteryDto = BatteryTestData.GetBatteryDtoById(id);
         _batteryService.GetBatteryDtoByIdAsync(id).Returns(batteryDto);
 
         // Act
@@ -70,7 +70,7 @@ public class BatteryControllerTest
     {
         // Arrange
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        BatteryDto batteryDto = BatteryTestData.GetBatteryDtoTestObjectByTimestamp(timestamp);
+        BatteryDto batteryDto = BatteryTestData.GetBatteryDtoByTimestamp(timestamp);
         _batteryService.GetBatteryDtoByTimestampAsync(timestamp).Returns(batteryDto);
 
         // Act
@@ -111,7 +111,7 @@ public class BatteryControllerTest
     {
         // Arrange
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
-        IEnumerable<BatteryDto> batteryDto = BatteryTestData.GetBatteryDtoTestObjectByDate(dateTimeOffset);
+        IEnumerable<BatteryDto> batteryDto = BatteryTestData.GetBatteryDtoByDate(dateTimeOffset);
         _batteryService.GetBatteryDtosByDateAsync(dateTimeOffset).Returns(batteryDto);
 
         // Act
@@ -151,7 +151,7 @@ public class BatteryControllerTest
     public async Task CreateAsync_Should_Return201Created_When_BatteryDtoModelstateIsValid()
     {
         // Arrange
-        BatteryDto batteryDto = BatteryTestData.CreateValidBatteryDtoTestObject();
+        BatteryDto batteryDto = BatteryTestData.CreateValidBatteryDto();
         _batteryService.CreateBatteryDtoAsync(Arg.Any<BatteryDto>()).Returns(Task.FromResult(batteryDto));
 
         // Act
@@ -171,7 +171,7 @@ public class BatteryControllerTest
     public async Task CreateAsync_Should_Return400BadRequest_When_BatteryDtoModelstateIsInvalid()
     {
         // Arrange
-        BatteryDto batteryDto = BatteryTestData.CreateInvalidBatteryDtoTestObject();
+        BatteryDto batteryDto = BatteryTestData.CreateInvalidBatteryDto();
         _batteryController.ModelState.AddModelError(nameof(batteryDto.BatteryStatus), "Battery status cannot be a negative number.");
 
         // Act
@@ -192,7 +192,7 @@ public class BatteryControllerTest
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        BatteryDto batteryDto = BatteryTestData.GetBatteryDtoTestObjectById(id);
+        BatteryDto batteryDto = BatteryTestData.GetBatteryDtoById(id);
         _batteryService.DeleteBatteryDtoByIdAsync(id).Returns(batteryDto);
 
         // Act
@@ -229,7 +229,7 @@ public class BatteryControllerTest
     {
         // Arrange
         DateTimeOffset timestamp = DateTimeOffset.Now;
-        BatteryDto batteryDto = BatteryTestData.GetBatteryDtoTestObjectByTimestamp(timestamp);
+        BatteryDto batteryDto = BatteryTestData.GetBatteryDtoByTimestamp(timestamp);
         _batteryService.DeleteBatteryDtoByTimestampAsync(timestamp).Returns(batteryDto);
 
         // Act

@@ -45,7 +45,7 @@ public class BatteryRepository : IBatteryRepository
     /// </summary>
     /// <param name="dateTimeOffset">The <see cref="DateTimeOffset"/> of the objects to retrieve.</param>
     /// <returns>Returns a list of <see cref="Battery"/> objects if non-empty list; otherwise, null.</returns>
-    public async Task<IEnumerable<Battery>> GetBatteriesByDateAsync(DateTimeOffset dateTimeOffset)
+    public async Task<IEnumerable<Battery>> GetBatteryByDateAsync(DateTimeOffset dateTimeOffset)
     {
         IEnumerable<Battery> batteries = await _dbContext.Batteries
             .Where(b => b.RegisteredAt.Date == dateTimeOffset.Date)
