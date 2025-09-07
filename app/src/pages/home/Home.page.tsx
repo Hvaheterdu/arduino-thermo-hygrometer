@@ -1,6 +1,7 @@
+import type { JSX } from "react";
 import { useNavigate } from "react-router";
 
-export const Home = () => {
+export const Home = (): JSX.Element => {
   const navigate = useNavigate();
 
   return (

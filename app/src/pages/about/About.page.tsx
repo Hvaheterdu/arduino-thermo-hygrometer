@@ -1,7 +1,8 @@
+import type { JSX } from "react";
 import { useNavigate } from "react-router";
 import "./About.style.css";
 
-export const About = () => {
+export const About = (): JSX.Element => {
   const navigate = useNavigate();
 
   return (
