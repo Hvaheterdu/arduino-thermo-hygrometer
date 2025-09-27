@@ -72,6 +72,7 @@ export default [
       "no-debugger": "error",
       "no-unused-vars": "off",
       "no-use-before-define": "off",
+      "no-var": "error",
       "import-x/no-default-export": "error",
       "import-x/no-unresolved": "error",
       "import-x/no-rename-default": "error",
