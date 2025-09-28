@@ -17,4 +17,3 @@ dist
 **/*.generated.ts
 **/*.d.ts
 package-lock.json
-
