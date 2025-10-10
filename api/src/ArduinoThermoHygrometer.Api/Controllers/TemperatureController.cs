@@ -98,6 +98,7 @@ public class TemperatureController : ControllerBase
     [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<TemperatureDto>> CreateAsync([FromBody] TemperatureDto temperatureDto)
     {
         if (!ModelState.IsValid)
@@ -105,7 +106,12 @@ public class TemperatureController : ControllerBase
             return BadRequest(temperatureDto);
         }
 
-        TemperatureDto temperatureDtoCreated = await _temperatureService.CreateTemperatureDtoAsync(temperatureDto);
+        TemperatureDto? temperatureDtoCreated = await _temperatureService.CreateTemperatureDtoAsync(temperatureDto);
+
+        if (temperatureDtoCreated == null)
+        {
+            return Conflict(temperatureDto);
+        }
 
         string actionName = "CreateTemperature";
 

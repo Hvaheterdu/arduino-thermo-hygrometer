@@ -98,6 +98,7 @@ public class HumidityController : ControllerBase
     [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<HumidityDto>> CreateAsync([FromBody] HumidityDto humidityDto)
     {
         if (!ModelState.IsValid)
@@ -105,7 +106,12 @@ public class HumidityController : ControllerBase
             return BadRequest(humidityDto);
         }
 
-        HumidityDto humidityDtoCreated = await _humidityService.CreateHumidityDtoAsync(humidityDto);
+        HumidityDto? humidityDtoCreated = await _humidityService.CreateHumidityDtoAsync(humidityDto);
+
+        if (humidityDtoCreated == null)
+        {
+            return Conflict(humidityDtoCreated);
+        }
 
         string actionName = "CreateHumidity";
 

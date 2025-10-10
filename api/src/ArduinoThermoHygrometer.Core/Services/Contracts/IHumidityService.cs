@@ -10,7 +10,7 @@ public interface IHumidityService
 
     Task<IEnumerable<HumidityDto>?> GetHumidityDtosByDateAsync(DateTimeOffset dateTimeOffset);
 
-    Task<HumidityDto> CreateHumidityDtoAsync(HumidityDto humidityDto);
+    Task<HumidityDto?> CreateHumidityDtoAsync(HumidityDto humidityDto);
 
     Task<HumidityDto?> DeleteHumidityDtoByIdAsync(Guid id);
 

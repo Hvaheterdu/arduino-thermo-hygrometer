@@ -10,7 +10,7 @@ public interface IBatteryService
 
     Task<IEnumerable<BatteryDto>?> GetBatteryDtosByDateAsync(DateTimeOffset dateTimeOffset);
 
-    Task<BatteryDto> CreateBatteryDtoAsync(BatteryDto batteryDto);
+    Task<BatteryDto?> CreateBatteryDtoAsync(BatteryDto batteryDto);
 
     Task<BatteryDto?> DeleteBatteryDtoByIdAsync(Guid id);
 

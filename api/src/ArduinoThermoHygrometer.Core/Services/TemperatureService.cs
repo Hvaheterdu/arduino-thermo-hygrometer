@@ -5,6 +5,7 @@ using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ArduinoThermoHygrometer.Core.Services;
@@ -108,12 +109,26 @@ public class TemperatureService : ITemperatureService
     /// </summary>
     /// <param name="temperatureDto">The <see cref="TemperatureDto"/> object to create.</param>
     /// <returns>Returns the <see cref="TemperatureDto"/> object if created; otherwise, null.</returns>
-    public async Task<TemperatureDto> CreateTemperatureDtoAsync(TemperatureDto temperatureDto)
+    public async Task<TemperatureDto?> CreateTemperatureDtoAsync(TemperatureDto temperatureDto)
     {
         Temperature? temperature = TemperatureMapper.GetTemperatureFromTemperatureDto(temperatureDto);
 
-        await _temperatureRepository.CreateTemperatureAsync(temperature);
-        await _temperatureRepository.SaveChangesAsync();
+        if (temperature == null)
+        {
+            LoggingExtensions.LogIsNull(_logger, nameof(Temperature));
+            return null;
+        }
+
+        try
+        {
+            await _temperatureRepository.CreateTemperatureAsync(temperature);
+            await _temperatureRepository.SaveChangesAsync();
+        }
+        catch (DbUpdateException dbUpdateException)
+        {
+            LoggingExtensions.LogDtoObjectAlreadyExists(_logger, dbUpdateException.Message, nameof(Temperature), temperatureDto.Id);
+            return null;
+        }
 
         TemperatureDto createdTemperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 

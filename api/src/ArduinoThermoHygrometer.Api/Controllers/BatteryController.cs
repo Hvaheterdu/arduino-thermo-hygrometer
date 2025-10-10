@@ -98,6 +98,7 @@ public class BatteryController : ControllerBase
     [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<BatteryDto>> CreateAsync([FromBody] BatteryDto batteryDto)
     {
         if (!ModelState.IsValid)
@@ -105,7 +106,12 @@ public class BatteryController : ControllerBase
             return BadRequest(batteryDto);
         }
 
-        BatteryDto batteryDtoCreated = await _batteryService.CreateBatteryDtoAsync(batteryDto);
+        BatteryDto? batteryDtoCreated = await _batteryService.CreateBatteryDtoAsync(batteryDto);
+
+        if (batteryDtoCreated == null)
+        {
+            return Conflict(batteryDtoCreated);
+        }
 
         string actionName = "CreateBattery";
 

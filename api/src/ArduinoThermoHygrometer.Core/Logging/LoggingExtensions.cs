@@ -47,6 +47,10 @@ public static partial class LoggingExtensions
         Message = "{LogDtoObjectToDelete} with Id={Id} and RegisteredAt={DateTimeOffset} is deleted.")]
     public static partial void LogDtoObjectToDelete(this ILogger logger, string? LogDtoObjectToDelete, Guid? id, string dateTimeOffset);
 
+    [LoggerMessage(EventId = 23, EventName = "LogDtoObjectAlreadyExists", Level = LogLevel.Information,
+        Message = "{ExceptionMessage}, {LogDtoObjectAlreadyExists} with Id={Id} already exists.")]
+    public static partial void LogDtoObjectAlreadyExists(this ILogger logger, string? ExceptionMessage, string? LogDtoObjectAlreadyExists, Guid? id);
+
     // Healthcheck service.
 
     [LoggerMessage(EventId = 30, EventName = "HealthCheckStatusDegradedOrUnhealthy", Level = LogLevel.Error,

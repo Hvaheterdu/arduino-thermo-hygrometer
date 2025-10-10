@@ -5,6 +5,7 @@ using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ArduinoThermoHygrometer.Core.Services;
@@ -108,12 +109,26 @@ public class BatteryService : IBatteryService
     /// </summary>
     /// <param name="batteryDto">The <see cref="BatteryDto"/> object to create.</param>
     /// <returns>Returns the <see cref="BatteryDto"/> object if created; otherwise, null.</returns>
-    public async Task<BatteryDto> CreateBatteryDtoAsync(BatteryDto batteryDto)
+    public async Task<BatteryDto?> CreateBatteryDtoAsync(BatteryDto batteryDto)
     {
         Battery? battery = BatteryMapper.GetBatteryFromBatteryDto(batteryDto);
 
-        await _batteryRepository.CreateBatteryAsync(battery);
-        await _batteryRepository.SaveChangesAsync();
+        if (battery == null)
+        {
+            LoggingExtensions.LogIsNull(_logger, nameof(Battery));
+            return null;
+        }
+
+        try
+        {
+            await _batteryRepository.CreateBatteryAsync(battery);
+            await _batteryRepository.SaveChangesAsync();
+        }
+        catch (DbUpdateException dbUpdateException)
+        {
+            LoggingExtensions.LogDtoObjectAlreadyExists(_logger, dbUpdateException.Message, nameof(Battery), batteryDto.Id);
+            return null;
+        }
 
         BatteryDto? createdBatteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
