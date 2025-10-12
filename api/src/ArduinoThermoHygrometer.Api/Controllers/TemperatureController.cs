@@ -31,7 +31,6 @@ public class TemperatureController : ControllerBase
     public async Task<ActionResult<TemperatureDto>> GetByIdAsync([FromRoute] Guid id)
     {
         TemperatureDto? temperatureDto = await _temperatureService.GetTemperatureDtoByIdAsync(id);
-
         if (temperatureDto == null)
         {
             return NotFound(temperatureDto);
@@ -54,7 +53,6 @@ public class TemperatureController : ControllerBase
     public async Task<ActionResult<TemperatureDto>> GetByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         TemperatureDto? temperatureDto = await _temperatureService.GetTemperatureDtoByTimestampAsync(timestamp);
-
         if (temperatureDto == null)
         {
             return NotFound(temperatureDto);
@@ -77,7 +75,6 @@ public class TemperatureController : ControllerBase
     public async Task<ActionResult<IEnumerable<TemperatureDto>>> GetByDateAsync([FromRoute] DateTimeOffset date)
     {
         IEnumerable<TemperatureDto>? temperatureDto = await _temperatureService.GetTemperatureDtosByDateAsync(date);
-
         if (temperatureDto == null || !temperatureDto.Any())
         {
             return NotFound(temperatureDto);
@@ -108,11 +105,6 @@ public class TemperatureController : ControllerBase
 
         TemperatureDto? temperatureDtoCreated = await _temperatureService.CreateTemperatureDtoAsync(temperatureDto);
 
-        if (temperatureDtoCreated == null)
-        {
-            return Conflict(temperatureDto);
-        }
-
         string actionName = "CreateTemperature";
 
         return CreatedAtAction(actionName, temperatureDtoCreated);
@@ -132,7 +124,6 @@ public class TemperatureController : ControllerBase
     public async Task<ActionResult<TemperatureDto>> DeleteByIdAsync([FromRoute] Guid id)
     {
         TemperatureDto? temperatureDto = await _temperatureService.DeleteTemperatureDtoByIdAsync(id);
-
         if (temperatureDto == null)
         {
             return NotFound(temperatureDto);
@@ -155,7 +146,6 @@ public class TemperatureController : ControllerBase
     public async Task<ActionResult<TemperatureDto>> DeleteByTimestampAsync(DateTimeOffset timestamp)
     {
         TemperatureDto? temperatureDto = await _temperatureService.DeleteTemperatureDtoByTimestampAsync(timestamp);
-
         if (temperatureDto == null)
         {
             return NotFound(temperatureDto);

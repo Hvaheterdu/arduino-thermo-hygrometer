@@ -31,7 +31,6 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<BatteryDto>> GetByIdAsync([FromRoute] Guid id)
     {
         BatteryDto? batteryDto = await _batteryService.GetBatteryDtoByIdAsync(id);
-
         if (batteryDto == null)
         {
             return NotFound(batteryDto);
@@ -54,7 +53,6 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<BatteryDto>> GetByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         BatteryDto? batteryDto = await _batteryService.GetBatteryDtoByTimestampAsync(timestamp);
-
         if (batteryDto == null)
         {
             return NotFound(batteryDto);
@@ -77,7 +75,6 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<IEnumerable<BatteryDto>>> GetByDateAsync([FromRoute] DateTimeOffset date)
     {
         IEnumerable<BatteryDto>? batteryDto = await _batteryService.GetBatteryDtosByDateAsync(date);
-
         if (batteryDto == null || !batteryDto.Any())
         {
             return NotFound(batteryDto);
@@ -108,11 +105,6 @@ public class BatteryController : ControllerBase
 
         BatteryDto? batteryDtoCreated = await _batteryService.CreateBatteryDtoAsync(batteryDto);
 
-        if (batteryDtoCreated == null)
-        {
-            return Conflict(batteryDtoCreated);
-        }
-
         string actionName = "CreateBattery";
 
         return CreatedAtAction(actionName, batteryDtoCreated);
@@ -132,7 +124,6 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<BatteryDto>> DeleteByIdAsync([FromRoute] Guid id)
     {
         BatteryDto? batteryDto = await _batteryService.DeleteBatteryDtoByIdAsync(id);
-
         if (batteryDto == null)
         {
             return NotFound(batteryDto);
@@ -155,7 +146,6 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<BatteryDto>> DeleteByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         BatteryDto? batteryDto = await _batteryService.DeleteBatteryDtoByTimestampAsync(timestamp);
-
         if (batteryDto == null)
         {
             return NotFound(batteryDto);

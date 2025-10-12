@@ -5,7 +5,6 @@ using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ArduinoThermoHygrometer.Core.Services;
@@ -35,7 +34,6 @@ public class BatteryService : IBatteryService
         }
 
         Battery? battery = await _batteryRepository.GetBatteryByIdAsync(id);
-
         if (battery == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Battery));
@@ -59,7 +57,6 @@ public class BatteryService : IBatteryService
     public async Task<BatteryDto?> GetBatteryDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         Battery? battery = await _batteryRepository.GetBatteryByTimestampAsync(timestamp);
-
         if (battery == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Battery));
@@ -83,7 +80,6 @@ public class BatteryService : IBatteryService
     public async Task<IEnumerable<BatteryDto>?> GetBatteryDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
         IEnumerable<Battery> batteries = await _batteryRepository.GetBatteryByDateAsync(dateTimeOffset);
-
         if (batteries == null || !batteries.Any())
         {
             LoggingExtensions.LogIsNullOrEmpty(_logger, nameof(Battery), dateTimeOffset.Date.ToShortDateString());
@@ -109,23 +105,14 @@ public class BatteryService : IBatteryService
     public async Task<BatteryDto?> CreateBatteryDtoAsync(BatteryDto batteryDto)
     {
         Battery? battery = BatteryMapper.GetBatteryFromBatteryDto(batteryDto);
-
         if (battery == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Battery));
             return null;
         }
 
-        try
-        {
-            await _batteryRepository.CreateBatteryAsync(battery);
-            await _batteryRepository.SaveChangesAsync();
-        }
-        catch (DbUpdateException dbUpdateException)
-        {
-            LoggingExtensions.LogDtoObjectAlreadyExists(_logger, dbUpdateException.Message, nameof(Battery), batteryDto.Id);
-            return null;
-        }
+        await _batteryRepository.CreateBatteryAsync(battery);
+        await _batteryRepository.SaveChangesAsync();
 
         BatteryDto? createdBatteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
 
@@ -150,7 +137,6 @@ public class BatteryService : IBatteryService
         }
 
         Battery? battery = await _batteryRepository.DeleteBatteryByIdAsync(id);
-
         if (battery == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Battery));
@@ -176,7 +162,6 @@ public class BatteryService : IBatteryService
     public async Task<BatteryDto?> DeleteBatteryDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         Battery? battery = await _batteryRepository.DeleteBatteryByTimestampAsync(timestamp);
-
         if (battery == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Battery));

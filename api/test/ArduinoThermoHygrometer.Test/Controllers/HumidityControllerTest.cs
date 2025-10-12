@@ -152,7 +152,7 @@ public class HumidityControllerTest
     {
         // Arrange
         HumidityDto humidityDto = HumidityTestData.CreateValidHumidityDto();
-        _humidityService.CreateHumidityDtoAsync(Arg.Any<HumidityDto>()).Returns(Task.FromResult(humidityDto));
+        _humidityService.CreateHumidityDtoAsync(Arg.Any<HumidityDto>()).Returns(Task.FromResult<HumidityDto?>(humidityDto));
 
         // Act
         ActionResult<HumidityDto> act = await _humidityController.CreateAsync(humidityDto);

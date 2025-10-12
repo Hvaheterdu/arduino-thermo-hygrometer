@@ -70,7 +70,6 @@ public class BatteryRepository : IBatteryRepository
     public async Task<Battery?> DeleteBatteryByIdAsync(Guid id)
     {
         Battery? battery = await _dbContext.Batteries.FindAsync(id);
-
         if (battery == null)
         {
             return null;
@@ -88,9 +87,7 @@ public class BatteryRepository : IBatteryRepository
     /// <returns>Returns the <see cref="Battery"/> object if deleted; otherwise, null.</returns>
     public async Task<Battery?> DeleteBatteryByTimestampAsync(DateTimeOffset timestamp)
     {
-        Battery? battery = await _dbContext.Batteries
-            .FirstOrDefaultAsync(b => b.RegisteredAt == timestamp);
-
+        Battery? battery = await _dbContext.Batteries.FirstOrDefaultAsync(b => b.RegisteredAt == timestamp);
         if (battery == null)
         {
             return null;

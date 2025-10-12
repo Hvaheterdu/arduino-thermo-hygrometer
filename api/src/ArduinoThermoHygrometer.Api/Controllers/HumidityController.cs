@@ -31,7 +31,6 @@ public class HumidityController : ControllerBase
     public async Task<ActionResult<HumidityDto>> GetByIdAsync([FromRoute] Guid id)
     {
         HumidityDto? humidityDto = await _humidityService.GetHumidityDtoByIdAsync(id);
-
         if (humidityDto == null)
         {
             return NotFound(humidityDto);
@@ -54,7 +53,6 @@ public class HumidityController : ControllerBase
     public async Task<ActionResult<HumidityDto>> GetByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         HumidityDto? humidityDto = await _humidityService.GetHumidityDtoByTimestampAsync(timestamp);
-
         if (humidityDto == null)
         {
             return NotFound(humidityDto);
@@ -77,7 +75,6 @@ public class HumidityController : ControllerBase
     public async Task<ActionResult<IEnumerable<HumidityDto>>> GetByDateAsync([FromRoute] DateTimeOffset date)
     {
         IEnumerable<HumidityDto>? humidityDto = await _humidityService.GetHumidityDtosByDateAsync(date);
-
         if (humidityDto == null || !humidityDto.Any())
         {
             return NotFound(humidityDto);
@@ -108,11 +105,6 @@ public class HumidityController : ControllerBase
 
         HumidityDto? humidityDtoCreated = await _humidityService.CreateHumidityDtoAsync(humidityDto);
 
-        if (humidityDtoCreated == null)
-        {
-            return Conflict(humidityDtoCreated);
-        }
-
         string actionName = "CreateHumidity";
 
         return CreatedAtAction(actionName, humidityDtoCreated);
@@ -132,7 +124,6 @@ public class HumidityController : ControllerBase
     public async Task<ActionResult<HumidityDto>> DeleteByIdAsync([FromRoute] Guid id)
     {
         HumidityDto? humidityDto = await _humidityService.DeleteHumidityDtoByIdAsync(id);
-
         if (humidityDto == null)
         {
             return NotFound(humidityDto);
@@ -155,7 +146,6 @@ public class HumidityController : ControllerBase
     public async Task<ActionResult<HumidityDto>> DeleteByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         HumidityDto? humidityDto = await _humidityService.DeleteHumidityDtoByTimestampAsync(timestamp);
-
         if (humidityDto == null)
         {
             return NotFound(humidityDto);

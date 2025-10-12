@@ -5,7 +5,6 @@ using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ArduinoThermoHygrometer.Core.Services;
@@ -35,7 +34,6 @@ public class TemperatureService : ITemperatureService
         }
 
         Temperature? temperature = await _temperatureRepository.GetTemperatureByIdAsync(id);
-
         if (temperature == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Temperature));
@@ -59,7 +57,6 @@ public class TemperatureService : ITemperatureService
     public async Task<TemperatureDto?> GetTemperatureDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         Temperature? temperature = await _temperatureRepository.GetTemperatureByTimestampAsync(timestamp);
-
         if (temperature == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Temperature));
@@ -83,7 +80,6 @@ public class TemperatureService : ITemperatureService
     public async Task<IEnumerable<TemperatureDto>?> GetTemperatureDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
         IEnumerable<Temperature> temperatures = await _temperatureRepository.GetTemperatureByDateAsync(dateTimeOffset);
-
         if (temperatures == null || !temperatures.Any())
         {
             LoggingExtensions.LogIsNullOrEmpty(_logger, nameof(Humidity), dateTimeOffset.Date.ToShortDateString());
@@ -109,23 +105,14 @@ public class TemperatureService : ITemperatureService
     public async Task<TemperatureDto?> CreateTemperatureDtoAsync(TemperatureDto temperatureDto)
     {
         Temperature? temperature = TemperatureMapper.GetTemperatureFromTemperatureDto(temperatureDto);
-
         if (temperature == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Temperature));
             return null;
         }
 
-        try
-        {
-            await _temperatureRepository.CreateTemperatureAsync(temperature);
-            await _temperatureRepository.SaveChangesAsync();
-        }
-        catch (DbUpdateException dbUpdateException)
-        {
-            LoggingExtensions.LogDtoObjectAlreadyExists(_logger, dbUpdateException.Message, nameof(Temperature), temperatureDto.Id);
-            return null;
-        }
+        await _temperatureRepository.CreateTemperatureAsync(temperature);
+        await _temperatureRepository.SaveChangesAsync();
 
         TemperatureDto createdTemperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
@@ -150,7 +137,6 @@ public class TemperatureService : ITemperatureService
         }
 
         Temperature? temperature = await _temperatureRepository.DeleteTemperatureByIdAsync(id);
-
         if (temperature == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Temperature));
@@ -176,7 +162,6 @@ public class TemperatureService : ITemperatureService
     public async Task<TemperatureDto?> DeleteTemperatureDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         Temperature? temperature = await _temperatureRepository.DeleteTemperatureByTimestampAsync(timestamp);
-
         if (temperature == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Temperature));

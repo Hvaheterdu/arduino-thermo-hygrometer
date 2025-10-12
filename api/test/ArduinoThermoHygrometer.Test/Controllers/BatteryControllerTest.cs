@@ -152,7 +152,7 @@ public class BatteryControllerTest
     {
         // Arrange
         BatteryDto batteryDto = BatteryTestData.CreateValidBatteryDto();
-        _batteryService.CreateBatteryDtoAsync(Arg.Any<BatteryDto>()).Returns(Task.FromResult(batteryDto));
+        _batteryService.CreateBatteryDtoAsync(Arg.Any<BatteryDto>()).Returns(Task.FromResult<BatteryDto?>(batteryDto));
 
         // Act
         ActionResult<BatteryDto> act = await _batteryController.CreateAsync(batteryDto);

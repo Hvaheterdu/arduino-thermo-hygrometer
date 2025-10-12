@@ -152,7 +152,7 @@ public class TemperatureControllerTest
     {
         // Arrange
         TemperatureDto temperatureDto = TemperatureTestData.CreateValidTemperatureDto();
-        _temperatureService.CreateTemperatureDtoAsync(Arg.Any<TemperatureDto>()).Returns(Task.FromResult(temperatureDto));
+        _temperatureService.CreateTemperatureDtoAsync(Arg.Any<TemperatureDto>()).Returns(Task.FromResult<TemperatureDto?>(temperatureDto));
 
         // Act
         ActionResult<TemperatureDto> act = await _temperatureController.CreateAsync(temperatureDto);

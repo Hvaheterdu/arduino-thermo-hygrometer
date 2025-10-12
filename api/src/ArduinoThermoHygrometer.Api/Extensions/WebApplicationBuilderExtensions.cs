@@ -156,12 +156,12 @@ internal static class WebApplicationBuilderExtensions
             setupAction.DefaultApiVersion = new ApiVersion(0, 1);
             setupAction.ReportApiVersions = true;
         })
-            .AddMvc()
-            .AddApiExplorer(setupAction =>
-            {
-                setupAction.GroupNameFormat = "'v'VVVV";
-                setupAction.SubstituteApiVersionInUrl = true;
-            });
+        .AddMvc()
+        .AddApiExplorer(setupAction =>
+        {
+            setupAction.GroupNameFormat = "'v'VVVV";
+            setupAction.SubstituteApiVersionInUrl = true;
+        });
 
         return builder;
     }

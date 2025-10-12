@@ -23,7 +23,6 @@ public class HealthCheckServiceWrapper : IHealthCheckService
     public async Task<HealthReport> GetHealthCheckReportAsync()
     {
         HealthReport healthReport = await _healthCheckService.CheckHealthAsync();
-
         if (healthReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {
             LoggingExtensions.LogHealthCheckStatusDegradedOrUnhealthy(_logger, healthReport.Status);

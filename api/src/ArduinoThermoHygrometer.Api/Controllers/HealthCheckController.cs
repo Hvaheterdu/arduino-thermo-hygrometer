@@ -30,7 +30,6 @@ public class HealthCheckController : ControllerBase
     public async Task<IActionResult> GetHealthCheckReportAsync()
     {
         HealthReport healthCheckReport = await _healthCheckService.GetHealthCheckReportAsync();
-
         if (healthCheckReport.Status is HealthStatus.Degraded or HealthStatus.Unhealthy)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, healthCheckReport);

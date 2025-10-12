@@ -5,7 +5,6 @@ using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ArduinoThermoHygrometer.Core.Services;
@@ -35,7 +34,6 @@ public class HumidityService : IHumidityService
         }
 
         Humidity? humidity = await _humidityRepository.GetHumidityByIdAsync(id);
-
         if (humidity == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
@@ -59,7 +57,6 @@ public class HumidityService : IHumidityService
     public async Task<HumidityDto?> GetHumidityDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         Humidity? humidity = await _humidityRepository.GetHumidityByTimestampAsync(timestamp);
-
         if (humidity == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
@@ -83,7 +80,6 @@ public class HumidityService : IHumidityService
     public async Task<IEnumerable<HumidityDto>?> GetHumidityDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
         IEnumerable<Humidity> humidities = await _humidityRepository.GetHumidityByDateAsync(dateTimeOffset);
-
         if (humidities == null || !humidities.Any())
         {
             LoggingExtensions.LogIsNullOrEmpty(_logger, nameof(Humidity), dateTimeOffset.Date.ToShortDateString());
@@ -109,23 +105,14 @@ public class HumidityService : IHumidityService
     public async Task<HumidityDto?> CreateHumidityDtoAsync(HumidityDto humidityDto)
     {
         Humidity? humidity = HumidityMapper.GetHumidityFromHumidityDto(humidityDto);
-
         if (humidity == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
             return null;
         }
 
-        try
-        {
-            await _humidityRepository.CreateHumidityAsync(humidity);
-            await _humidityRepository.SaveChangesAsync();
-        }
-        catch (DbUpdateException dbUpdateException)
-        {
-            LoggingExtensions.LogDtoObjectAlreadyExists(_logger, dbUpdateException.Message, nameof(Humidity), humidityDto.Id);
-            return null;
-        }
+        await _humidityRepository.CreateHumidityAsync(humidity);
+        await _humidityRepository.SaveChangesAsync();
 
         HumidityDto createdHumidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
@@ -150,7 +137,6 @@ public class HumidityService : IHumidityService
         }
 
         Humidity? humidity = await _humidityRepository.DeleteHumidityByIdAsync(id);
-
         if (humidity == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
@@ -176,7 +162,6 @@ public class HumidityService : IHumidityService
     public async Task<HumidityDto?> DeleteHumidityDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         Humidity? humidity = await _humidityRepository.DeleteHumidityByTimestampAsync(timestamp);
-
         if (humidity == null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
