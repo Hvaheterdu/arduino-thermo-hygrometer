@@ -45,7 +45,7 @@ public class HumidityService : IHumidityService
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(HumidityDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return humidityDto;
@@ -69,7 +69,7 @@ public class HumidityService : IHumidityService
         HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(HumidityDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return humidityDto;
@@ -90,14 +90,11 @@ public class HumidityService : IHumidityService
             return null;
         }
 
-        List<HumidityDto> humidityDtos = new();
-        foreach (Humidity humidity in humidities)
+        List<HumidityDto> humidityDtos = humidities.Select(HumidityMapper.GetHumidityDtoFromHumidity).ToList();
+        foreach (HumidityDto humidityDto in humidityDtos)
         {
-            HumidityDto humidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
-            humidityDtos.Add(humidityDto);
-
             LoggingExtensions.LogDtoObjectToReturn(
-                _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
+                _logger, nameof(HumidityDto), humidityDto.Id, humidityDto.RegisteredAt.Date.ToShortDateString()
             );
         }
 
@@ -133,7 +130,7 @@ public class HumidityService : IHumidityService
         HumidityDto createdHumidityDto = HumidityMapper.GetHumidityDtoFromHumidity(humidity);
 
         LoggingExtensions.LogDtoObjectToCreate(
-            _logger, nameof(BatteryDto), createdHumidityDto.Id, createdHumidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(HumidityDto), createdHumidityDto.Id, createdHumidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return createdHumidityDto;
@@ -165,7 +162,7 @@ public class HumidityService : IHumidityService
         await _humidityRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(HumidityDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return humidityDto;
@@ -191,7 +188,7 @@ public class HumidityService : IHumidityService
         await _humidityRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(HumidityDto), humidityDto.Id, humidityDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return humidityDto;

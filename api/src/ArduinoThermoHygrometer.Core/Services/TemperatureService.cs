@@ -45,7 +45,7 @@ public class TemperatureService : ITemperatureService
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(TemperatureDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return temperatureDto;
@@ -69,7 +69,7 @@ public class TemperatureService : ITemperatureService
         TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
         LoggingExtensions.LogDtoObjectToReturn(
-            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(TemperatureDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return temperatureDto;
@@ -90,14 +90,11 @@ public class TemperatureService : ITemperatureService
             return null;
         }
 
-        List<TemperatureDto> temperatureDtos = new();
-        foreach (Temperature temperature in temperatures)
+        List<TemperatureDto> temperatureDtos = temperatures.Select(TemperatureMapper.GetTemperatureDtoFromTemperature).ToList();
+        foreach (TemperatureDto temperatureDto in temperatureDtos)
         {
-            TemperatureDto temperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
-            temperatureDtos.Add(temperatureDto);
-
             LoggingExtensions.LogDtoObjectToReturn(
-                _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
+                _logger, nameof(TemperatureDto), temperatureDto.Id, temperatureDto.RegisteredAt.Date.ToShortDateString()
             );
         }
 
@@ -133,7 +130,7 @@ public class TemperatureService : ITemperatureService
         TemperatureDto createdTemperatureDto = TemperatureMapper.GetTemperatureDtoFromTemperature(temperature);
 
         LoggingExtensions.LogDtoObjectToCreate(
-            _logger, nameof(BatteryDto), createdTemperatureDto.Id, createdTemperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(TemperatureDto), createdTemperatureDto.Id, createdTemperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return createdTemperatureDto;
@@ -165,7 +162,7 @@ public class TemperatureService : ITemperatureService
         await _temperatureRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(TemperatureDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return temperatureDto;
@@ -191,7 +188,7 @@ public class TemperatureService : ITemperatureService
         await _temperatureRepository.SaveChangesAsync();
 
         LoggingExtensions.LogDtoObjectToDelete(
-            _logger, nameof(BatteryDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
+            _logger, nameof(TemperatureDto), temperatureDto.Id, temperatureDto.RegisteredAt.ToString(CultureInfo.InvariantCulture)
         );
 
         return temperatureDto;

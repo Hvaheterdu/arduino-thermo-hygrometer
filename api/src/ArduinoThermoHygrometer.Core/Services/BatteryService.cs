@@ -90,12 +90,9 @@ public class BatteryService : IBatteryService
             return null;
         }
 
-        List<BatteryDto> batteryDtos = new();
-        foreach (Battery battery in batteries)
+        List<BatteryDto> batteryDtos = batteries.Select(BatteryMapper.GetBatteryDtoFromBattery).ToList();
+        foreach (BatteryDto batteryDto in batteryDtos)
         {
-            BatteryDto batteryDto = BatteryMapper.GetBatteryDtoFromBattery(battery);
-            batteryDtos.Add(batteryDto);
-
             LoggingExtensions.LogDtoObjectToReturn(
                 _logger, nameof(BatteryDto), batteryDto.Id, batteryDto.RegisteredAt.Date.ToShortDateString()
             );
