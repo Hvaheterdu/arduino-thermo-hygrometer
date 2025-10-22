@@ -23,8 +23,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "npm": ">=10.9.3",
-    "node": ">=22.18.0"
+    "npm": ">=11.6.1",
+    "node": ">=24.10.0"
   },
   "browserslist": {
     "production": [
@@ -63,36 +63,36 @@
     "version-bump-sh": "sh app/scripts/version_bump_sh.sh"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.90.3",
+    "@tanstack/react-query": "^5.90.5",
     "nswag": "^14.6.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router": "^7.9.4"
   },
   "devDependencies": {
-    "@eslint/js": "^9.37.0",
-    "@types/node": "^24.7.2",
+    "@eslint/js": "^9.38.0",
+    "@types/node": "^24.9.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.0.4",
-    "eslint": "^9.37.0",
+    "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-check-file": "^3.3.0",
     "eslint-plugin-import-x": "^4.16.1",
-    "eslint-plugin-jsdoc": "^61.1.2",
+    "eslint-plugin-jsdoc": "^61.1.5",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.0",
-    "eslint-plugin-react-refresh": "^0.4.23",
+    "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.4.0",
     "husky": "^9.1.7",
-    "knip": "^5.65.0",
-    "lint-staged": "^16.2.4",
+    "knip": "^5.66.2",
+    "lint-staged": "^16.2.5",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.1",
-    "vite": "^7.1.9",
+    "typescript-eslint": "^8.46.2",
+    "vite": "^7.1.11",
     "vite-plugin-checker": "^0.11.0",
     "vite-plugin-mkcert": "^1.17.9",
     "vite-plugin-svgr": "^4.5.0"
