@@ -95,7 +95,6 @@ public class HumidityController : ControllerBase
     [Produces("application/json"), Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<HumidityDto>> CreateAsync([FromBody] HumidityDto humidityDto)
     {
         if (!ModelState.IsValid)
