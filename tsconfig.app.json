@@ -11,6 +11,7 @@
     "rootDir": ".",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "sourceMap": false,
     "target": "esnext",
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.app.tsbuildinfo",
     "useDefineForClassFields": true,
