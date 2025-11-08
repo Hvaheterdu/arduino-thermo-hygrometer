@@ -189,8 +189,6 @@ public class HumidityServiceTest
     [Test]
     public async Task CreateHumidityDtoAsync_Should_ReturnNull_When_HumidityDtoIsNull()
     {
-        HumidityDto humidityDto = HumidityTestData.CreateValidHumidityDto();
-
         HumidityDto? result = await _humidityService.CreateHumidityDtoAsync(null);
 
         string logIsNull = $"{nameof(HumidityDto)} not found.";

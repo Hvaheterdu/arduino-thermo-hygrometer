@@ -188,8 +188,6 @@ public class TemperatureServiceTest
     [Test]
     public async Task CreateTemperatureDtoAsync_Should_ReturnNull_When_TemperatureIsNull()
     {
-        TemperatureDto temperatureDto = TemperatureTestData.CreateValidTemperatureDto();
-
         TemperatureDto? result = await _temperatureService.CreateTemperatureDtoAsync(null);
 
         string logIsNull = $"{nameof(TemperatureDto)} not found.";

@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using ArduinoThermoHygrometer.Core.Mappers;
 using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services;
 using ArduinoThermoHygrometer.Domain.DTOs;
@@ -188,8 +189,6 @@ public class BatteryServiceTest
     [Test]
     public async Task CreateBatteryDtoAsync_Should_ReturnNull_When_BatteryDtoIsNull()
     {
-        BatteryDto batteryDto = BatteryTestData.CreateValidBatteryDto();
-
         BatteryDto? result = await _batteryService.CreateBatteryDtoAsync(null);
 
         string logIsNull = $"{nameof(BatteryDto)} not found.";
