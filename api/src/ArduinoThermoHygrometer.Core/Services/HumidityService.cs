@@ -34,7 +34,7 @@ public class HumidityService : IHumidityService
         }
 
         Humidity? humidity = await _humidityRepository.GetHumidityByIdAsync(id);
-        if (humidity == null)
+        if (humidity is null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
             return null;
@@ -57,7 +57,7 @@ public class HumidityService : IHumidityService
     public async Task<HumidityDto?> GetHumidityDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         Humidity? humidity = await _humidityRepository.GetHumidityByTimestampAsync(timestamp);
-        if (humidity == null)
+        if (humidity is null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
             return null;
@@ -80,7 +80,7 @@ public class HumidityService : IHumidityService
     public async Task<IEnumerable<HumidityDto>?> GetHumidityDtosByDateAsync(DateTimeOffset dateTimeOffset)
     {
         IEnumerable<Humidity> humidities = await _humidityRepository.GetHumidityByDateAsync(dateTimeOffset);
-        if (humidities == null || !humidities.Any())
+        if (humidities is null || !humidities.Any())
         {
             LoggingExtensions.LogIsNullOrEmpty(_logger, nameof(Humidity), dateTimeOffset.Date.ToShortDateString());
             return null;
@@ -102,14 +102,15 @@ public class HumidityService : IHumidityService
     /// </summary>
     /// <param name="humidityDto">The <see cref="HumidityDto"/> object to create.</param>
     /// <returns>Returns the <see cref="HumidityDto"/> object if created; otherwise, null.</returns>
-    public async Task<HumidityDto?> CreateHumidityDtoAsync(HumidityDto humidityDto)
+    public async Task<HumidityDto?> CreateHumidityDtoAsync(HumidityDto? humidityDto)
     {
-        Humidity? humidity = HumidityMapper.GetHumidityFromHumidityDto(humidityDto);
-        if (humidity == null)
+        if (humidityDto is null)
         {
-            LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
+            LoggingExtensions.LogIsNull(_logger, nameof(HumidityDto));
             return null;
         }
+
+        Humidity humidity = HumidityMapper.GetHumidityFromHumidityDto(humidityDto);
 
         await _humidityRepository.CreateHumidityAsync(humidity);
         await _humidityRepository.SaveChangesAsync();
@@ -137,7 +138,7 @@ public class HumidityService : IHumidityService
         }
 
         Humidity? humidity = await _humidityRepository.DeleteHumidityByIdAsync(id);
-        if (humidity == null)
+        if (humidity is null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
             return null;
@@ -162,7 +163,7 @@ public class HumidityService : IHumidityService
     public async Task<HumidityDto?> DeleteHumidityDtoByTimestampAsync(DateTimeOffset timestamp)
     {
         Humidity? humidity = await _humidityRepository.DeleteHumidityByTimestampAsync(timestamp);
-        if (humidity == null)
+        if (humidity is null)
         {
             LoggingExtensions.LogIsNull(_logger, nameof(Humidity));
             return null;

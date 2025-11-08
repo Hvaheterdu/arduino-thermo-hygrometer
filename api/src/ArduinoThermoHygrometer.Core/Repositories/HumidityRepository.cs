@@ -70,7 +70,7 @@ public class HumidityRepository : IHumidityRepository
     public async Task<Humidity?> DeleteHumidityByIdAsync(Guid id)
     {
         Humidity? humidity = await _dbContext.Humidities.FindAsync(id);
-        if (humidity == null)
+        if (humidity is null)
         {
             return null;
         }
@@ -88,7 +88,7 @@ public class HumidityRepository : IHumidityRepository
     public async Task<Humidity?> DeleteHumidityByTimestampAsync(DateTimeOffset timestamp)
     {
         Humidity? humidity = await _dbContext.Humidities.FirstOrDefaultAsync(h => h.RegisteredAt == timestamp);
-        if (humidity == null)
+        if (humidity is null)
         {
             return null;
         }

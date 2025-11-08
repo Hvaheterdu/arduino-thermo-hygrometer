@@ -28,7 +28,7 @@ public class BatteryServiceTest
     }
 
     [Test]
-    public async Task GetBatteryDtoByIdAsync_Should_ReturnBatteryDto_When_BatteryDtoFoundById()
+    public async Task GetBatteryDtoByIdAsync_Should_ReturnBatteryDto_When_FoundById()
     {
         Guid id = Guid.NewGuid();
         Battery battery = BatteryTestData.GetBatteryById(id);
@@ -50,7 +50,6 @@ public class BatteryServiceTest
     public async Task GetBatteryDtoByIdAsync_Should_ReturnNull_When_IdIsEmpty()
     {
         Guid id = Guid.Empty;
-        _batteryRepository.GetBatteryByIdAsync(id).ReturnsNull();
 
         BatteryDto? result = await _batteryService.GetBatteryDtoByIdAsync(id);
 
@@ -70,6 +69,7 @@ public class BatteryServiceTest
 
         BatteryDto? result = await _batteryService.GetBatteryDtoByIdAsync(id);
 
+        await _batteryRepository.Received(1).GetBatteryByIdAsync(Arg.Is(id));
         string logIsNull = $"{nameof(Battery)} not found.";
         Assert.Multiple(() =>
         {
@@ -79,7 +79,7 @@ public class BatteryServiceTest
     }
 
     [Test]
-    public async Task GetBatteryDtoByTimestampAsync_Should_ReturnBatteryDto_When_BatteryDtoFoundByTimestamp()
+    public async Task GetBatteryDtoByTimestampAsync_Should_ReturnBatteryDto_When_FoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
         Battery battery = BatteryTestData.GetBatteryByTimestamp(timestamp);
@@ -105,6 +105,7 @@ public class BatteryServiceTest
 
         BatteryDto? result = await _batteryService.GetBatteryDtoByTimestampAsync(timestamp);
 
+        await _batteryRepository.Received(1).GetBatteryByTimestampAsync(Arg.Is(timestamp));
         string logIsNull = $"{nameof(Battery)} not found.";
         Assert.Multiple(() =>
         {
@@ -114,11 +115,11 @@ public class BatteryServiceTest
     }
 
     [Test]
-    public async Task GetBatteryDtoByDateAsync_Should_ReturnBatteryDto_When_BatteryDtoFoundByDate()
+    public async Task GetBatteryDtoByDateAsync_Should_ReturnBatteryDto_When_FoundByDate()
     {
         DateTimeOffset date = DateTimeOffset.Now;
-        IEnumerable<Battery> battery = BatteryTestData.GetBatteryByDate(date);
-        _batteryRepository.GetBatteryByDateAsync(date).Returns(battery);
+        IEnumerable<Battery> batteries = BatteryTestData.GetBatteryByDate(date);
+        _batteryRepository.GetBatteryByDateAsync(date).Returns(batteries);
 
         IEnumerable<BatteryDto>? result = await _batteryService.GetBatteryDtosByDateAsync(date);
 
@@ -128,7 +129,25 @@ public class BatteryServiceTest
         {
             Assert.That(logDtoObjectToReturn, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
             Assert.That(result, Is.Not.Empty);
-            Assert.That(result?.Last().RegisteredAt, Is.EqualTo(battery.Last().RegisteredAt));
+            Assert.That(result?.Last().RegisteredAt, Is.EqualTo(batteries.Last().RegisteredAt));
+        });
+    }
+
+    [Test]
+    public async Task GetBatteryDtoByDateAsync_Should_ReturnNull_When_BatteryListIsEmpty()
+    {
+        DateTimeOffset date = DateTimeOffset.Now;
+        IEnumerable<Battery> batteries = [];
+        _batteryRepository.GetBatteryByDateAsync(date).Returns(batteries);
+
+        IEnumerable<BatteryDto>? result = await _batteryService.GetBatteryDtosByDateAsync(date);
+
+        await _batteryRepository.Received(1).GetBatteryByDateAsync(Arg.Is(date));
+        string logIsNullOrEmpty = $"{nameof(Battery)} for {date.Date:d} not found.";
+        Assert.Multiple(() =>
+        {
+            Assert.That(logIsNullOrEmpty, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
+            Assert.That(result, Is.Null);
         });
     }
 
@@ -140,7 +159,8 @@ public class BatteryServiceTest
 
         IEnumerable<BatteryDto>? result = await _batteryService.GetBatteryDtosByDateAsync(date);
 
-        string logIsNullOrEmpty = $"{nameof(Battery)} for {date.Date.ToShortDateString()} not found.";
+        await _batteryRepository.Received(1).GetBatteryByDateAsync(Arg.Is(date));
+        string logIsNullOrEmpty = $"{nameof(Battery)} for {date.Date:d} not found.";
         Assert.Multiple(() =>
         {
             Assert.That(logIsNullOrEmpty, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
@@ -149,18 +169,122 @@ public class BatteryServiceTest
     }
 
     [Test]
-    public async Task GetBatteryDtoByDateAsync_Should_ReturnNull_When_BatteryListIsEmpty()
+    public async Task CreateBatteryDtoAsync_Should_ReturnBatteryDto_When_BatteryIsCreated()
     {
-        DateTimeOffset date = DateTimeOffset.Now;
-        IEnumerable<Battery> battery = Enumerable.Empty<Battery>();
-        _batteryRepository.GetBatteryByDateAsync(date).Returns(battery);
+        BatteryDto? batteryDto = BatteryTestData.CreateValidBatteryDto();
 
-        IEnumerable<BatteryDto>? result = await _batteryService.GetBatteryDtosByDateAsync(date);
+        BatteryDto? result = await _batteryService.CreateBatteryDtoAsync(batteryDto);
 
-        string logIsNullOrEmpty = $"{nameof(Battery)} for {date.Date.ToShortDateString()} not found.";
+        string LogDtoObjectToCreate =
+            $"{nameof(BatteryDto)} with Id={result?.Id} and RegisteredAt={result?.RegisteredAt.ToString(CultureInfo.InvariantCulture)} is created.";
         Assert.Multiple(() =>
         {
-            Assert.That(logIsNullOrEmpty, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
+            Assert.That(LogDtoObjectToCreate, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result?.Id, Is.EqualTo(batteryDto.Id));
+        });
+    }
+
+    [Test]
+    public async Task CreateBatteryDtoAsync_Should_ReturnNull_When_BatteryDtoIsNull()
+    {
+        BatteryDto batteryDto = BatteryTestData.CreateValidBatteryDto();
+
+        BatteryDto? result = await _batteryService.CreateBatteryDtoAsync(null);
+
+        string logIsNull = $"{nameof(BatteryDto)} not found.";
+        Assert.Multiple(() =>
+        {
+            Assert.That(logIsNull, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
+            Assert.That(result, Is.Null);
+        });
+    }
+
+    [Test]
+    public async Task DeleteBatteryDtoByIdAsync_Should_ReturnBatteryDto_When_FoundById()
+    {
+        Guid id = Guid.NewGuid();
+        Battery battery = BatteryTestData.GetBatteryById(id);
+        _batteryRepository.DeleteBatteryByIdAsync(id).Returns(battery);
+
+        BatteryDto? result = await _batteryService.DeleteBatteryDtoByIdAsync(id);
+
+        string LogDtoObjectToDelete =
+            $"{nameof(BatteryDto)} with Id={result?.Id} and RegisteredAt={result?.RegisteredAt.ToString(CultureInfo.InvariantCulture)} is deleted.";
+        Assert.Multiple(() =>
+        {
+            Assert.That(LogDtoObjectToDelete, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result?.Id, Is.EqualTo(battery.Id));
+        });
+    }
+
+    [Test]
+    public async Task DeleteBatteryDtoByIdAsync_Should_ReturnNull_When_IdIsEmpty()
+    {
+        Guid id = Guid.Empty;
+
+        BatteryDto? result = await _batteryService.DeleteBatteryDtoByIdAsync(id);
+
+        string logIsNull = $"{id} is invalid id.";
+        Assert.Multiple(() =>
+        {
+            Assert.That(logIsNull, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
+            Assert.That(result, Is.Null);
+        });
+    }
+
+    [Test]
+    public async Task DeleteBatteryDtoByIdAsync_Should_ReturnNull_When_BatteryIsNull()
+    {
+        Guid id = Guid.NewGuid();
+        _batteryRepository.DeleteBatteryByIdAsync(id).ReturnsNull();
+
+        BatteryDto? result = await _batteryService.DeleteBatteryDtoByIdAsync(id);
+
+        await _batteryRepository.Received(1).DeleteBatteryByIdAsync(Arg.Is(id));
+        string logIsNull = $"{nameof(Battery)} not found.";
+        Assert.Multiple(() =>
+        {
+            Assert.That(logIsNull, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
+            Assert.That(result, Is.Null);
+        });
+    }
+
+    [Test]
+    public async Task DeleteBatteryDtoByTimestampAsync_Should_ReturnBatteryDto_When_FoundById()
+    {
+        DateTimeOffset timestamp = DateTimeOffset.Now;
+        Battery battery = BatteryTestData.GetBatteryByTimestamp(timestamp);
+        _batteryRepository.DeleteBatteryByTimestampAsync(timestamp).Returns(battery);
+
+        BatteryDto? result = await _batteryService.DeleteBatteryDtoByTimestampAsync(timestamp);
+
+        await _batteryRepository.Received(1).DeleteBatteryByTimestampAsync(Arg.Is(timestamp));
+        await _batteryRepository.Received(1).SaveChangesAsync();
+        string LogDtoObjectToDelete =
+            $"{nameof(BatteryDto)} with Id={result?.Id} and RegisteredAt={result?.RegisteredAt.ToString(CultureInfo.InvariantCulture)} is deleted.";
+        Assert.Multiple(() =>
+        {
+            Assert.That(LogDtoObjectToDelete, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result?.Id, Is.EqualTo(battery.Id));
+        });
+    }
+
+    [Test]
+    public async Task DeleteBatteryDtoByTimestampAsync_Should_ReturnNull_When_BatteryIsNull()
+    {
+        DateTimeOffset timestamp = DateTimeOffset.Now;
+        _batteryRepository.DeleteBatteryByTimestampAsync(timestamp).ReturnsNull();
+
+        BatteryDto? result = await _batteryService.DeleteBatteryDtoByTimestampAsync(timestamp);
+
+        await _batteryRepository.Received(1).DeleteBatteryByTimestampAsync(Arg.Is(timestamp));
+        string logIsNull = $"{nameof(Battery)} not found.";
+        Assert.Multiple(() =>
+        {
+            Assert.That(logIsNull, Is.EqualTo(_fakeLogger.Collector.LatestRecord.Message));
             Assert.That(result, Is.Null);
         });
     }

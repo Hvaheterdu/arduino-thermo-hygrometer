@@ -31,7 +31,7 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<BatteryDto>> GetByIdAsync([FromRoute] Guid id)
     {
         BatteryDto? batteryDto = await _batteryService.GetBatteryDtoByIdAsync(id);
-        if (batteryDto == null)
+        if (batteryDto is null)
         {
             return NotFound(batteryDto);
         }
@@ -53,7 +53,7 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<BatteryDto>> GetByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         BatteryDto? batteryDto = await _batteryService.GetBatteryDtoByTimestampAsync(timestamp);
-        if (batteryDto == null)
+        if (batteryDto is null)
         {
             return NotFound(batteryDto);
         }
@@ -75,7 +75,7 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<IEnumerable<BatteryDto>>> GetByDateAsync([FromRoute] DateTimeOffset date)
     {
         IEnumerable<BatteryDto>? batteryDto = await _batteryService.GetBatteryDtosByDateAsync(date);
-        if (batteryDto == null || !batteryDto.Any())
+        if (batteryDto is null || !batteryDto.Any())
         {
             return NotFound(batteryDto);
         }
@@ -92,7 +92,7 @@ public class BatteryController : ControllerBase
     /// <response code="400">Returns <c>BadRequest</c> if invalid batteryDto object.</response>
     [ActionName("CreateBattery")]
     [HttpPost("add")]
-    [Produces("application/json"), Consumes("application/json")]
+    [Consumes("application/json"), Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BatteryDto>> CreateAsync([FromBody] BatteryDto batteryDto)
@@ -123,7 +123,7 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<BatteryDto>> DeleteByIdAsync([FromRoute] Guid id)
     {
         BatteryDto? batteryDto = await _batteryService.DeleteBatteryDtoByIdAsync(id);
-        if (batteryDto == null)
+        if (batteryDto is null)
         {
             return NotFound(batteryDto);
         }
@@ -145,7 +145,7 @@ public class BatteryController : ControllerBase
     public async Task<ActionResult<BatteryDto>> DeleteByTimestampAsync([FromRoute] DateTimeOffset timestamp)
     {
         BatteryDto? batteryDto = await _batteryService.DeleteBatteryDtoByTimestampAsync(timestamp);
-        if (batteryDto == null)
+        if (batteryDto is null)
         {
             return NotFound(batteryDto);
         }
