@@ -21,7 +21,7 @@ public static class HumidityTestData
     public static Humidity GetHumidityByTimestamp(DateTimeOffset timestamp) => new(90.42M)
     {
         Id = Guid.NewGuid(),
-        RegisteredAt = timestamp,
+        RegisteredAt = timestamp
     };
 
     public static HumidityDto GetHumidityDtoByTimestamp(DateTimeOffset timestamp) => new()
@@ -36,12 +36,12 @@ public static class HumidityTestData
         new(85.22M)
         {
             Id = Guid.NewGuid(),
-            RegisteredAt = dateTimeOffset,
+            RegisteredAt = dateTimeOffset
         },
         new(84.24M)
         {
             Id = Guid.NewGuid(),
-            RegisteredAt = dateTimeOffset,
+            RegisteredAt = dateTimeOffset
         }
     };
 

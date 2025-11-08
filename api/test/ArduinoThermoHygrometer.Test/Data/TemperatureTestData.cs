@@ -8,7 +8,7 @@ public static class TemperatureTestData
     public static Temperature GetTemperatureById(Guid id) => new(120.25M)
     {
         Id = id,
-        RegisteredAt = DateTimeOffset.Now,
+        RegisteredAt = DateTimeOffset.Now
     };
 
     public static TemperatureDto GetTemperatureDtoById(Guid id) => new()
@@ -21,7 +21,7 @@ public static class TemperatureTestData
     public static Temperature GetTemperatureByTimestamp(DateTimeOffset timestamp) => new(115.35M)
     {
         Id = Guid.NewGuid(),
-        RegisteredAt = timestamp,
+        RegisteredAt = timestamp
     };
 
     public static TemperatureDto GetTemperatureDtoByTimestamp(DateTimeOffset timestamp) => new()
@@ -36,12 +36,12 @@ public static class TemperatureTestData
         new(110.35M)
         {
             Id = Guid.NewGuid(),
-            RegisteredAt = dateTimeOffset,
+            RegisteredAt = dateTimeOffset
         },
         new(109.52M)
         {
             Id = Guid.NewGuid(),
-            RegisteredAt = dateTimeOffset,
+            RegisteredAt = dateTimeOffset
         }
     };
 

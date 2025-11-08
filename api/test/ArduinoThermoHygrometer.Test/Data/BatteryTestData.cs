@@ -8,7 +8,7 @@ public static class BatteryTestData
     public static Battery GetBatteryById(Guid id) => new(100)
     {
         Id = id,
-        RegisteredAt = DateTimeOffset.Now,
+        RegisteredAt = DateTimeOffset.Now
     };
 
     public static BatteryDto GetBatteryDtoById(Guid id) => new()
@@ -21,7 +21,7 @@ public static class BatteryTestData
     public static Battery GetBatteryByTimestamp(DateTimeOffset timestamp) => new(95)
     {
         Id = Guid.NewGuid(),
-        RegisteredAt = timestamp,
+        RegisteredAt = timestamp
     };
 
     public static BatteryDto GetBatteryDtoByTimestamp(DateTimeOffset timestamp) => new()
@@ -36,12 +36,12 @@ public static class BatteryTestData
         new(90)
         {
             Id = Guid.NewGuid(),
-            RegisteredAt = dateTimeOffset,
+            RegisteredAt = dateTimeOffset
         },
         new(89)
         {
             Id = Guid.NewGuid(),
-            RegisteredAt = dateTimeOffset,
+            RegisteredAt = dateTimeOffset
         }
     };
 
