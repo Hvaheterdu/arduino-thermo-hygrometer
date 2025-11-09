@@ -1,14 +1,13 @@
 ﻿using ArduinoThermoHygrometer.Api.Controllers;
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
-using ArduinoThermoHygrometer.Test.Data;
-using Microsoft.AspNetCore.Http;
+using ArduinoThermoHygrometer.Test.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 
-namespace ArduinoThermoHygrometer.Test.Controllers;
+namespace ArduinoThermoHygrometer.Test.Unit.Controllers;
 
 [TestFixture]
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]

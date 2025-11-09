@@ -1,16 +1,15 @@
 ﻿using System.Globalization;
-using ArduinoThermoHygrometer.Core.Mappers;
 using ArduinoThermoHygrometer.Core.Repositories.Contracts;
 using ArduinoThermoHygrometer.Core.Services;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
-using ArduinoThermoHygrometer.Test.Data;
+using ArduinoThermoHygrometer.Test.Helpers;
 using Microsoft.Extensions.Logging.Testing;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 
-namespace ArduinoThermoHygrometer.Test.Services;
+namespace ArduinoThermoHygrometer.Test.Unit.Services;
 
 [TestFixture]
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]

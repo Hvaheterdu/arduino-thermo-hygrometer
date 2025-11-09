@@ -1,77 +1,77 @@
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 
-namespace ArduinoThermoHygrometer.Test.Data;
+namespace ArduinoThermoHygrometer.Test.Helpers;
 
-public static class HumidityTestData
+public static class BatteryTestData
 {
-    public static Humidity GetHumidityById(Guid id) => new(95.50M)
+    public static Battery GetBatteryById(Guid id) => new(100)
     {
         Id = id,
         RegisteredAt = DateTimeOffset.Now
     };
 
-    public static HumidityDto GetHumidityDtoById(Guid id) => new()
+    public static BatteryDto GetBatteryDtoById(Guid id) => new()
     {
         Id = id,
         RegisteredAt = DateTimeOffset.Now,
-        AirHumidity = 95.50M
+        BatteryStatus = 100
     };
 
-    public static Humidity GetHumidityByTimestamp(DateTimeOffset timestamp) => new(90.42M)
+    public static Battery GetBatteryByTimestamp(DateTimeOffset timestamp) => new(95)
     {
         Id = Guid.NewGuid(),
         RegisteredAt = timestamp
     };
 
-    public static HumidityDto GetHumidityDtoByTimestamp(DateTimeOffset timestamp) => new()
+    public static BatteryDto GetBatteryDtoByTimestamp(DateTimeOffset timestamp) => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = timestamp,
-        AirHumidity = 90.42M
+        BatteryStatus = 95
     };
 
-    public static IEnumerable<Humidity> GetHumidityByDate(DateTimeOffset dateTimeOffset) => new List<Humidity>()
+    public static IEnumerable<Battery> GetBatteryByDate(DateTimeOffset dateTimeOffset) => new List<Battery>()
     {
-        new(85.22M)
+        new(90)
         {
             Id = Guid.NewGuid(),
             RegisteredAt = dateTimeOffset
         },
-        new(84.24M)
+        new(89)
         {
             Id = Guid.NewGuid(),
             RegisteredAt = dateTimeOffset
         }
     };
 
-    public static IEnumerable<HumidityDto> GetHumidityDtoByDate(DateTimeOffset dateTimeOffset) => new List<HumidityDto>()
+    public static IEnumerable<BatteryDto> GetBatteryDtoByDate(DateTimeOffset dateTimeOffset) => new List<BatteryDto>()
     {
         new()
         {
             Id = Guid.NewGuid(),
             RegisteredAt = dateTimeOffset,
-            AirHumidity = 85.22M
+            BatteryStatus = 90
         },
         new()
         {
             Id = Guid.NewGuid(),
             RegisteredAt = dateTimeOffset,
-            AirHumidity = 84.24M
+            BatteryStatus = 89
         }
     };
 
-    public static HumidityDto CreateValidHumidityDto() => new()
+    public static BatteryDto CreateValidBatteryDto() => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,
-        AirHumidity = 83.98M
+        BatteryStatus = 85
     };
 
-    public static HumidityDto CreateInvalidHumidityDto() => new()
+    public static BatteryDto CreateInvalidBatteryDto() => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,
-        AirHumidity = 100
+        BatteryStatus = -10
     };
 }

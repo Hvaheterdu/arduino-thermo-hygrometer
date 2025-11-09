@@ -1,7 +1,7 @@
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Domain.Entities;
 
-namespace ArduinoThermoHygrometer.Test.Data;
+namespace ArduinoThermoHygrometer.Test.Helpers;
 
 public static class TemperatureTestData
 {

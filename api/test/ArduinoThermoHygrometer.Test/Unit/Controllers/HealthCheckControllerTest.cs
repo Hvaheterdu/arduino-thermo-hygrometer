@@ -6,7 +6,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace ArduinoThermoHygrometer.Test.Controllers;
+namespace ArduinoThermoHygrometer.Test.Unit.Controllers;
 
 [TestFixture]
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
