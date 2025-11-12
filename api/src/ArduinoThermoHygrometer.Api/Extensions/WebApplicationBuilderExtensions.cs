@@ -186,15 +186,15 @@ internal static class WebApplicationBuilderExtensions
 
         using ServiceProvider serviceProvider = builder.Services.BuildServiceProvider();
         using IServiceScope scope = serviceProvider.CreateScope();
-        ArduinoThermoHygrometerDbContext arduinoThermoHygrometerDbContext = scope.ServiceProvider.GetRequiredService<ArduinoThermoHygrometerDbContext>();
+        ArduinoThermoHygrometerDbContext dbContext = scope.ServiceProvider.GetRequiredService<ArduinoThermoHygrometerDbContext>();
 
-        bool isSqlServer = arduinoThermoHygrometerDbContext.Database.IsSqlServer();
+        bool isSqlServer = dbContext.Database.IsSqlServer();
         if (!isSqlServer)
         {
             throw new NotSupportedException("Database provider currently in use is not the SQL Server provider.");
         }
 
-        arduinoThermoHygrometerDbContext.Database.Migrate();
+        dbContext.Database.Migrate();
 
         return builder;
     }
@@ -227,22 +227,6 @@ internal static class WebApplicationBuilderExtensions
                 configure.IncludeScopes = true;
             });
         }
-        //else
-        //{
-        //    builder.Services.AddOpenTelemetry()
-        //        .ConfigureResource(configure => configure.AddService(builder.Environment.ApplicationName))
-        //        .UseAzureMonitor();
-
-        //    builder.Logging.AddOpenTelemetry(configure =>
-        //    {
-        //        configure.SetResourceBuilder(ResourceBuilder.CreateDefault()
-        //            .AddService(builder.Environment.ApplicationName)
-        //            .AddAttributes(new Dictionary<string, object>()
-        //            {
-        //                ["environment.name"] = builder.Environment.EnvironmentName,
-        //            }));
-        //    });
-        //}
 
         return builder;
     }

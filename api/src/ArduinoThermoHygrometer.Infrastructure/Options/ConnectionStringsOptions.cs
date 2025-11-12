@@ -1,6 +1,6 @@
 namespace ArduinoThermoHygrometer.Infrastructure.Options;
 
-public sealed class ConnectionStringsOptions
+internal sealed class ConnectionStringsOptions
 {
     public const string SectionName = "ConnectionStrings";
 

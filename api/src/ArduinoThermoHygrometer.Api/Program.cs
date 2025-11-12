@@ -136,17 +136,10 @@ app.MapHealthChecks($"/api/health", new HealthCheckOptions
 // Custom middleware.
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
-// Seed database.
-if (app.Environment.IsDevelopment())
-{
-    using IServiceScope scope = app.Services.CreateScope();
-    IServiceProvider services = scope.ServiceProvider;
-
-    ArduinoThermoHygrometerDbContext dbContext = services.GetRequiredService<ArduinoThermoHygrometerDbContext>();
-    DatabaseInitialiser.SeedDatabase(dbContext);
-}
-
 // Endpoints for controllers.
 app.MapControllers();
 
 app.Run();
+
+// Required for integration tests.
+public partial class Program { }

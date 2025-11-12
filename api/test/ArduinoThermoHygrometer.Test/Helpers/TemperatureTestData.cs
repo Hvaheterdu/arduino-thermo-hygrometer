@@ -3,35 +3,35 @@ using ArduinoThermoHygrometer.Domain.Entities;
 
 namespace ArduinoThermoHygrometer.Test.Helpers;
 
-public static class TemperatureTestData
+internal static class TemperatureTestData
 {
-    public static Temperature GetTemperatureById(Guid id) => new(120.25M)
+    internal static Temperature GetTemperatureById(Guid id) => new(120.25M)
     {
         Id = id,
         RegisteredAt = DateTimeOffset.Now
     };
 
-    public static TemperatureDto GetTemperatureDtoById(Guid id) => new()
+    internal static TemperatureDto GetTemperatureDtoById(Guid id) => new()
     {
         Id = id,
         RegisteredAt = DateTimeOffset.Now,
         Temp = 120.25M
     };
 
-    public static Temperature GetTemperatureByTimestamp(DateTimeOffset timestamp) => new(115.35M)
+    internal static Temperature GetTemperatureByTimestamp(DateTimeOffset timestamp) => new(115.35M)
     {
         Id = Guid.NewGuid(),
         RegisteredAt = timestamp
     };
 
-    public static TemperatureDto GetTemperatureDtoByTimestamp(DateTimeOffset timestamp) => new()
+    internal static TemperatureDto GetTemperatureDtoByTimestamp(DateTimeOffset timestamp) => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = timestamp,
         Temp = 115.35M
     };
 
-    public static IEnumerable<Temperature> GetTemperatureByDate(DateTimeOffset dateTimeOffset) => new List<Temperature>()
+    internal static IEnumerable<Temperature> GetTemperatureByDate(DateTimeOffset dateTimeOffset) => new List<Temperature>()
     {
         new(110.35M)
         {
@@ -45,7 +45,7 @@ public static class TemperatureTestData
         }
     };
 
-    public static IEnumerable<TemperatureDto> GetTemperatureDtoByDate(DateTimeOffset dateTimeOffset) => new List<TemperatureDto>()
+    internal static IEnumerable<TemperatureDto> GetTemperatureDtoByDate(DateTimeOffset dateTimeOffset) => new List<TemperatureDto>()
     {
         new()
         {
@@ -61,14 +61,14 @@ public static class TemperatureTestData
         }
     };
 
-    public static TemperatureDto CreateValidTemperatureDto() => new()
+    internal static TemperatureDto CreateValidTemperatureDto() => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,
         Temp = 100.52M
     };
 
-    public static TemperatureDto CreateInvalidTemperatureDto() => new()
+    internal static TemperatureDto CreateInvalidTemperatureDto() => new()
     {
         Id = Guid.NewGuid(),
         RegisteredAt = DateTimeOffset.Now,

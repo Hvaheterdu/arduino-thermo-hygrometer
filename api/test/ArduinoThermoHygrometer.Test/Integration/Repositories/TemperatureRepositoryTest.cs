@@ -1,5 +1,14 @@
-﻿namespace ArduinoThermoHygrometer.Test.Integration.Repositories;
+﻿using ArduinoThermoHygrometer.Test.Configs;
+using ArduinoThermoHygrometer.Test.Fixtures;
+using Xunit;
 
-public class TemperatureRepositoryTest
+namespace ArduinoThermoHygrometer.Test.Integration.Repositories;
+
+[Collection("TemperatureRepository integration tests.")]
+public class TemperatureRepositoryTest : IntegrationTestBase
 {
+    public TemperatureRepositoryTest(TestContainerFixture testContainerFixture) : base(testContainerFixture)
+    {
+
+    }
 }
