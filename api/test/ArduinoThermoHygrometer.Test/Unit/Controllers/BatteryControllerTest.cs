@@ -2,28 +2,27 @@
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Test.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using NUnit.Framework;
+using Xunit;
 
 namespace ArduinoThermoHygrometer.Test.Unit.Controllers;
 
-[TestFixture]
-[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
+[Collection("BatteryController unit tests")]
 public class BatteryControllerTest
 {
-    private IBatteryService _batteryService = null!;
-    private BatteryController _batteryController = null!;
+    private readonly IBatteryService _batteryService;
+    private readonly BatteryController _batteryController;
 
-    [SetUp]
-    public void Init()
+    public BatteryControllerTest()
     {
         _batteryService = Substitute.For<IBatteryService>();
         _batteryController = new BatteryController(_batteryService);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByIdAsync_Should_Return200OK_When_BatteryDtoFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -32,11 +31,12 @@ public class BatteryControllerTest
 
         ActionResult<BatteryDto> result = await _batteryController.GetByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        Assert.Equal(batteryDto, okResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByIdAsync_Should_Return404NotFound_When_BatteryDtoNotFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -44,11 +44,11 @@ public class BatteryControllerTest
 
         ActionResult<BatteryDto> result = await _batteryController.GetByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByTimestampAsync_Should_Return200OK_When_BatteryDtoFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -57,11 +57,12 @@ public class BatteryControllerTest
 
         ActionResult<BatteryDto> result = await _batteryController.GetByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        Assert.Equal(batteryDto, okResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByTimestampAsync_Should_Return404NotFound_When_BatteryDtoNotFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -69,24 +70,25 @@ public class BatteryControllerTest
 
         ActionResult<BatteryDto> result = await _batteryController.GetByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByDateAsync_Should_Return200OK_When_BatteryDtoFoundByDate()
     {
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
-        IEnumerable<BatteryDto> batteryDto = BatteryTestData.GetBatteryDtoByDate(dateTimeOffset);
-        _batteryService.GetBatteryDtosByDateAsync(dateTimeOffset).Returns(batteryDto);
+        IEnumerable<BatteryDto> batteryDtos = BatteryTestData.GetBatteryDtoByDate(dateTimeOffset);
+        _batteryService.GetBatteryDtosByDateAsync(dateTimeOffset).Returns(batteryDtos);
 
         ActionResult<IEnumerable<BatteryDto>> result = await _batteryController.GetByDateAsync(dateTimeOffset);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<IEnumerable<BatteryDto>>>());
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        Assert.Equal(batteryDtos, okResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByDateAsync_Should_Return404NotFound_When_BatteryDtoNotFoundByDate()
     {
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
@@ -94,23 +96,24 @@ public class BatteryControllerTest
 
         ActionResult<IEnumerable<BatteryDto>> result = await _batteryController.GetByDateAsync(dateTimeOffset);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<IEnumerable<BatteryDto>>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task CreateAsync_Should_Return201Created_When_BatteryDtoModelstateIsValid()
     {
         BatteryDto batteryDto = BatteryTestData.CreateValidBatteryDto();
-        _batteryService.CreateBatteryDtoAsync(Arg.Any<BatteryDto>()).Returns(Task.FromResult<BatteryDto?>(batteryDto));
+        _batteryService.CreateBatteryDtoAsync(Arg.Any<BatteryDto>()).Returns(batteryDto);
 
         ActionResult<BatteryDto> result = await _batteryController.CreateAsync(batteryDto);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<CreatedAtActionResult>());
+        CreatedAtActionResult createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+        Assert.Equal(StatusCodes.Status201Created, createdResult.StatusCode);
+        Assert.Equal(batteryDto, createdResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task CreateAsync_Should_Return400BadRequest_When_BatteryDtoModelstateIsInvalid()
     {
         BatteryDto batteryDto = BatteryTestData.CreateInvalidBatteryDto();
@@ -118,11 +121,11 @@ public class BatteryControllerTest
 
         ActionResult<BatteryDto> result = await _batteryController.CreateAsync(batteryDto);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<BadRequestObjectResult>());
+        BadRequestObjectResult badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status400BadRequest, badRequestResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByIdAsync_Should_Return204NoContent_When_BatteryDtoFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -131,11 +134,11 @@ public class BatteryControllerTest
 
         ActionResult<BatteryDto> result = await _batteryController.DeleteByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NoContentResult>());
+        NoContentResult noContentResult = Assert.IsType<NoContentResult>(result.Result);
+        Assert.Equal(StatusCodes.Status204NoContent, noContentResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByIdAsync_Should_Return404NotFound_When_BatteryDtoNotFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -143,11 +146,11 @@ public class BatteryControllerTest
 
         ActionResult<BatteryDto> result = await _batteryController.DeleteByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByTimestampAsync_Should_Return204NoContent_When_BatteryDtoFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -156,11 +159,11 @@ public class BatteryControllerTest
 
         ActionResult<BatteryDto> result = await _batteryController.DeleteByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NoContentResult>());
+        NoContentResult noContentResult = Assert.IsType<NoContentResult>(result.Result);
+        Assert.Equal(StatusCodes.Status204NoContent, noContentResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByTimestampAsync_Should_Return404NotFound_When_BatteryDtoNotFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -168,7 +171,7 @@ public class BatteryControllerTest
 
         ActionResult<BatteryDto> result = await _batteryController.DeleteByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<BatteryDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 }

@@ -2,28 +2,27 @@
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Test.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using NUnit.Framework;
+using Xunit;
 
 namespace ArduinoThermoHygrometer.Test.Unit.Controllers;
 
-[TestFixture]
-[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
+[Collection("TemperatureController unit tests")]
 public class TemperatureControllerTest
 {
-    private ITemperatureService _temperatureService = null!;
-    private TemperatureController _temperatureController = null!;
+    private readonly ITemperatureService _temperatureService;
+    private readonly TemperatureController _temperatureController;
 
-    [SetUp]
-    public void Init()
+    public TemperatureControllerTest()
     {
         _temperatureService = Substitute.For<ITemperatureService>();
         _temperatureController = new TemperatureController(_temperatureService);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByIdAsync_Should_Return200OK_When_TemperatureDtoFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -32,11 +31,12 @@ public class TemperatureControllerTest
 
         ActionResult<TemperatureDto> result = await _temperatureController.GetByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        Assert.Equal(temperatureDto, okResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByIdAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -44,11 +44,11 @@ public class TemperatureControllerTest
 
         ActionResult<TemperatureDto> result = await _temperatureController.GetByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByTimestampAsync_Should_Return200OK_When_TemperatureDtoFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -57,11 +57,12 @@ public class TemperatureControllerTest
 
         ActionResult<TemperatureDto> result = await _temperatureController.GetByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        Assert.Equal(temperatureDto, okResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByTimestampAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -69,24 +70,25 @@ public class TemperatureControllerTest
 
         ActionResult<TemperatureDto> result = await _temperatureController.GetByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByDateAsync_Should_Return200OK_When_TemperatureDtoFoundByDate()
     {
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
-        IEnumerable<TemperatureDto> temperatureDto = TemperatureTestData.GetTemperatureDtoByDate(dateTimeOffset);
-        _temperatureService.GetTemperatureDtosByDateAsync(dateTimeOffset).Returns(temperatureDto);
+        IEnumerable<TemperatureDto> temperatureDtos = TemperatureTestData.GetTemperatureDtoByDate(dateTimeOffset);
+        _temperatureService.GetTemperatureDtosByDateAsync(dateTimeOffset).Returns(temperatureDtos);
 
         ActionResult<IEnumerable<TemperatureDto>> result = await _temperatureController.GetByDateAsync(dateTimeOffset);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<IEnumerable<TemperatureDto>>>());
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        Assert.Equal(temperatureDtos, okResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByDateAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundByDate()
     {
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
@@ -94,23 +96,24 @@ public class TemperatureControllerTest
 
         ActionResult<IEnumerable<TemperatureDto>> result = await _temperatureController.GetByDateAsync(dateTimeOffset);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<IEnumerable<TemperatureDto>>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task CreateAsync_Should_Return201Created_When_TemperatureDtoModelstateIsValid()
     {
         TemperatureDto temperatureDto = TemperatureTestData.CreateValidTemperatureDto();
-        _temperatureService.CreateTemperatureDtoAsync(Arg.Any<TemperatureDto>()).Returns(Task.FromResult<TemperatureDto?>(temperatureDto));
+        _temperatureService.CreateTemperatureDtoAsync(Arg.Any<TemperatureDto>()).Returns(temperatureDto);
 
         ActionResult<TemperatureDto> result = await _temperatureController.CreateAsync(temperatureDto);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<CreatedAtActionResult>());
+        CreatedAtActionResult createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+        Assert.Equal(StatusCodes.Status201Created, createdResult.StatusCode);
+        Assert.Equal(temperatureDto, createdResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task CreateAsync_Should_Return400BadRequest_When_TemperatureDtoModelstateIsInvalid()
     {
         TemperatureDto temperatureDto = TemperatureTestData.CreateInvalidTemperatureDto();
@@ -118,11 +121,11 @@ public class TemperatureControllerTest
 
         ActionResult<TemperatureDto> result = await _temperatureController.CreateAsync(temperatureDto);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<BadRequestObjectResult>());
+        BadRequestObjectResult badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status400BadRequest, badRequestResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByIdAsync_Should_Return204NoContent_When_TemperatureDtoFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -131,11 +134,11 @@ public class TemperatureControllerTest
 
         ActionResult<TemperatureDto> result = await _temperatureController.DeleteByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NoContentResult>());
+        NoContentResult noContentResult = Assert.IsType<NoContentResult>(result.Result);
+        Assert.Equal(StatusCodes.Status204NoContent, noContentResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByIdAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -143,11 +146,11 @@ public class TemperatureControllerTest
 
         ActionResult<TemperatureDto> result = await _temperatureController.DeleteByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByTimestampAsync_Should_Return204NoContent_When_TemperatureDtoFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -156,11 +159,11 @@ public class TemperatureControllerTest
 
         ActionResult<TemperatureDto> result = await _temperatureController.DeleteByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NoContentResult>());
+        NoContentResult noContentResult = Assert.IsType<NoContentResult>(result.Result);
+        Assert.Equal(StatusCodes.Status204NoContent, noContentResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByTimestampAsync_Should_Return404NotFound_When_TemperatureDtoNotFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -168,7 +171,7 @@ public class TemperatureControllerTest
 
         ActionResult<TemperatureDto> result = await _temperatureController.DeleteByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<TemperatureDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 }

@@ -11,7 +11,8 @@ public class ArduinoThermoHygrometerDbContext : DbContext
 
     public DbSet<Temperature> Temperatures { get; set; } = default!;
 
-    public ArduinoThermoHygrometerDbContext(DbContextOptions<ArduinoThermoHygrometerDbContext> options) : base(options)
+    public ArduinoThermoHygrometerDbContext(DbContextOptions<ArduinoThermoHygrometerDbContext> options)
+        : base(options)
     {
     }
 

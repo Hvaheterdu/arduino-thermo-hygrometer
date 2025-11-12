@@ -2,28 +2,27 @@
 using ArduinoThermoHygrometer.Core.Services.Contracts;
 using ArduinoThermoHygrometer.Domain.DTOs;
 using ArduinoThermoHygrometer.Test.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using NUnit.Framework;
+using Xunit;
 
 namespace ArduinoThermoHygrometer.Test.Unit.Controllers;
 
-[TestFixture]
-[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
+[Collection("HumidityController unit tests")]
 public class HumidityControllerTest
 {
-    private IHumidityService _humidityService = null!;
-    private HumidityController _humidityController = null!;
+    private readonly IHumidityService _humidityService;
+    private readonly HumidityController _humidityController;
 
-    [SetUp]
-    public void Init()
+    public HumidityControllerTest()
     {
         _humidityService = Substitute.For<IHumidityService>();
         _humidityController = new HumidityController(_humidityService);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByIdAsync_Should_Return200OK_When_HumidityDtoFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -32,11 +31,12 @@ public class HumidityControllerTest
 
         ActionResult<HumidityDto> result = await _humidityController.GetByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        Assert.Equal(humidityDto, okResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByIdAsync_Should_Return404NotFound_When_HumidityDtoNotFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -44,11 +44,11 @@ public class HumidityControllerTest
 
         ActionResult<HumidityDto> result = await _humidityController.GetByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByTimestampAsync_Should_Return200OK_When_HumidityDtoFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -57,11 +57,12 @@ public class HumidityControllerTest
 
         ActionResult<HumidityDto> result = await _humidityController.GetByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        Assert.Equal(humidityDto, okResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByTimestampAsync_Should_Return404NotFound_When_HumidityDtoNotFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -69,24 +70,25 @@ public class HumidityControllerTest
 
         ActionResult<HumidityDto> result = await _humidityController.GetByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByDateAsync_Should_Return200OK_When_HumidityDtoFoundByDate()
     {
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
-        IEnumerable<HumidityDto> humidityDto = HumidityTestData.GetHumidityDtoByDate(dateTimeOffset);
-        _humidityService.GetHumidityDtosByDateAsync(dateTimeOffset).Returns(humidityDto);
+        IEnumerable<HumidityDto> humidityDtos = HumidityTestData.GetHumidityDtoByDate(dateTimeOffset);
+        _humidityService.GetHumidityDtosByDateAsync(dateTimeOffset).Returns(humidityDtos);
 
         ActionResult<IEnumerable<HumidityDto>> result = await _humidityController.GetByDateAsync(dateTimeOffset);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<IEnumerable<HumidityDto>>>());
-        Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status200OK, okResult.StatusCode);
+        Assert.Equal(humidityDtos, okResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task GetByDateAsync_Should_Return404NotFound_When_HumidityDtoNotFoundByDate()
     {
         DateTimeOffset dateTimeOffset = DateTimeOffset.Now;
@@ -94,23 +96,24 @@ public class HumidityControllerTest
 
         ActionResult<IEnumerable<HumidityDto>> result = await _humidityController.GetByDateAsync(dateTimeOffset);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<IEnumerable<HumidityDto>>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task CreateAsync_Should_Return201Created_When_HumidityDtoModelstateIsValid()
     {
         HumidityDto humidityDto = HumidityTestData.CreateValidHumidityDto();
-        _humidityService.CreateHumidityDtoAsync(Arg.Any<HumidityDto>()).Returns(Task.FromResult<HumidityDto?>(humidityDto));
+        _humidityService.CreateHumidityDtoAsync(Arg.Any<HumidityDto>()).Returns(humidityDto);
 
         ActionResult<HumidityDto> result = await _humidityController.CreateAsync(humidityDto);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<CreatedAtActionResult>());
+        CreatedAtActionResult createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+        Assert.Equal(StatusCodes.Status201Created, createdResult.StatusCode);
+        Assert.Equal(humidityDto, createdResult.Value);
     }
 
-    [Test]
+    [Fact]
     public async Task CreateAsync_Should_Return400BadRequest_When_HumidityDtoModelstateIsInvalid()
     {
         HumidityDto humidityDto = HumidityTestData.CreateInvalidHumidityDto();
@@ -118,11 +121,11 @@ public class HumidityControllerTest
 
         ActionResult<HumidityDto> result = await _humidityController.CreateAsync(humidityDto);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<BadRequestObjectResult>());
+        BadRequestObjectResult badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status400BadRequest, badRequestResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByIdAsync_Should_Return204NoContent_When_HumidityDtoFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -131,11 +134,11 @@ public class HumidityControllerTest
 
         ActionResult<HumidityDto> result = await _humidityController.DeleteByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NoContentResult>());
+        NoContentResult noContentResult = Assert.IsType<NoContentResult>(result.Result);
+        Assert.Equal(StatusCodes.Status204NoContent, noContentResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByIdAsync_Should_Return404NotFound_When_HumidityDtoNotFoundById()
     {
         Guid id = Guid.NewGuid();
@@ -143,11 +146,11 @@ public class HumidityControllerTest
 
         ActionResult<HumidityDto> result = await _humidityController.DeleteByIdAsync(id);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByTimestampAsync_Should_Return204NoContent_When_HumidityDtoFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -156,11 +159,11 @@ public class HumidityControllerTest
 
         ActionResult<HumidityDto> result = await _humidityController.DeleteByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NoContentResult>());
+        NoContentResult noContentResult = Assert.IsType<NoContentResult>(result.Result);
+        Assert.Equal(StatusCodes.Status204NoContent, noContentResult.StatusCode);
     }
 
-    [Test]
+    [Fact]
     public async Task DeleteByTimestampAsync_Should_Return404NotFound_When_HumidityDtoNotFoundByTimestamp()
     {
         DateTimeOffset timestamp = DateTimeOffset.Now;
@@ -168,7 +171,7 @@ public class HumidityControllerTest
 
         ActionResult<HumidityDto> result = await _humidityController.DeleteByTimestampAsync(timestamp);
 
-        Assert.That(result, Is.InstanceOf<ActionResult<HumidityDto>>());
-        Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+        NotFoundObjectResult notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
     }
 }

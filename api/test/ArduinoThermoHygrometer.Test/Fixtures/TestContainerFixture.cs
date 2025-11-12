@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System.Runtime.InteropServices;
 using ArduinoThermoHygrometer.Infrastructure.Data;
 using DotNet.Testcontainers.Builders;
@@ -70,11 +71,18 @@ public class TestContainerFixture : WebApplicationFactory<Program>, IAsyncLifeti
     {
         builder.ConfigureTestServices(servicesConfiguration =>
         {
-            ServiceDescriptor? descriptor = servicesConfiguration.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<ArduinoThermoHygrometerDbContext>));
-            if (descriptor is not null)
+            ServiceDescriptor? dbOptionsDescriptor = servicesConfiguration.SingleOrDefault(
+                defaultValue => defaultValue.ServiceType == typeof(DbContextOptions<ArduinoThermoHygrometerDbContext>));
+            if (dbOptionsDescriptor is not null)
             {
-                servicesConfiguration.Remove(descriptor);
+                servicesConfiguration.Remove(dbOptionsDescriptor);
+            }
+
+            ServiceDescriptor? dbConnectionDescriptor = servicesConfiguration.SingleOrDefault(
+                defaultValue => defaultValue.ServiceType == typeof(DbConnection));
+            if (dbConnectionDescriptor is not null)
+            {
+                servicesConfiguration.Remove(dbConnectionDescriptor);
             }
 
             servicesConfiguration.AddDbContext<ArduinoThermoHygrometerDbContext>(
