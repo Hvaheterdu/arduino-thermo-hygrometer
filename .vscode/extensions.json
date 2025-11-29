@@ -1,10 +1,12 @@
 {
   "recommendations": [
     "dbaeumer.vscode-eslint",
+    "christian-kohler.path-intellisense",
     "esbenp.prettier-vscode",
-    "ms-dotnettools.csharp",
-    "ms-dotnettools.csdevkit",
-    "editorconfig.editorconfig",
-    "christian-kohler.path-intellisense"
+    "redhat.java",
+    "shengchen.vscode-checkstyle",
+    "SonarSource.sonarlint-vscode",
+    "vmware.vscode-spring-boot",
+    "vscjava.vscode-spring-initializr"
   ]
 }

@@ -2,8 +2,12 @@
   "version": "0.0.01",
   "name": "app",
   "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@outlook.com>",
-  "description": "The frontend application for a ASP.NET Core Web API that measures temperature and air humidity through a Arduino thermo hygrometer IoT device.",
+  "description": "The frontend application for a Java RESTful API that measures temperature and air humidity through a Arduino thermo hygrometer IoT device.",
   "keywords": [
+    "Java",
+    "Spring Boot",
+    "Maven",
+    "Postgres",
     "TypeScript",
     "React",
     "Arduino",
@@ -24,7 +28,7 @@
   "type": "module",
   "engines": {
     "npm": ">=11.6.1",
-    "node": ">=24.10.0"
+    "node": ">=24.11.0"
   },
   "browserslist": {
     "production": [
@@ -39,13 +43,7 @@
     "last 1 safari version",
     "last 1 edge version"
   ],
-  "lint-staged": {
-    "*.{ts,tsx}": "eslint",
-    "*.{ts,tsx,html,css,json,md}": "prettier --write",
-    "*.cs": "dotnet format --verify-no-changes --include"
-  },
   "scripts": {
-    "api:format": "dotnet format --verify-no-changes",
     "app:build:dev": "vite build --mode development",
     "app:build:production": "vite build --mode production",
     "app:build:staging": "vite build --mode staging",
@@ -55,24 +53,20 @@
     "app:lint:fix": "eslint \"app/**/*.{ts,tsx}\" --fix",
     "app:dev": "vite --mode localhost --config app/vite.config.ts",
     "knip": "knip",
-    "lint-staged": "lint-staged --relative",
-    "nswag": "nswag run nswag.json /runTime:Net80 --write app/src/**/api.generated.ts",
     "preview": "vite preview",
-    "prepare": "husky ./.husky",
     "version-bump-ps": "pwsh app/scripts/version_bump_ps.ps1",
     "version-bump-sh": "sh app/scripts/version_bump_sh.sh"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.90.8",
-    "nswag": "^14.6.2",
+    "@tanstack/react-query": "^5.90.10",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router": "^7.9.5"
+    "react-router": "^7.9.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
-    "@types/react": "^19.2.4",
+    "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
@@ -80,19 +74,16 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-check-file": "^3.3.1",
     "eslint-plugin-import-x": "^4.16.1",
-    "eslint-plugin-jsdoc": "^61.2.0",
+    "eslint-plugin-jsdoc": "^61.4.1",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
-    "husky": "^9.1.7",
-    "knip": "^5.69.0",
-    "lint-staged": "^16.2.6",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.2",
+    "typescript-eslint": "^8.47.0",
+    "vite": "^7.2.4",
     "vite-plugin-checker": "^0.11.0",
     "vite-plugin-mkcert": "^1.17.9",
     "vite-plugin-svgr": "^4.5.0"

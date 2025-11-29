@@ -1,1 +1,1 @@
-# Web API
+# RESTful API

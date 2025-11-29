@@ -1,104 +1,75 @@
 // Workspace settings. Overrides user and default settings
 {
-  "diffEditor.ignoreTrimWhitespace": false,
-  "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
-  "editor.formatOnType": true,
-  "editor.insertSpaces": true,
-  "eslint.enable": true,
-  "eslint.run": "onSave",
-  "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 1000,
-  "files.insertFinalNewline": true,
-  "path-intellisense.autoSlashAfterDirectory": true,
-  "path-intellisense.absolutePathToWorkspace": true,
-  "prettier.enable": true,
-  "[csharp]": {
-    "editor.maxTokenizationLineLength": 2500,
-    "editor.inlineSuggest.suppressSuggestions": false,
-    "editor.defaultFormatter": "ms-dotnettools.csdevkit",
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "editor.tabSize": 4,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit",
-      "source.unusedImports": "explicit"
-    }
-  },
   "[css]": {
-    "editor.suggest.insertMode": "replace",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "editor.tabSize": 2,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
       "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit",
       "source.unusedImports": "explicit"
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.insertMode": "replace",
+    "editor.tabSize": 2
   },
   "[html]": {
-    "editor.suggest.insertMode": "replace",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "editor.tabSize": 2,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
       "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit",
       "source.unusedImports": "explicit"
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.insertMode": "replace",
+    "editor.tabSize": 2
+  },
+  "java.checkstyle.configuration": "${workspaceFolder}\\api\\config\\checkstyle\\checkstyle.xml",
+  "[java]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.unusedImports": "explicit"
+    },
+    "editor.defaultFormatter": "redhat.java",
+    "editor.tabSize": 4
   },
   "[json]": {
     "editor.quickSuggestions": {
       "strings": true
     },
-    "editor.suggest.insertMode": "replace",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "editor.tabSize": 2,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
       "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit",
       "source.unusedImports": "explicit"
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.suggest.insertMode": "replace",
+    "editor.tabSize": 2
   },
   "typescript.format.semicolons": "insert",
   "typescript.suggest.paths": false,
   "typescript.autoClosingTags": true,
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
-    "editor.tabSize": 2,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
       "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit",
       "source.unusedImports": "explicit"
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
-    "editor.tabSize": 2,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
       "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit",
       "source.unusedImports": "explicit"
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
   },
-  "dataworkspace.excludedProjects": ["ArduinoThermoHygrometerLocal/ArduinoThermoHygrometerLocal.sqlproj"]
+  "[xml]": {
+    "editor.tabSize": 4
+  },
+  "java.configuration.updateBuildConfiguration": "interactive"
 }
