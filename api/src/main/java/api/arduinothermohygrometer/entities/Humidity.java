@@ -1,15 +1,16 @@
-package api.arduinothermohygrometer.models;
+package api.arduinothermohygrometer.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -18,10 +19,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "batteries")
+@Table(name = "humidities")
 @Getter
 @Setter
-public class Battery {
+public class Humidity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @NotEmpty
@@ -31,19 +32,21 @@ public class Battery {
 
     @NotEmpty
     @NotNull
+    @Column(name = "registered_at", nullable = false)
     private LocalDateTime registeredAt;
 
     @NotEmpty
     @NotNull
-    @Min(0)
-    @Max(100)
+    @DecimalMin("20.00")
+    @DecimalMax("90.00")
     @Pattern(regexp = "^\\d+\\.\\d+$")
-    private int batteryStatus;
+    @Column(name = "air_humidity", nullable = false, precision = 5, scale = 2)
+    private BigDecimal airHumidity;
 
     @Builder
-    public Battery(int batteryStatus) {
+    public Humidity(BigDecimal airHumidity) {
         this.id = UUID.randomUUID();
         this.registeredAt = LocalDateTime.now();
-        this.batteryStatus = batteryStatus;
+        this.airHumidity = airHumidity;
     }
 }

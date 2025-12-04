@@ -1,0 +1,15 @@
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				TIME="%date{"yyyy-MM-dd'T'HH:mm:ss,SSSZ"}";THREAD="%thread";SEVERITY="%-5p";ORIGIN="%C{36}";LINE="%L";%X;MESSAGE="%m";stacktrace="%ex{3}"%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT"/>
+	</root>
+
+</configuration>

@@ -1,30 +1,27 @@
-package api.arduinothermohygrometer.models;
+package api.arduinothermohygrometer.entities;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Data
-@Table(name = "temperatures")
+@Table(name = "batteries")
 @Getter
 @Setter
-public class Temperature {
+public class Battery {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @NotEmpty
@@ -34,19 +31,21 @@ public class Temperature {
 
     @NotEmpty
     @NotNull
+    @Column(name = "registered_at", nullable = false)
     private LocalDateTime registeredAt;
 
     @NotEmpty
     @NotNull
-    @DecimalMin("-55.00")
-    @DecimalMax("125.00")
-    @Pattern(regexp = "^[+-]?\\d+\\.\\d+$")
-    private BigDecimal temp;
+    @Min(0)
+    @Max(100)
+    @Pattern(regexp = "^\\d+\\.\\d+$")
+    @Column(name = "battery_status", nullable = false)
+    private int batteryStatus;
 
     @Builder
-    public Temperature(BigDecimal temp) {
+    public Battery(int batteryStatus) {
         this.id = UUID.randomUUID();
         this.registeredAt = LocalDateTime.now();
-        this.temp = temp;
+        this.batteryStatus = batteryStatus;
     }
 }

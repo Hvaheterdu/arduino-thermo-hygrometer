@@ -13,7 +13,9 @@ import lombok.Builder;
 
 @Builder
 public record HumidityDto(
-    @JsonIgnore @NotEmpty @NotNull @Pattern(regexp = "[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}") UUID id,
-    @NotEmpty @NotNull LocalDateTime registeredAt,
-    @NotEmpty @NotNull @DecimalMin("20.00") @DecimalMax("90.00") @Pattern(regexp = "^\\d+\\.\\d+$") BigDecimal airHumidity) {
+        @JsonIgnore @NotEmpty @NotNull @Pattern(
+                regexp = "[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}") UUID id,
+        @NotEmpty @NotNull LocalDateTime registeredAt,
+        @NotEmpty @NotNull @DecimalMin("20.00") @DecimalMax("90.00") @Pattern(
+                regexp = "^\\d+\\.\\d+$") BigDecimal airHumidity) {
 }
