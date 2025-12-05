@@ -5,9 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import api.arduinothermohygrometer.dtos.BatteryDto;
 import api.arduinothermohygrometer.entities.Battery;
 import api.arduinothermohygrometer.mappers.BatteryEntityMapper;
@@ -69,9 +71,8 @@ public class BatteryServiceImpl implements BatteryService {
     public List<BatteryDto> getBatteryDtosByDate(LocalDateTime localDateTime) {
         LOGGER.info("Retrieving batteries with date={}", localDateTime.toLocalDate());
 
-        List<Battery> batteries =
-                Optional.ofNullable(batteryRepository.getBatteriesByDate(localDateTime))
-                        .orElse(Collections.emptyList());
+        List<Battery> batteries = Optional.ofNullable(batteryRepository.getBatteriesByDate(localDateTime))
+                .orElse(Collections.emptyList());
         if (batteries.isEmpty()) {
             LOGGER.info("Batteries with date={} not found.", localDateTime.toLocalDate());
         }
@@ -85,24 +86,26 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public void createBatteryDto(BatteryDto batteryDto) {
+    public Optional<BatteryDto> createBatteryDto(BatteryDto batteryDto) {
         LOGGER.info("Creating battery.");
 
         if (batteryDto == null) {
             LOGGER.info("Battery can't be created.");
-            return;
+            return Optional.empty();
         }
 
         Optional<Battery> battery = BatteryEntityMapper.toModel(batteryDto);
         if (battery.isEmpty()) {
             LOGGER.info("Battery mapping failed during creation.");
-            return;
+            return Optional.empty();
         }
 
         batteryRepository.createBattery(battery.get());
         LOGGER.info("Battery with id={} and registered_at={} created.",
                 battery.get().getId(),
                 battery.get().getRegisteredAt());
+
+        return Optional.of(batteryDto);
     }
 
     @Override

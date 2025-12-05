@@ -1,13 +1,16 @@
 package api.arduinothermohygrometer.mappers;
 
 import java.util.Optional;
+
 import org.springframework.stereotype.Component;
+
 import api.arduinothermohygrometer.dtos.BatteryDto;
 import api.arduinothermohygrometer.entities.Battery;
 
 @Component
 public class BatteryEntityMapper {
-    private BatteryEntityMapper() {}
+    private BatteryEntityMapper() {
+    }
 
     public static Optional<Battery> toModel(BatteryDto batteryDto) {
         return Optional.ofNullable(batteryDto)

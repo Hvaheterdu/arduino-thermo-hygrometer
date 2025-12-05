@@ -272,4 +272,4 @@ $RECYCLE.BIN/
 **/*.lnk
 
 ### Project specific folders and items ###
-.cert
+**/*.cert

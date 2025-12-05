@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
 import api.arduinothermohygrometer.entities.Temperature;
 import api.arduinothermohygrometer.repositories.TemperatureRepository;
 
@@ -21,7 +23,7 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public Optional<Temperature> geTemperatureById(UUID id) {
+    public Optional<Temperature> getTemperatureById(UUID id) {
         String sql = """
                 SELECT *
                 FROM temperatures

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import api.arduinothermohygrometer.dtos.TemperatureDto;
 
 public interface TemperatureService {
@@ -15,7 +16,7 @@ public interface TemperatureService {
 
     Optional<TemperatureDto> createTemperatureDto(TemperatureDto temperatureDto);
 
-    Optional<TemperatureDto> deleteBatteryById(UUID id);
+    void deleteTemperatureById(UUID id);
 
-    Optional<TemperatureDto> deleteBatteryByTimestamp(LocalDateTime timestamp);
+    void deleteTemperatureByTimestamp(LocalDateTime timestamp);
 }

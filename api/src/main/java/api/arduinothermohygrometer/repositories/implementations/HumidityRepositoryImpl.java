@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
 import api.arduinothermohygrometer.entities.Humidity;
 import api.arduinothermohygrometer.repositories.HumidityRepository;
 
@@ -21,7 +23,7 @@ public class HumidityRepositoryImpl implements HumidityRepository {
     }
 
     @Override
-    public Optional<Humidity> geHumidityById(UUID id) {
+    public Optional<Humidity> getHumidityById(UUID id) {
         String sql = """
                 SELECT *
                 FROM humidities

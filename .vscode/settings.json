@@ -24,6 +24,7 @@
   },
   "java.checkstyle.configuration": "${workspaceFolder}\\api\\config\\checkstyle\\checkstyle.xml",
   "java.compile.nullAnalysis.mode": "automatic",
+  "java.completion.importOrder": ["java", "javax", "org", "com", "#", ""],
   "[java]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit",

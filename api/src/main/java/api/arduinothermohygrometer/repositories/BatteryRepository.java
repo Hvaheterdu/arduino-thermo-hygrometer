@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import api.arduinothermohygrometer.entities.Battery;
 
 public interface BatteryRepository {

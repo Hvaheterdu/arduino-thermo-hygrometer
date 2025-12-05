@@ -29,6 +29,14 @@
       <property name="separateLineBetweenGroups" value="true"/>
     </module>
 
+    <module name="ImportOrder">
+      <property name="ordered" value="true"/>
+      <property name="seperated" value="true"/>
+      <property name="separatedStaticGroups" value="true"/>
+      <property name="option" value="bottom"/>
+      <property name="sortStaticImportsAlphabetically" value="true"/>
+    </module>
+
     <module name="DeclarationOrder">
       <property name="ignoreConstructors" value="true"/>
     </module>

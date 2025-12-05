@@ -4,10 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import api.arduinothermohygrometer.entities.Humidity;
 
 public interface HumidityRepository {
-    Optional<Humidity> geHumidityById(UUID id);
+    Optional<Humidity> getHumidityById(UUID id);
 
     Optional<Humidity> getHumidityByTimestamp(LocalDateTime timestamp);
 

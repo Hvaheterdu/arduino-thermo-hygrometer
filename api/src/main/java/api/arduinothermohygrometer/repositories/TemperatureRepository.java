@@ -4,10 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import api.arduinothermohygrometer.entities.Temperature;
 
 public interface TemperatureRepository {
-    Optional<Temperature> geTemperatureById(UUID id);
+    Optional<Temperature> getTemperatureById(UUID id);
 
     Optional<Temperature> getTemperatureByTimestamp(LocalDateTime timestamp);
 
