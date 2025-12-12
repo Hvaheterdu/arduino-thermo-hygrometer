@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,11 +35,13 @@ public class Humidity {
 
     @NotEmpty
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "no_NO")
     @Column(name = "registered_at", nullable = false)
     private LocalDateTime registeredAt;
 
     @NotEmpty
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
     @DecimalMin("20.00")
     @DecimalMax("90.00")
     @Pattern(regexp = "^\\d+\\.\\d+$")

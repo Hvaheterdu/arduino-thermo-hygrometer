@@ -6,7 +6,7 @@
     
     <groupId>api</groupId>
     <artifactId>arduinothermohygrometer</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>arduinothermohygrometer-api</name>
     <description>A Java RESTful API that measures temperature and air humidity through a Arduino thermo hygrometer IoT device.</description>
 
@@ -36,30 +36,53 @@
     </parent>
 
     <properties>
-        <flyway-database-postgresql.version>11.14.1</flyway-database-postgresql.version>
-        <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
-        <logback-classic.version>1.5.21</logback-classic.version>
-        <lombok.version>1.18.42</lombok.version>
+        <!-- Java version -->
         <java.version>25</java.version>
+
+        <!-- Maven dependencies -->
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
-        <postgresql.version>42.7.8</postgresql.version>
-        <slf4j-api.version>2.0.17</slf4j-api.version>
         <sonar-maven-plugin.version>5.3.0.6276</sonar-maven-plugin.version>
+
+        <!-- Flyway version -->
+        <flyway-database-postgresql.version>11.14.1</flyway-database-postgresql.version>
+        
+        <!-- Jakarta persistence version -->
+        <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
+        
+        <!-- Logback version -->
+        <logback-classic.version>1.5.21</logback-classic.version>
+        
+        <!-- Lombok version -->
+        <lombok.version>1.18.42</lombok.version>
+        
+        <!-- Postgresql version -->
+        <postgresql.version>42.7.8</postgresql.version>
+        
+        <!-- SLF4J version -->
+        <slf4j-api.version>2.0.17</slf4j-api.version>
+        
+        <!-- Springdoc/Swagger OpenAPI version -->
         <springdoc-openapi-starter-webmcv-ui.version>3.0.0</springdoc-openapi-starter-webmcv-ui.version>
+        
+        <!-- Testcontainers version -->
         <testcontainers.version>2.0.2</testcontainers.version>
         <testcontainers-postgresql.version>1.21.3</testcontainers-postgresql.version>
-        <wiremock.version>3.13.2</wiremock.version>
 
+        <!-- Maven compiler configurations -->
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.proc>full</maven.compiler.proc>
+
+        <!-- Maven build configurations -->
         <maven.build.timestamp.format>ddMMyyyyHHmmss</maven.build.timestamp.format>
 
+        <!-- Project build configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
+        <!-- Spring boot configurations -->
         <spring-boot.run.jwmArguments>-Duser.timezone=Europe/Oslo</spring-boot.run.jwmArguments>
     </properties>
 
@@ -75,26 +98,32 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-flyway</artifactId>
         </dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
+
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
@@ -155,7 +184,7 @@
 
         <!-- Testing -->
         
-        <!-- Spring boot starter test -->
+        <!-- Spring boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -169,6 +198,7 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
@@ -259,6 +289,20 @@
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
+            </plugin>
+
+            <!-- Maven build number parser -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                <execution>
+                    <id>parse-version</id>
+                    <goals>
+                        <goal>parse-version</goal>
+                    </goals>
+                </execution>
+                </executions>
             </plugin>
         
         </plugins>
