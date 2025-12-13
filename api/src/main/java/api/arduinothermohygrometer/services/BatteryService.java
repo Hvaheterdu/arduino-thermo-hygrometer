@@ -2,22 +2,25 @@ package api.arduinothermohygrometer.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import api.arduinothermohygrometer.dtos.BatteryDto;
+import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
+import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
+import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 
 public interface BatteryService {
-    Optional<BatteryDto> getBatteryDtoById(UUID id);
+    BatteryDto getBatteryDtoById(UUID id) throws ResourceNotFoundException;
 
-    Optional<BatteryDto> getBatteryDtoByTimestamp(LocalDateTime timestamp);
+    BatteryDto getBatteryDtoByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
 
-    List<BatteryDto> getBatteryDtosByDate(LocalDateTime localDateTime);
+    List<BatteryDto> getBatteryDtosByDate(LocalDateTime date);
 
-    Optional<BatteryDto> createBatteryDto(BatteryDto batteryDto);
+    BatteryDto createBatteryDto(BatteryDto batteryDto)
+            throws ResourceNotCreatedException, ResourceMappingFailedException;
 
-    void deleteBatteryById(UUID id);
+    void deleteBatteryById(UUID id) throws ResourceNotFoundException;
 
-    void deleteBatteryByTimestamp(LocalDateTime timestamp);
+    void deleteBatteryByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
 
 }

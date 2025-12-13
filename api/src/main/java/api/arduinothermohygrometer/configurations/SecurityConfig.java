@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 

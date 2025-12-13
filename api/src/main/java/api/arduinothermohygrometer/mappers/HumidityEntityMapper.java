@@ -1,7 +1,5 @@
 package api.arduinothermohygrometer.mappers;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Component;
 
 import api.arduinothermohygrometer.dtos.HumidityDto;
@@ -12,17 +10,16 @@ public class HumidityEntityMapper {
     private HumidityEntityMapper() {
     }
 
-    public static Optional<Humidity> toModel(HumidityDto humidityDto) {
-        return Optional.ofNullable(humidityDto)
-                .map(dto -> Humidity.builder()
-                        .airHumidity(dto.airHumidity())
-                        .build());
+    public static Humidity toModel(HumidityDto humidityDto) {
+        return Humidity.builder()
+                .airHumidity(humidityDto.airHumidity())
+                .build();
     }
 
-    public static Optional<HumidityDto> toDto(Humidity humidity) {
-        return Optional.ofNullable(humidity)
-                .map(entity -> HumidityDto.builder().id(entity.getId())
-                        .registeredAt(entity.getRegisteredAt())
-                        .airHumidity(entity.getAirHumidity()).build());
+    public static HumidityDto toDto(Humidity humidity) {
+        return HumidityDto.builder().id(humidity.getId())
+                .registeredAt(humidity.getRegisteredAt())
+                .airHumidity(humidity.getAirHumidity())
+                .build();
     }
 }

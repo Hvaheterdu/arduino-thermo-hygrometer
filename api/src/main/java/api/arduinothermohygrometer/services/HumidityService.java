@@ -2,21 +2,24 @@ package api.arduinothermohygrometer.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import api.arduinothermohygrometer.dtos.HumidityDto;
+import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
+import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
+import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 
 public interface HumidityService {
-    Optional<HumidityDto> getHumidityDtoById(UUID id);
+    HumidityDto getHumidityDtoById(UUID id) throws ResourceNotFoundException;
 
-    Optional<HumidityDto> getHumidityDtoByTimestamp(LocalDateTime timestamp);
+    HumidityDto getHumidityDtoByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
 
-    List<HumidityDto> getHumidityDtosByDate(LocalDateTime localDateTime);
+    List<HumidityDto> getHumidityDtosByDate(LocalDateTime date);
 
-    Optional<HumidityDto> createHumidityDto(HumidityDto humidityDto);
+    HumidityDto createHumidityDto(HumidityDto humidityDto)
+            throws ResourceNotCreatedException, ResourceMappingFailedException;
 
-    void deleteHumidityById(UUID id);
+    void deleteHumidityById(UUID id) throws ResourceNotFoundException;
 
-    void deleteHumidityByTimestamp(LocalDateTime timestamp);
+    void deleteHumidityByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
 }
