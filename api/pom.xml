@@ -264,6 +264,8 @@
                 <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
                     <configLocation>${basedir}/config/checkstyle/checkstyle.xml</configLocation>
+                    <suppressionsLocation>${basedir}/config/checkstyle/suppressions.xml</suppressionsLocation>
+                    <suppressionsFileExpression>suppressions.xml</suppressionsFileExpression>
                     <failsOnError>true</failsOnError>
                     <consoleOutput>true</consoleOutput>
                     <outputFile>${project.build.directory}/checkstyle/checkstyle-report.xml</outputFile>

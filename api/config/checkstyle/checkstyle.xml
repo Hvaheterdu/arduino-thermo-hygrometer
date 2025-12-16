@@ -37,6 +37,16 @@
       <property name="sortStaticImportsAlphabetically" value="true"/>
     </module>
 
+    <module name="Indentation">
+      <property name="arrayInitIndent" value="0"/>
+      <property name="basicOffset" value="0"/>
+      <property name="braceAdjustment" value="0"/>
+      <property name="caseIndent" value="0"/>
+      <property name="forceStrictCondition" value="true"/>
+      <property name="lineWrappingIndentation" value="0"/>
+      <property name="throwsIndent" value="0"/>
+    </module>
+
     <module name="DeclarationOrder">
       <property name="ignoreConstructors" value="true"/>
     </module>
@@ -73,6 +83,12 @@
         LITERAL_INSTANCEOF, TYPE_EXTENSION_AND, ASSIGN, DIV_ASSIGN, PLUS_ASSIGN, MINUS_ASSIGN,
         STAR_ASSIGN, MOD_ASSIGN, SR_ASSIGN, BSR_ASSIGN, SL_ASSIGN, BXOR_ASSIGN, BOR_ASSIGN,
         BAND_ASSIGN, METHOD_REF"/>
+    </module>
+
+    <module name="RegexpSinglelineJava">
+      <property name="format" value="^\t+\S"/>
+      <property name="message" value="Line has leading tab characters; indentation should be performed with spaces only."/>
+      <property name="ignoreComments" value="true"/>
     </module>
     
     <module name="TodoComment">
@@ -125,7 +141,6 @@
     <module name="IllegalCatch"/>
     <module name="IllegalThrows"/>
     <module name="IllegalTokenText">
-    <module name="Indentation"/>
     <module name="InnerAssignment"/>
     <module name="InnerTypeLast"/>
     <module name="InterfaceIsType"/>

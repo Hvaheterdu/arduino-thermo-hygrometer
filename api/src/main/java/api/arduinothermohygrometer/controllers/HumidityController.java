@@ -8,24 +8,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import api.arduinothermohygrometer.dtos.BatteryDto;
+import api.arduinothermohygrometer.dtos.HumidityDto;
 import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 
-public interface BatteryController {
-    ResponseEntity<BatteryDto> getBatteryById(@PathVariable UUID id) throws ResourceNotFoundException;
+public interface HumidityController {
+    ResponseEntity<HumidityDto> getHumidityById(@PathVariable UUID id) throws ResourceNotFoundException;
 
-    ResponseEntity<BatteryDto> getBatteryByTimestamp(@PathVariable LocalDateTime timestamp)
+    ResponseEntity<HumidityDto> getHumidityByTimestamp(@PathVariable LocalDateTime timestamp)
             throws ResourceNotFoundException;
 
-    ResponseEntity<List<BatteryDto>> getBatteriesByDate(@PathVariable LocalDateTime date);
+    ResponseEntity<List<HumidityDto>> getHumiditiesByDate(@PathVariable LocalDateTime date);
 
-    ResponseEntity<BatteryDto> create(@Valid @RequestBody final BatteryDto batteryDto)
+    ResponseEntity<HumidityDto> create(@Valid @RequestBody final HumidityDto humidityDto)
             throws ResourceNotCreatedException, ResourceMappingFailedException;
 
-    ResponseEntity<Void> deleteBatteryDtoById(@PathVariable UUID id) throws ResourceNotFoundException;
+    ResponseEntity<Void> deleteHumidityDtoById(@PathVariable UUID id) throws ResourceNotFoundException;
 
-    ResponseEntity<Void> deleteBatteryByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
+    ResponseEntity<Void> deleteHumidityByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
+
 }

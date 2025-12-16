@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,6 @@ import api.arduinothermohygrometer.services.BatteryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -94,7 +94,7 @@ public class BatteryControllerImpl implements BatteryController {
     })
     @Parameter(name = "batteryDto", description = "batteryDto object", required = true)
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json", version = "v1.0.0")
-    public ResponseEntity<BatteryDto> create(@Valid @RequestBody BatteryDto batteryDto)
+    public ResponseEntity<BatteryDto> create(@Valid @RequestBody final BatteryDto batteryDto)
             throws ResourceNotCreatedException, ResourceMappingFailedException {
         BatteryDto createdBatteryDto = batteryService.createBatteryDto(batteryDto);
 
