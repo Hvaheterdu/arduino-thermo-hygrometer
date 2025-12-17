@@ -23,6 +23,7 @@
     "editor.tabSize": 2
   },
   "java.checkstyle.configuration": "${workspaceFolder}\\api\\config\\checkstyle\\checkstyle.xml",
+  "java.checkstyle.version": "12.3.0",
   "java.compile.nullAnalysis.mode": "automatic",
   "java.completion.importOrder": ["java", "javax", "com", "org", "#", ""],
   "[java]": {
