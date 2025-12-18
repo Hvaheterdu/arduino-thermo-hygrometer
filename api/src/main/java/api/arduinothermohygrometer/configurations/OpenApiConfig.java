@@ -39,5 +39,4 @@ public class OpenApiConfig {
 
         return openApi;
     }
-
 }

@@ -9,11 +9,12 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidation(MethodArgumentNotValidException ex, HttpServletRequest httpServletRequest) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
@@ -24,8 +25,9 @@ public class GlobalExceptionHandler {
         problemDetail.setInstance(URI.create(httpServletRequest.getRequestURI()));
 
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors()
-                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        ex.getBindingResult()
+          .getFieldErrors()
+          .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
         problemDetail.setProperty("errors", errors);
 
         return problemDetail;
@@ -45,7 +47,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotCreatedException.class)
     public ProblemDetail handleResourceNotCreated(ResourceNotCreatedException ex,
-            HttpServletRequest httpServletRequest) {
+                                                  HttpServletRequest httpServletRequest) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
 
         problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/resource-not-created"));

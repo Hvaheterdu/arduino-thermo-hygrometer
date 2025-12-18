@@ -16,8 +16,7 @@ public interface BatteryService {
 
     List<BatteryDto> getBatteryDtosByDate(LocalDateTime date);
 
-    BatteryDto createBatteryDto(BatteryDto batteryDto)
-            throws ResourceNotCreatedException, ResourceMappingFailedException;
+    BatteryDto createBatteryDto(BatteryDto batteryDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
 
     void deleteBatteryById(UUID id) throws ResourceNotFoundException;
 

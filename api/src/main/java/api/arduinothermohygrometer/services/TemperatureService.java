@@ -16,8 +16,7 @@ public interface TemperatureService {
 
     List<TemperatureDto> getTemperatureDtosByDate(LocalDateTime date);
 
-    TemperatureDto createTemperatureDto(TemperatureDto temperatureDto)
-            throws ResourceNotCreatedException, ResourceMappingFailedException;
+    TemperatureDto createTemperatureDto(TemperatureDto temperatureDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
 
     void deleteTemperatureById(UUID id) throws ResourceNotFoundException;
 

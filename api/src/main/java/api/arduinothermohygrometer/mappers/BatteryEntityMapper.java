@@ -12,14 +12,15 @@ public class BatteryEntityMapper {
 
     public static Battery toModel(BatteryDto batteryDto) {
         return Battery.builder()
-                .batteryStatus(batteryDto.batteryStatus())
-                .build();
+                      .batteryStatus(batteryDto.batteryStatus())
+                      .build();
     }
 
     public static BatteryDto toDto(Battery battery) {
-        return BatteryDto.builder().id(battery.getId())
-                .registeredAt(battery.getRegisteredAt())
-                .batteryStatus(battery.getBatteryStatus())
-                .build();
+        return BatteryDto.builder()
+                         .id(battery.getId())
+                         .registeredAt(battery.getRegisteredAt())
+                         .batteryStatus(battery.getBatteryStatus())
+                         .build();
     }
 }

@@ -21,8 +21,7 @@ import api.arduinothermohygrometer.services.TemperatureService;
 
 @Service
 public class TemperatureServiceImpl implements TemperatureService {
-    private static final String TEMPERATURE_ID_NOT_FOUND = "Temperature with id={} not found.";
-    private static final String TEMPERATURE_ID_NOT_FOUND_EXCEPTION = "Temperature with id=%uuid not found.";
+    private static final String TEMPERATURE_ID_NOT_FOUND_EXCEPTION = "Temperature with id=%s not found.";
     private static final UUID EMPTY_UUID = new UUID(0, 0);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TemperatureServiceImpl.class);
@@ -39,13 +38,13 @@ public class TemperatureServiceImpl implements TemperatureService {
         LOGGER.info("Retrieving Temperature with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.info(TEMPERATURE_ID_NOT_FOUND, id);
+            LOGGER.warn("Invalid id={}.", id);
             throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
         }
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureById(id);
         if (temperature.isEmpty()) {
-            LOGGER.info(TEMPERATURE_ID_NOT_FOUND, id);
+            LOGGER.warn("Temperature with id={} not found.", id);
             throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
         }
 
@@ -56,13 +55,12 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public TemperatureDto getTemperatureDtoByTimestamp(LocalDateTime timestamp)
-            throws ResourceNotFoundException {
+    public TemperatureDto getTemperatureDtoByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException {
         LOGGER.info("Retrieving Temperature with timestamp={}.", timestamp);
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureByTimestamp(timestamp);
         if (temperature.isEmpty()) {
-            LOGGER.info("Temperature with timestamp={} not found.", timestamp);
+            LOGGER.warn("Temperature with timestamp={} not found.", timestamp);
             throw new ResourceNotFoundException(String.format("Temperature with timestamp=%s not found.", timestamp));
         }
 
@@ -77,39 +75,37 @@ public class TemperatureServiceImpl implements TemperatureService {
         LOGGER.info("Retrieving temperatures with date={}.", date.toLocalDate());
 
         List<Temperature> temperatures = Optional.ofNullable(temperatureRepository.getTemperaturesByDate(date))
-                .orElse(Collections.emptyList());
+                                                 .orElse(Collections.emptyList());
         if (temperatures.isEmpty()) {
-            LOGGER.info("Temperatures with date={} not found.", date.toLocalDate());
+            LOGGER.warn("Temperatures with date={} not found.", date.toLocalDate());
         }
 
         List<TemperatureDto> temperatureDtos = temperatures.stream()
-                .map(TemperatureEntityMapper::toDto)
-                .toList();
+                                                           .map(TemperatureEntityMapper::toDto)
+                                                           .toList();
         LOGGER.info("Temperatures with date={} retrieved.", date);
 
         return temperatureDtos;
     }
 
     @Override
-    public TemperatureDto createTemperatureDto(TemperatureDto temperatureDto)
-            throws ResourceNotCreatedException, ResourceMappingFailedException {
+    public TemperatureDto createTemperatureDto(TemperatureDto temperatureDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
         LOGGER.info("Creating Temperature.");
 
         if (temperatureDto == null) {
-            LOGGER.info("Temperature can't be created.");
+            LOGGER.warn("Temperature can't be created.");
             throw new ResourceNotCreatedException("Temperature can't be created.");
         }
 
         Temperature temperature = TemperatureEntityMapper.toModel(temperatureDto);
         if (temperature == null) {
-            LOGGER.info("Temperature mapping failed during creation.");
+            LOGGER.warn("Temperature mapping failed during creation.");
             throw new ResourceMappingFailedException("Temperature mapping failed during creation.");
         }
 
         temperatureRepository.createTemperature(temperature);
-        LOGGER.info("Temperature with id={} and registered_at={} created.",
-                temperature.getId(),
-                temperature.getRegisteredAt());
+        LOGGER.info("Temperature with id={} and registered_at={} created.", temperature.getId(),
+                    temperature.getRegisteredAt());
 
         return temperatureDto;
     }
@@ -119,13 +115,13 @@ public class TemperatureServiceImpl implements TemperatureService {
         LOGGER.info("Deleting Temperature with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.info(TEMPERATURE_ID_NOT_FOUND, id);
+            LOGGER.warn("Invalid id={}.", id);
             throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
         }
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureById(id);
         if (temperature.isEmpty()) {
-            LOGGER.info(TEMPERATURE_ID_NOT_FOUND, id);
+            LOGGER.warn("Temperature with id={} not found.", id);
             throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
         }
 
@@ -139,7 +135,7 @@ public class TemperatureServiceImpl implements TemperatureService {
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureByTimestamp(timestamp);
         if (temperature.isEmpty()) {
-            LOGGER.info("Temperature with timestamp={} not found.", timestamp);
+            LOGGER.warn("Temperature with timestamp={} not found.", timestamp);
             throw new ResourceNotFoundException(String.format("Temperature with timestamp=%s not found.", timestamp));
         }
 

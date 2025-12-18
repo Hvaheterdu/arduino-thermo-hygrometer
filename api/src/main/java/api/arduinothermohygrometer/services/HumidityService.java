@@ -16,8 +16,7 @@ public interface HumidityService {
 
     List<HumidityDto> getHumidityDtosByDate(LocalDateTime date);
 
-    HumidityDto createHumidityDto(HumidityDto humidityDto)
-            throws ResourceNotCreatedException, ResourceMappingFailedException;
+    HumidityDto createHumidityDto(HumidityDto humidityDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
 
     void deleteHumidityById(UUID id) throws ResourceNotFoundException;
 

@@ -12,14 +12,15 @@ public class HumidityEntityMapper {
 
     public static Humidity toModel(HumidityDto humidityDto) {
         return Humidity.builder()
-                .airHumidity(humidityDto.airHumidity())
-                .build();
+                       .airHumidity(humidityDto.airHumidity())
+                       .build();
     }
 
     public static HumidityDto toDto(Humidity humidity) {
-        return HumidityDto.builder().id(humidity.getId())
-                .registeredAt(humidity.getRegisteredAt())
-                .airHumidity(humidity.getAirHumidity())
-                .build();
+        return HumidityDto.builder()
+                          .id(humidity.getId())
+                          .registeredAt(humidity.getRegisteredAt())
+                          .airHumidity(humidity.getAirHumidity())
+                          .build();
     }
 }

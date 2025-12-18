@@ -14,10 +14,9 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
-        httpSecurity.headers(header -> header
-                .contentSecurityPolicy(csp -> csp.policyDirectives(
-                        "connect-src 'none'; default-src 'none'; frame-ancestors 'none'; img-src 'none'; script-src 'none'; style-src 'none';"))
-                .referrerPolicy(referrer -> referrer.policy(ReferrerPolicy.NO_REFERRER)));
+        httpSecurity.headers(header -> header.contentSecurityPolicy(csp -> csp.policyDirectives(
+                                                 "connect-src 'none'; default-src 'none'; frame-ancestors 'none'; img-src 'none'; script-src 'none'; style-src 'none';"))
+                                             .referrerPolicy(referrer -> referrer.policy(ReferrerPolicy.NO_REFERRER)));
 
         httpSecurity.securityMatcher(EndpointRequest.toAnyEndpoint());
         httpSecurity.authorizeHttpRequests(requests -> requests.anyRequest().permitAll());

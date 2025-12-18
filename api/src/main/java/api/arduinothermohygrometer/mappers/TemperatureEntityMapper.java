@@ -12,14 +12,15 @@ public class TemperatureEntityMapper {
 
     public static Temperature toModel(TemperatureDto temperatureDto) {
         return Temperature.builder()
-                .temp(temperatureDto.temp())
-                .build();
+                          .temp(temperatureDto.temp())
+                          .build();
     }
 
     public static TemperatureDto toDto(Temperature temperature) {
-        return TemperatureDto.builder().id(temperature.getId())
-                .registeredAt(temperature.getRegisteredAt())
-                .temp(temperature.getTemp())
-                .build();
+        return TemperatureDto.builder()
+                             .id(temperature.getId())
+                             .registeredAt(temperature.getRegisteredAt())
+                             .temp(temperature.getTemp())
+                             .build();
     }
 }

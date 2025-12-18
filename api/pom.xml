@@ -1,312 +1,320 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    
-    <groupId>api</groupId>
-    <artifactId>arduinothermohygrometer</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>arduinothermohygrometer-api</name>
-    <description>A Java RESTful API that measures temperature and air humidity through a Arduino thermo hygrometer IoT device.</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://mit-license.org/</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    
-    <developers>
-        <developer>
-            <id>1</id>
-            <name>Burhan Sarfraz</name>
-            <email>burhan.mohammad.sarfraz@outlook.com</email>
-            <url>https://github.com/Hvaheterdu/arduino-thermo-hygrometer</url>
-            <timezone>Europe/Oslo</timezone>
-        </developer>
-    </developers>
+  <groupId>api</groupId>
+  <artifactId>arduinothermohygrometer</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>arduinothermohygrometer-api</name>
+  <description>A Java RESTful API that measures temperature and air humidity through a Arduino thermo hygrometer IoT
+    device.
+  </description>
 
-    <parent>
+  <licenses>
+    <license>
+      <name>MIT</name>
+      <url>https://mit-license.org/</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>1</id>
+      <name>Burhan Sarfraz</name>
+      <email>burhan.mohammad.sarfraz@outlook.com</email>
+      <url>https://github.com/Hvaheterdu/arduino-thermo-hygrometer</url>
+      <timezone>Europe/Oslo</timezone>
+    </developer>
+  </developers>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.0.0</version>
+    <relativePath/>
+  </parent>
+
+  <properties>
+    <!-- Java version -->
+    <java.version>25</java.version>
+
+    <!-- Maven dependencies -->
+    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+    <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+    <sonar-maven-plugin.version>5.3.0.6276</sonar-maven-plugin.version>
+
+    <!-- Flyway version -->
+    <flyway-database-postgresql.version>11.14.1</flyway-database-postgresql.version>
+
+    <!-- Jakarta persistence version -->
+    <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
+
+    <!-- Logback version -->
+    <logback-classic.version>1.5.21</logback-classic.version>
+
+    <!-- Lombok version -->
+    <lombok.version>1.18.42</lombok.version>
+
+    <!-- Postgresql version -->
+    <postgresql.version>42.7.8</postgresql.version>
+
+    <!-- SLF4J version -->
+    <slf4j-api.version>2.0.17</slf4j-api.version>
+
+    <!-- Springdoc/Swagger OpenAPI version -->
+    <springdoc-openapi-starter-webmcv-ui.version>3.0.0</springdoc-openapi-starter-webmcv-ui.version>
+
+    <!-- Testcontainers version -->
+    <testcontainers.version>2.0.2</testcontainers.version>
+    <testcontainers-postgresql.version>1.21.3</testcontainers-postgresql.version>
+
+    <!-- Maven compiler configurations -->
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.compiler.release>${java.version}</maven.compiler.release>
+    <maven.compiler.parameters>true</maven.compiler.parameters>
+    <maven.compiler.proc>full</maven.compiler.proc>
+
+    <!-- Maven build configurations -->
+    <maven.build.timestamp.format>ddMMyyyyHHmmss</maven.build.timestamp.format>
+
+    <!-- Project build configurations -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Spring boot configurations -->
+    <spring-boot.run.jwmArguments>-Duser.timezone=Europe/Oslo</spring-boot.run.jwmArguments>
+  </properties>
+
+  <packaging>jar</packaging>
+
+  <scm>
+    <developerConnection>https://github.com/Hvaheterdu/arduino-thermo-hygrometer.git</developerConnection>
+  </scm>
+
+  <dependencies>
+    <!-- Spring Boot starters -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-amqp</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-flyway</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webmvc</artifactId>
+    </dependency>
+
+    <!-- Flyway Postgresql -->
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-database-postgresql</artifactId>
+      <version>${flyway-database-postgresql.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Jakarta persistence -->
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+      <version>${jakarta-persistence.version}</version>
+    </dependency>
+
+    <!-- Lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- Postgresql -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgresql.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- SLF4J -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j-api.version}</version>
+    </dependency>
+
+    <!-- Logback -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback-classic.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- Springdoc/Swagger -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>${springdoc-openapi-starter-webmcv-ui.version}</version>
+    </dependency>
+
+    <!-- Testing -->
+
+    <!-- Spring boot -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Testcontainers -->
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${testcontainers-postgresql.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <!-- Filtering -->
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/application*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <plugins>
+      <!-- Maven Enforcer -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-enforcer-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.9.11</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Maven Compiler -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
+      <!-- Checkstyle -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven-checkstyle-plugin.version}</version>
+        <configuration>
+          <configLocation>${basedir}/config/checkstyle/checkstyle.xml</configLocation>
+          <failsOnError>true</failsOnError>
+          <consoleOutput>true</consoleOutput>
+          <outputFile>${project.build.directory}/checkstyle/checkstyle-report.xml</outputFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Spring Boot -->
+      <plugin>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.0</version>
-        <relativePath/>
-    </parent>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
 
-    <properties>
-        <!-- Java version -->
-        <java.version>25</java.version>
+      <!-- Sonar Maven Plugin -->
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>${sonar-maven-plugin.version}</version>
+      </plugin>
 
-        <!-- Maven dependencies -->
-        <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
-        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
-        <sonar-maven-plugin.version>5.3.0.6276</sonar-maven-plugin.version>
+      <!-- Maven build number parser -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>parse-version</id>
+            <goals>
+              <goal>parse-version</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
-        <!-- Flyway version -->
-        <flyway-database-postgresql.version>11.14.1</flyway-database-postgresql.version>
-        
-        <!-- Jakarta persistence version -->
-        <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
-        
-        <!-- Logback version -->
-        <logback-classic.version>1.5.21</logback-classic.version>
-        
-        <!-- Lombok version -->
-        <lombok.version>1.18.42</lombok.version>
-        
-        <!-- Postgresql version -->
-        <postgresql.version>42.7.8</postgresql.version>
-        
-        <!-- SLF4J version -->
-        <slf4j-api.version>2.0.17</slf4j-api.version>
-        
-        <!-- Springdoc/Swagger OpenAPI version -->
-        <springdoc-openapi-starter-webmcv-ui.version>3.0.0</springdoc-openapi-starter-webmcv-ui.version>
-        
-        <!-- Testcontainers version -->
-        <testcontainers.version>2.0.2</testcontainers.version>
-        <testcontainers-postgresql.version>1.21.3</testcontainers-postgresql.version>
-
-        <!-- Maven compiler configurations -->
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.release>${java.version}</maven.compiler.release>
-        <maven.compiler.parameters>true</maven.compiler.parameters>
-        <maven.compiler.proc>full</maven.compiler.proc>
-
-        <!-- Maven build configurations -->
-        <maven.build.timestamp.format>ddMMyyyyHHmmss</maven.build.timestamp.format>
-
-        <!-- Project build configurations -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        
-        <!-- Spring boot configurations -->
-        <spring-boot.run.jwmArguments>-Duser.timezone=Europe/Oslo</spring-boot.run.jwmArguments>
-    </properties>
-
-    <packaging>jar</packaging>
-
-    <scm>
-        <developerConnection>https://github.com/Hvaheterdu/arduino-thermo-hygrometer.git</developerConnection>
-    </scm>
-
-    <dependencies>
-        <!-- Spring Boot starters -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-flyway</artifactId>
-        </dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-
-         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webmvc</artifactId>
-        </dependency>
-
-        <!-- Flyway Postgresql -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
-            <version>${flyway-database-postgresql.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Jakarta persistence -->
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>${jakarta-persistence.version}</version>
-        </dependency>
-
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <optional>true</optional>
-        </dependency>
-
-        <!-- Postgresql -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        
-        <!-- SLF4J -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api.version}</version>
-        </dependency>
-
-        <!-- Logback -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback-classic.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- Springdoc/Swagger -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc-openapi-starter-webmcv-ui.version}</version>
-        </dependency>
-
-        <!-- Testing -->
-        
-        <!-- Spring boot -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
-        <!-- Testcontainers -->
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${testcontainers-postgresql.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <resources>
-            <!-- Filtering -->
-            <resource>
-            <directory>${basedir}/src/main/resources</directory>
-            <filtering>true</filtering>
-            <includes>
-                <include>**/application*.properties</include>
-            </includes>
-            </resource>
-        </resources>
-
-        <plugins>
-            <!-- Maven Enforcer -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${maven-enforcer-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>enforce-maven</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireMavenVersion>
-                                <version>3.9.11</version>
-                                </requireMavenVersion>
-                            </rules>    
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <!-- Maven Compiler -->
-            <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-compiler-plugin</artifactId>
-                  <version>${maven-compiler-plugin.version}</version>
-                  <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </path>
-                    </annotationProcessorPaths>
-                  </configuration>
-            </plugin>
-            
-            <!-- Checkstyle -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven-checkstyle-plugin.version}</version>
-                <configuration>
-                    <configLocation>${basedir}/config/checkstyle/checkstyle.xml</configLocation>
-                    <suppressionsLocation>${basedir}/config/checkstyle/suppressions.xml</suppressionsLocation>
-                    <suppressionsFileExpression>suppressions.xml</suppressionsFileExpression>
-                    <failsOnError>true</failsOnError>
-                    <consoleOutput>true</consoleOutput>
-                    <outputFile>${project.build.directory}/checkstyle/checkstyle-report.xml</outputFile>
-                </configuration>
-            </plugin>
-            
-            <!-- Spring Boot -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-
-            <!-- Sonar Maven Plugin -->
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>${sonar-maven-plugin.version}</version>
-            </plugin>
-
-            <!-- Maven build number parser -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                <execution>
-                    <id>parse-version</id>
-                    <goals>
-                        <goal>parse-version</goal>
-                    </goals>
-                </execution>
-                </executions>
-            </plugin>
-        
-        </plugins>
-    </build>
+    </plugins>
+  </build>
 </project>
