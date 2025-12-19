@@ -19,9 +19,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(value = MethodArgumentNotValidException.class, produces = "application/problem+json")
     public ProblemDetail handleValidation(MethodArgumentNotValidException ex, HttpServletRequest httpServletRequest) {
-        LOG.error("Method argument not valid exception with message={}", ex.getMessage());
+        LOG.error("Method argument not valid exception with message={}.", ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/validation-error"));
@@ -38,9 +38,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(value = ResourceNotFoundException.class, produces = "application/problem+json")
     public ProblemDetail handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest httpServletRequest) {
-        LOG.error("Resource not found exception with message={}", ex.getMessage());
+        LOG.error("Resource not found exception with message={}.", ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
         problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/resource-not-found"));
@@ -51,10 +51,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(ResourceNotCreatedException.class)
+    @ExceptionHandler(value = ResourceNotCreatedException.class, produces = "application/problem+json")
     public ProblemDetail handleResourceNotCreated(ResourceNotCreatedException ex,
                                                   HttpServletRequest httpServletRequest) {
-        LOG.error("Resource not created exception with message={}", ex.getMessage());
+        LOG.error("Resource not created exception with message={}.", ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/resource-not-created"));
@@ -65,9 +65,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(value = Exception.class, produces = "application/problem+json")
     public ProblemDetail handleGeneralException(Exception ex, HttpServletRequest httpServletRequest) {
-        LOG.error("Internal server error exception with message={}", ex.getMessage());
+        LOG.error("Internal server error exception with message={}.", ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/internal-error"));
