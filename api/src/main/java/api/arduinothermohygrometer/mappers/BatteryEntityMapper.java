@@ -1,11 +1,8 @@
 package api.arduinothermohygrometer.mappers;
 
-import org.springframework.stereotype.Component;
-
 import api.arduinothermohygrometer.dtos.BatteryDto;
 import api.arduinothermohygrometer.entities.Battery;
 
-@Component
 public class BatteryEntityMapper {
     private BatteryEntityMapper() {
     }

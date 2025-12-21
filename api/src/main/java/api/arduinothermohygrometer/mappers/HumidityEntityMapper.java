@@ -1,11 +1,8 @@
 package api.arduinothermohygrometer.mappers;
 
-import org.springframework.stereotype.Component;
-
 import api.arduinothermohygrometer.dtos.HumidityDto;
 import api.arduinothermohygrometer.entities.Humidity;
 
-@Component
 public class HumidityEntityMapper {
     private HumidityEntityMapper() {
     }
