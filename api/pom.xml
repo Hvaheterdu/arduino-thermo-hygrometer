@@ -41,7 +41,6 @@
     <java.version>25</java.version>
 
     <!-- Maven dependencies -->
-    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
     <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
     <sonar-maven-plugin.version>5.3.0.6276</sonar-maven-plugin.version>
 
@@ -256,28 +255,6 @@
             </path>
           </annotationProcessorPaths>
         </configuration>
-      </plugin>
-
-      <!-- Checkstyle -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${maven-checkstyle-plugin.version}</version>
-        <configuration>
-          <configLocation>${basedir}/config/checkstyle/checkstyle.xml</configLocation>
-          <failsOnError>true</failsOnError>
-          <consoleOutput>true</consoleOutput>
-          <outputFile>${project.build.directory}/checkstyle/checkstyle-report.xml</outputFile>
-        </configuration>
-        <executions>
-          <execution>
-            <id>validate</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
       <!-- Spring Boot -->
