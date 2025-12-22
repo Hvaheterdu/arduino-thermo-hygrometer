@@ -42,7 +42,7 @@ public class BatteryControllerImpl implements BatteryController {
                            @ApiResponse(responseCode = "404", description = "Battery not found.")})
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for battery", required = true)
     @GetMapping(path = "/{id}", produces = "application/json", version = "v1.0.0")
-    public ResponseEntity<BatteryDto> getBatteryById(@PathVariable UUID id) throws ResourceNotFoundException {
+    public ResponseEntity<BatteryDto> getBatteryById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
         BatteryDto batteryDto = batteryService.getBatteryDtoById(id);
         if (batteryDto == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -57,7 +57,7 @@ public class BatteryControllerImpl implements BatteryController {
                            @ApiResponse(responseCode = "404", description = "Battery not found.")})
     @Parameter(name = "timestamp", in = ParameterIn.PATH, description = "timestamp for battery", required = true)
     @GetMapping(path = "/{timestamp}", produces = "application/json", version = "v1.0.0")
-    public ResponseEntity<BatteryDto> getBatteryByTimestamp(@PathVariable LocalDateTime timestamp) throws ResourceNotFoundException {
+    public ResponseEntity<BatteryDto> getBatteryByTimestamp(@PathVariable("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {
         BatteryDto batteryDto = batteryService.getBatteryDtoByTimestamp(timestamp);
         if (batteryDto == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -72,7 +72,7 @@ public class BatteryControllerImpl implements BatteryController {
                            @ApiResponse(responseCode = "404", description = "Batteries not found.")})
     @Parameter(name = "date", in = ParameterIn.PATH, description = "date for batteries", required = true)
     @GetMapping(path = "/{date}", produces = "application/json", version = "v1.0.0")
-    public ResponseEntity<List<BatteryDto>> getBatteriesByDate(@PathVariable LocalDateTime date) {
+    public ResponseEntity<List<BatteryDto>> getBatteriesByDate(@PathVariable("date") LocalDateTime date) {
         List<BatteryDto> batteries = batteryService.getBatteryDtosByDate(date);
         if (batteries == null || batteries.isEmpty()) {
             return new ResponseEntity<>(batteries, HttpStatus.NOT_FOUND);
@@ -99,7 +99,7 @@ public class BatteryControllerImpl implements BatteryController {
                            @ApiResponse(responseCode = "400", description = "Battery failed to be deleted.")})
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for battery", required = true)
     @DeleteMapping(path = "/delete/{id}", version = "v1.0.0")
-    public ResponseEntity<Void> deleteBatteryDtoById(@PathVariable UUID id) throws ResourceNotFoundException {
+    public ResponseEntity<Void> deleteBatteryDtoById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
         batteryService.deleteBatteryById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -111,7 +111,7 @@ public class BatteryControllerImpl implements BatteryController {
                            @ApiResponse(responseCode = "400", description = "Battery failed to be deleted.")})
     @Parameter(name = "timestamp", in = ParameterIn.PATH, description = "timestamp for battery", required = true)
     @DeleteMapping(path = "/delete/{timestamp}", version = "v1.0.0")
-    public ResponseEntity<Void> deleteBatteryByTimestamp(@PathVariable LocalDateTime timestamp) throws ResourceNotFoundException {
+    public ResponseEntity<Void> deleteBatteryByTimestamp(@PathVariable("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {
         batteryService.deleteBatteryByTimestamp(timestamp);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
