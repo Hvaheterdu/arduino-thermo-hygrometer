@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public interface HumidityController {
 
     ResponseEntity<HumidityDto> getHumidityByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
 
-    ResponseEntity<List<HumidityDto>> getHumiditiesByDate(LocalDateTime date);
+    ResponseEntity<List<HumidityDto>> getHumiditiesByDate(LocalDate date);
 
     ResponseEntity<HumidityDto> create(final HumidityDto humidityDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
 

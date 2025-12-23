@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,7 @@ public interface HumidityService {
 
     HumidityDto getHumidityDtoByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
 
-    List<HumidityDto> getHumidityDtosByDate(LocalDateTime date);
+    List<HumidityDto> getHumidityDtosByDate(LocalDate date);
 
     HumidityDto createHumidityDto(HumidityDto humidityDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
 

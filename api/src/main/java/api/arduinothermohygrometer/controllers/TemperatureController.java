@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public interface TemperatureController {
 
     ResponseEntity<TemperatureDto> getTemperatureByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
 
-    ResponseEntity<List<TemperatureDto>> getTemperaturesByDate(LocalDateTime date);
+    ResponseEntity<List<TemperatureDto>> getTemperaturesByDate(LocalDate date);
 
     ResponseEntity<TemperatureDto> create(final TemperatureDto temperatureDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
 

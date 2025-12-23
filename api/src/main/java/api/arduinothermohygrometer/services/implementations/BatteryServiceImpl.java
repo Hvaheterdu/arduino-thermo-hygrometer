@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.services.implementations;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -71,18 +72,16 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public List<BatteryDto> getBatteryDtosByDate(LocalDateTime date) {
-        LOGGER.info("Retrieving batteries with date={}.", date.toLocalDate());
+    public List<BatteryDto> getBatteryDtosByDate(LocalDate date) {
+        LOGGER.info("Retrieving batteries with date={}.", date);
 
         List<Battery> batteries = Optional.ofNullable(batteryRepository.getBatteriesByDate(date))
                                           .orElse(Collections.emptyList());
         if (batteries.isEmpty()) {
-            LOGGER.warn("Batteries with date={} not found.", date.toLocalDate());
+            LOGGER.warn("Batteries with date={} not found.", date);
         }
 
-        List<BatteryDto> batteryDtos = batteries.stream()
-                                                .map(BatteryEntityMapper::toDto)
-                                                .toList();
+        List<BatteryDto> batteryDtos = batteries.stream().map(BatteryEntityMapper::toDto).toList();
         LOGGER.info("Batteries with date={} retrieved.", date);
 
         return batteryDtos;

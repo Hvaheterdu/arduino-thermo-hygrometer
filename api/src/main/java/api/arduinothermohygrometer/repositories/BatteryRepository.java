@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.repositories;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ public interface BatteryRepository {
 
     Optional<Battery> getBatteryByTimestamp(LocalDateTime timestamp);
 
-    List<Battery> getBatteriesByDate(LocalDateTime localDateTime);
+    List<Battery> getBatteriesByDate(LocalDate date);
 
     void createBattery(Battery battery);
 

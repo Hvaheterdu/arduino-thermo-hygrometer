@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.services.implementations;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -71,18 +72,16 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public List<TemperatureDto> getTemperatureDtosByDate(LocalDateTime date) {
-        LOGGER.info("Retrieving temperatures with date={}.", date.toLocalDate());
+    public List<TemperatureDto> getTemperatureDtosByDate(LocalDate date) {
+        LOGGER.info("Retrieving temperatures with date={}.", date);
 
         List<Temperature> temperatures = Optional.ofNullable(temperatureRepository.getTemperaturesByDate(date))
                                                  .orElse(Collections.emptyList());
         if (temperatures.isEmpty()) {
-            LOGGER.warn("Temperatures with date={} not found.", date.toLocalDate());
+            LOGGER.warn("Temperatures with date={} not found.", date);
         }
 
-        List<TemperatureDto> temperatureDtos = temperatures.stream()
-                                                           .map(TemperatureEntityMapper::toDto)
-                                                           .toList();
+        List<TemperatureDto> temperatureDtos = temperatures.stream().map(TemperatureEntityMapper::toDto).toList();
         LOGGER.info("Temperatures with date={} retrieved.", date);
 
         return temperatureDtos;

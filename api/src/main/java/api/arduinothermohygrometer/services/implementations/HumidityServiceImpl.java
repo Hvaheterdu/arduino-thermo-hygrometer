@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.services.implementations;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -71,18 +72,16 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public List<HumidityDto> getHumidityDtosByDate(LocalDateTime date) {
-        LOGGER.info("Retrieving temperatures with date={}.", date.toLocalDate());
+    public List<HumidityDto> getHumidityDtosByDate(LocalDate date) {
+        LOGGER.info("Retrieving temperatures with date={}.", date);
 
         List<Humidity> humidities = Optional.ofNullable(humidityRepository.getHumiditiesByDate(date))
                                             .orElse(Collections.emptyList());
         if (humidities.isEmpty()) {
-            LOGGER.warn("Humidities with date={} not found.", date.toLocalDate());
+            LOGGER.warn("Humidities with date={} not found.", date);
         }
 
-        List<HumidityDto> humidityDtos = humidities.stream()
-                                                   .map(HumidityEntityMapper::toDto)
-                                                   .toList();
+        List<HumidityDto> humidityDtos = humidities.stream().map(HumidityEntityMapper::toDto).toList();
         LOGGER.info("Humidities with date={} retrieved.", date);
 
         return humidityDtos;

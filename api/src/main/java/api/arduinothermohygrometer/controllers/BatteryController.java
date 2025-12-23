@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public interface BatteryController {
 
     ResponseEntity<BatteryDto> getBatteryByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
 
-    ResponseEntity<List<BatteryDto>> getBatteriesByDate(LocalDateTime date);
+    ResponseEntity<List<BatteryDto>> getBatteriesByDate(LocalDate date);
 
     ResponseEntity<BatteryDto> create(final BatteryDto batteryDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
 

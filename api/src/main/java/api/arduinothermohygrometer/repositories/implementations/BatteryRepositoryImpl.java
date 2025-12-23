@@ -30,10 +30,7 @@ public class BatteryRepositoryImpl implements BatteryRepository {
             WHERE id = :id
             """;
 
-        return jdbcClient.sql(sql)
-                         .param("id", id)
-                         .query(Battery.class)
-                         .optional();
+        return jdbcClient.sql(sql).param("id", id).query(Battery.class).optional();
     }
 
     @Override
@@ -44,25 +41,20 @@ public class BatteryRepositoryImpl implements BatteryRepository {
             WHERE registered_at = :timestamp
             """;
 
-        return jdbcClient.sql(sql)
-                         .param("timestamp", timestamp)
-                         .query(Battery.class)
-                         .optional();
+        return jdbcClient.sql(sql).param("timestamp", timestamp).query(Battery.class).optional();
     }
 
     @Override
-    public List<Battery> getBatteriesByDate(LocalDateTime localDateTime) {
+    public List<Battery> getBatteriesByDate(LocalDate date) {
         String sql = """
             SELECT *
             FROM batteries
             WHERE registered_at >= :start AND registered_at < :end
             """;
 
-        LocalDate localDate = localDateTime.toLocalDate();
         return jdbcClient.sql(sql)
-                         .param("start", localDate.atStartOfDay())
-                         .param("end", localDate.plusDays(1)
-                                                .atStartOfDay())
+                         .param("start", date.atStartOfDay())
+                         .param("end", date.plusDays(1).atStartOfDay())
                          .query(Battery.class)
                          .list();
     }
@@ -89,9 +81,7 @@ public class BatteryRepositoryImpl implements BatteryRepository {
             WHERE id = :id
             """;
 
-        jdbcClient.sql(sql)
-                  .param("id", id)
-                  .update();
+        jdbcClient.sql(sql).param("id", id).update();
     }
 
     @Override
@@ -101,8 +91,6 @@ public class BatteryRepositoryImpl implements BatteryRepository {
             WHERE registered_at = :timestamp
             """;
 
-        jdbcClient.sql(sql)
-                  .param("timestamp", timestamp)
-                  .update();
+        jdbcClient.sql(sql).param("timestamp", timestamp).update();
     }
 }

@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.repositories;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ public interface TemperatureRepository {
 
     Optional<Temperature> getTemperatureByTimestamp(LocalDateTime timestamp);
 
-    List<Temperature> getTemperaturesByDate(LocalDateTime localDateTime);
+    List<Temperature> getTemperaturesByDate(LocalDate date);
 
     void createTemperature(Temperature temperature);
 

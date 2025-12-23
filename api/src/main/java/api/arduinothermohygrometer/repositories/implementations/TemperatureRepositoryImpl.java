@@ -30,10 +30,7 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
             WHERE id = :id
             """;
 
-        return jdbcClient.sql(sql)
-                         .param("id", id)
-                         .query(Temperature.class)
-                         .optional();
+        return jdbcClient.sql(sql).param("id", id).query(Temperature.class).optional();
     }
 
     @Override
@@ -44,25 +41,20 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
             WHERE registered_at = :timestamp
             """;
 
-        return jdbcClient.sql(sql)
-                         .param("timestamp", timestamp)
-                         .query(Temperature.class)
-                         .optional();
+        return jdbcClient.sql(sql).param("timestamp", timestamp).query(Temperature.class).optional();
     }
 
     @Override
-    public List<Temperature> getTemperaturesByDate(LocalDateTime localDateTime) {
+    public List<Temperature> getTemperaturesByDate(LocalDate date) {
         String sql = """
             SELECT *
             FROM temperatures
             WHERE registered_at >= :start AND registered_at < :end
             """;
 
-        LocalDate localDate = localDateTime.toLocalDate();
         return jdbcClient.sql(sql)
-                         .param("start", localDate.atStartOfDay())
-                         .param("end", localDate.plusDays(1)
-                                                .atStartOfDay())
+                         .param("start", date.atStartOfDay())
+                         .param("end", date.plusDays(1).atStartOfDay())
                          .query(Temperature.class)
                          .list();
     }
@@ -89,9 +81,7 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
             WHERE id = :id
             """;
 
-        jdbcClient.sql(sql)
-                  .param("id", id)
-                  .update();
+        jdbcClient.sql(sql).param("id", id).update();
     }
 
     @Override
@@ -101,8 +91,6 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
             WHERE registered_at = :timestamp
             """;
 
-        jdbcClient.sql(sql)
-                  .param("timestamp", timestamp)
-                  .update();
+        jdbcClient.sql(sql).param("timestamp", timestamp).update();
     }
 }
