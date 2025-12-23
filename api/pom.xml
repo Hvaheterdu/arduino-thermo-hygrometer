@@ -67,7 +67,7 @@
 
     <!-- Testcontainers version -->
     <testcontainers.version>2.0.2</testcontainers.version>
-    <testcontainers-postgresql.version>1.21.3</testcontainers-postgresql.version>
+    <testcontainers-postgresql.version>1.21.4</testcontainers-postgresql.version>
 
     <!-- Maven compiler configurations -->
     <maven.compiler.source>${java.version}</maven.compiler.source>
