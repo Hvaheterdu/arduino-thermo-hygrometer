@@ -45,7 +45,7 @@
     <sonar-maven-plugin.version>5.3.0.6276</sonar-maven-plugin.version>
 
     <!-- Flyway version -->
-    <flyway-database-postgresql.version>11.14.1</flyway-database-postgresql.version>
+    <flyway-database-postgresql.version>11.20.0</flyway-database-postgresql.version>
 
     <!-- Jakarta persistence version -->
     <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
