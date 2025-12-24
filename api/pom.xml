@@ -66,7 +66,7 @@
     <springdoc-openapi-starter-webmcv-ui.version>3.0.0</springdoc-openapi-starter-webmcv-ui.version>
 
     <!-- Testcontainers version -->
-    <testcontainers.version>2.0.2</testcontainers.version>
+    <testcontainers.version>2.0.3</testcontainers.version>
     <testcontainers-postgresql.version>1.21.4</testcontainers-postgresql.version>
 
     <!-- Maven compiler configurations -->
