@@ -40,53 +40,52 @@ public class BatteryControllerImpl implements BatteryController {
 
     @Override
     @Operation(summary = "Retrieve a battery by id.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Battery found."),
-                           @ApiResponse(responseCode = "404", description = "Battery not found.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Battery found."),
+        @ApiResponse(responseCode = "404", description = "Battery not found.")
+    })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for battery", required = true)
     @GetMapping(path = "/id/{id}", produces = "application/json")
     public ResponseEntity<BatteryDto> getBatteryById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
         BatteryDto batteryDto = batteryService.getBatteryDtoById(id);
-        if (batteryDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(batteryDto, HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Retrieve a battery by timestamp.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Battery found."),
-                           @ApiResponse(responseCode = "404", description = "Battery not found.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Battery found."),
+        @ApiResponse(responseCode = "404", description = "Battery not found.")
+    })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for battery", required = true)
     @GetMapping(path = "/timestamp", produces = "application/json")
     public ResponseEntity<BatteryDto> getBatteryByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {
         BatteryDto batteryDto = batteryService.getBatteryDtoByTimestamp(timestamp);
-        if (batteryDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(batteryDto, HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Retrieve batteries by date.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Batteries found."),
-                           @ApiResponse(responseCode = "404", description = "Batteries not found.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Batteries found."),
+        @ApiResponse(responseCode = "404", description = "Batteries not found.")
+    })
     @Parameter(name = "date", in = ParameterIn.QUERY, description = "date for batteries", required = true)
     @GetMapping(path = "/date", produces = "application/json")
     public ResponseEntity<List<BatteryDto>> getBatteriesByDate(@RequestParam("date") LocalDate date) throws ResourceNotFoundException {
         List<BatteryDto> batteries = batteryService.getBatteryDtosByDate(date);
-        if (batteries == null || batteries.isEmpty()) {
-            return new ResponseEntity<>(batteries, HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(batteries, HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Create battery.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Battery created."),
-                           @ApiResponse(responseCode = "400", description = "Battery failed to be created.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Battery created."),
+        @ApiResponse(responseCode = "400", description = "Battery failed to be created.")
+    })
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<BatteryDto> create(@Valid @RequestBody final BatteryDto batteryDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
         BatteryDto createdBatteryDto = batteryService.createBatteryDto(batteryDto);
@@ -96,8 +95,10 @@ public class BatteryControllerImpl implements BatteryController {
 
     @Override
     @Operation(summary = "Delete battery by id.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Battery deleted."),
-                           @ApiResponse(responseCode = "400", description = "Battery failed to be deleted.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Battery deleted."),
+        @ApiResponse(responseCode = "400", description = "Battery failed to be deleted.")
+    })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for battery", required = true)
     @DeleteMapping(path = "/delete/id/{id}")
     public ResponseEntity<Void> deleteBatteryDtoById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
@@ -108,8 +109,10 @@ public class BatteryControllerImpl implements BatteryController {
 
     @Override
     @Operation(summary = "Delete battery by timestamp.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Battery deleted."),
-                           @ApiResponse(responseCode = "400", description = "Battery failed to be deleted.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Battery deleted."),
+        @ApiResponse(responseCode = "400", description = "Battery failed to be deleted.")
+    })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for battery", required = true)
     @DeleteMapping(path = "/delete/timestamp")
     public ResponseEntity<Void> deleteBatteryByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {

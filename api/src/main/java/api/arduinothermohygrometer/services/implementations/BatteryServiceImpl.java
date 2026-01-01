@@ -81,7 +81,9 @@ public class BatteryServiceImpl implements BatteryService {
             LOGGER.warn("Batteries with date={} not found.", date);
         }
 
-        List<BatteryDto> batteryDtos = batteries.stream().map(BatteryEntityMapper::toDto).toList();
+        List<BatteryDto> batteryDtos = batteries.stream()
+                                                .map(BatteryEntityMapper::toDto)
+                                                .toList();
         LOGGER.info("Batteries with date={} retrieved.", date);
 
         return batteryDtos;

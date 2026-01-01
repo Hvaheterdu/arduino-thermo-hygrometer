@@ -11,5 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record BatteryDto(@JsonIgnore UUID id, @NotNull LocalDateTime registeredAt, @Min(0) @Max(100) int batteryStatus
+public record BatteryDto(@JsonIgnore UUID id,
+                         @NotNull LocalDateTime registeredAt,
+                         @Min(0) @Max(100) int batteryStatus
 ) {}

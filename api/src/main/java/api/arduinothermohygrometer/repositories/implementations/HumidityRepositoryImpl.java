@@ -30,7 +30,10 @@ public class HumidityRepositoryImpl implements HumidityRepository {
             WHERE id = :id
             """;
 
-        return jdbcClient.sql(sql).param("id", id).query(Humidity.class).optional();
+        return jdbcClient.sql(sql)
+                         .param("id", id)
+                         .query(Humidity.class)
+                         .optional();
     }
 
     @Override
@@ -41,7 +44,10 @@ public class HumidityRepositoryImpl implements HumidityRepository {
             WHERE registered_at = :timestamp
             """;
 
-        return jdbcClient.sql(sql).param("timestamp", timestamp).query(Humidity.class).optional();
+        return jdbcClient.sql(sql)
+                         .param("timestamp", timestamp)
+                         .query(Humidity.class)
+                         .optional();
     }
 
     @Override
@@ -81,7 +87,9 @@ public class HumidityRepositoryImpl implements HumidityRepository {
             WHERE id = :id
             """;
 
-        jdbcClient.sql(sql).param("id", id).update();
+        jdbcClient.sql(sql)
+                  .param("id", id)
+                  .update();
     }
 
     @Override
@@ -91,6 +99,8 @@ public class HumidityRepositoryImpl implements HumidityRepository {
             WHERE registered_at = :timestamp
             """;
 
-        jdbcClient.sql(sql).param("timestamp", timestamp).update();
+        jdbcClient.sql(sql)
+                  .param("timestamp", timestamp)
+                  .update();
     }
 }

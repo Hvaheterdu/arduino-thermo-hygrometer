@@ -81,7 +81,9 @@ public class HumidityServiceImpl implements HumidityService {
             LOGGER.warn("Humidities with date={} not found.", date);
         }
 
-        List<HumidityDto> humidityDtos = humidities.stream().map(HumidityEntityMapper::toDto).toList();
+        List<HumidityDto> humidityDtos = humidities.stream()
+                                                   .map(HumidityEntityMapper::toDto)
+                                                   .toList();
         LOGGER.info("Humidities with date={} retrieved.", date);
 
         return humidityDtos;
@@ -119,7 +121,7 @@ public class HumidityServiceImpl implements HumidityService {
 
         Optional<Humidity> humidity = humidityRepository.getHumidityById(id);
         if (humidity.isEmpty()) {
-            LOGGER.warn("Humidity with id={} not found.", id);
+            LOGGER.warn("Humidity with id={} not deleted.", id);
             throw new ResourceNotFoundException(String.format(HUMIDITY_ID_NOT_FOUND_EXCEPTION, id));
         }
 
@@ -133,7 +135,7 @@ public class HumidityServiceImpl implements HumidityService {
 
         Optional<Humidity> humidity = humidityRepository.getHumidityByTimestamp(timestamp);
         if (humidity.isEmpty()) {
-            LOGGER.warn("Humidity with timestamp={} not found.", timestamp);
+            LOGGER.warn("Humidity with timestamp={} not deleted.", timestamp);
             throw new ResourceNotFoundException(String.format("Humidity with timestamp=%s not found.", timestamp));
         }
 

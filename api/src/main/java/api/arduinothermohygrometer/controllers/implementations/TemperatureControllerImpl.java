@@ -40,53 +40,52 @@ public class TemperatureControllerImpl implements TemperatureController {
 
     @Override
     @Operation(summary = "Retrieve measured temperature by id.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Temperature found."),
-                           @ApiResponse(responseCode = "404", description = "Temperature not found.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Temperature found."),
+        @ApiResponse(responseCode = "404", description = "Temperature not found.")
+    })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured temperature", required = true)
     @GetMapping(path = "/{id}", produces = "application/json")
     public ResponseEntity<TemperatureDto> getTemperatureById(@PathVariable UUID id) throws ResourceNotFoundException {
         TemperatureDto temperatureDto = temperatureService.getTemperatureDtoById(id);
-        if (temperatureDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Retrieve measured temperature by timestamp.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Temperature found."),
-                           @ApiResponse(responseCode = "404", description = "Temperature not found.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Temperature found."),
+        @ApiResponse(responseCode = "404", description = "Temperature not found.")
+    })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured temperature", required = true)
     @GetMapping(path = "/timestamp", produces = "application/json")
     public ResponseEntity<TemperatureDto> getTemperatureByTimestamp(@RequestParam LocalDateTime timestamp) throws ResourceNotFoundException {
         TemperatureDto temperatureDto = temperatureService.getTemperatureDtoByTimestamp(timestamp);
-        if (temperatureDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Retrieve measured temperatures by date.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Temperatures found."),
-                           @ApiResponse(responseCode = "404", description = "Temperatures not found.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Temperatures found."),
+        @ApiResponse(responseCode = "404", description = "Temperatures not found.")
+    })
     @Parameter(name = "date", in = ParameterIn.QUERY, description = "date for measured temperatures", required = true)
     @GetMapping(path = "/date", produces = "application/json")
     public ResponseEntity<List<TemperatureDto>> getTemperaturesByDate(@RequestParam LocalDate date) {
         List<TemperatureDto> temperatures = temperatureService.getTemperatureDtosByDate(date);
-        if (temperatures == null || temperatures.isEmpty()) {
-            return new ResponseEntity<>(temperatures, HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(temperatures, HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Create measured temperature.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Temperature created."),
-                           @ApiResponse(responseCode = "400", description = "Temperature failed to be created.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Temperature created."),
+        @ApiResponse(responseCode = "400", description = "Temperature failed to be created.")
+    })
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<TemperatureDto> create(@Valid @RequestBody TemperatureDto temperatureDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
         TemperatureDto createdTemperatureDto = temperatureService.createTemperatureDto(temperatureDto);
@@ -96,8 +95,10 @@ public class TemperatureControllerImpl implements TemperatureController {
 
     @Override
     @Operation(summary = "Delete measured temperature by id.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Temperature deleted."),
-                           @ApiResponse(responseCode = "400", description = "Temperature failed to be deleted.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Temperature deleted."),
+        @ApiResponse(responseCode = "400", description = "Temperature failed to be deleted.")
+    })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured temperature", required = true)
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<Void> deleteTemperatureDtoById(@PathVariable UUID id) throws ResourceNotFoundException {
@@ -108,8 +109,10 @@ public class TemperatureControllerImpl implements TemperatureController {
 
     @Override
     @Operation(summary = "Delete measured temperature by timestamp.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Temperature deleted."),
-                           @ApiResponse(responseCode = "400", description = "Temperature failed to be deleted.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Temperature deleted."),
+        @ApiResponse(responseCode = "400", description = "Temperature failed to be deleted.")
+    })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured temperature", required = true)
     @DeleteMapping(path = "/delete/timestamp/")
     public ResponseEntity<Void> deleteTemperatureByTimestamp(@RequestParam LocalDateTime timestamp) throws ResourceNotFoundException {

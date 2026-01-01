@@ -42,53 +42,52 @@ public class HumidityControllerImpl implements HumidityController {
 
     @Override
     @Operation(summary = "Retrieve measured humidity by id.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Humidity found."),
-                           @ApiResponse(responseCode = "404", description = "Humidity not found.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Humidity found."),
+        @ApiResponse(responseCode = "404", description = "Humidity not found.")
+    })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured humidity", required = true)
     @GetMapping(path = "/{id}", produces = "application/json")
     public ResponseEntity<HumidityDto> getHumidityById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
         HumidityDto humidityDto = humidityService.getHumidityDtoById(id);
-        if (humidityDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(humidityDto, HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Retrieve measured humidity by timestamp.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Humidity found."),
-                           @ApiResponse(responseCode = "404", description = "Humidity not found.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Humidity found."),
+        @ApiResponse(responseCode = "404", description = "Humidity not found.")
+    })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured humidity", required = true)
     @GetMapping(path = "/timestamp", produces = "application/json")
     public ResponseEntity<HumidityDto> getHumidityByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {
         HumidityDto humidityDto = humidityService.getHumidityDtoByTimestamp(timestamp);
-        if (humidityDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(humidityDto, HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Retrieve measured humidities by date.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Humidities found."),
-                           @ApiResponse(responseCode = "404", description = "Humidities not found.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Humidities found."),
+        @ApiResponse(responseCode = "404", description = "Humidities not found.")
+    })
     @Parameter(name = "date", in = ParameterIn.QUERY, description = "date for measured humidities", required = true)
     @GetMapping(path = "/date", produces = "application/json")
     public ResponseEntity<List<HumidityDto>> getHumiditiesByDate(@RequestParam("date") LocalDate date) {
         List<HumidityDto> humidities = humidityService.getHumidityDtosByDate(date);
-        if (humidities == null || humidities.isEmpty()) {
-            return new ResponseEntity<>(humidities, HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(humidities, HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Create measured humidity.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Humidity created."),
-                           @ApiResponse(responseCode = "400", description = "Humidity failed to be created.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Humidity created."),
+        @ApiResponse(responseCode = "400", description = "Humidity failed to be created.")
+    })
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<HumidityDto> create(@Valid @RequestBody HumidityDto humidityDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
         HumidityDto createdHumidityDto = humidityService.createHumidityDto(humidityDto);
@@ -98,8 +97,10 @@ public class HumidityControllerImpl implements HumidityController {
 
     @Override
     @Operation(summary = "Delete measured humidity by id.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Humidity deleted."),
-                           @ApiResponse(responseCode = "400", description = "Humidity failed to be deleted.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Humidity deleted."),
+        @ApiResponse(responseCode = "400", description = "Humidity failed to be deleted.")
+    })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured humidity", required = true)
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<Void> deleteHumidityDtoById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
@@ -110,8 +111,10 @@ public class HumidityControllerImpl implements HumidityController {
 
     @Override
     @Operation(summary = "Delete measured humidity by timestamp.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Humidity deleted."),
-                           @ApiResponse(responseCode = "400", description = "Humidity failed to be deleted.")})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Humidity deleted."),
+        @ApiResponse(responseCode = "400", description = "Humidity failed to be deleted.")
+    })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured humidity", required = true)
     @DeleteMapping(path = "/delete/timestamp")
     public ResponseEntity<Void> deleteHumidityByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {

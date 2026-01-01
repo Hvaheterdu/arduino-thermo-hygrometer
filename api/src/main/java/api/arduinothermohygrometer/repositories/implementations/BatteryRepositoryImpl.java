@@ -30,7 +30,10 @@ public class BatteryRepositoryImpl implements BatteryRepository {
             WHERE id = :id
             """;
 
-        return jdbcClient.sql(sql).param("id", id).query(Battery.class).optional();
+        return jdbcClient.sql(sql)
+                         .param("id", id)
+                         .query(Battery.class)
+                         .optional();
     }
 
     @Override
@@ -41,7 +44,10 @@ public class BatteryRepositoryImpl implements BatteryRepository {
             WHERE registered_at = :timestamp
             """;
 
-        return jdbcClient.sql(sql).param("timestamp", timestamp).query(Battery.class).optional();
+        return jdbcClient.sql(sql)
+                         .param("timestamp", timestamp)
+                         .query(Battery.class)
+                         .optional();
     }
 
     @Override
@@ -81,7 +87,9 @@ public class BatteryRepositoryImpl implements BatteryRepository {
             WHERE id = :id
             """;
 
-        jdbcClient.sql(sql).param("id", id).update();
+        jdbcClient.sql(sql)
+                  .param("id", id)
+                  .update();
     }
 
     @Override
@@ -91,6 +99,8 @@ public class BatteryRepositoryImpl implements BatteryRepository {
             WHERE registered_at = :timestamp
             """;
 
-        jdbcClient.sql(sql).param("timestamp", timestamp).update();
+        jdbcClient.sql(sql)
+                  .param("timestamp", timestamp)
+                  .update();
     }
 }
