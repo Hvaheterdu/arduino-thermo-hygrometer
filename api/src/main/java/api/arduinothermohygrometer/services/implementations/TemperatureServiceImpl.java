@@ -79,6 +79,7 @@ public class TemperatureServiceImpl implements TemperatureService {
                                                  .orElse(Collections.emptyList());
         if (temperatures.isEmpty()) {
             LOGGER.warn("Temperatures with date={} not found.", date);
+            throw new ResourceNotFoundException(String.format("Temperatures with date=%s not found.", date));
         }
 
         List<TemperatureDto> temperatureDtos = temperatures.stream()

@@ -79,6 +79,7 @@ public class BatteryServiceImpl implements BatteryService {
                                           .orElse(Collections.emptyList());
         if (batteries.isEmpty()) {
             LOGGER.warn("Batteries with date={} not found.", date);
+            throw new ResourceNotFoundException(String.format("Batteries with date=%s not found.", date));
         }
 
         List<BatteryDto> batteryDtos = batteries.stream()

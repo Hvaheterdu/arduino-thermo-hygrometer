@@ -79,6 +79,7 @@ public class HumidityServiceImpl implements HumidityService {
                                             .orElse(Collections.emptyList());
         if (humidities.isEmpty()) {
             LOGGER.warn("Humidities with date={} not found.", date);
+            throw new ResourceNotFoundException(String.format("Humidities with date=%s not found.", date));
         }
 
         List<HumidityDto> humidityDtos = humidities.stream()
