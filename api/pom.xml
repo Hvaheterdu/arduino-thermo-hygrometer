@@ -222,14 +222,31 @@
         <version>${maven-enforcer-plugin.version}</version>
         <executions>
           <execution>
+            <id>enforce-java</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <failFast>true</failFast>
+              <rules>
+                <requireJavaVersion>
+                  <version>[25, 26)</version>
+                  <message>Application requires Java 25. Check configured Java version.</message>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+          <execution>
             <id>enforce-maven</id>
             <goals>
               <goal>enforce</goal>
             </goals>
             <configuration>
+              <failFast>true</failFast>
               <rules>
                 <requireMavenVersion>
                   <version>3.9.11</version>
+                  <message>Application requires Maven 3.9.11. Check configured Maven version.</message>
                 </requireMavenVersion>
               </rules>
             </configuration>
