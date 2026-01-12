@@ -8,14 +8,17 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "cron"
+      cronjob: 0 8 1-7 * *
 
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "cron"
+      cronjob: 0 8 1-7 * *
 
   - package-ecosystem: "maven"
     directory: "/api"
     schedule:
-      interval: "weekly"
+      interval: "cron"
+      cronjob: 0 8 1-7 * *

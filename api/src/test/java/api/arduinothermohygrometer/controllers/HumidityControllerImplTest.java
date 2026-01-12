@@ -187,13 +187,13 @@ class HumidityControllerImplTest {
         UUID id = UUID.randomUUID();
         LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 21.02;
-        String requestTemperatureDto = String.format("""
+        String requestHumidityDto = String.format("""
             {
             "registeredAt": "%s",
             "airHumidity": %s
             }
             """, localDateTime, airHumidity);
-        String responseTemperatureDto = String.format("""
+        String responseHumidityDto = String.format("""
             {
             "registeredAt": "%s",
             "airHumidity": %s
@@ -209,13 +209,13 @@ class HumidityControllerImplTest {
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/v1/api/humidities/create")
                                             .contentType(MediaType.APPLICATION_JSON)
-                                            .content(requestTemperatureDto)
+                                            .content(requestHumidityDto)
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.CREATED)
             .bodyJson()
-            .isEqualTo(responseTemperatureDto);
+            .isEqualTo(responseHumidityDto);
     }
 
     @Test
@@ -223,7 +223,7 @@ class HumidityControllerImplTest {
     void givenInvalidHumidityDtoModel_whenCreating_thenReturn400BadRequest() {
         LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 150.03;
-        String requestTemperatureDto = String.format("""
+        String requestHumidityDto = String.format("""
             {
             "registeredAt": "%s",
             "airHumidity": %s
@@ -233,7 +233,7 @@ class HumidityControllerImplTest {
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/v1/api/humidities/create")
                                             .contentType(MediaType.APPLICATION_JSON)
-                                            .content(requestTemperatureDto)
+                                            .content(requestHumidityDto)
                                             .exchange();
 
         verifyNoInteractions(humidityService);
