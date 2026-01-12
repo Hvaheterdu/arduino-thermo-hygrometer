@@ -45,7 +45,7 @@
     <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 
     <!-- Flyway version -->
-    <flyway-database-postgresql.version>11.20.0</flyway-database-postgresql.version>
+    <flyway-database-postgresql.version>11.20.1</flyway-database-postgresql.version>
 
     <!-- Jakarta persistence version -->
     <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
@@ -63,10 +63,10 @@
     <slf4j-api.version>2.0.17</slf4j-api.version>
 
     <!-- Springdoc/Swagger OpenAPI version -->
-    <springdoc-openapi-starter-webmcv-ui.version>3.0.0</springdoc-openapi-starter-webmcv-ui.version>
+    <springdoc-openapi-starter-webmcv-ui.version>3.0.1</springdoc-openapi-starter-webmcv-ui.version>
 
     <!-- Testcontainers version -->
-    <testcontainers.version>2.0.2</testcontainers.version>
+    <testcontainers.version>2.0.3</testcontainers.version>
     <testcontainers-postgresql.version>1.21.4</testcontainers-postgresql.version>
 
     <!-- Maven compiler configurations -->
