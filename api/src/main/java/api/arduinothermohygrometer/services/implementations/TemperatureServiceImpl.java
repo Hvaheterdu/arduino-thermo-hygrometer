@@ -79,9 +79,12 @@ public class TemperatureServiceImpl implements TemperatureService {
                                                  .orElse(Collections.emptyList());
         if (temperatures.isEmpty()) {
             LOGGER.warn("Temperatures with date={} not found.", date);
+            throw new ResourceNotFoundException(String.format("Temperatures with date=%s not found.", date));
         }
 
-        List<TemperatureDto> temperatureDtos = temperatures.stream().map(TemperatureEntityMapper::toDto).toList();
+        List<TemperatureDto> temperatureDtos = temperatures.stream()
+                                                           .map(TemperatureEntityMapper::toDto)
+                                                           .toList();
         LOGGER.info("Temperatures with date={} retrieved.", date);
 
         return temperatureDtos;
@@ -104,7 +107,7 @@ public class TemperatureServiceImpl implements TemperatureService {
 
         temperatureRepository.createTemperature(temperature);
         LOGGER.info("Temperature with id={} and registered_at={} created.", temperature.getId(),
-                    temperature.getRegisteredAt());
+            temperature.getRegisteredAt());
 
         return temperatureDto;
     }
@@ -120,7 +123,7 @@ public class TemperatureServiceImpl implements TemperatureService {
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureById(id);
         if (temperature.isEmpty()) {
-            LOGGER.warn("Temperature with id={} not found.", id);
+            LOGGER.warn("Temperature with id={} not deleted.", id);
             throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
         }
 
@@ -134,7 +137,7 @@ public class TemperatureServiceImpl implements TemperatureService {
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureByTimestamp(timestamp);
         if (temperature.isEmpty()) {
-            LOGGER.warn("Temperature with timestamp={} not found.", timestamp);
+            LOGGER.warn("Temperature with timestamp={} not deleted.", timestamp);
             throw new ResourceNotFoundException(String.format("Temperature with timestamp=%s not found.", timestamp));
         }
 
