@@ -47,7 +47,7 @@ public class HumidityControllerImpl implements HumidityController {
         @ApiResponse(responseCode = "404", description = "Humidity not found.")
     })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured humidity", required = true)
-    @GetMapping(path = "/{id}", produces = "application/json")
+    @GetMapping(path = "/id/{id}", produces = "application/json")
     public ResponseEntity<HumidityDto> getHumidityById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
         HumidityDto humidityDto = humidityService.getHumidityDtoById(id);
 
@@ -102,7 +102,7 @@ public class HumidityControllerImpl implements HumidityController {
         @ApiResponse(responseCode = "400", description = "Humidity failed to be deleted.")
     })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured humidity", required = true)
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping(path = "/delete/id/{id}")
     public ResponseEntity<Void> deleteHumidityDtoById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
         humidityService.deleteHumidityById(id);
 

@@ -1,6 +1,5 @@
 package api.arduinothermohygrometer.dtos;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,5 +13,5 @@ import lombok.Builder;
 @Builder
 public record TemperatureDto(@JsonIgnore UUID id,
                              @NotNull LocalDateTime registeredAt,
-                             @DecimalMin("-55.00") @DecimalMax("125.00") BigDecimal temp
+                             @DecimalMin("-55.00") @DecimalMax("125.00") Double temp
 ) {}
