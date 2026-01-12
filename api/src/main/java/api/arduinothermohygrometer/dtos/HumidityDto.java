@@ -1,6 +1,5 @@
 package api.arduinothermohygrometer.dtos;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,5 +13,5 @@ import lombok.Builder;
 @Builder
 public record HumidityDto(@JsonIgnore UUID id,
                           @NotNull LocalDateTime registeredAt,
-                          @DecimalMin("20.00") @DecimalMax("90.00") BigDecimal airHumidity
+                          @DecimalMin("20.00") @DecimalMax("90.00") Double airHumidity
 ) {}

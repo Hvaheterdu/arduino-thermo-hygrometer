@@ -45,7 +45,7 @@ public class TemperatureControllerImpl implements TemperatureController {
         @ApiResponse(responseCode = "404", description = "Temperature not found.")
     })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured temperature", required = true)
-    @GetMapping(path = "/{id}", produces = "application/json")
+    @GetMapping(path = "/id/{id}", produces = "application/json")
     public ResponseEntity<TemperatureDto> getTemperatureById(@PathVariable UUID id) throws ResourceNotFoundException {
         TemperatureDto temperatureDto = temperatureService.getTemperatureDtoById(id);
 
@@ -100,7 +100,7 @@ public class TemperatureControllerImpl implements TemperatureController {
         @ApiResponse(responseCode = "400", description = "Temperature failed to be deleted.")
     })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured temperature", required = true)
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping(path = "/delete/id/{id}")
     public ResponseEntity<Void> deleteTemperatureDtoById(@PathVariable UUID id) throws ResourceNotFoundException {
         temperatureService.deleteTemperatureById(id);
 
@@ -114,7 +114,7 @@ public class TemperatureControllerImpl implements TemperatureController {
         @ApiResponse(responseCode = "400", description = "Temperature failed to be deleted.")
     })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured temperature", required = true)
-    @DeleteMapping(path = "/delete/timestamp/")
+    @DeleteMapping(path = "/delete/timestamp")
     public ResponseEntity<Void> deleteTemperatureByTimestamp(@RequestParam LocalDateTime timestamp) throws ResourceNotFoundException {
         temperatureService.deleteTemperatureByTimestamp(timestamp);
 

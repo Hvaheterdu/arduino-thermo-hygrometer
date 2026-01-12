@@ -1,6 +1,5 @@
 package api.arduinothermohygrometer.entities;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -27,10 +26,10 @@ public class Temperature {
     private LocalDateTime registeredAt;
 
     @Column(name = "temp", nullable = false, precision = 6, scale = 2)
-    private BigDecimal temp;
+    private Double temp;
 
     @Builder
-    public Temperature(BigDecimal temp) {
+    public Temperature(Double temp) {
         this.id = UUID.randomUUID();
         this.registeredAt = LocalDateTime.now();
         this.temp = temp;

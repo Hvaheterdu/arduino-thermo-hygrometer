@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 @DisplayName("Unit tests for BatteryControllerImpl")
 @ExtendWith(MockitoExtension.class)
-class BatteryControllerTest {
+class BatteryControllerImplTest {
     @Mock
     private BatteryService batteryService;
 
