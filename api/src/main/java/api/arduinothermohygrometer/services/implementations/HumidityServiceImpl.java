@@ -39,7 +39,7 @@ public class HumidityServiceImpl implements HumidityService {
         LOGGER.info("Retrieving Humidity with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Invalid id={}.", id);
+            LOGGER.warn("Getting humidity failed. Invalid id={}.", id);
             throw new ResourceNotFoundException(String.format(HUMIDITY_ID_NOT_FOUND_EXCEPTION, id));
         }
 
@@ -116,7 +116,7 @@ public class HumidityServiceImpl implements HumidityService {
         LOGGER.info("Deleting Humidity with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Invalid id={}.", id);
+            LOGGER.warn("Deleting humidity failed. Invalid id={}.", id);
             throw new ResourceNotFoundException(String.format(HUMIDITY_ID_NOT_FOUND_EXCEPTION, id));
         }
 

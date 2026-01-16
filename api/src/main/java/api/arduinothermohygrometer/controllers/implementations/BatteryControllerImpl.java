@@ -36,7 +36,9 @@ import jakarta.validation.Valid;
 public class BatteryControllerImpl implements BatteryController {
     private final BatteryService batteryService;
 
-    public BatteryControllerImpl(BatteryService batteryService) {this.batteryService = batteryService;}
+    public BatteryControllerImpl(BatteryService batteryService) {
+        this.batteryService = batteryService;
+    }
 
     @Override
     @Operation(summary = "Retrieve a battery by id.")

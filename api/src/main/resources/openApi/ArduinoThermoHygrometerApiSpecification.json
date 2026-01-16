@@ -1,0 +1,798 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Arduino Thermo Hygrometer API.",
+    "description": "A Java Web API for an Arduino Thermo Hygrometer IoT device.",
+    "contact": {
+      "name": "Burhan Mohammad Sarfraz",
+      "email": "burhan.mohammad.sarfraz@outlook.com"
+    },
+    "license": {
+      "name": "MIT license",
+      "url": "https://mit-license.org/"
+    },
+    "version": "1.0.0-SNAPSHOT"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Battery component.",
+      "description": "Battery status of arduino device."
+    },
+    {
+      "name": "Temperature component.",
+      "description": "Temperature measured by arduino device."
+    },
+    {
+      "name": "Humidity component.",
+      "description": "Humidity measured by arduino device."
+    }
+  ],
+  "paths": {
+    "/v1/api/temperatures/create": {
+      "post": {
+        "tags": [
+          "Temperature component."
+        ],
+        "summary": "Create measured temperature.",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemperatureDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Temperature created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperatureDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Temperature failed to be created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperatureDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/humidities/create": {
+      "post": {
+        "tags": [
+          "Humidity component."
+        ],
+        "summary": "Create measured humidity.",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HumidityDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Humidity created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HumidityDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Humidity failed to be created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HumidityDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/batteries/create": {
+      "post": {
+        "tags": [
+          "Battery component."
+        ],
+        "summary": "Create battery.",
+        "operationId": "create_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatteryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Battery created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatteryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Battery failed to be created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatteryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/temperatures/timestamp": {
+      "get": {
+        "tags": [
+          "Temperature component."
+        ],
+        "summary": "Retrieve measured temperature by timestamp.",
+        "operationId": "getTemperatureByTimestamp",
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "description": "timestamp for measured temperature",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Temperature found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperatureDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Temperature not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperatureDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/temperatures/id/{id}": {
+      "get": {
+        "tags": [
+          "Temperature component."
+        ],
+        "summary": "Retrieve measured temperature by id.",
+        "operationId": "getTemperatureById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for measured temperature",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Temperature found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperatureDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Temperature not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperatureDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/temperatures/date": {
+      "get": {
+        "tags": [
+          "Temperature component."
+        ],
+        "summary": "Retrieve measured temperatures by date.",
+        "operationId": "getTemperaturesByDate",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "date for measured temperatures",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Temperatures found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TemperatureDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Temperatures not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TemperatureDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/humidities/timestamp": {
+      "get": {
+        "tags": [
+          "Humidity component."
+        ],
+        "summary": "Retrieve measured humidity by timestamp.",
+        "operationId": "getHumidityByTimestamp",
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "description": "timestamp for measured humidity",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Humidity found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HumidityDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Humidity not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HumidityDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/humidities/id/{id}": {
+      "get": {
+        "tags": [
+          "Humidity component."
+        ],
+        "summary": "Retrieve measured humidity by id.",
+        "operationId": "getHumidityById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for measured humidity",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Humidity found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HumidityDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Humidity not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HumidityDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/humidities/date": {
+      "get": {
+        "tags": [
+          "Humidity component."
+        ],
+        "summary": "Retrieve measured humidities by date.",
+        "operationId": "getHumiditiesByDate",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "date for measured humidities",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Humidities found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HumidityDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Humidities not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HumidityDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/batteries/timestamp": {
+      "get": {
+        "tags": [
+          "Battery component."
+        ],
+        "summary": "Retrieve a battery by timestamp.",
+        "operationId": "getBatteryByTimestamp",
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "description": "timestamp for battery",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Battery found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatteryDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Battery not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatteryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/batteries/id/{id}": {
+      "get": {
+        "tags": [
+          "Battery component."
+        ],
+        "summary": "Retrieve a battery by id.",
+        "operationId": "getBatteryById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for battery",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Battery found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatteryDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Battery not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatteryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/batteries/date": {
+      "get": {
+        "tags": [
+          "Battery component."
+        ],
+        "summary": "Retrieve batteries by date.",
+        "operationId": "getBatteriesByDate",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "date for batteries",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Batteries found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BatteryDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Batteries not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BatteryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/api/temperatures/delete/timestamp": {
+      "delete": {
+        "tags": [
+          "Temperature component."
+        ],
+        "summary": "Delete measured temperature by timestamp.",
+        "operationId": "deleteTemperatureByTimestamp",
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "description": "timestamp for measured temperature",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Temperature deleted."
+          },
+          "400": {
+            "description": "Temperature failed to be deleted."
+          }
+        }
+      }
+    },
+    "/v1/api/temperatures/delete/id/{id}": {
+      "delete": {
+        "tags": [
+          "Temperature component."
+        ],
+        "summary": "Delete measured temperature by id.",
+        "operationId": "deleteTemperatureDtoById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for measured temperature",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Temperature deleted."
+          },
+          "400": {
+            "description": "Temperature failed to be deleted."
+          }
+        }
+      }
+    },
+    "/v1/api/humidities/delete/timestamp": {
+      "delete": {
+        "tags": [
+          "Humidity component."
+        ],
+        "summary": "Delete measured humidity by timestamp.",
+        "operationId": "deleteHumidityByTimestamp",
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "description": "timestamp for measured humidity",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Humidity deleted."
+          },
+          "400": {
+            "description": "Humidity failed to be deleted."
+          }
+        }
+      }
+    },
+    "/v1/api/humidities/delete/id/{id}": {
+      "delete": {
+        "tags": [
+          "Humidity component."
+        ],
+        "summary": "Delete measured humidity by id.",
+        "operationId": "deleteHumidityDtoById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for measured humidity",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Humidity deleted."
+          },
+          "400": {
+            "description": "Humidity failed to be deleted."
+          }
+        }
+      }
+    },
+    "/v1/api/batteries/delete/timestamp": {
+      "delete": {
+        "tags": [
+          "Battery component."
+        ],
+        "summary": "Delete battery by timestamp.",
+        "operationId": "deleteBatteryByTimestamp",
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "description": "timestamp for battery",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Battery deleted."
+          },
+          "400": {
+            "description": "Battery failed to be deleted."
+          }
+        }
+      }
+    },
+    "/v1/api/batteries/delete/id/{id}": {
+      "delete": {
+        "tags": [
+          "Battery component."
+        ],
+        "summary": "Delete battery by id.",
+        "operationId": "deleteBatteryDtoById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for battery",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Battery deleted."
+          },
+          "400": {
+            "description": "Battery failed to be deleted."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TemperatureDto": {
+        "type": "object",
+        "properties": {
+          "registeredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "temp": {
+            "type": "number",
+            "format": "double",
+            "maximum": 125,
+            "minimum": -55
+          }
+        },
+        "required": [
+          "registeredAt"
+        ]
+      },
+      "HumidityDto": {
+        "type": "object",
+        "properties": {
+          "registeredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "airHumidity": {
+            "type": "number",
+            "format": "double",
+            "maximum": 90,
+            "minimum": 20
+          }
+        },
+        "required": [
+          "registeredAt"
+        ]
+      },
+      "BatteryDto": {
+        "type": "object",
+        "properties": {
+          "registeredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "batteryStatus": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        "required": [
+          "registeredAt"
+        ]
+      }
+    }
+  }
+}

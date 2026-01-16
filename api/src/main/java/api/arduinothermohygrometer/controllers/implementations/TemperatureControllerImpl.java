@@ -36,7 +36,9 @@ import jakarta.validation.Valid;
 public class TemperatureControllerImpl implements TemperatureController {
     private final TemperatureService temperatureService;
 
-    public TemperatureControllerImpl(TemperatureService temperatureService) {this.temperatureService = temperatureService;}
+    public TemperatureControllerImpl(TemperatureService temperatureService) {
+        this.temperatureService = temperatureService;
+    }
 
     @Override
     @Operation(summary = "Retrieve measured temperature by id.")

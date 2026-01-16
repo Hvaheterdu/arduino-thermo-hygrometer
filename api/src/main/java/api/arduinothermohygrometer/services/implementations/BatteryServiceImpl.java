@@ -39,7 +39,7 @@ public class BatteryServiceImpl implements BatteryService {
         LOGGER.info("Retrieving battery with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Invalid id={}.", id);
+            LOGGER.warn("Getting battery failed. Invalid id={}.", id);
             throw new ResourceNotFoundException(String.format(BATTERY_ID_NOT_FOUND_EXCEPTION, id));
         }
 
@@ -116,7 +116,7 @@ public class BatteryServiceImpl implements BatteryService {
         LOGGER.info("Deleting battery with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Invalid id={}.", id);
+            LOGGER.warn("Deleting battery failed. Invalid id={}.", id);
             throw new ResourceNotFoundException(String.format(BATTERY_ID_NOT_FOUND_EXCEPTION, id));
         }
 

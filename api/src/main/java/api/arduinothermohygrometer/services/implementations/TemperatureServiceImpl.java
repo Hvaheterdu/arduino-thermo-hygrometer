@@ -39,7 +39,7 @@ public class TemperatureServiceImpl implements TemperatureService {
         LOGGER.info("Retrieving Temperature with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Invalid id={}.", id);
+            LOGGER.warn("Getting temperature failed. Invalid id={}.", id);
             throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
         }
 
@@ -117,7 +117,7 @@ public class TemperatureServiceImpl implements TemperatureService {
         LOGGER.info("Deleting Temperature with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Invalid id={}.", id);
+            LOGGER.warn("Deleting temperature failed. Invalid id={}.", id);
             throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
         }
 
