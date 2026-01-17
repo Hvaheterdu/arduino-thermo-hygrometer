@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.controllers.HumidityController;
 import api.arduinothermohygrometer.dtos.HumidityDto;
-import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.HumidityService;
@@ -89,7 +88,7 @@ public class HumidityControllerImpl implements HumidityController {
         @ApiResponse(responseCode = "400", description = "Humidity failed to be created.")
     })
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<HumidityDto> create(@Valid @RequestBody HumidityDto humidityDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
+    public ResponseEntity<HumidityDto> create(@Valid @RequestBody HumidityDto humidityDto) throws ResourceNotCreatedException {
         HumidityDto createdHumidityDto = humidityService.createHumidityDto(humidityDto);
 
         return new ResponseEntity<>(createdHumidityDto, HttpStatus.CREATED);

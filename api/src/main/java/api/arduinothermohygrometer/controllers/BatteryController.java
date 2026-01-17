@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 
 import api.arduinothermohygrometer.dtos.BatteryDto;
-import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 
@@ -19,7 +18,7 @@ public interface BatteryController {
 
     ResponseEntity<List<BatteryDto>> getBatteriesByDate(LocalDate date);
 
-    ResponseEntity<BatteryDto> create(final BatteryDto batteryDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
+    ResponseEntity<BatteryDto> create(final BatteryDto batteryDto) throws ResourceNotCreatedException;
 
     ResponseEntity<Void> deleteBatteryDtoById(UUID id) throws ResourceNotFoundException;
 

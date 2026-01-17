@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.controllers.TemperatureController;
 import api.arduinothermohygrometer.dtos.TemperatureDto;
-import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.TemperatureService;
@@ -89,7 +88,7 @@ public class TemperatureControllerImpl implements TemperatureController {
         @ApiResponse(responseCode = "400", description = "Temperature failed to be created.")
     })
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<TemperatureDto> create(@Valid @RequestBody TemperatureDto temperatureDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
+    public ResponseEntity<TemperatureDto> create(@Valid @RequestBody TemperatureDto temperatureDto) throws ResourceNotCreatedException {
         TemperatureDto createdTemperatureDto = temperatureService.createTemperatureDto(temperatureDto);
 
         return new ResponseEntity<>(createdTemperatureDto, HttpStatus.CREATED);

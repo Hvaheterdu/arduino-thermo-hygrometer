@@ -61,13 +61,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildProblemDetail(HttpStatus.BAD_REQUEST, "resource-not-created", "Resource not created.", ex.getMessage(), request);
     }
 
-    @ExceptionHandler(ResourceMappingFailedException.class)
-    public ProblemDetail handleResourceMappingFailed(ResourceMappingFailedException ex, HttpServletRequest request) {
-        LOG.error("Resource mapping failed exception with message={}.", ex.getMessage());
-
-        return buildProblemDetail(HttpStatus.BAD_REQUEST, "resource-mapping-failed", "Resource mapping failed.", ex.getMessage(), request);
-    }
-
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGeneralException(Exception ex, HttpServletRequest request) {
         LOG.error("Internal server error exception with message={}.", ex.getMessage());

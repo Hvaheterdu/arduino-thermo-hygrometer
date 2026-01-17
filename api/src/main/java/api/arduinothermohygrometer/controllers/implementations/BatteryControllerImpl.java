@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.controllers.BatteryController;
 import api.arduinothermohygrometer.dtos.BatteryDto;
-import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.BatteryService;
@@ -89,7 +88,7 @@ public class BatteryControllerImpl implements BatteryController {
         @ApiResponse(responseCode = "400", description = "Battery failed to be created.")
     })
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<BatteryDto> create(@Valid @RequestBody final BatteryDto batteryDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
+    public ResponseEntity<BatteryDto> create(@Valid @RequestBody final BatteryDto batteryDto) throws ResourceNotCreatedException {
         BatteryDto createdBatteryDto = batteryService.createBatteryDto(batteryDto);
 
         return new ResponseEntity<>(createdBatteryDto, HttpStatus.CREATED);

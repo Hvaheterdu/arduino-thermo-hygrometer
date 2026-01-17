@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import api.arduinothermohygrometer.dtos.TemperatureDto;
 import api.arduinothermohygrometer.entities.Temperature;
-import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.mappers.TemperatureEntityMapper;
@@ -22,7 +21,8 @@ import api.arduinothermohygrometer.services.TemperatureService;
 
 @Service
 public class TemperatureServiceImpl implements TemperatureService {
-    private static final String TEMPERATURE_ID_NOT_FOUND_EXCEPTION = "Temperature with id=%s not found.";
+    private static final String ID_NOT_FOUND_EXCEPTION = "Temperature with id=%s not found.";
+    private static final String EMPTY_ID_NOT_FOUND = "Temperature with empty id=%s does not exist.";
     private static final UUID EMPTY_UUID = new UUID(0, 0);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TemperatureServiceImpl.class);
@@ -39,18 +39,18 @@ public class TemperatureServiceImpl implements TemperatureService {
         LOGGER.info("Retrieving Temperature with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Getting temperature failed. Invalid id={}.", id);
-            throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
+            LOGGER.warn("Getting temperature with empty id={} failed.", id);
+            throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureById(id);
         if (temperature.isEmpty()) {
             LOGGER.warn("Temperature with id={} not found.", id);
-            throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
+            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND_EXCEPTION, id));
         }
 
         TemperatureDto temperatureDto = TemperatureEntityMapper.toDto(temperature.get());
-        LOGGER.info("Temperature with id={} retrieved.", temperatureDto);
+        LOGGER.info("Temperature with id={} retrieved.", id);
 
         return temperatureDto;
     }
@@ -91,7 +91,7 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public TemperatureDto createTemperatureDto(TemperatureDto temperatureDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
+    public TemperatureDto createTemperatureDto(TemperatureDto temperatureDto) throws ResourceNotCreatedException {
         LOGGER.info("Creating Temperature.");
 
         if (temperatureDto == null) {
@@ -100,11 +100,6 @@ public class TemperatureServiceImpl implements TemperatureService {
         }
 
         Temperature temperature = TemperatureEntityMapper.toModel(temperatureDto);
-        if (temperature == null) {
-            LOGGER.warn("Temperature mapping failed during creation.");
-            throw new ResourceMappingFailedException("Temperature mapping failed during creation.");
-        }
-
         temperatureRepository.createTemperature(temperature);
         LOGGER.info("Temperature with id={} and registered_at={} created.", temperature.getId(),
             temperature.getRegisteredAt());
@@ -117,14 +112,14 @@ public class TemperatureServiceImpl implements TemperatureService {
         LOGGER.info("Deleting Temperature with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Deleting temperature failed. Invalid id={}.", id);
-            throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
+            LOGGER.warn("Deleting temperature with empty id={} failed.", id);
+            throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureById(id);
         if (temperature.isEmpty()) {
             LOGGER.warn("Temperature with id={} not deleted.", id);
-            throw new ResourceNotFoundException(String.format(TEMPERATURE_ID_NOT_FOUND_EXCEPTION, id));
+            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND_EXCEPTION, id));
         }
 
         temperatureRepository.deleteTemperatureById(id);

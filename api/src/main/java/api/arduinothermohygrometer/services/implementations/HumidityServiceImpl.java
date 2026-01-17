@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import api.arduinothermohygrometer.dtos.HumidityDto;
 import api.arduinothermohygrometer.entities.Humidity;
-import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.mappers.HumidityEntityMapper;
@@ -22,7 +21,8 @@ import api.arduinothermohygrometer.services.HumidityService;
 
 @Service
 public class HumidityServiceImpl implements HumidityService {
-    private static final String HUMIDITY_ID_NOT_FOUND_EXCEPTION = "Humidity with id=%s not found.";
+    private static final String ID_NOT_FOUND_EXCEPTION = "Humidity with id=%s not found.";
+    private static final String EMPTY_ID_NOT_FOUND = "Humidity with empty id=%s does not exist.";
     private static final UUID EMPTY_UUID = new UUID(0, 0);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HumidityServiceImpl.class);
@@ -39,18 +39,18 @@ public class HumidityServiceImpl implements HumidityService {
         LOGGER.info("Retrieving Humidity with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Getting humidity failed. Invalid id={}.", id);
-            throw new ResourceNotFoundException(String.format(HUMIDITY_ID_NOT_FOUND_EXCEPTION, id));
+            LOGGER.warn("Getting humidity with empty id={} failed.", id);
+            throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }
 
         Optional<Humidity> humidity = humidityRepository.getHumidityById(id);
         if (humidity.isEmpty()) {
             LOGGER.warn("Humidity with id={} not found.", id);
-            throw new ResourceNotFoundException(String.format(HUMIDITY_ID_NOT_FOUND_EXCEPTION, id));
+            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND_EXCEPTION, id));
         }
 
         HumidityDto humidityDto = HumidityEntityMapper.toDto(humidity.get());
-        LOGGER.info("Humidity with id={} retrieved.", humidityDto);
+        LOGGER.info("Humidity with id={} retrieved.", id);
 
         return humidityDto;
     }
@@ -91,7 +91,7 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public HumidityDto createHumidityDto(HumidityDto humidityDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
+    public HumidityDto createHumidityDto(HumidityDto humidityDto) throws ResourceNotCreatedException {
         LOGGER.info("Creating Humidity.");
 
         if (humidityDto == null) {
@@ -100,11 +100,6 @@ public class HumidityServiceImpl implements HumidityService {
         }
 
         Humidity humidity = HumidityEntityMapper.toModel(humidityDto);
-        if (humidity == null) {
-            LOGGER.warn("Humidity mapping failed during creation.");
-            throw new ResourceMappingFailedException("Humidity mapping failed during creation.");
-        }
-
         humidityRepository.createHumidity(humidity);
         LOGGER.info("Humidity with id={} and registered_at={} created.", humidity.getId(), humidity.getRegisteredAt());
 
@@ -116,14 +111,14 @@ public class HumidityServiceImpl implements HumidityService {
         LOGGER.info("Deleting Humidity with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Deleting humidity failed. Invalid id={}.", id);
-            throw new ResourceNotFoundException(String.format(HUMIDITY_ID_NOT_FOUND_EXCEPTION, id));
+            LOGGER.warn("Deleting humidity failed with empty id={} failed.", id);
+            throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }
 
         Optional<Humidity> humidity = humidityRepository.getHumidityById(id);
         if (humidity.isEmpty()) {
             LOGGER.warn("Humidity with id={} not deleted.", id);
-            throw new ResourceNotFoundException(String.format(HUMIDITY_ID_NOT_FOUND_EXCEPTION, id));
+            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND_EXCEPTION, id));
         }
 
         humidityRepository.deleteHumidityById(id);

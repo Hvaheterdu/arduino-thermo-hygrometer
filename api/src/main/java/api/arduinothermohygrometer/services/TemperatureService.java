@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 import api.arduinothermohygrometer.dtos.TemperatureDto;
-import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 
@@ -17,7 +16,7 @@ public interface TemperatureService {
 
     List<TemperatureDto> getTemperatureDtosByDate(LocalDate date);
 
-    TemperatureDto createTemperatureDto(TemperatureDto temperatureDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
+    TemperatureDto createTemperatureDto(TemperatureDto temperatureDto) throws ResourceNotCreatedException;
 
     void deleteTemperatureById(UUID id) throws ResourceNotFoundException;
 

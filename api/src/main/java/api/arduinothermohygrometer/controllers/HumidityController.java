@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 
 import api.arduinothermohygrometer.dtos.HumidityDto;
-import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 
@@ -19,7 +18,7 @@ public interface HumidityController {
 
     ResponseEntity<List<HumidityDto>> getHumiditiesByDate(LocalDate date);
 
-    ResponseEntity<HumidityDto> create(final HumidityDto humidityDto) throws ResourceNotCreatedException, ResourceMappingFailedException;
+    ResponseEntity<HumidityDto> create(final HumidityDto humidityDto) throws ResourceNotCreatedException;
 
     ResponseEntity<Void> deleteHumidityDtoById(UUID id) throws ResourceNotFoundException;
 

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import api.arduinothermohygrometer.dtos.BatteryDto;
 import api.arduinothermohygrometer.entities.Battery;
-import api.arduinothermohygrometer.exceptions.ResourceMappingFailedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.mappers.BatteryEntityMapper;
@@ -22,7 +21,8 @@ import api.arduinothermohygrometer.services.BatteryService;
 
 @Service
 public class BatteryServiceImpl implements BatteryService {
-    private static final String BATTERY_ID_NOT_FOUND_EXCEPTION = "Battery with id=%s not found.";
+    private static final String ID_NOT_FOUND_EXCEPTION = "Battery with id=%s not found.";
+    private static final String EMPTY_ID_NOT_FOUND = "Battery with empty id=%s does not exist.";
     private static final UUID EMPTY_UUID = new UUID(0, 0);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BatteryServiceImpl.class);
@@ -39,18 +39,18 @@ public class BatteryServiceImpl implements BatteryService {
         LOGGER.info("Retrieving battery with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Getting battery failed. Invalid id={}.", id);
-            throw new ResourceNotFoundException(String.format(BATTERY_ID_NOT_FOUND_EXCEPTION, id));
+            LOGGER.warn("Getting battery with empty id={} failed.", id);
+            throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }
 
         Optional<Battery> battery = batteryRepository.getBatteryById(id);
         if (battery.isEmpty()) {
             LOGGER.warn("Battery with id={} not found.", id);
-            throw new ResourceNotFoundException(String.format(BATTERY_ID_NOT_FOUND_EXCEPTION, id));
+            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND_EXCEPTION, id));
         }
 
         BatteryDto batteryDto = BatteryEntityMapper.toDto(battery.get());
-        LOGGER.info("Battery with id={} retrieved.", batteryDto);
+        LOGGER.info("Battery with id={} retrieved.", id);
 
         return batteryDto;
     }
@@ -91,7 +91,7 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public BatteryDto createBatteryDto(BatteryDto batteryDto) throws ResourceNotCreatedException, ResourceMappingFailedException {
+    public BatteryDto createBatteryDto(BatteryDto batteryDto) throws ResourceNotCreatedException {
         LOGGER.info("Creating battery.");
 
         if (batteryDto == null) {
@@ -100,11 +100,6 @@ public class BatteryServiceImpl implements BatteryService {
         }
 
         Battery battery = BatteryEntityMapper.toModel(batteryDto);
-        if (battery == null) {
-            LOGGER.warn("Battery mapping failed during creation.");
-            throw new ResourceMappingFailedException("Battery mapping failed during creation.");
-        }
-
         batteryRepository.createBattery(battery);
         LOGGER.info("Battery with id={} and registered_at={} created.", battery.getId(), battery.getRegisteredAt());
 
@@ -116,14 +111,14 @@ public class BatteryServiceImpl implements BatteryService {
         LOGGER.info("Deleting battery with id={}.", id);
 
         if (id == EMPTY_UUID) {
-            LOGGER.warn("Deleting battery failed. Invalid id={}.", id);
-            throw new ResourceNotFoundException(String.format(BATTERY_ID_NOT_FOUND_EXCEPTION, id));
+            LOGGER.warn("Deleting battery with empty id={} failed.", id);
+            throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }
 
         Optional<Battery> battery = batteryRepository.getBatteryById(id);
         if (battery.isEmpty()) {
             LOGGER.warn("Battery with id={} not deleted.", id);
-            throw new ResourceNotFoundException(String.format(BATTERY_ID_NOT_FOUND_EXCEPTION, id));
+            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND_EXCEPTION, id));
         }
 
         batteryRepository.deleteBatteryById(id);
