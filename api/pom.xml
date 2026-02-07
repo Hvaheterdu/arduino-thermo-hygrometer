@@ -57,7 +57,7 @@
     <lombok.version>1.18.42</lombok.version>
 
     <!-- Postgresql version -->
-    <postgresql.version>42.7.8</postgresql.version>
+    <postgresql.version>42.7.9</postgresql.version>
 
     <!-- SLF4J version -->
     <slf4j-api.version>2.0.17</slf4j-api.version>
