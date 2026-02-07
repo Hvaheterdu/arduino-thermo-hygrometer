@@ -7,7 +7,7 @@ public class BatteryEntityMapper {
     private BatteryEntityMapper() {
     }
 
-    public static Battery toModel(BatteryDto batteryDto) {
+    public static Battery toEntity(BatteryDto batteryDto) {
         Battery battery = new Battery(batteryDto.batteryStatus());
         battery.setId(batteryDto.id());
         battery.setRegisteredAt(batteryDto.registeredAt());

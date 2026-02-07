@@ -54,7 +54,7 @@ class TemperatureControllerImplTest {
                                                       .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
-        when(temperatureService.getTemperatureDtoById(id)).thenReturn(temperatureDto);
+        when(temperatureService.getTemperatureById(id)).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/temperatures/id/{id}", id)
@@ -73,7 +73,7 @@ class TemperatureControllerImplTest {
     @DisplayName("getTemperatureById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenGettingTemperatureById_thenReturn404NotFound() {
         UUID id = new UUID(0, 0);
-        when(temperatureService.getTemperatureDtoById(id))
+        when(temperatureService.getTemperatureById(id))
             .thenThrow(new ResourceNotFoundException("Temperature with id=" + id + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
@@ -96,7 +96,7 @@ class TemperatureControllerImplTest {
                                                       .registeredAt(timestamp)
                                                       .temp(temp)
                                                       .build();
-        when(temperatureService.getTemperatureDtoByTimestamp(timestamp)).thenReturn(temperatureDto);
+        when(temperatureService.getTemperatureByTimestamp(timestamp)).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/temperatures/timestamp")
@@ -116,7 +116,7 @@ class TemperatureControllerImplTest {
     @DisplayName("getTemperatureByTimestamp returns 404 NOT FOUND with invalid timestamp.")
     void givenInvalidTimestamp_whenGettingTemperatureByTimestamp_thenReturn404NotFound() {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(temperatureService.getTemperatureDtoByTimestamp(timestamp))
+        when(temperatureService.getTemperatureByTimestamp(timestamp))
             .thenThrow(new ResourceNotFoundException("Temperature with timestamp=" + timestamp + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
@@ -146,7 +146,7 @@ class TemperatureControllerImplTest {
                                                        .temp(temp2)
                                                        .build();
         List<TemperatureDto> temperatures = List.of(temperatureDto, temperatureDto2);
-        when(temperatureService.getTemperatureDtosByDate(timestamp.toLocalDate())).thenReturn(temperatures);
+        when(temperatureService.getTemperaturesByDate(timestamp.toLocalDate())).thenReturn(temperatures);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/temperatures/date")
@@ -166,7 +166,7 @@ class TemperatureControllerImplTest {
     @DisplayName("getTemperatureByDate returns 404 NOT FOUND with invalid date.")
     void givenInvalidDate_whenGettingTemperatureByDate_thenReturn404NotFound() {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(temperatureService.getTemperatureDtosByDate(timestamp.toLocalDate()))
+        when(temperatureService.getTemperaturesByDate(timestamp.toLocalDate()))
             .thenThrow(new ResourceNotFoundException("Temperatures with date=" + timestamp.toLocalDate() + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
@@ -204,7 +204,7 @@ class TemperatureControllerImplTest {
                                                       .registeredAt(localDateTime)
                                                       .temp(temp)
                                                       .build();
-        when(temperatureService.createTemperatureDto(any())).thenReturn(temperatureDto);
+        when(temperatureService.createTemperature(any())).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/v1/api/temperatures/create")
@@ -243,7 +243,7 @@ class TemperatureControllerImplTest {
             .hasPathSatisfying("$.detail",
                 path -> assertThat(path).asString().isEqualTo("One or more fields are invalid."))
             .hasPathSatisfying("$.title",
-                path -> assertThat(path).asString().isEqualTo("Model validation error."))
+                path -> assertThat(path).asString().isEqualTo("Entity validation error."))
             .hasPathSatisfying("$.errors.temp",
                 path -> assertThat(path).asString().isNotBlank());
     }

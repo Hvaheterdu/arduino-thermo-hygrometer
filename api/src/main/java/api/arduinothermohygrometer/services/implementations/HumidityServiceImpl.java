@@ -35,10 +35,10 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public HumidityDto getHumidityDtoById(UUID id) throws ResourceNotFoundException {
+    public HumidityDto getHumidityById(UUID id) throws ResourceNotFoundException {
         LOGGER.info("Retrieving Humidity with id={}.", id);
 
-        if (id == EMPTY_UUID) {
+        if (EMPTY_UUID.equals(id)) {
             LOGGER.warn("Getting humidity with empty id={} failed.", id);
             throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }
@@ -56,7 +56,7 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public HumidityDto getHumidityDtoByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException {
+    public HumidityDto getHumidityByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException {
         LOGGER.info("Retrieving Humidity with timestamp={}.", timestamp);
 
         Optional<Humidity> humidity = humidityRepository.getHumidityByTimestamp(timestamp);
@@ -72,7 +72,7 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public List<HumidityDto> getHumidityDtosByDate(LocalDate date) {
+    public List<HumidityDto> getHumiditiesByDate(LocalDate date) {
         LOGGER.info("Retrieving temperatures with date={}.", date);
 
         List<Humidity> humidities = Optional.ofNullable(humidityRepository.getHumiditiesByDate(date))
@@ -91,7 +91,7 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public HumidityDto createHumidityDto(HumidityDto humidityDto) throws ResourceNotCreatedException {
+    public HumidityDto createHumidity(HumidityDto humidityDto) throws ResourceNotCreatedException {
         LOGGER.info("Creating Humidity.");
 
         if (humidityDto == null) {
@@ -99,7 +99,7 @@ public class HumidityServiceImpl implements HumidityService {
             throw new ResourceNotCreatedException("Humidity cannot be created.");
         }
 
-        Humidity humidity = HumidityEntityMapper.toModel(humidityDto);
+        Humidity humidity = HumidityEntityMapper.toEntity(humidityDto);
         humidityRepository.createHumidity(humidity);
         LOGGER.info("Humidity with id={} and registered_at={} created.", humidity.getId(), humidity.getRegisteredAt());
 
@@ -110,7 +110,7 @@ public class HumidityServiceImpl implements HumidityService {
     public void deleteHumidityById(UUID id) throws ResourceNotFoundException {
         LOGGER.info("Deleting Humidity with id={}.", id);
 
-        if (id == EMPTY_UUID) {
+        if (EMPTY_UUID.equals(id)) {
             LOGGER.warn("Deleting humidity failed with empty id={} failed.", id);
             throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }

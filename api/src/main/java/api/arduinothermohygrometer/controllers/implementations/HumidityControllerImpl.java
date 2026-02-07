@@ -48,7 +48,7 @@ public class HumidityControllerImpl implements HumidityController {
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured humidity", required = true)
     @GetMapping(path = "/id/{id}", produces = "application/json")
     public ResponseEntity<HumidityDto> getHumidityById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
-        HumidityDto humidityDto = humidityService.getHumidityDtoById(id);
+        HumidityDto humidityDto = humidityService.getHumidityById(id);
 
         return new ResponseEntity<>(humidityDto, HttpStatus.OK);
     }
@@ -62,7 +62,7 @@ public class HumidityControllerImpl implements HumidityController {
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured humidity", required = true)
     @GetMapping(path = "/timestamp", produces = "application/json")
     public ResponseEntity<HumidityDto> getHumidityByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {
-        HumidityDto humidityDto = humidityService.getHumidityDtoByTimestamp(timestamp);
+        HumidityDto humidityDto = humidityService.getHumidityByTimestamp(timestamp);
 
         return new ResponseEntity<>(humidityDto, HttpStatus.OK);
     }
@@ -76,7 +76,7 @@ public class HumidityControllerImpl implements HumidityController {
     @Parameter(name = "date", in = ParameterIn.QUERY, description = "date for measured humidities", required = true)
     @GetMapping(path = "/date", produces = "application/json")
     public ResponseEntity<List<HumidityDto>> getHumiditiesByDate(@RequestParam("date") LocalDate date) {
-        List<HumidityDto> humidities = humidityService.getHumidityDtosByDate(date);
+        List<HumidityDto> humidities = humidityService.getHumiditiesByDate(date);
 
         return new ResponseEntity<>(humidities, HttpStatus.OK);
     }
@@ -89,7 +89,7 @@ public class HumidityControllerImpl implements HumidityController {
     })
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<HumidityDto> create(@Valid @RequestBody HumidityDto humidityDto) throws ResourceNotCreatedException {
-        HumidityDto createdHumidityDto = humidityService.createHumidityDto(humidityDto);
+        HumidityDto createdHumidityDto = humidityService.createHumidity(humidityDto);
 
         return new ResponseEntity<>(createdHumidityDto, HttpStatus.CREATED);
     }
