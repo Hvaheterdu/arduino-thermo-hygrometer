@@ -32,7 +32,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.1</version>
+    <version>4.0.2</version>
     <relativePath/>
   </parent>
 
@@ -45,13 +45,13 @@
     <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 
     <!-- Flyway version -->
-    <flyway-database-postgresql.version>11.20.1</flyway-database-postgresql.version>
+    <flyway-database-postgresql.version>12.0.0</flyway-database-postgresql.version>
 
     <!-- Jakarta persistence version -->
     <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
 
     <!-- Logback version -->
-    <logback-classic.version>1.5.24</logback-classic.version>
+    <logback-classic.version>1.5.27</logback-classic.version>
 
     <!-- Lombok version -->
     <lombok.version>1.18.42</lombok.version>
@@ -266,6 +266,18 @@
               <artifactId>lombok</artifactId>
             </path>
           </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
+      <!-- Mockito inline-mocker-maker -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>
+            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+            -Xshare:off
+          </argLine>
         </configuration>
       </plugin>
 

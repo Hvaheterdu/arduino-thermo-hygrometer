@@ -34,7 +34,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(httpStatusCode, "One or more fields are invalid.");
         problemDetail.setType(URI.create(BASE_URL + "validation-error"));
-        problemDetail.setTitle("Model validation error.");
+        problemDetail.setTitle("Entity validation error.");
 
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult()
