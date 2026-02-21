@@ -7,7 +7,7 @@ public class TemperatureEntityMapper {
     private TemperatureEntityMapper() {
     }
 
-    public static Temperature toModel(TemperatureDto temperatureDto) {
+    public static Temperature toEntity(TemperatureDto temperatureDto) {
         Temperature temperature = new Temperature(temperatureDto.temp());
         temperature.setId(temperatureDto.id());
         temperature.setRegisteredAt(temperatureDto.registeredAt());
