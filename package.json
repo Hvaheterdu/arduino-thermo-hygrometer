@@ -58,9 +58,9 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.16",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-router": "7.12.0"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router": "7.13.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -73,12 +73,12 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-check-file": "^3.3.1",
     "eslint-plugin-import-x": "^4.16.1",
-    "eslint-plugin-jsdoc": "^61.5.0",
+    "eslint-plugin-jsdoc": "^62.7.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.26",
-    "globals": "^17.0.0",
+    "eslint-plugin-react-refresh": "^0.5.0",
+    "globals": "^17.3.0",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.52.0",

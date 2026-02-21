@@ -48,7 +48,7 @@ public class BatteryControllerImpl implements BatteryController {
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for battery", required = true)
     @GetMapping(path = "/id/{id}", produces = "application/json")
     public ResponseEntity<BatteryDto> getBatteryById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
-        BatteryDto batteryDto = batteryService.getBatteryDtoById(id);
+        BatteryDto batteryDto = batteryService.getBatteryById(id);
 
         return new ResponseEntity<>(batteryDto, HttpStatus.OK);
     }
@@ -62,7 +62,7 @@ public class BatteryControllerImpl implements BatteryController {
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for battery", required = true)
     @GetMapping(path = "/timestamp", produces = "application/json")
     public ResponseEntity<BatteryDto> getBatteryByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {
-        BatteryDto batteryDto = batteryService.getBatteryDtoByTimestamp(timestamp);
+        BatteryDto batteryDto = batteryService.getBatteryByTimestamp(timestamp);
 
         return new ResponseEntity<>(batteryDto, HttpStatus.OK);
     }
@@ -76,7 +76,7 @@ public class BatteryControllerImpl implements BatteryController {
     @Parameter(name = "date", in = ParameterIn.QUERY, description = "date for batteries", required = true)
     @GetMapping(path = "/date", produces = "application/json")
     public ResponseEntity<List<BatteryDto>> getBatteriesByDate(@RequestParam("date") LocalDate date) throws ResourceNotFoundException {
-        List<BatteryDto> batteries = batteryService.getBatteryDtosByDate(date);
+        List<BatteryDto> batteries = batteryService.getBatteriesByDate(date);
 
         return new ResponseEntity<>(batteries, HttpStatus.OK);
     }
@@ -89,7 +89,7 @@ public class BatteryControllerImpl implements BatteryController {
     })
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<BatteryDto> create(@Valid @RequestBody final BatteryDto batteryDto) throws ResourceNotCreatedException {
-        BatteryDto createdBatteryDto = batteryService.createBatteryDto(batteryDto);
+        BatteryDto createdBatteryDto = batteryService.createBattery(batteryDto);
 
         return new ResponseEntity<>(createdBatteryDto, HttpStatus.CREATED);
     }

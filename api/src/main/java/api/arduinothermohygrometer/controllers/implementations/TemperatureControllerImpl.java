@@ -48,7 +48,7 @@ public class TemperatureControllerImpl implements TemperatureController {
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured temperature", required = true)
     @GetMapping(path = "/id/{id}", produces = "application/json")
     public ResponseEntity<TemperatureDto> getTemperatureById(@PathVariable UUID id) throws ResourceNotFoundException {
-        TemperatureDto temperatureDto = temperatureService.getTemperatureDtoById(id);
+        TemperatureDto temperatureDto = temperatureService.getTemperatureById(id);
 
         return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
     }
@@ -62,7 +62,7 @@ public class TemperatureControllerImpl implements TemperatureController {
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured temperature", required = true)
     @GetMapping(path = "/timestamp", produces = "application/json")
     public ResponseEntity<TemperatureDto> getTemperatureByTimestamp(@RequestParam LocalDateTime timestamp) throws ResourceNotFoundException {
-        TemperatureDto temperatureDto = temperatureService.getTemperatureDtoByTimestamp(timestamp);
+        TemperatureDto temperatureDto = temperatureService.getTemperatureByTimestamp(timestamp);
 
         return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
     }
@@ -76,7 +76,7 @@ public class TemperatureControllerImpl implements TemperatureController {
     @Parameter(name = "date", in = ParameterIn.QUERY, description = "date for measured temperatures", required = true)
     @GetMapping(path = "/date", produces = "application/json")
     public ResponseEntity<List<TemperatureDto>> getTemperaturesByDate(@RequestParam LocalDate date) {
-        List<TemperatureDto> temperatures = temperatureService.getTemperatureDtosByDate(date);
+        List<TemperatureDto> temperatures = temperatureService.getTemperaturesByDate(date);
 
         return new ResponseEntity<>(temperatures, HttpStatus.OK);
     }
@@ -89,7 +89,7 @@ public class TemperatureControllerImpl implements TemperatureController {
     })
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<TemperatureDto> create(@Valid @RequestBody TemperatureDto temperatureDto) throws ResourceNotCreatedException {
-        TemperatureDto createdTemperatureDto = temperatureService.createTemperatureDto(temperatureDto);
+        TemperatureDto createdTemperatureDto = temperatureService.createTemperature(temperatureDto);
 
         return new ResponseEntity<>(createdTemperatureDto, HttpStatus.CREATED);
     }
