@@ -54,7 +54,7 @@ class BatteryControllerImplTest {
                                           .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
-        when(batteryService.getBatteryDtoById(id)).thenReturn(batteryDto);
+        when(batteryService.getBatteryById(id)).thenReturn(batteryDto);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/batteries/id/{id}", id)
@@ -73,7 +73,7 @@ class BatteryControllerImplTest {
     @DisplayName("getBatteryById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenGettingBatteryById_thenReturn404NotFound() {
         UUID id = new UUID(0, 0);
-        when(batteryService.getBatteryDtoById(id))
+        when(batteryService.getBatteryById(id))
             .thenThrow(new ResourceNotFoundException("Battery with id=" + id + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
@@ -96,7 +96,7 @@ class BatteryControllerImplTest {
                                           .registeredAt(timestamp)
                                           .batteryStatus(batteryStatus)
                                           .build();
-        when(batteryService.getBatteryDtoByTimestamp(timestamp)).thenReturn(batteryDto);
+        when(batteryService.getBatteryByTimestamp(timestamp)).thenReturn(batteryDto);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/batteries/timestamp")
@@ -116,7 +116,7 @@ class BatteryControllerImplTest {
     @DisplayName("getBatteryByTimestamp returns 404 NOT FOUND with invalid timestamp.")
     void givenInvalidTimestamp_whenGettingBatteryByTimestamp_thenReturn404NotFound() {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(batteryService.getBatteryDtoByTimestamp(timestamp))
+        when(batteryService.getBatteryByTimestamp(timestamp))
             .thenThrow(new ResourceNotFoundException("Battery with timestamp=" + timestamp + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
@@ -136,17 +136,18 @@ class BatteryControllerImplTest {
     void givenValidDate_whenGettingBatteryByDate_thenReturn200OK() {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 95;
+        LocalDateTime timestamp2 = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus2 = 90;
         BatteryDto batteryDto = BatteryDto.builder()
                                           .registeredAt(timestamp)
                                           .batteryStatus(batteryStatus)
                                           .build();
         BatteryDto batteryDto2 = BatteryDto.builder()
-                                           .registeredAt(timestamp.minusHours(1))
+                                           .registeredAt(timestamp2)
                                            .batteryStatus(batteryStatus2)
                                            .build();
         List<BatteryDto> batteries = List.of(batteryDto, batteryDto2);
-        when(batteryService.getBatteryDtosByDate(timestamp.toLocalDate())).thenReturn(batteries);
+        when(batteryService.getBatteriesByDate(timestamp.toLocalDate())).thenReturn(batteries);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/batteries/date")
@@ -166,7 +167,7 @@ class BatteryControllerImplTest {
     @DisplayName("getBatteryByDate returns 404 NOT FOUND with invalid date.")
     void givenInvalidDate_whenGettingBatteryByDate_thenReturn404NotFound() {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(batteryService.getBatteryDtosByDate(timestamp.toLocalDate()))
+        when(batteryService.getBatteriesByDate(timestamp.toLocalDate()))
             .thenThrow(new ResourceNotFoundException("Batteries with date=" + timestamp.toLocalDate() + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
@@ -204,7 +205,7 @@ class BatteryControllerImplTest {
                                           .registeredAt(localDateTime)
                                           .batteryStatus(batteryStatus)
                                           .build();
-        when(batteryService.createBatteryDto(any())).thenReturn(batteryDto);
+        when(batteryService.createBattery(any())).thenReturn(batteryDto);
 
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/v1/api/batteries/create")
@@ -243,7 +244,7 @@ class BatteryControllerImplTest {
             .hasPathSatisfying("$.detail",
                 path -> assertThat(path).asString().isEqualTo("One or more fields are invalid."))
             .hasPathSatisfying("$.title",
-                path -> assertThat(path).asString().isEqualTo("Model validation error."))
+                path -> assertThat(path).asString().isEqualTo("Entity validation error."))
             .hasPathSatisfying("$.errors.batteryStatus",
                 path -> assertThat(path).asString().isNotBlank());
     }
