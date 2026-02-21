@@ -35,10 +35,10 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public TemperatureDto getTemperatureDtoById(UUID id) throws ResourceNotFoundException {
+    public TemperatureDto getTemperatureById(UUID id) throws ResourceNotFoundException {
         LOGGER.info("Retrieving Temperature with id={}.", id);
 
-        if (id == EMPTY_UUID) {
+        if (EMPTY_UUID.equals(id)) {
             LOGGER.warn("Getting temperature with empty id={} failed.", id);
             throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }
@@ -56,7 +56,7 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public TemperatureDto getTemperatureDtoByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException {
+    public TemperatureDto getTemperatureByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException {
         LOGGER.info("Retrieving Temperature with timestamp={}.", timestamp);
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureByTimestamp(timestamp);
@@ -72,7 +72,7 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public List<TemperatureDto> getTemperatureDtosByDate(LocalDate date) {
+    public List<TemperatureDto> getTemperaturesByDate(LocalDate date) {
         LOGGER.info("Retrieving temperatures with date={}.", date);
 
         List<Temperature> temperatures = Optional.ofNullable(temperatureRepository.getTemperaturesByDate(date))
@@ -91,7 +91,7 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public TemperatureDto createTemperatureDto(TemperatureDto temperatureDto) throws ResourceNotCreatedException {
+    public TemperatureDto createTemperature(TemperatureDto temperatureDto) throws ResourceNotCreatedException {
         LOGGER.info("Creating Temperature.");
 
         if (temperatureDto == null) {
@@ -99,7 +99,7 @@ public class TemperatureServiceImpl implements TemperatureService {
             throw new ResourceNotCreatedException("Temperature can't be created.");
         }
 
-        Temperature temperature = TemperatureEntityMapper.toModel(temperatureDto);
+        Temperature temperature = TemperatureEntityMapper.toEntity(temperatureDto);
         temperatureRepository.createTemperature(temperature);
         LOGGER.info("Temperature with id={} and registered_at={} created.", temperature.getId(),
             temperature.getRegisteredAt());
@@ -111,7 +111,7 @@ public class TemperatureServiceImpl implements TemperatureService {
     public void deleteTemperatureById(UUID id) throws ResourceNotFoundException {
         LOGGER.info("Deleting Temperature with id={}.", id);
 
-        if (id == EMPTY_UUID) {
+        if (EMPTY_UUID.equals(id)) {
             LOGGER.warn("Deleting temperature with empty id={} failed.", id);
             throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
         }

@@ -10,13 +10,13 @@ import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 
 public interface BatteryService {
-    BatteryDto getBatteryDtoById(UUID id) throws ResourceNotFoundException;
+    BatteryDto getBatteryById(UUID id) throws ResourceNotFoundException;
 
-    BatteryDto getBatteryDtoByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
+    BatteryDto getBatteryByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
 
-    List<BatteryDto> getBatteryDtosByDate(LocalDate date);
+    List<BatteryDto> getBatteriesByDate(LocalDate date);
 
-    BatteryDto createBatteryDto(BatteryDto batteryDto) throws ResourceNotCreatedException;
+    BatteryDto createBattery(BatteryDto batteryDto) throws ResourceNotCreatedException;
 
     void deleteBatteryById(UUID id) throws ResourceNotFoundException;
 

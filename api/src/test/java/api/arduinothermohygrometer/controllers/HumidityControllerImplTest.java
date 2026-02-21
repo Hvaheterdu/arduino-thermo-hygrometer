@@ -54,7 +54,7 @@ class HumidityControllerImplTest {
                                              .registeredAt(registeredAt)
                                              .airHumidity(airHumidity)
                                              .build();
-        when(humidityService.getHumidityDtoById(id)).thenReturn(humidityDto);
+        when(humidityService.getHumidityById(id)).thenReturn(humidityDto);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/humidities/id/{id}", id)
@@ -73,7 +73,7 @@ class HumidityControllerImplTest {
     @DisplayName("getHumidityById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenGettingHumidityById_thenReturn404NotFound() {
         UUID id = new UUID(0, 0);
-        when(humidityService.getHumidityDtoById(id))
+        when(humidityService.getHumidityById(id))
             .thenThrow(new ResourceNotFoundException("Humidity with id=" + id + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
@@ -96,7 +96,7 @@ class HumidityControllerImplTest {
                                              .registeredAt(timestamp)
                                              .airHumidity(airHumidity)
                                              .build();
-        when(humidityService.getHumidityDtoByTimestamp(timestamp)).thenReturn(humidityDto);
+        when(humidityService.getHumidityByTimestamp(timestamp)).thenReturn(humidityDto);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/humidities/timestamp")
@@ -116,7 +116,7 @@ class HumidityControllerImplTest {
     @DisplayName("getHumidityByTimestamp returns 404 NOT FOUND with invalid timestamp.")
     void givenInvalidTimestamp_whenGettingHumidityByTimestamp_thenReturn404NotFound() {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(humidityService.getHumidityDtoByTimestamp(timestamp))
+        when(humidityService.getHumidityByTimestamp(timestamp))
             .thenThrow(new ResourceNotFoundException("Humidity with timestamp=" + timestamp + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
@@ -146,7 +146,7 @@ class HumidityControllerImplTest {
                                               .airHumidity(airHumidity2)
                                               .build();
         List<HumidityDto> humidities = List.of(humidityDto, humidityDto2);
-        when(humidityService.getHumidityDtosByDate(timestamp.toLocalDate())).thenReturn(humidities);
+        when(humidityService.getHumiditiesByDate(timestamp.toLocalDate())).thenReturn(humidities);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/humidities/date")
@@ -166,7 +166,7 @@ class HumidityControllerImplTest {
     @DisplayName("getHumidityByDate returns 404 NOT FOUND with invalid date.")
     void givenInvalidDate_whenGettingHumidityByDate_thenReturn404NotFound() {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(humidityService.getHumidityDtosByDate(timestamp.toLocalDate()))
+        when(humidityService.getHumiditiesByDate(timestamp.toLocalDate()))
             .thenThrow(new ResourceNotFoundException("Humidities with date=" + timestamp.toLocalDate() + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
@@ -204,7 +204,7 @@ class HumidityControllerImplTest {
                                              .registeredAt(localDateTime)
                                              .airHumidity(airHumidity)
                                              .build();
-        when(humidityService.createHumidityDto(any())).thenReturn(humidityDto);
+        when(humidityService.createHumidity(any())).thenReturn(humidityDto);
 
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/v1/api/humidities/create")
@@ -243,7 +243,7 @@ class HumidityControllerImplTest {
             .hasPathSatisfying("$.detail",
                 path -> assertThat(path).asString().isEqualTo("One or more fields are invalid."))
             .hasPathSatisfying("$.title",
-                path -> assertThat(path).asString().isEqualTo("Model validation error."))
+                path -> assertThat(path).asString().isEqualTo("Entity validation error."))
             .hasPathSatisfying("$.errors.airHumidity",
                 path -> assertThat(path).asString().isNotBlank());
     }

@@ -11,7 +11,6 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         httpSecurity.headers(header ->

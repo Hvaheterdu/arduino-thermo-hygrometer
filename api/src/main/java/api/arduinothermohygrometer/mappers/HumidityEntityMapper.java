@@ -7,7 +7,7 @@ public class HumidityEntityMapper {
     private HumidityEntityMapper() {
     }
 
-    public static Humidity toModel(HumidityDto humidityDto) {
+    public static Humidity toEntity(HumidityDto humidityDto) {
         Humidity humidity = new Humidity(humidityDto.airHumidity());
         humidity.setId(humidityDto.id());
         humidity.setRegisteredAt(humidityDto.registeredAt());
