@@ -60,11 +60,11 @@
     "@tanstack/react-query": "^5.90.16",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router": "7.13.0"
+    "react-router": "7.13.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
-    "@types/node": "^25.0.6",
+    "@types/node": "^25.3.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
@@ -73,18 +73,18 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-check-file": "^3.3.1",
     "eslint-plugin-import-x": "^4.16.1",
-    "eslint-plugin-jsdoc": "^62.7.0",
+    "eslint-plugin-jsdoc": "^62.7.1",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.5.0",
-    "globals": "^17.3.0",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.52.0",
+    "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
     "vite-plugin-checker": "^0.12.0",
-    "vite-plugin-mkcert": "^1.17.9",
+    "vite-plugin-mkcert": "^1.17.10",
     "vite-plugin-svgr": "^4.5.0"
   }
 }
