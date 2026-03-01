@@ -32,7 +32,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.2</version>
+    <version>4.0.3</version>
     <relativePath/>
   </parent>
 
@@ -45,19 +45,19 @@
     <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 
     <!-- Flyway version -->
-    <flyway-database-postgresql.version>12.0.0</flyway-database-postgresql.version>
+    <flyway-database-postgresql.version>12.0.3</flyway-database-postgresql.version>
 
     <!-- Jakarta persistence version -->
     <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
 
     <!-- Logback version -->
-    <logback-classic.version>1.5.27</logback-classic.version>
+    <logback-classic.version>1.5.32</logback-classic.version>
 
     <!-- Lombok version -->
     <lombok.version>1.18.42</lombok.version>
 
     <!-- Postgresql version -->
-    <postgresql.version>42.7.9</postgresql.version>
+    <postgresql.version>42.7.10</postgresql.version>
 
     <!-- SLF4J version -->
     <slf4j-api.version>2.0.17</slf4j-api.version>
