@@ -96,7 +96,7 @@ public class TemperatureServiceImpl implements TemperatureService {
 
         if (temperatureDto == null) {
             LOGGER.warn("Temperature cannot be created.");
-            throw new ResourceNotCreatedException("Temperature can't be created.");
+            throw new ResourceNotCreatedException("Temperature cannot be created.");
         }
 
         Temperature temperature = TemperatureEntityMapper.toEntity(temperatureDto);

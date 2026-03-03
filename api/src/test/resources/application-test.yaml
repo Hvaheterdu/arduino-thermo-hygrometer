@@ -1,0 +1,18 @@
+spring:
+  mvc:
+    apiversion:
+      default: v1
+      use:
+        path-segment: 0
+
+management:
+  health:
+    defaults:
+      enabled: false
+  endpoint:
+    health:
+      show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: "health"
