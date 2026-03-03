@@ -199,10 +199,11 @@ class BatteryServiceImplTest {
     void givenValidId_whenDeletingBatteryById_thenDeleteBattery() {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
+        int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
                                           .id(id)
                                           .registeredAt(registeredAt)
-                                          .batteryStatus(90)
+                                          .batteryStatus(batteryStatus)
                                           .build();
         Battery battery = BatteryEntityMapper.toEntity(batteryDto);
         when(batteryRepository.getBatteryById(id)).thenReturn(Optional.of(battery));
@@ -243,10 +244,11 @@ class BatteryServiceImplTest {
     void givenValidTimestamp_whenDeletingBatteryByTimestamp_thenDeleteBattery() {
         UUID id = UUID.randomUUID();
         LocalDateTime timestamp = LocalDateTime.now();
+        int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
                                           .id(id)
                                           .registeredAt(timestamp)
-                                          .batteryStatus(90)
+                                          .batteryStatus(batteryStatus)
                                           .build();
         Battery battery = BatteryEntityMapper.toEntity(batteryDto);
         when(batteryRepository.getBatteryByTimestamp(timestamp)).thenReturn(Optional.of(battery));

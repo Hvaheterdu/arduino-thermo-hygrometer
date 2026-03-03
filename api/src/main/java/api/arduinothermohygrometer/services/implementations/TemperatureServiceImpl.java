@@ -95,7 +95,7 @@ public class TemperatureServiceImpl implements TemperatureService {
         LOGGER.info("Creating Temperature.");
 
         if (temperatureDto == null) {
-            LOGGER.warn("Temperature can't be created.");
+            LOGGER.warn("Temperature cannot be created.");
             throw new ResourceNotCreatedException("Temperature can't be created.");
         }
 
