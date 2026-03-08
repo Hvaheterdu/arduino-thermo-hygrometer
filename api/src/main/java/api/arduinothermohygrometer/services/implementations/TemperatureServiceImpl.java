@@ -30,7 +30,6 @@ public class TemperatureServiceImpl implements TemperatureService {
     private final TemperatureRepository temperatureRepository;
 
     public TemperatureServiceImpl(TemperatureRepository temperatureRepository) {
-        LOGGER.info("Initialising TemperatureService.");
         this.temperatureRepository = temperatureRepository;
     }
 

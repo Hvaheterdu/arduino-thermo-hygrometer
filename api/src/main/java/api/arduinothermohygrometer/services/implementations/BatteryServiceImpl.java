@@ -30,7 +30,6 @@ public class BatteryServiceImpl implements BatteryService {
     private final BatteryRepository batteryRepository;
 
     public BatteryServiceImpl(BatteryRepository batteryRepository) {
-        LOGGER.info("Initialising BatteryService.");
         this.batteryRepository = batteryRepository;
     }
 

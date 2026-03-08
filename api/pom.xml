@@ -29,6 +29,10 @@
     </developer>
   </developers>
 
+  <scm>
+    <developerConnection>https://github.com/Hvaheterdu/arduino-thermo-hygrometer.git</developerConnection>
+  </scm>
+
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -39,6 +43,9 @@
   <properties>
     <!-- Java version -->
     <java.version>25</java.version>
+
+    <!-- Maven version -->
+    <maven.version>3.9.11</maven.version>
 
     <!-- Maven dependencies -->
     <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
@@ -67,41 +74,24 @@
     <!-- Testcontainers version -->
     <testcontainers.version>2.0.3</testcontainers.version>
 
-    <!-- Maven compiler configurations -->
+    <!-- Maven compiler properties -->
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.proc>full</maven.compiler.proc>
 
-    <!-- Maven build configurations -->
+    <!-- Maven build properties -->
     <maven.build.timestamp.format>ddMMyyyyHHmmss</maven.build.timestamp.format>
 
-    <!-- Project build configurations -->
+    <!-- Project build properties -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <!-- Spring boot configurations -->
+    <!-- Spring boot properties -->
     <spring-boot.run.jwmArguments>-Duser.timezone=Europe/Oslo</spring-boot.run.jwmArguments>
   </properties>
 
   <packaging>jar</packaging>
-
-  <scm>
-    <developerConnection>https://github.com/Hvaheterdu/arduino-thermo-hygrometer.git</developerConnection>
-  </scm>
-
-  <!-- Testcontainers and version management -->
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.testcontainers</groupId>
-        <artifactId>testcontainers-bom</artifactId>
-        <version>${testcontainers.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <!-- Spring Boot starters -->
@@ -208,10 +198,17 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-testcontainers</artifactId>
+      <scope>test</scope>
+    </dependency>
+
     <!-- Testcontainers -->
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers-postgresql</artifactId>
+      <version>${testcontainers.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -270,19 +267,46 @@
         </configuration>
       </plugin>
 
-      <!-- Mockito inline-mocker-maker -->
+      <!-- Maven surefire -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <systemPropertyVariables>
-            <spring.profiles.active>test</spring.profiles.active>
-          </systemPropertyVariables>
           <argLine>
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
             -Xshare:off
           </argLine>
+          <systemPropertyVariables>
+            <spring.profiles.active>test</spring.profiles.active>
+          </systemPropertyVariables>
         </configuration>
+      </plugin>
+
+      <!-- Maven failsafe -->
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Maven build number parser -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>parse-version</id>
+            <goals>
+              <goal>parse-version</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
       <!-- Spring Boot -->
@@ -304,20 +328,6 @@
         <groupId>org.sonarsource.scanner.maven</groupId>
         <artifactId>sonar-maven-plugin</artifactId>
         <version>${sonar-maven-plugin.version}</version>
-      </plugin>
-
-      <!-- Maven build number parser -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>parse-version</id>
-            <goals>
-              <goal>parse-version</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

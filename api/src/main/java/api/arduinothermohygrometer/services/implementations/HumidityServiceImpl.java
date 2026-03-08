@@ -30,7 +30,6 @@ public class HumidityServiceImpl implements HumidityService {
     private final HumidityRepository humidityRepository;
 
     public HumidityServiceImpl(HumidityRepository humidityRepository) {
-        LOGGER.info("Initialising HumidityService.");
         this.humidityRepository = humidityRepository;
     }
 
