@@ -51,7 +51,7 @@
     <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 
     <!-- Flyway version -->
-    <flyway-database-postgresql.version>12.0.3</flyway-database-postgresql.version>
+    <flyway-database-postgresql.version>12.1.1</flyway-database-postgresql.version>
 
     <!-- Jakarta persistence version -->
     <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
@@ -60,7 +60,7 @@
     <logback-classic.version>1.5.32</logback-classic.version>
 
     <!-- Lombok version -->
-    <lombok.version>1.18.42</lombok.version>
+    <lombok.version>1.18.44</lombok.version>
 
     <!-- Postgresql version -->
     <postgresql.version>42.7.10</postgresql.version>
@@ -72,7 +72,7 @@
     <springdoc-openapi-starter-webmcv-ui.version>3.0.2</springdoc-openapi-starter-webmcv-ui.version>
 
     <!-- Testcontainers version -->
-    <testcontainers.version>2.0.3</testcontainers.version>
+    <testcontainers.version>2.0.4</testcontainers.version>
 
     <!-- Maven compiler properties -->
     <maven.compiler.source>${java.version}</maven.compiler.source>
