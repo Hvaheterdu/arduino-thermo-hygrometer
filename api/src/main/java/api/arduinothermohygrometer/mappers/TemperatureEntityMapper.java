@@ -8,10 +8,7 @@ public class TemperatureEntityMapper {
     }
 
     public static Temperature toEntity(TemperatureDto temperatureDto) {
-        return Temperature.builder()
-                          .registeredAt(temperatureDto.registeredAt())
-                          .temp(temperatureDto.temp())
-                          .build();
+        return new Temperature(temperatureDto.registeredAt(), temperatureDto.temp());
     }
 
     public static TemperatureDto toDto(Temperature temperature) {
