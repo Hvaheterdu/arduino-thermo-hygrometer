@@ -8,16 +8,14 @@ public class BatteryEntityMapper {
     }
 
     public static Battery toEntity(BatteryDto batteryDto) {
-        Battery battery = new Battery(batteryDto.batteryStatus());
-        battery.setId(batteryDto.id());
-        battery.setRegisteredAt(batteryDto.registeredAt());
-
-        return battery;
+        return Battery.builder()
+                      .batteryStatus(batteryDto.batteryStatus())
+                      .registeredAt(batteryDto.registeredAt())
+                      .build();
     }
 
     public static BatteryDto toDto(Battery battery) {
         return BatteryDto.builder()
-                         .id(battery.getId())
                          .registeredAt(battery.getRegisteredAt())
                          .batteryStatus(battery.getBatteryStatus())
                          .build();

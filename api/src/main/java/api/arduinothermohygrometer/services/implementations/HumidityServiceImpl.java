@@ -102,7 +102,7 @@ public class HumidityServiceImpl implements HumidityService {
         humidityRepository.createHumidity(humidity);
         LOGGER.info("Humidity with id={} and registered_at={} created.", humidity.getId(), humidity.getRegisteredAt());
 
-        return humidityDto;
+        return HumidityEntityMapper.toDto(humidity);
     }
 
     @Override

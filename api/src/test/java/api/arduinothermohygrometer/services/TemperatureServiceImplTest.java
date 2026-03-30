@@ -53,15 +53,14 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("getTemperatureById returns temperature with valid id.")
     void givenValidId_whenGettingTemperatureById_thenReturnTemperature() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 70.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .id(id)
                                                       .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
         Temperature temperature = TemperatureEntityMapper.toEntity(temperatureDto);
+        UUID id = temperature.getId();
         when(temperatureRepository.getTemperatureById(id)).thenReturn(Optional.of(temperature));
 
         TemperatureDto result = temperatureService.getTemperatureById(id);
@@ -95,11 +94,9 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("getTemperatureByTimestamp returns temperature with valid timestamp.")
     void givenValidTimestamp_whenGettingTemperatureByTimestamp_thenReturnTemperature() {
-        UUID id = UUID.randomUUID();
         LocalDateTime timestamp = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .id(id)
                                                       .registeredAt(timestamp)
                                                       .temp(temp)
                                                       .build();
@@ -126,19 +123,15 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("getTemperaturesByDate returns temperatures with valid date.")
     void givenValidDate_whenGettingTemperaturesByDate_thenReturnTemperatures() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
-        UUID id2 = UUID.randomUUID();
         LocalDateTime registeredAt2 = LocalDateTime.now();
         Double temp2 = 80.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .id(id)
                                                       .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
         TemperatureDto temperatureDto2 = TemperatureDto.builder()
-                                                       .id(id2)
                                                        .registeredAt(registeredAt2)
                                                        .temp(temp2)
                                                        .build();
@@ -168,11 +161,9 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("createTemperature returns created temperature with valid temperature model.")
     void givenValidTemperatureModel_whenCreatingTemperature_thenReturnCreatedTemperature() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .id(id)
                                                       .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
@@ -197,15 +188,14 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("deleteTemperatureById deletes temperature with valid id.")
     void givenValidId_whenDeletingTemperatureById_thenDeleteTemperature() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .id(id)
                                                       .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
         Temperature temperature = TemperatureEntityMapper.toEntity(temperatureDto);
+        UUID id = temperature.getId();
         when(temperatureRepository.getTemperatureById(id)).thenReturn(Optional.of(temperature));
         doNothing().when(temperatureRepository).deleteTemperatureById(id);
 
@@ -242,11 +232,9 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("deleteTemperatureByTimestamp deletes temperature with valid timestamp.")
     void givenValidTimestamp_whenDeletingTemperatureByTimestamp_thenDeleteTemperature() {
-        UUID id = UUID.randomUUID();
         LocalDateTime timestamp = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .id(id)
                                                       .registeredAt(timestamp)
                                                       .temp(temp)
                                                       .build();

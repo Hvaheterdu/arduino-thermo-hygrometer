@@ -1,7 +1,6 @@
 package api.arduinothermohygrometer.mappers;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,32 +15,32 @@ class BatteryEntityMapperTest {
     @Test
     @DisplayName("toEntity returns battery entity from valid batteryDto entity.")
     void givenValidBatteryDtoEntity_whenToEntity_thenReturnBatteryEntity() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 95;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .id(id)
                                           .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
 
         Battery result = BatteryEntityMapper.toEntity(batteryDto);
 
-        assertThat(result)
-            .usingRecursiveComparison()
-            .isEqualTo(batteryDto);
+        assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.registeredAt());
+        assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.batteryStatus());
     }
 
     @Test
     @DisplayName("toDto returns batteryDto entity from valid battery entity.")
     void givenValidBatteryEntity_whenToDto_thenReturnBatteryDtoEntity() {
+        LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 95;
-        Battery battery = new Battery(batteryStatus);
+        Battery battery = Battery.builder()
+                                 .registeredAt(registeredAt)
+                                 .batteryStatus(batteryStatus)
+                                 .build();
 
         BatteryDto result = BatteryEntityMapper.toDto(battery);
 
-        assertThat(result)
-            .usingRecursiveComparison()
-            .isEqualTo(battery);
+        assertThat(result.registeredAt()).isEqualTo(battery.getRegisteredAt());
+        assertThat(result.batteryStatus()).isEqualTo(battery.getBatteryStatus());
     }
 }

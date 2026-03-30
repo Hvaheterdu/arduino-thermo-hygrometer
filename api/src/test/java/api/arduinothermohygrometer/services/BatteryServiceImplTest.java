@@ -53,15 +53,14 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("getBatteryById returns battery with valid id.")
     void givenValidId_whenGettingBatteryById_thenReturnBattery() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .id(id)
                                           .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
         Battery battery = BatteryEntityMapper.toEntity(batteryDto);
+        UUID id = battery.getId();
         when(batteryRepository.getBatteryById(id)).thenReturn(Optional.of(battery));
 
         BatteryDto result = batteryService.getBatteryById(id);
@@ -95,11 +94,9 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("getBatteryByTimestamp returns battery with valid timestamp.")
     void givenValidTimestamp_whenGettingBatteryByTimestamp_thenReturnBattery() {
-        UUID id = UUID.randomUUID();
         LocalDateTime timestamp = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .id(id)
                                           .registeredAt(timestamp)
                                           .batteryStatus(batteryStatus)
                                           .build();
@@ -126,19 +123,15 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("getBatteriesByDate returns batteries with valid date.")
     void givenValidDate_whenGettingBatteriesByDate_thenReturnBatteries() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
-        UUID id2 = UUID.randomUUID();
         LocalDateTime registeredAt2 = LocalDateTime.now();
         int batteryStatus2 = 95;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .id(id)
                                           .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
         BatteryDto batteryDto2 = BatteryDto.builder()
-                                           .id(id2)
                                            .registeredAt(registeredAt2)
                                            .batteryStatus(batteryStatus2)
                                            .build();
@@ -168,11 +161,9 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("createBattery returns created battery with valid battery model.")
     void givenValidBatteryModel_whenCreatingBattery_thenReturnCreatedBattery() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .id(id)
                                           .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
@@ -197,15 +188,14 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("deleteBatteryById deletes battery with valid id.")
     void givenValidId_whenDeletingBatteryById_thenDeleteBattery() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .id(id)
                                           .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
         Battery battery = BatteryEntityMapper.toEntity(batteryDto);
+        UUID id = battery.getId();
         when(batteryRepository.getBatteryById(id)).thenReturn(Optional.of(battery));
         doNothing().when(batteryRepository).deleteBatteryById(id);
 
@@ -242,11 +232,9 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("deleteBatteryByTimestamp deletes battery with valid timestamp.")
     void givenValidTimestamp_whenDeletingBatteryByTimestamp_thenDeleteBattery() {
-        UUID id = UUID.randomUUID();
         LocalDateTime timestamp = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .id(id)
                                           .registeredAt(timestamp)
                                           .batteryStatus(batteryStatus)
                                           .build();

@@ -53,15 +53,14 @@ class HumidityServiceImplTest {
     @Test
     @DisplayName("getHumidityById returns humidity with valid id.")
     void givenValidId_whenGettingHumidityById_thenReturnHumidity() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 70.00;
         HumidityDto humidityDto = HumidityDto.builder()
-                                             .id(id)
                                              .registeredAt(registeredAt)
                                              .airHumidity(airHumidity)
                                              .build();
         Humidity humidity = HumidityEntityMapper.toEntity(humidityDto);
+        UUID id = humidity.getId();
         when(humidityRepository.getHumidityById(id)).thenReturn(Optional.of(humidity));
 
         HumidityDto result = humidityService.getHumidityById(id);
@@ -95,11 +94,9 @@ class HumidityServiceImplTest {
     @Test
     @DisplayName("getHumidityByTimestamp returns humidity with valid timestamp.")
     void givenValidTimestamp_whenGettingHumidityByTimestamp_thenReturnHumidity() {
-        UUID id = UUID.randomUUID();
         LocalDateTime timestamp = LocalDateTime.now();
         Double airHumidity = 75.00;
         HumidityDto humidityDto = HumidityDto.builder()
-                                             .id(id)
                                              .registeredAt(timestamp)
                                              .airHumidity(airHumidity)
                                              .build();
@@ -126,19 +123,15 @@ class HumidityServiceImplTest {
     @Test
     @DisplayName("getHumiditiesByDate returns humidities with valid date.")
     void givenValidDate_whenGettingHumiditiesByDate_thenReturnHumidities() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 75.00;
-        UUID id2 = UUID.randomUUID();
         LocalDateTime registeredAt2 = LocalDateTime.now();
         Double airHumidity2 = 80.00;
         HumidityDto humidityDto = HumidityDto.builder()
-                                             .id(id)
                                              .registeredAt(registeredAt)
                                              .airHumidity(airHumidity)
                                              .build();
         HumidityDto humidityDto2 = HumidityDto.builder()
-                                              .id(id2)
                                               .registeredAt(registeredAt2)
                                               .airHumidity(airHumidity2)
                                               .build();
@@ -168,11 +161,9 @@ class HumidityServiceImplTest {
     @Test
     @DisplayName("createHumidity returns created humidity with valid humidity model.")
     void givenValidHumidityModel_whenCreatingHumidity_thenReturnCreatedHumidity() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 75.00;
         HumidityDto humidityDto = HumidityDto.builder()
-                                             .id(id)
                                              .registeredAt(registeredAt)
                                              .airHumidity(airHumidity)
                                              .build();
@@ -197,15 +188,14 @@ class HumidityServiceImplTest {
     @Test
     @DisplayName("deleteHumidityById deletes humidity with valid id.")
     void givenValidId_whenDeletingHumidityById_thenDeleteHumidity() {
-        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 75.00;
         HumidityDto humidityDto = HumidityDto.builder()
-                                             .id(id)
                                              .registeredAt(registeredAt)
                                              .airHumidity(airHumidity)
                                              .build();
         Humidity humidity = HumidityEntityMapper.toEntity(humidityDto);
+        UUID id = humidity.getId();
         when(humidityRepository.getHumidityById(id)).thenReturn(Optional.of(humidity));
         doNothing().when(humidityRepository).deleteHumidityById(id);
 
@@ -242,11 +232,9 @@ class HumidityServiceImplTest {
     @Test
     @DisplayName("deleteHumidityByTimestamp deletes humidity with valid timestamp.")
     void givenValidTimestamp_whenDeletingHumidityByTimestamp_thenDeleteHumidity() {
-        UUID id = UUID.randomUUID();
         LocalDateTime timestamp = LocalDateTime.now();
         Double airHumidity = 75.00;
         HumidityDto humidityDto = HumidityDto.builder()
-                                             .id(id)
                                              .registeredAt(timestamp)
                                              .airHumidity(airHumidity)
                                              .build();

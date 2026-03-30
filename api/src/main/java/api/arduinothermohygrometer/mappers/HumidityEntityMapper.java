@@ -8,16 +8,14 @@ public class HumidityEntityMapper {
     }
 
     public static Humidity toEntity(HumidityDto humidityDto) {
-        Humidity humidity = new Humidity(humidityDto.airHumidity());
-        humidity.setId(humidityDto.id());
-        humidity.setRegisteredAt(humidityDto.registeredAt());
-
-        return humidity;
+        return Humidity.builder()
+                       .registeredAt(humidityDto.registeredAt())
+                       .airHumidity(humidityDto.airHumidity())
+                       .build();
     }
 
     public static HumidityDto toDto(Humidity humidity) {
         return HumidityDto.builder()
-                          .id(humidity.getId())
                           .registeredAt(humidity.getRegisteredAt())
                           .airHumidity(humidity.getAirHumidity())
                           .build();

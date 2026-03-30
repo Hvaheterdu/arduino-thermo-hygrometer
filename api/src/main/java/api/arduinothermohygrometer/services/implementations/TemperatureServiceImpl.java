@@ -103,7 +103,7 @@ public class TemperatureServiceImpl implements TemperatureService {
         LOGGER.info("Temperature with id={} and registered_at={} created.", temperature.getId(),
             temperature.getRegisteredAt());
 
-        return temperatureDto;
+        return TemperatureEntityMapper.toDto(temperature);
     }
 
     @Override

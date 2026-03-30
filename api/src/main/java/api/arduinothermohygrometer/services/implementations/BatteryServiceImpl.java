@@ -102,7 +102,7 @@ public class BatteryServiceImpl implements BatteryService {
         batteryRepository.createBattery(battery);
         LOGGER.info("Battery with id={} and registered_at={} created.", battery.getId(), battery.getRegisteredAt());
 
-        return batteryDto;
+        return BatteryEntityMapper.toDto(battery);
     }
 
     @Override

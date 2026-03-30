@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
@@ -19,8 +17,7 @@ import lombok.Setter;
 @Setter
 public class Humidity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "registered_at", nullable = false)
     private LocalDateTime registeredAt;
@@ -29,9 +26,11 @@ public class Humidity {
     private Double airHumidity;
 
     @Builder
-    public Humidity(Double airHumidity) {
-        this.id = UUID.randomUUID();
-        this.registeredAt = LocalDateTime.now();
+    public Humidity(LocalDateTime registeredAt, Double airHumidity) {
+        this.registeredAt = registeredAt;
         this.airHumidity = airHumidity;
+    }
+
+    protected Humidity() {
     }
 }
