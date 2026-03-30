@@ -40,7 +40,7 @@ class TemperatureServiceImplTest {
     private TemperatureRepository temperatureRepository;
 
     @Captor
-    ArgumentCaptor<Temperature> temperatureArgumentCaptor;
+    private ArgumentCaptor<Temperature> temperatureArgumentCaptor;
 
     private TemperatureServiceImpl temperatureService;
 

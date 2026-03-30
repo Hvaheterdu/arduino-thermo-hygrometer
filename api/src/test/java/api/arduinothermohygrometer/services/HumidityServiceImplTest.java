@@ -40,7 +40,7 @@ class HumidityServiceImplTest {
     private HumidityRepository humidityRepository;
 
     @Captor
-    ArgumentCaptor<Humidity> humidityArgumentCaptor;
+    private ArgumentCaptor<Humidity> humidityArgumentCaptor;
 
     private HumidityServiceImpl humidityService;
 

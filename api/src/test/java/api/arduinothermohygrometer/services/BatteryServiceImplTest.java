@@ -40,7 +40,7 @@ class BatteryServiceImplTest {
     private BatteryRepository batteryRepository;
 
     @Captor
-    ArgumentCaptor<Battery> batteryArgumentCaptor;
+    private ArgumentCaptor<Battery> batteryArgumentCaptor;
 
     private BatteryServiceImpl batteryService;
 
