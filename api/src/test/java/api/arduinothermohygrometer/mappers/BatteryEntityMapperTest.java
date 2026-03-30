@@ -33,10 +33,7 @@ class BatteryEntityMapperTest {
     void givenValidBatteryEntity_whenToDto_thenReturnBatteryDtoEntity() {
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 95;
-        Battery battery = Battery.builder()
-                                 .registeredAt(registeredAt)
-                                 .batteryStatus(batteryStatus)
-                                 .build();
+        Battery battery = new Battery(registeredAt, batteryStatus);
 
         BatteryDto result = BatteryEntityMapper.toDto(battery);
 

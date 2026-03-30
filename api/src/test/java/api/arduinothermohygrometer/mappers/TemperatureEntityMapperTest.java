@@ -33,10 +33,7 @@ class TemperatureEntityMapperTest {
     void givenValidTemperatureEntity_whenToDto_thenReturnTemperatureDtoEntity() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 86.425;
-        Temperature temperature = Temperature.builder()
-                                             .registeredAt(registeredAt)
-                                             .temp(temp)
-                                             .build();
+        Temperature temperature = new Temperature(registeredAt, temp);
 
         TemperatureDto result = TemperatureEntityMapper.toDto(temperature);
 
