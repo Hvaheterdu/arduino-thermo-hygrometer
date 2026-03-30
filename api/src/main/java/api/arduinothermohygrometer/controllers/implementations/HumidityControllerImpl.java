@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.controllers.HumidityController;
 import api.arduinothermohygrometer.dtos.HumidityDto;
-import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.HumidityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -115,7 +114,7 @@ public class HumidityControllerImpl implements HumidityController {
     })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured humidity", required = true)
     @DeleteMapping(path = "/timestamp")
-    public ResponseEntity<Void> deleteHumidityByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {
+    public ResponseEntity<Void> deleteHumidityByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) {
         humidityService.deleteHumidityByTimestamp(timestamp);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

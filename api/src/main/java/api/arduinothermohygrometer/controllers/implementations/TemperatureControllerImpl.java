@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.controllers.TemperatureController;
 import api.arduinothermohygrometer.dtos.TemperatureDto;
-import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.TemperatureService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -101,7 +100,7 @@ public class TemperatureControllerImpl implements TemperatureController {
     })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured temperature", required = true)
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> deleteTemperatureDtoById(@PathVariable UUID id) throws ResourceNotFoundException {
+    public ResponseEntity<Void> deleteTemperatureDtoById(@PathVariable UUID id) {
         temperatureService.deleteTemperatureById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -114,7 +113,7 @@ public class TemperatureControllerImpl implements TemperatureController {
     })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured temperature", required = true)
     @DeleteMapping(path = "/timestamp")
-    public ResponseEntity<Void> deleteTemperatureByTimestamp(@RequestParam LocalDateTime timestamp) throws ResourceNotFoundException {
+    public ResponseEntity<Void> deleteTemperatureByTimestamp(@RequestParam LocalDateTime timestamp) {
         temperatureService.deleteTemperatureByTimestamp(timestamp);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
