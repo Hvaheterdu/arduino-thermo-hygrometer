@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +25,7 @@ public class Battery {
     @Column(name = "battery_status", nullable = false)
     private int batteryStatus;
 
+    @Builder
     public Battery(LocalDateTime registeredAt, int batteryStatus) {
         this.registeredAt = registeredAt;
         this.batteryStatus = batteryStatus;

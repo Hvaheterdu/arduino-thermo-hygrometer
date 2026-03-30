@@ -33,7 +33,10 @@ class HumidityEntityMapperTest {
     void givenValidHumidityEntity_whenToDto_thenReturnHumidityDtoEntity() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 86.425;
-        Humidity humidity = new Humidity(registeredAt, airHumidity);
+        Humidity humidity = Humidity.builder()
+                                    .registeredAt(registeredAt)
+                                    .airHumidity(airHumidity)
+                                    .build();
 
         HumidityDto result = HumidityEntityMapper.toDto(humidity);
 
