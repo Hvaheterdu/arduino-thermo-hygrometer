@@ -8,19 +8,17 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 
 import api.arduinothermohygrometer.dtos.TemperatureDto;
-import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
-import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 
 public interface TemperatureController {
-    ResponseEntity<TemperatureDto> getTemperatureById(UUID id) throws ResourceNotFoundException;
+    ResponseEntity<TemperatureDto> getTemperatureById(UUID id);
 
-    ResponseEntity<TemperatureDto> getTemperatureByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
+    ResponseEntity<TemperatureDto> getTemperatureByTimestamp(LocalDateTime timestamp);
 
     ResponseEntity<List<TemperatureDto>> getTemperaturesByDate(LocalDate date);
 
-    ResponseEntity<TemperatureDto> create(final TemperatureDto temperatureDto) throws ResourceNotCreatedException;
+    ResponseEntity<TemperatureDto> create(final TemperatureDto temperatureDto);
 
-    ResponseEntity<Void> deleteTemperatureDtoById(UUID id) throws ResourceNotFoundException;
+    ResponseEntity<Void> deleteTemperatureDtoById(UUID id);
 
-    ResponseEntity<Void> deleteTemperatureByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
+    ResponseEntity<Void> deleteTemperatureByTimestamp(LocalDateTime timestamp);
 }
