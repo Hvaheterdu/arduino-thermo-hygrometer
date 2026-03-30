@@ -7,7 +7,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,7 +24,6 @@ public class Temperature {
     @Column(name = "temp", nullable = false, precision = 6, scale = 2)
     private Double temp;
 
-    @Builder
     public Temperature(LocalDateTime registeredAt, Double temp) {
         this.registeredAt = registeredAt;
         this.temp = temp;
