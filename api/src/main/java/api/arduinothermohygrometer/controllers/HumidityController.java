@@ -8,19 +8,17 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 
 import api.arduinothermohygrometer.dtos.HumidityDto;
-import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
-import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 
 public interface HumidityController {
-    ResponseEntity<HumidityDto> getHumidityById(UUID id) throws ResourceNotFoundException;
+    ResponseEntity<HumidityDto> getHumidityById(UUID id);
 
-    ResponseEntity<HumidityDto> getHumidityByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
+    ResponseEntity<HumidityDto> getHumidityByTimestamp(LocalDateTime timestamp);
 
     ResponseEntity<List<HumidityDto>> getHumiditiesByDate(LocalDate date);
 
-    ResponseEntity<HumidityDto> create(final HumidityDto humidityDto) throws ResourceNotCreatedException;
+    ResponseEntity<HumidityDto> create(final HumidityDto humidityDto);
 
-    ResponseEntity<Void> deleteHumidityDtoById(UUID id) throws ResourceNotFoundException;
+    ResponseEntity<Void> deleteHumidityDtoById(UUID id);
 
-    ResponseEntity<Void> deleteHumidityByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
+    ResponseEntity<Void> deleteHumidityByTimestamp(LocalDateTime timestamp);
 }

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.controllers.HumidityController;
 import api.arduinothermohygrometer.dtos.HumidityDto;
-import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.HumidityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,8 +45,8 @@ public class HumidityControllerImpl implements HumidityController {
         @ApiResponse(responseCode = "404", description = "Humidity not found.")
     })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured humidity", required = true)
-    @GetMapping(path = "/id/{id}", produces = "application/json")
-    public ResponseEntity<HumidityDto> getHumidityById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
+    @GetMapping(path = "/{id}", produces = "application/json")
+    public ResponseEntity<HumidityDto> getHumidityById(@PathVariable("id") UUID id) {
         HumidityDto humidityDto = humidityService.getHumidityById(id);
 
         return new ResponseEntity<>(humidityDto, HttpStatus.OK);
@@ -61,7 +60,7 @@ public class HumidityControllerImpl implements HumidityController {
     })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured humidity", required = true)
     @GetMapping(path = "/timestamp", produces = "application/json")
-    public ResponseEntity<HumidityDto> getHumidityByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {
+    public ResponseEntity<HumidityDto> getHumidityByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) {
         HumidityDto humidityDto = humidityService.getHumidityByTimestamp(timestamp);
 
         return new ResponseEntity<>(humidityDto, HttpStatus.OK);
@@ -87,8 +86,8 @@ public class HumidityControllerImpl implements HumidityController {
         @ApiResponse(responseCode = "201", description = "Humidity created."),
         @ApiResponse(responseCode = "400", description = "Humidity failed to be created.")
     })
-    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<HumidityDto> create(@Valid @RequestBody HumidityDto humidityDto) throws ResourceNotCreatedException {
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<HumidityDto> create(@Valid @RequestBody HumidityDto humidityDto) {
         HumidityDto createdHumidityDto = humidityService.createHumidity(humidityDto);
 
         return new ResponseEntity<>(createdHumidityDto, HttpStatus.CREATED);
@@ -101,8 +100,8 @@ public class HumidityControllerImpl implements HumidityController {
         @ApiResponse(responseCode = "400", description = "Humidity failed to be deleted.")
     })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured humidity", required = true)
-    @DeleteMapping(path = "/delete/id/{id}")
-    public ResponseEntity<Void> deleteHumidityDtoById(@PathVariable("id") UUID id) throws ResourceNotFoundException {
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deleteHumidityDtoById(@PathVariable("id") UUID id) {
         humidityService.deleteHumidityById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -115,7 +114,7 @@ public class HumidityControllerImpl implements HumidityController {
         @ApiResponse(responseCode = "400", description = "Humidity failed to be deleted.")
     })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured humidity", required = true)
-    @DeleteMapping(path = "/delete/timestamp")
+    @DeleteMapping(path = "/timestamp")
     public ResponseEntity<Void> deleteHumidityByTimestamp(@RequestParam("timestamp") LocalDateTime timestamp) throws ResourceNotFoundException {
         humidityService.deleteHumidityByTimestamp(timestamp);
 

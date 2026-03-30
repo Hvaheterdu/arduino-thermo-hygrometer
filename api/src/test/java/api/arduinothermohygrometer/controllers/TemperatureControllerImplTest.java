@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -21,6 +22,7 @@ import api.arduinothermohygrometer.dtos.TemperatureDto;
 import api.arduinothermohygrometer.exceptions.GlobalExceptionHandler;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.TemperatureService;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,11 +39,14 @@ class TemperatureControllerImplTest {
     @Mock
     private TemperatureService temperatureService;
 
+    private ObjectMapper objectMapper;
+
     private MockMvcTester mockMvcTester;
 
     @BeforeEach
     void setup() {
         mockMvcTester = MockMvcTester.of(new TemperatureControllerImpl(temperatureService), new GlobalExceptionHandler());
+        objectMapper = new ObjectMapper();
     }
 
     @Test
@@ -57,14 +62,13 @@ class TemperatureControllerImplTest {
         when(temperatureService.getTemperatureById(id)).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/temperatures/id/{id}", id)
+                                            .uri("/v1/api/temperatures/{id}", id)
                                             .exchange();
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
-            .hasPathSatisfying("$.registeredAt",
-                path -> assertThat(path).asString().isEqualTo(registeredAt.toString()))
+            .hasPath("$.registeredAt")
             .hasPathSatisfying("$.temp",
                 path -> assertThat(path).asNumber().isEqualTo(temp));
     }
@@ -77,7 +81,7 @@ class TemperatureControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Temperature with id=" + id + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/temperatures/id/{id}", id)
+                                            .uri("/v1/api/temperatures/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -106,8 +110,7 @@ class TemperatureControllerImplTest {
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
-            .hasPathSatisfying("$.registeredAt",
-                path -> assertThat(path).asString().isEqualTo(timestamp.toString()))
+            .hasPath("$.registeredAt")
             .hasPathSatisfying("$.temp",
                 path -> assertThat(path).asNumber().isEqualTo(temp));
     }
@@ -165,75 +168,63 @@ class TemperatureControllerImplTest {
     @Test
     @DisplayName("getTemperatureByDate returns 404 NOT FOUND with invalid date.")
     void givenInvalidDate_whenGettingTemperatureByDate_thenReturn404NotFound() {
-        LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(temperatureService.getTemperaturesByDate(timestamp.toLocalDate()))
-            .thenThrow(new ResourceNotFoundException("Temperatures with date=" + timestamp.toLocalDate() + " not found."));
+        LocalDate date = LocalDate.now();
+        when(temperatureService.getTemperaturesByDate(date))
+            .thenThrow(new ResourceNotFoundException("Temperatures with date=" + date + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/temperatures/date")
-                                            .param("date", timestamp.toLocalDate().toString())
+                                            .param("date", date.toString())
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.NOT_FOUND)
             .failure()
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Temperatures with date=" + timestamp.toLocalDate() + " not found.");
+            .hasMessage("Temperatures with date=" + date + " not found.");
     }
 
     @Test
     @DisplayName("create returns 201 CREATED for creating valid temperature model.")
-    void givenValidTemperatureDtoModel_whenCreating_thenReturn200OK() {
-        UUID id = UUID.randomUUID();
-        LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    void givenValidTemperatureDtoModel_whenCreating_thenReturn201CREATED() {
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 21.02;
-        String requestTemperatureDto = String.format("""
-            {
-            "registeredAt": "%s",
-            "temp": %s
-            }
-            """, localDateTime, temp);
-        String responseTemperatureDto = String.format("""
-            {
-            "registeredAt": "%s",
-            "temp": %s
-            }
-            """, localDateTime, temp);
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .id(id)
-                                                      .registeredAt(localDateTime)
+                                                      .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
         when(temperatureService.createTemperature(any())).thenReturn(temperatureDto);
+        String requestJson = objectMapper.writeValueAsString(temperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/temperatures/create")
+                                            .uri("/v1/api/temperatures")
                                             .contentType(MediaType.APPLICATION_JSON)
-                                            .content(requestTemperatureDto)
+                                            .content(requestJson)
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.CREATED)
             .bodyJson()
-            .isEqualTo(responseTemperatureDto);
+            .hasPath("$.registeredAt")
+            .hasPathSatisfying("$.temp",
+                path -> assertThat(path).asNumber().isEqualTo(temp));
     }
 
     @Test
     @DisplayName("create returns 400 BAD REQUEST for creating invalid temperature model.")
     void givenInvalidTemperatureDtoModel_whenCreating_thenReturn400BadRequest() {
-        LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 150.03;
-        String requestTemperatureDto = String.format("""
-            {
-            "registeredAt": "%s",
-            "temp": %s
-            }
-            """, localDateTime, temp);
+        TemperatureDto temperatureDto = TemperatureDto.builder()
+                                                      .registeredAt(registeredAt)
+                                                      .temp(temp)
+                                                      .build();
+        String requestJson = objectMapper.writeValueAsString(temperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/temperatures/create")
+                                            .uri("/v1/api/temperatures")
                                             .contentType(MediaType.APPLICATION_JSON)
-                                            .content(requestTemperatureDto)
+                                            .content(requestJson)
                                             .exchange();
 
         verifyNoInteractions(temperatureService);
@@ -255,11 +246,12 @@ class TemperatureControllerImplTest {
         doNothing().when(temperatureService).deleteTemperatureById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/temperatures/delete/id/{id}", id)
+                                            .uri("/v1/api/temperatures/{id}", id)
                                             .exchange();
 
         verify(temperatureService, times(1)).deleteTemperatureById(id);
-        assertThat(result).hasStatus(HttpStatus.NO_CONTENT);
+        assertThat(result)
+            .hasStatus(HttpStatus.NO_CONTENT);
     }
 
     @Test
@@ -270,7 +262,7 @@ class TemperatureControllerImplTest {
                                                                                            .deleteTemperatureById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/temperatures/delete/id/{id}", id)
+                                            .uri("/v1/api/temperatures/{id}", id)
                                             .exchange();
 
         verify(temperatureService, times(1)).deleteTemperatureById(id);
@@ -288,12 +280,13 @@ class TemperatureControllerImplTest {
         doNothing().when(temperatureService).deleteTemperatureByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/temperatures/delete/timestamp")
+                                            .uri("/v1/api/temperatures/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
         verify(temperatureService, times(1)).deleteTemperatureByTimestamp(timestamp);
-        assertThat(result).hasStatus(HttpStatus.NO_CONTENT);
+        assertThat(result)
+            .hasStatus(HttpStatus.NO_CONTENT);
     }
 
     @Test
@@ -305,7 +298,7 @@ class TemperatureControllerImplTest {
                                                                        .deleteTemperatureByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/temperatures/delete/timestamp")
+                                            .uri("/v1/api/temperatures/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 

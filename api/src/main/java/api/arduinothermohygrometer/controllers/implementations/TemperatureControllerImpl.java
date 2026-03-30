@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.controllers.TemperatureController;
 import api.arduinothermohygrometer.dtos.TemperatureDto;
-import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.TemperatureService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,8 +45,8 @@ public class TemperatureControllerImpl implements TemperatureController {
         @ApiResponse(responseCode = "404", description = "Temperature not found.")
     })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured temperature", required = true)
-    @GetMapping(path = "/id/{id}", produces = "application/json")
-    public ResponseEntity<TemperatureDto> getTemperatureById(@PathVariable UUID id) throws ResourceNotFoundException {
+    @GetMapping(path = "/{id}", produces = "application/json")
+    public ResponseEntity<TemperatureDto> getTemperatureById(@PathVariable UUID id) {
         TemperatureDto temperatureDto = temperatureService.getTemperatureById(id);
 
         return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
@@ -61,7 +60,7 @@ public class TemperatureControllerImpl implements TemperatureController {
     })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured temperature", required = true)
     @GetMapping(path = "/timestamp", produces = "application/json")
-    public ResponseEntity<TemperatureDto> getTemperatureByTimestamp(@RequestParam LocalDateTime timestamp) throws ResourceNotFoundException {
+    public ResponseEntity<TemperatureDto> getTemperatureByTimestamp(@RequestParam LocalDateTime timestamp) {
         TemperatureDto temperatureDto = temperatureService.getTemperatureByTimestamp(timestamp);
 
         return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
@@ -87,8 +86,8 @@ public class TemperatureControllerImpl implements TemperatureController {
         @ApiResponse(responseCode = "201", description = "Temperature created."),
         @ApiResponse(responseCode = "400", description = "Temperature failed to be created.")
     })
-    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<TemperatureDto> create(@Valid @RequestBody TemperatureDto temperatureDto) throws ResourceNotCreatedException {
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<TemperatureDto> create(@Valid @RequestBody TemperatureDto temperatureDto) {
         TemperatureDto createdTemperatureDto = temperatureService.createTemperature(temperatureDto);
 
         return new ResponseEntity<>(createdTemperatureDto, HttpStatus.CREATED);
@@ -101,10 +100,9 @@ public class TemperatureControllerImpl implements TemperatureController {
         @ApiResponse(responseCode = "400", description = "Temperature failed to be deleted.")
     })
     @Parameter(name = "id", in = ParameterIn.PATH, description = "identifier for measured temperature", required = true)
-    @DeleteMapping(path = "/delete/id/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteTemperatureDtoById(@PathVariable UUID id) throws ResourceNotFoundException {
         temperatureService.deleteTemperatureById(id);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -115,10 +113,9 @@ public class TemperatureControllerImpl implements TemperatureController {
         @ApiResponse(responseCode = "400", description = "Temperature failed to be deleted.")
     })
     @Parameter(name = "timestamp", in = ParameterIn.QUERY, description = "timestamp for measured temperature", required = true)
-    @DeleteMapping(path = "/delete/timestamp")
+    @DeleteMapping(path = "/timestamp")
     public ResponseEntity<Void> deleteTemperatureByTimestamp(@RequestParam LocalDateTime timestamp) throws ResourceNotFoundException {
         temperatureService.deleteTemperatureByTimestamp(timestamp);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

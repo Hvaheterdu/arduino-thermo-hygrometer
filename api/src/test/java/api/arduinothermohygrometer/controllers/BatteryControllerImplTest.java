@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -21,6 +22,7 @@ import api.arduinothermohygrometer.dtos.BatteryDto;
 import api.arduinothermohygrometer.exceptions.GlobalExceptionHandler;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.BatteryService;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,11 +39,14 @@ class BatteryControllerImplTest {
     @Mock
     private BatteryService batteryService;
 
+    private ObjectMapper objectMapper;
+
     private MockMvcTester mockMvcTester;
 
     @BeforeEach
     void setup() {
         mockMvcTester = MockMvcTester.of(new BatteryControllerImpl(batteryService), new GlobalExceptionHandler());
+        objectMapper = new ObjectMapper();
     }
 
     @Test
@@ -57,14 +62,13 @@ class BatteryControllerImplTest {
         when(batteryService.getBatteryById(id)).thenReturn(batteryDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/batteries/id/{id}", id)
+                                            .uri("/v1/api/batteries/{id}", id)
                                             .exchange();
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
-            .hasPathSatisfying("$.registeredAt",
-                path -> assertThat(path).asString().isEqualTo(registeredAt.toString()))
+            .hasPath("$.registeredAt")
             .hasPathSatisfying("$.batteryStatus",
                 path -> assertThat(path).asNumber().isEqualTo(batteryStatus));
     }
@@ -77,7 +81,7 @@ class BatteryControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Battery with id=" + id + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/batteries/id/{id}", id)
+                                            .uri("/v1/api/batteries/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -106,8 +110,7 @@ class BatteryControllerImplTest {
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
-            .hasPathSatisfying("$.registeredAt",
-                path -> assertThat(path).asString().isEqualTo(timestamp.toString()))
+            .hasPath("$.registeredAt")
             .hasPathSatisfying("$.batteryStatus",
                 path -> assertThat(path).asNumber().isEqualTo(batteryStatus));
     }
@@ -166,75 +169,63 @@ class BatteryControllerImplTest {
     @Test
     @DisplayName("getBatteryByDate returns 404 NOT FOUND with invalid date.")
     void givenInvalidDate_whenGettingBatteryByDate_thenReturn404NotFound() {
-        LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(batteryService.getBatteriesByDate(timestamp.toLocalDate()))
-            .thenThrow(new ResourceNotFoundException("Batteries with date=" + timestamp.toLocalDate() + " not found."));
+        LocalDate date = LocalDate.now();
+        when(batteryService.getBatteriesByDate(date))
+            .thenThrow(new ResourceNotFoundException("Batteries with date=" + date + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/v1/api/batteries/date")
-                                            .param("date", timestamp.toLocalDate().toString())
+                                            .param("date", date.toString())
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.NOT_FOUND)
             .failure()
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Batteries with date=" + timestamp.toLocalDate() + " not found.");
+            .hasMessage("Batteries with date=" + date + " not found.");
     }
 
     @Test
     @DisplayName("create returns 201 CREATED for creating valid battery model.")
-    void givenValidBatteryDtoModel_whenCreating_thenReturn200OK() {
-        UUID id = UUID.randomUUID();
-        LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    void givenValidBatteryDtoModel_whenCreating_thenReturn201CREATED() {
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 95;
-        String requestBatteryDto = String.format("""
-            {
-            "registeredAt": "%s",
-            "batteryStatus": %d
-            }
-            """, localDateTime, batteryStatus);
-        String responseBatteryDto = String.format("""
-            {
-            "registeredAt": "%s",
-            "batteryStatus": %d
-            }
-            """, localDateTime, batteryStatus);
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .id(id)
-                                          .registeredAt(localDateTime)
+                                          .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
         when(batteryService.createBattery(any())).thenReturn(batteryDto);
+        String requestJson = objectMapper.writeValueAsString(batteryDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/batteries/create")
+                                            .uri("/v1/api/batteries")
                                             .contentType(MediaType.APPLICATION_JSON)
-                                            .content(requestBatteryDto)
+                                            .content(requestJson)
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.CREATED)
             .bodyJson()
-            .isEqualTo(responseBatteryDto);
+            .hasPath("$.registeredAt")
+            .hasPathSatisfying("$.batteryStatus",
+                path -> assertThat(path).asNumber().isEqualTo(batteryStatus));
     }
 
     @Test
     @DisplayName("create returns 400 BAD REQUEST for creating invalid batteryDto model.")
     void givenInvalidBatteryDtoModel_whenCreating_thenReturn400BadRequest() {
-        LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 105;
-        String requestBatteryDto = String.format("""
-            {
-            "registeredAt": "%s",
-            "batteryStatus": %d
-            }
-            """, localDateTime, batteryStatus);
+        BatteryDto batteryDto = BatteryDto.builder()
+                                          .registeredAt(registeredAt)
+                                          .batteryStatus(batteryStatus)
+                                          .build();
+        String requestJson = objectMapper.writeValueAsString(batteryDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/batteries/create")
+                                            .uri("/v1/api/batteries")
                                             .contentType(MediaType.APPLICATION_JSON)
-                                            .content(requestBatteryDto)
+                                            .content(requestJson)
                                             .exchange();
 
         verifyNoInteractions(batteryService);
@@ -256,11 +247,12 @@ class BatteryControllerImplTest {
         doNothing().when(batteryService).deleteBatteryById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/batteries/delete/id/{id}", id)
+                                            .uri("/v1/api/batteries/{id}", id)
                                             .exchange();
 
         verify(batteryService, times(1)).deleteBatteryById(id);
-        assertThat(result).hasStatus(HttpStatus.NO_CONTENT);
+        assertThat(result)
+            .hasStatus(HttpStatus.NO_CONTENT);
     }
 
     @Test
@@ -271,7 +263,7 @@ class BatteryControllerImplTest {
                                                                                        .deleteBatteryById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/batteries/delete/id/{id}", id)
+                                            .uri("/v1/api/batteries/{id}", id)
                                             .exchange();
 
         verify(batteryService, times(1)).deleteBatteryById(id);
@@ -289,12 +281,13 @@ class BatteryControllerImplTest {
         doNothing().when(batteryService).deleteBatteryByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/batteries/delete/timestamp")
+                                            .uri("/v1/api/batteries/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
         verify(batteryService, times(1)).deleteBatteryByTimestamp(timestamp);
-        assertThat(result).hasStatus(HttpStatus.NO_CONTENT);
+        assertThat(result)
+            .hasStatus(HttpStatus.NO_CONTENT);
     }
 
     @Test
@@ -306,7 +299,7 @@ class BatteryControllerImplTest {
                                                                    .deleteBatteryByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/batteries/delete/timestamp")
+                                            .uri("/v1/api/batteries/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 

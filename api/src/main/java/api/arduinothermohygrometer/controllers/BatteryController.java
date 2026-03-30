@@ -8,19 +8,17 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 
 import api.arduinothermohygrometer.dtos.BatteryDto;
-import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
-import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 
 public interface BatteryController {
-    ResponseEntity<BatteryDto> getBatteryById(UUID id) throws ResourceNotFoundException;
+    ResponseEntity<BatteryDto> getBatteryById(UUID id);
 
-    ResponseEntity<BatteryDto> getBatteryByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
+    ResponseEntity<BatteryDto> getBatteryByTimestamp(LocalDateTime timestamp);
 
     ResponseEntity<List<BatteryDto>> getBatteriesByDate(LocalDate date);
 
-    ResponseEntity<BatteryDto> create(final BatteryDto batteryDto) throws ResourceNotCreatedException;
+    ResponseEntity<BatteryDto> create(final BatteryDto batteryDto);
 
-    ResponseEntity<Void> deleteBatteryDtoById(UUID id) throws ResourceNotFoundException;
+    ResponseEntity<Void> deleteBatteryDtoById(UUID id);
 
-    ResponseEntity<Void> deleteBatteryByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException;
+    ResponseEntity<Void> deleteBatteryByTimestamp(LocalDateTime timestamp);
 }

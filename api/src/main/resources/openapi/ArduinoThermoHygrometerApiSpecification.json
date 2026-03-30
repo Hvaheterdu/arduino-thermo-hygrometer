@@ -34,7 +34,7 @@
     }
   ],
   "paths": {
-    "/v1/api/temperatures/create": {
+    "/v1/api/temperatures": {
       "post": {
         "tags": [
           "Temperature component."
@@ -75,7 +75,7 @@
         }
       }
     },
-    "/v1/api/humidities/create": {
+    "/v1/api/humidities": {
       "post": {
         "tags": [
           "Humidity component."
@@ -116,7 +116,7 @@
         }
       }
     },
-    "/v1/api/batteries/create": {
+    "/v1/api/batteries": {
       "post": {
         "tags": [
           "Battery component."
@@ -153,6 +153,76 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/v1/api/temperatures/{id}": {
+      "get": {
+        "tags": [
+          "Temperature component."
+        ],
+        "summary": "Retrieve measured temperature by id.",
+        "operationId": "getTemperatureById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for measured temperature",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Temperature found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperatureDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Temperature not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperatureDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Temperature component."
+        ],
+        "summary": "Delete measured temperature by id.",
+        "operationId": "deleteTemperatureDtoById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for measured temperature",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Temperature deleted."
+          },
+          "400": {
+            "description": "Temperature failed to be deleted."
           }
         }
       }
@@ -198,47 +268,31 @@
             }
           }
         }
-      }
-    },
-    "/v1/api/temperatures/id/{id}": {
-      "get": {
+      },
+      "delete": {
         "tags": [
           "Temperature component."
         ],
-        "summary": "Retrieve measured temperature by id.",
-        "operationId": "getTemperatureById",
+        "summary": "Delete measured temperature by timestamp.",
+        "operationId": "deleteTemperatureByTimestamp",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "identifier for measured temperature",
+            "name": "timestamp",
+            "in": "query",
+            "description": "timestamp for measured temperature",
             "required": true,
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "date-time"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Temperature found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TemperatureDto"
-                }
-              }
-            }
+          "204": {
+            "description": "Temperature deleted."
           },
-          "404": {
-            "description": "Temperature not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TemperatureDto"
-                }
-              }
-            }
+          "400": {
+            "description": "Temperature failed to be deleted."
           }
         }
       }
@@ -292,6 +346,76 @@
         }
       }
     },
+    "/v1/api/humidities/{id}": {
+      "get": {
+        "tags": [
+          "Humidity component."
+        ],
+        "summary": "Retrieve measured humidity by id.",
+        "operationId": "getHumidityById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for measured humidity",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Humidity found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HumidityDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Humidity not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HumidityDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Humidity component."
+        ],
+        "summary": "Delete measured humidity by id.",
+        "operationId": "deleteHumidityDtoById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for measured humidity",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Humidity deleted."
+          },
+          "400": {
+            "description": "Humidity failed to be deleted."
+          }
+        }
+      }
+    },
     "/v1/api/humidities/timestamp": {
       "get": {
         "tags": [
@@ -333,47 +457,31 @@
             }
           }
         }
-      }
-    },
-    "/v1/api/humidities/id/{id}": {
-      "get": {
+      },
+      "delete": {
         "tags": [
           "Humidity component."
         ],
-        "summary": "Retrieve measured humidity by id.",
-        "operationId": "getHumidityById",
+        "summary": "Delete measured humidity by timestamp.",
+        "operationId": "deleteHumidityByTimestamp",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "identifier for measured humidity",
+            "name": "timestamp",
+            "in": "query",
+            "description": "timestamp for measured humidity",
             "required": true,
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "date-time"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Humidity found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HumidityDto"
-                }
-              }
-            }
+          "204": {
+            "description": "Humidity deleted."
           },
-          "404": {
-            "description": "Humidity not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HumidityDto"
-                }
-              }
-            }
+          "400": {
+            "description": "Humidity failed to be deleted."
           }
         }
       }
@@ -427,6 +535,76 @@
         }
       }
     },
+    "/v1/api/batteries/{id}": {
+      "get": {
+        "tags": [
+          "Battery component."
+        ],
+        "summary": "Retrieve a battery by id.",
+        "operationId": "getBatteryById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for battery",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Battery found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatteryDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Battery not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatteryDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Battery component."
+        ],
+        "summary": "Delete battery by id.",
+        "operationId": "deleteBatteryDtoById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "identifier for battery",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Battery deleted."
+          },
+          "400": {
+            "description": "Battery failed to be deleted."
+          }
+        }
+      }
+    },
     "/v1/api/batteries/timestamp": {
       "get": {
         "tags": [
@@ -468,47 +646,31 @@
             }
           }
         }
-      }
-    },
-    "/v1/api/batteries/id/{id}": {
-      "get": {
+      },
+      "delete": {
         "tags": [
           "Battery component."
         ],
-        "summary": "Retrieve a battery by id.",
-        "operationId": "getBatteryById",
+        "summary": "Delete battery by timestamp.",
+        "operationId": "deleteBatteryByTimestamp",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "identifier for battery",
+            "name": "timestamp",
+            "in": "query",
+            "description": "timestamp for battery",
             "required": true,
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "date-time"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Battery found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BatteryDto"
-                }
-              }
-            }
+          "204": {
+            "description": "Battery deleted."
           },
-          "404": {
-            "description": "Battery not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BatteryDto"
-                }
-              }
-            }
+          "400": {
+            "description": "Battery failed to be deleted."
           }
         }
       }
@@ -558,180 +720,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/v1/api/temperatures/delete/timestamp": {
-      "delete": {
-        "tags": [
-          "Temperature component."
-        ],
-        "summary": "Delete measured temperature by timestamp.",
-        "operationId": "deleteTemperatureByTimestamp",
-        "parameters": [
-          {
-            "name": "timestamp",
-            "in": "query",
-            "description": "timestamp for measured temperature",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Temperature deleted."
-          },
-          "400": {
-            "description": "Temperature failed to be deleted."
-          }
-        }
-      }
-    },
-    "/v1/api/temperatures/delete/id/{id}": {
-      "delete": {
-        "tags": [
-          "Temperature component."
-        ],
-        "summary": "Delete measured temperature by id.",
-        "operationId": "deleteTemperatureDtoById",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "identifier for measured temperature",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Temperature deleted."
-          },
-          "400": {
-            "description": "Temperature failed to be deleted."
-          }
-        }
-      }
-    },
-    "/v1/api/humidities/delete/timestamp": {
-      "delete": {
-        "tags": [
-          "Humidity component."
-        ],
-        "summary": "Delete measured humidity by timestamp.",
-        "operationId": "deleteHumidityByTimestamp",
-        "parameters": [
-          {
-            "name": "timestamp",
-            "in": "query",
-            "description": "timestamp for measured humidity",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Humidity deleted."
-          },
-          "400": {
-            "description": "Humidity failed to be deleted."
-          }
-        }
-      }
-    },
-    "/v1/api/humidities/delete/id/{id}": {
-      "delete": {
-        "tags": [
-          "Humidity component."
-        ],
-        "summary": "Delete measured humidity by id.",
-        "operationId": "deleteHumidityDtoById",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "identifier for measured humidity",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Humidity deleted."
-          },
-          "400": {
-            "description": "Humidity failed to be deleted."
-          }
-        }
-      }
-    },
-    "/v1/api/batteries/delete/timestamp": {
-      "delete": {
-        "tags": [
-          "Battery component."
-        ],
-        "summary": "Delete battery by timestamp.",
-        "operationId": "deleteBatteryByTimestamp",
-        "parameters": [
-          {
-            "name": "timestamp",
-            "in": "query",
-            "description": "timestamp for battery",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Battery deleted."
-          },
-          "400": {
-            "description": "Battery failed to be deleted."
-          }
-        }
-      }
-    },
-    "/v1/api/batteries/delete/id/{id}": {
-      "delete": {
-        "tags": [
-          "Battery component."
-        ],
-        "summary": "Delete battery by id.",
-        "operationId": "deleteBatteryDtoById",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "identifier for battery",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Battery deleted."
-          },
-          "400": {
-            "description": "Battery failed to be deleted."
           }
         }
       }
