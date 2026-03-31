@@ -2,8 +2,8 @@
 /* eslint @typescript-eslint/naming-convention: 0 */
 
 import viteReact from "@vitejs/plugin-react";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { defineConfig } from "vite";
 import { checker } from "vite-plugin-checker";
 import plugin from "vite-plugin-mkcert";
