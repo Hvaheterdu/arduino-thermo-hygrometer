@@ -1,31 +1,29 @@
 import js from "@eslint/js";
-import checkFile from "eslint-plugin-check-file";
-import eslintPluginImportX from "eslint-plugin-import-x";
-import jsdoc from "eslint-plugin-jsdoc";
+import vitest from "@vitest/eslint-plugin";
+import eslintPluginCheckFile from "eslint-plugin-check-file";
 import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
 import reactPlugin from "eslint-plugin-react";
 import eslintPluginHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import eslintPluginTestingLibrary from "eslint-plugin-testing-library";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default [
   js.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  ...tseslint.configs.stylisticTypeChecked,
   ...tseslint.configs.strictTypeChecked,
-  eslintPluginImportX.flatConfigs.errors,
-  eslintPluginImportX.flatConfigs.recommended,
-  eslintPluginImportX.flatConfigs.typescript,
-  eslintPluginImportX.flatConfigs.warnings,
-  jsdoc.configs["flat/recommended-typescript-error"],
+  ...tseslint.configs.stylisticTypeChecked,
+  eslintPluginTestingLibrary.configs["flat/react"],
   reactPlugin.configs.flat["jsx-runtime"],
   reactPlugin.configs.flat.recommended,
-  eslintPluginPrettier,
   {
     languageOptions: {
       parser: tseslint.parser,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...vitest.environments.env.globals
+      },
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
@@ -46,9 +44,10 @@ export default [
       }
     },
     plugins: {
-      "check-file": checkFile,
+      "check-file": eslintPluginCheckFile,
       "react-hooks": eslintPluginHooks,
       "react-refresh": reactRefresh,
+      "testing-library": eslintPluginTestingLibrary,
       "@typescript-eslint": tseslint.plugin,
       react: reactPlugin
     },
@@ -69,28 +68,8 @@ export default [
         }
       ],
       "no-console": "error",
-      "no-debugger": "error",
-      "no-unused-vars": "error",
-      "no-use-before-define": "error",
-      "no-var": "error",
-      "import-x/no-default-export": "error",
-      "import-x/no-unresolved": "error",
-      "import-x/no-rename-default": "error",
-      "react-refresh/only-export-components": "warn",
       "react/react-in-jsx-scope": "off",
-      "@typescript-eslint/no-unsafe-argument": "error",
-      "@typescript-eslint/no-unsafe-assignment": "error",
-      "@typescript-eslint/no-unsafe-call": "error",
-      "@typescript-eslint/no-unsafe-member-access": "error",
-      "@typescript-eslint/no-unsafe-return": "error",
-      "@typescript-eslint/no-namespace": "off",
-      "@typescript-eslint/prefer-namespace-keyword": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        {
-          ignoreRestSiblings: true
-        }
-      ],
+      "react-refresh/only-export-components": "warn",
       "@typescript-eslint/no-use-before-define": "error",
       "@typescript-eslint/naming-convention": [
         "error",
@@ -119,10 +98,6 @@ export default [
           format: ["snake_case", "UPPER_CASE"]
         },
         {
-          selector: "enum",
-          format: ["PascalCase"]
-        },
-        {
           selector: "variable",
           format: ["camelCase", "PascalCase"]
         }
@@ -130,14 +105,35 @@ export default [
     }
   },
   {
+    files: ["**/*.{test,spec}.{ts,tsx}", "**/__tests__/**/*.{ts,tsx}", "**/__mocks__/**/*.{ts}"],
+    plugins: {
+      vitest
+    },
+    rules: {
+      ...vitest.configs.recommended.rules,
+      "vitest/max-nested-describe": ["error", { max: 1 }]
+    },
+    settings: {
+      vitest: {
+        typecheck: true
+      }
+    }
+  },
+  eslintPluginPrettier,
+  {
     ignores: [
       "api",
       "build",
       "coverage",
       "dist",
       "node_modules",
+      "scripts",
+      "eslint.config.js",
+      "tsconfig.json",
+      "tsconfig.app.json",
+      "tsconfig.node.json",
+      "app/vite.config.ts",
       "**/*.d.ts",
-      "**/*.js",
       "**/*.generated.ts",
       "**/.git",
       "**/.svn",
