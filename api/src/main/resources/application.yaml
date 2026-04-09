@@ -1,3 +1,6 @@
+server:
+  port: 5000
+
 spring:
   profiles:
     active: local
@@ -14,23 +17,17 @@ spring:
     baseline-on-migrate: true
     connect-retries: 3
     locations: classpath:db/migrations, classpath:db/undo_migrations
-  mvc:
-    apiversion:
-      default: v1
-      use:
-        path-segment: 0
-
-server:
-  port: 5000
 
 springdoc:
   api-docs:
     enabled: true
-    path: /v1/api-docs
   packages-to-scan: api.arduinothermohygrometer
   swagger-ui:
-    path: /v1/swagger
+    path: /swagger-ui.html
     operations-sorter: method
+
+cors:
+  allowedOrigins: http://localhost:3000
 
 info:
   contact:
@@ -41,7 +38,7 @@ info:
     name: MIT license
     url: https://mit-license.org/
   title: Arduino Thermo Hygrometer API.
-  version: "@project.version@"
+  version: ${maven.build.version}
 
 management:
   endpoint:

@@ -67,8 +67,12 @@
     <!-- SLF4J version -->
     <slf4j-api.version>2.0.17</slf4j-api.version>
 
-    <!-- Springdoc/Swagger OpenAPI version -->
+    <!-- Springdoc/Swagger version -->
     <springdoc-openapi-starter-webmcv-ui.version>3.0.2</springdoc-openapi-starter-webmcv-ui.version>
+
+    <!-- OpenAPI Generator -->
+    <swagger.version>2.2.46</swagger.version>
+    <openapi-generator-maven-plugin.version>7.21.0</openapi-generator-maven-plugin.version>
 
     <!-- Testcontainers version -->
     <testcontainers.version>2.0.4</testcontainers.version>
@@ -180,6 +184,28 @@
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
       <version>${springdoc-openapi-starter-webmcv-ui.version}</version>
+    </dependency>
+
+    <!-- OpenApi Generator -->
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>${swagger.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-models</artifactId>
+      <version>${swagger.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations-jakarta</artifactId>
+      <version>${swagger.version}</version>
+      <scope>compile</scope>
     </dependency>
 
     <!-- Testing -->
@@ -294,16 +320,34 @@
         </executions>
       </plugin>
 
-      <!-- Maven build number parser -->
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>${openapi-generator-maven-plugin.version}</version>
         <executions>
           <execution>
-            <id>parse-version</id>
+            <id>api</id>
+            <phase>generate-sources</phase>
             <goals>
-              <goal>parse-version</goal>
+              <goal>generate</goal>
             </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/openapi/api.yml</inputSpec>
+              <generatorName>java</generatorName>
+              <configOptions>
+                <title>ArduinoThermoHygrometer Backend</title>
+                <apiPackage>api.arduinothermohygrometer.api</apiPackage>
+                <basePackage>api.arduinothermohygrometer</basePackage>
+                <generateBuilders>true</generateBuilders>
+                <interfaceOnly>true</interfaceOnly>
+                <modelPackage>api.arduinothermohygrometer.entities</modelPackage>
+                <output>${project.build.directory}/generated-sources/openapi</output>
+                <skipDefaultInterface>true</skipDefaultInterface>
+                <typeMappings>true</typeMappings>
+                <useSpringBoot4>true</useSpringBoot4>
+                <useTags>true</useTags>
+              </configOptions>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -312,6 +356,13 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build-info</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
           <excludes>
             <exclude>
