@@ -29,7 +29,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    UrlBasedCorsConfigurationSource corsFilter() {
+    protected UrlBasedCorsConfigurationSource corsFilter() {
         var source = new UrlBasedCorsConfigurationSource();
         var config = new CorsConfiguration();
         config.setAllowCredentials(true);
@@ -45,7 +45,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
+    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         return httpSecurity
             .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsFilter()))
             .headers(headers ->
