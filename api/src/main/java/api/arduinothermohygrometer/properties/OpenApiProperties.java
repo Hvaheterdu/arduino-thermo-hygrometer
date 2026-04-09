@@ -9,7 +9,6 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "info")
 @Data
 public class OpenApiProperties {
-    private String version;
     private String title;
     private String description;
     private OpenApiContactProperties contact = new OpenApiContactProperties();

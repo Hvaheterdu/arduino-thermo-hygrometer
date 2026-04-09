@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/v1/api/temperatures")
+@RequestMapping("/api/temperatures")
 @Tag(name = "Temperature component.", description = "Temperature measured by arduino device.")
 public class TemperatureControllerImpl implements TemperatureController {
     private final TemperatureService temperatureService;

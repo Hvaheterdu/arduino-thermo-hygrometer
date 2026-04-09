@@ -1,3 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres-local
+    password: postgres-local
+    url: jdbc:postgresql://localhost:5432/arduinothermohygrometer-local
+  flyway:
+    enabled: false
+
+info:
+  contact:
+    name: Burhan Mohammad Sarfraz
+    email: burhan.mohammad.sarfraz@outlook.com
+  description: A Java Web API for an Arduino Thermo Hygrometer IoT device.
+  license:
+    name: MIT license
+    url: https://mit-license.org/
+  title: Arduino Thermo Hygrometer API.
+  version: 1.0.0-SNAPSHOT
+
 management:
   health:
     defaults:

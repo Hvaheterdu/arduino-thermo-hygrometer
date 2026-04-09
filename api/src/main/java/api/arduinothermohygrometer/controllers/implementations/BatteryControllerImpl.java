@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/v1/api/batteries")
+@RequestMapping("/api/batteries")
 @Tag(name = "Battery component.", description = "Battery status of arduino device.")
 public class BatteryControllerImpl implements BatteryController {
     private final BatteryService batteryService;

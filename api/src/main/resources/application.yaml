@@ -1,5 +1,4 @@
 server:
-  address: https://localhost:8000
   port: 5000
 
 spring:
@@ -14,18 +13,19 @@ spring:
     password: postgres-local
     url: jdbc:postgresql://localhost:5432/arduinothermohygrometer-local
   flyway:
-    enabled: true
     baseline-on-migrate: true
     connect-retries: 3
-    locations: classpath:db/migrations, classpath:db/undo_migrations
+    enabled: true
+    locations: classpath:db/migration
+    validate-migration-naming: true
 
 springdoc:
   api-docs:
     enabled: true
   packages-to-scan: api.arduinothermohygrometer
   swagger-ui:
-    path: /swagger-ui.html
     operations-sorter: method
+    path: /swagger-ui.html
 
 cors:
   allowedOrigins: http://localhost:3000
@@ -39,7 +39,7 @@ info:
     name: MIT license
     url: https://mit-license.org/
   title: Arduino Thermo Hygrometer API.
-  version: ${maven.build.version}
+  version: ${build.version}
 
 management:
   endpoint:

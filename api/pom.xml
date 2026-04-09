@@ -71,6 +71,8 @@
     <springdoc-openapi-starter-webmcv-ui.version>3.0.2</springdoc-openapi-starter-webmcv-ui.version>
 
     <!-- OpenAPI Generator -->
+    <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
+    <okhttp3.version>5.3.2</okhttp3.version>
     <swagger.version>2.2.46</swagger.version>
     <openapi-generator-maven-plugin.version>7.21.0</openapi-generator-maven-plugin.version>
 
@@ -188,6 +190,20 @@
 
     <!-- OpenApi Generator -->
     <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>${jackson-databind-nullable.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>${okhttp3.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations</artifactId>
       <version>${swagger.version}</version>
@@ -292,7 +308,7 @@
         </configuration>
       </plugin>
 
-      <!-- Maven surefire -->
+      <!-- Maven Surefire -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -307,7 +323,7 @@
         </configuration>
       </plugin>
 
-      <!-- Maven failsafe -->
+      <!-- Maven Failsafe -->
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
         <executions>
@@ -320,32 +336,43 @@
         </executions>
       </plugin>
 
+      <!-- OpenAPI Generator -->
       <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
         <version>${openapi-generator-maven-plugin.version}</version>
         <executions>
           <execution>
-            <id>api</id>
+            <id>generate-api</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/src/main/resources/openapi/api.yml</inputSpec>
-              <generatorName>java</generatorName>
+              <inputSpec>${project.basedir}/src/main/resources/openapi/arduino-thermo-hygrometer-api.yaml</inputSpec>
+              <generatorName>spring</generatorName>
+              <output>${project.build.directory}/generated-sources/openapi</output>
+              <apiPackage>api.arduinothermohygrometer.api</apiPackage>
+              <modelPackage>api.arduinothermohygrometer.dto</modelPackage>
+              <invokerPackage>api.arduinothermohygrometer.invoker</invokerPackage>
               <configOptions>
-                <title>ArduinoThermoHygrometer Backend</title>
-                <apiPackage>api.arduinothermohygrometer.api</apiPackage>
-                <basePackage>api.arduinothermohygrometer</basePackage>
+                <developerName>Burhan Mohammad Sarfraz</developerName>
+                <developerEmail>burhan.mohammad.sarfraz@outlook.com</developerEmail>
+                <licenseName>MIT</licenseName>
+                <licenseUrl>https://mit-license.org/</licenseUrl>
+                <booleanGetterPrefix>is</booleanGetterPrefix>
+                <disallowAdditionalPropertiesIfNotPresent>false</disallowAdditionalPropertiesIfNotPresent>
                 <generateBuilders>true</generateBuilders>
+                <hideGenerationTimestamp>true</hideGenerationTimestamp>
                 <interfaceOnly>true</interfaceOnly>
-                <modelPackage>api.arduinothermohygrometer.entities</modelPackage>
-                <output>${project.build.directory}/generated-sources/openapi</output>
+                <modelNameSuffix>Dto</modelNameSuffix>
+                <serializationLibrary>jackson</serializationLibrary>
                 <skipDefaultInterface>true</skipDefaultInterface>
-                <typeMappings>true</typeMappings>
+                <snapshotVersion>true</snapshotVersion>
                 <useSpringBoot4>true</useSpringBoot4>
                 <useTags>true</useTags>
+                <useJakartaEe>true</useJakartaEe>
+                <serializableModel>true</serializableModel>
               </configOptions>
             </configuration>
           </execution>

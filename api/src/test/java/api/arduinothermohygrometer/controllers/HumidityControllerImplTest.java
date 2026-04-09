@@ -62,7 +62,7 @@ class HumidityControllerImplTest {
         when(humidityService.getHumidityById(id)).thenReturn(humidityDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/humidities/{id}", id)
+                                            .uri("/api/humidities/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -81,7 +81,7 @@ class HumidityControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Humidity with id=" + id + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/humidities/{id}", id)
+                                            .uri("/api/humidities/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -103,7 +103,7 @@ class HumidityControllerImplTest {
         when(humidityService.getHumidityByTimestamp(timestamp)).thenReturn(humidityDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/humidities/timestamp")
+                                            .uri("/api/humidities/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
@@ -123,7 +123,7 @@ class HumidityControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Humidity with timestamp=" + timestamp + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/humidities/timestamp")
+                                            .uri("/api/humidities/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
@@ -152,7 +152,7 @@ class HumidityControllerImplTest {
         when(humidityService.getHumiditiesByDate(timestamp.toLocalDate())).thenReturn(humidities);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/humidities/date")
+                                            .uri("/api/humidities/date")
                                             .param("date", timestamp.toLocalDate().toString())
                                             .exchange();
 
@@ -173,7 +173,7 @@ class HumidityControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Humidities with date=" + date + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/humidities/date")
+                                            .uri("/api/humidities/date")
                                             .param("date", date.toString())
                                             .exchange();
 
@@ -197,7 +197,7 @@ class HumidityControllerImplTest {
         String requestJson = objectMapper.writeValueAsString(humidityDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/humidities")
+                                            .uri("/api/humidities")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -222,7 +222,7 @@ class HumidityControllerImplTest {
         String requestJson = objectMapper.writeValueAsString(humidityDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/humidities")
+                                            .uri("/api/humidities")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -246,7 +246,7 @@ class HumidityControllerImplTest {
         doNothing().when(humidityService).deleteHumidityById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/humidities/{id}", id)
+                                            .uri("/api/humidities/{id}", id)
                                             .exchange();
 
         verify(humidityService, times(1)).deleteHumidityById(id);
@@ -262,7 +262,7 @@ class HumidityControllerImplTest {
                                                                                         .deleteHumidityById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/humidities/{id}", id)
+                                            .uri("/api/humidities/{id}", id)
                                             .exchange();
 
         verify(humidityService, times(1)).deleteHumidityById(id);
@@ -280,7 +280,7 @@ class HumidityControllerImplTest {
         doNothing().when(humidityService).deleteHumidityByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/humidities/timestamp")
+                                            .uri("/api/humidities/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
@@ -298,7 +298,7 @@ class HumidityControllerImplTest {
                                                                     .deleteHumidityByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/humidities/timestamp")
+                                            .uri("/api/humidities/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 

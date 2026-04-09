@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/v1/api/humidities")
+@RequestMapping("/api/humidities")
 @Tag(name = "Humidity component.", description = "Humidity measured by arduino device.")
 public class HumidityControllerImpl implements HumidityController {
     private final HumidityService humidityService;

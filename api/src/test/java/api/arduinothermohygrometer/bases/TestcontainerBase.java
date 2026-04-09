@@ -51,7 +51,7 @@ public abstract class TestcontainerBase {
         Flyway.configure()
               .dataSource(postgreSQLContainer.getJdbcUrl(), postgreSQLContainer.getUsername(), postgreSQLContainer.getPassword())
               .encoding(StandardCharsets.ISO_8859_1)
-              .locations("classpath:db/migrations", "classpath:db/undo_migrations")
+              .locations("classpath:db/migration")
               .load()
               .migrate();
     }

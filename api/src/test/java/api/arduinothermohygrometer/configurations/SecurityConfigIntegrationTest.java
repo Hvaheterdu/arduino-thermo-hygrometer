@@ -31,17 +31,43 @@ class SecurityConfigIntegrationTest {
                .andExpect(status().isOk())
                .andExpect(header().string("X-Content-Type-Options", "nosniff"))
                .andExpect(header().string("X-Frame-Options", "DENY"))
-               .andExpect(header().string("X-XSS-Protection", "0"))
                .andExpect(header().string("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate"))
                .andExpect(header().string("Content-Security-Policy",
-                   "connect-src 'none'; default-src 'none'; frame-ancestors 'none'; img-src 'none'; script-src 'none'; style-src 'none';"))
+                   "connect-src 'self'; "
+                       + "default-src 'self'; "
+                       + "frame-ancestors 'none'; "
+                       + "img-src 'self' data:; "
+                       + "script-src 'self'; "
+                       + "style-src 'self' 'unsafe-inline';"))
                .andExpect(header().string("Referrer-Policy", "no-referrer"));
     }
 
     @Test
-    @DisplayName("Given non actuator endpoint when accessed then return 404 NOT FOUND")
-    void givenNonActuatorEndpoint_whenAccessed_thenReturn404NotFound() throws Exception {
+    @DisplayName("Given actuator endpoint when accessed over HTTPS then apply HSTS header")
+    void givenActuatorEndpoint_whenAccessedOverHttps_thenApplyHstsHeader() throws Exception {
+        mockMvc.perform(get("/actuator/health").secure(true))
+               .andExpect(status().isOk())
+               .andExpect(header().string("Strict-Transport-Security", "max-age=31536000 ; includeSubDomains"));
+    }
+
+    @Test
+    @DisplayName("Given non actuator endpoint when accessed then return 403 FORBIDDEN")
+    void givenNonActuatorEndpoint_whenAccessed_thenReturn403Forbidden() throws Exception {
         mockMvc.perform(get("/random-endpoint"))
-               .andExpect(status().isNotFound());
+               .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Given OpenAPI docs endpoint when accessed then return 200 OK")
+    void givenOpenApiDocsEndpoint_whenAccessed_thenReturn200OK() throws Exception {
+        mockMvc.perform(get("/v3/api-docs"))
+               .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Given Swagger UI endpoint when accessed then return 200 OK")
+    void givenSwaggerUiEndpoint_whenAccessed_thenReturn200OK() throws Exception {
+        mockMvc.perform(get("/swagger-ui/index.html"))
+               .andExpect(status().isOk());
     }
 }

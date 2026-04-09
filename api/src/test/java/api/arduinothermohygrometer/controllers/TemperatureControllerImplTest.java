@@ -62,7 +62,7 @@ class TemperatureControllerImplTest {
         when(temperatureService.getTemperatureById(id)).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/temperatures/{id}", id)
+                                            .uri("/api/temperatures/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -81,7 +81,7 @@ class TemperatureControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Temperature with id=" + id + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/temperatures/{id}", id)
+                                            .uri("/api/temperatures/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -103,7 +103,7 @@ class TemperatureControllerImplTest {
         when(temperatureService.getTemperatureByTimestamp(timestamp)).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/temperatures/timestamp")
+                                            .uri("/api/temperatures/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
@@ -123,7 +123,7 @@ class TemperatureControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Temperature with timestamp=" + timestamp + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/temperatures/timestamp")
+                                            .uri("/api/temperatures/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
@@ -152,7 +152,7 @@ class TemperatureControllerImplTest {
         when(temperatureService.getTemperaturesByDate(timestamp.toLocalDate())).thenReturn(temperatures);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/temperatures/date")
+                                            .uri("/api/temperatures/date")
                                             .param("date", timestamp.toLocalDate().toString())
                                             .exchange();
 
@@ -173,7 +173,7 @@ class TemperatureControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Temperatures with date=" + date + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/temperatures/date")
+                                            .uri("/api/temperatures/date")
                                             .param("date", date.toString())
                                             .exchange();
 
@@ -197,7 +197,7 @@ class TemperatureControllerImplTest {
         String requestJson = objectMapper.writeValueAsString(temperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/temperatures")
+                                            .uri("/api/temperatures")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -222,7 +222,7 @@ class TemperatureControllerImplTest {
         String requestJson = objectMapper.writeValueAsString(temperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/temperatures")
+                                            .uri("/api/temperatures")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -246,7 +246,7 @@ class TemperatureControllerImplTest {
         doNothing().when(temperatureService).deleteTemperatureById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/temperatures/{id}", id)
+                                            .uri("/api/temperatures/{id}", id)
                                             .exchange();
 
         verify(temperatureService, times(1)).deleteTemperatureById(id);
@@ -262,7 +262,7 @@ class TemperatureControllerImplTest {
                                                                                            .deleteTemperatureById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/temperatures/{id}", id)
+                                            .uri("/api/temperatures/{id}", id)
                                             .exchange();
 
         verify(temperatureService, times(1)).deleteTemperatureById(id);
@@ -280,7 +280,7 @@ class TemperatureControllerImplTest {
         doNothing().when(temperatureService).deleteTemperatureByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/temperatures/timestamp")
+                                            .uri("/api/temperatures/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
@@ -298,7 +298,7 @@ class TemperatureControllerImplTest {
                                                                        .deleteTemperatureByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/temperatures/timestamp")
+                                            .uri("/api/temperatures/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 

@@ -62,7 +62,7 @@ class BatteryControllerImplTest {
         when(batteryService.getBatteryById(id)).thenReturn(batteryDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/batteries/{id}", id)
+                                            .uri("/api/batteries/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -81,7 +81,7 @@ class BatteryControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Battery with id=" + id + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/batteries/{id}", id)
+                                            .uri("/api/batteries/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -103,7 +103,7 @@ class BatteryControllerImplTest {
         when(batteryService.getBatteryByTimestamp(timestamp)).thenReturn(batteryDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/batteries/timestamp")
+                                            .uri("/api/batteries/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
@@ -123,7 +123,7 @@ class BatteryControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Battery with timestamp=" + timestamp + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/batteries/timestamp")
+                                            .uri("/api/batteries/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
@@ -153,7 +153,7 @@ class BatteryControllerImplTest {
         when(batteryService.getBatteriesByDate(timestamp.toLocalDate())).thenReturn(batteries);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/batteries/date")
+                                            .uri("/api/batteries/date")
                                             .param("date", timestamp.toLocalDate().toString())
                                             .exchange();
 
@@ -174,7 +174,7 @@ class BatteryControllerImplTest {
             .thenThrow(new ResourceNotFoundException("Batteries with date=" + date + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/v1/api/batteries/date")
+                                            .uri("/api/batteries/date")
                                             .param("date", date.toString())
                                             .exchange();
 
@@ -198,7 +198,7 @@ class BatteryControllerImplTest {
         String requestJson = objectMapper.writeValueAsString(batteryDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/batteries")
+                                            .uri("/api/batteries")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -223,7 +223,7 @@ class BatteryControllerImplTest {
         String requestJson = objectMapper.writeValueAsString(batteryDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/v1/api/batteries")
+                                            .uri("/api/batteries")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -247,7 +247,7 @@ class BatteryControllerImplTest {
         doNothing().when(batteryService).deleteBatteryById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/batteries/{id}", id)
+                                            .uri("/api/batteries/{id}", id)
                                             .exchange();
 
         verify(batteryService, times(1)).deleteBatteryById(id);
@@ -263,7 +263,7 @@ class BatteryControllerImplTest {
                                                                                        .deleteBatteryById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/batteries/{id}", id)
+                                            .uri("/api/batteries/{id}", id)
                                             .exchange();
 
         verify(batteryService, times(1)).deleteBatteryById(id);
@@ -281,7 +281,7 @@ class BatteryControllerImplTest {
         doNothing().when(batteryService).deleteBatteryByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/batteries/timestamp")
+                                            .uri("/api/batteries/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
@@ -299,7 +299,7 @@ class BatteryControllerImplTest {
                                                                    .deleteBatteryByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/v1/api/batteries/timestamp")
+                                            .uri("/api/batteries/timestamp")
                                             .param("timestamp", timestamp.toString())
                                             .exchange();
 
