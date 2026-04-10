@@ -1,6 +1,6 @@
 package api.arduinothermohygrometer.mappers;
 
-import api.arduinothermohygrometer.dtos.BatteryDto;
+import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.entities.Battery;
 
 public class BatteryEntityMapper {
@@ -8,7 +8,7 @@ public class BatteryEntityMapper {
     }
 
     public static Battery toEntity(BatteryDto batteryDto) {
-        return new Battery(batteryDto.registeredAt(), batteryDto.batteryStatus());
+        return new Battery(batteryDto.getRegisteredAt(), batteryDto.getBatteryStatus());
     }
 
     public static BatteryDto toDto(Battery battery) {

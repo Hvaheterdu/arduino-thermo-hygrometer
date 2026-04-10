@@ -51,7 +51,7 @@ public class SecurityConfig {
                 authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator/**").permitAll()
                                                           .requestMatchers("/v3/api-docs/**").permitAll()
                                                           .requestMatchers("/swagger-ui/**").permitAll()
-                                                          .requestMatchers("/api/**").authenticated()
+                                                          .requestMatchers("/api/**").permitAll()
                                                           .anyRequest()
                                                           .denyAll()
             )

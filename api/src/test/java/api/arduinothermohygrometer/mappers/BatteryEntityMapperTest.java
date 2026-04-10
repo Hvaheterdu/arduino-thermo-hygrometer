@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import api.arduinothermohygrometer.dtos.BatteryDto;
+import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.entities.Battery;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,8 +24,8 @@ class BatteryEntityMapperTest {
 
         Battery result = BatteryEntityMapper.toEntity(batteryDto);
 
-        assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.registeredAt());
-        assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.batteryStatus());
+        assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.getRegisteredAt());
+        assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.getBatteryStatus());
     }
 
     @Test
@@ -37,7 +37,7 @@ class BatteryEntityMapperTest {
 
         BatteryDto result = BatteryEntityMapper.toDto(battery);
 
-        assertThat(result.registeredAt()).isEqualTo(battery.getRegisteredAt());
-        assertThat(result.batteryStatus()).isEqualTo(battery.getBatteryStatus());
+        assertThat(result.getRegisteredAt()).isEqualTo(battery.getRegisteredAt());
+        assertThat(result.getBatteryStatus()).isEqualTo(battery.getBatteryStatus());
     }
 }

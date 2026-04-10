@@ -17,8 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
-import api.arduinothermohygrometer.controllers.implementations.BatteryControllerImpl;
-import api.arduinothermohygrometer.dtos.BatteryDto;
+import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.exceptions.GlobalExceptionHandler;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.BatteryService;
@@ -35,7 +34,7 @@ import static org.mockito.Mockito.when;
 
 @DisplayName("Unit tests for BatteryControllerImpl")
 @ExtendWith(MockitoExtension.class)
-class BatteryControllerImplTest {
+class BatteryControllerTest {
     @Mock
     private BatteryService batteryService;
 
@@ -45,7 +44,7 @@ class BatteryControllerImplTest {
 
     @BeforeEach
     void setup() {
-        mockMvcTester = MockMvcTester.of(new BatteryControllerImpl(batteryService), new GlobalExceptionHandler());
+        mockMvcTester = MockMvcTester.of(new BatteryController(batteryService), new GlobalExceptionHandler());
         objectMapper = new ObjectMapper();
     }
 

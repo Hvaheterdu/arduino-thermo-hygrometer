@@ -15,7 +15,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import api.arduinothermohygrometer.dtos.BatteryDto;
+import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.entities.Battery;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;

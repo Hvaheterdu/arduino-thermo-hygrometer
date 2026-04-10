@@ -5,20 +5,61 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
-import api.arduinothermohygrometer.dtos.BatteryDto;
+import api.arduinothermohygrometer.api.BatteryComponentApi;
+import api.arduinothermohygrometer.dto.BatteryDto;
+import api.arduinothermohygrometer.services.BatteryService;
 
-public interface BatteryController {
-    ResponseEntity<BatteryDto> getBatteryById(UUID id);
+@RestController
+public class BatteryController implements BatteryComponentApi {
+    private final BatteryService batteryService;
 
-    ResponseEntity<BatteryDto> getBatteryByTimestamp(LocalDateTime timestamp);
+    public BatteryController(BatteryService batteryService) {
+        this.batteryService = batteryService;
+    }
 
-    ResponseEntity<List<BatteryDto>> getBatteriesByDate(LocalDate date);
+    @Override
+    public ResponseEntity<BatteryDto> getBatteryById(UUID id) {
+        BatteryDto batteryDto = batteryService.getBatteryById(id);
 
-    ResponseEntity<BatteryDto> create(final BatteryDto batteryDto);
+        return new ResponseEntity<>(batteryDto, HttpStatus.OK);
+    }
 
-    ResponseEntity<Void> deleteBatteryDtoById(UUID id);
+    @Override
+    public ResponseEntity<BatteryDto> getBatteryByTimestamp(LocalDateTime timestamp) {
+        BatteryDto batteryDto = batteryService.getBatteryByTimestamp(timestamp);
 
-    ResponseEntity<Void> deleteBatteryByTimestamp(LocalDateTime timestamp);
+        return new ResponseEntity<>(batteryDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<BatteryDto>> getBatteriesByDate(LocalDate date) {
+        List<BatteryDto> batteries = batteryService.getBatteriesByDate(date);
+
+        return new ResponseEntity<>(batteries, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<BatteryDto> create2(final BatteryDto batteryDto) {
+        BatteryDto createdBatteryDto = batteryService.createBattery(batteryDto);
+
+        return new ResponseEntity<>(createdBatteryDto, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteBatteryDtoById(UUID id) {
+        batteryService.deleteBatteryById(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteBatteryByTimestamp(LocalDateTime timestamp) {
+        batteryService.deleteBatteryByTimestamp(timestamp);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
