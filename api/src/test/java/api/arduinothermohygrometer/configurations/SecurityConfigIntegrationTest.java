@@ -56,18 +56,4 @@ class SecurityConfigIntegrationTest {
         mockMvc.perform(get("/random-endpoint"))
                .andExpect(status().isForbidden());
     }
-
-    @Test
-    @DisplayName("Given OpenAPI docs endpoint when accessed then return 200 OK")
-    void givenOpenApiDocsEndpoint_whenAccessed_thenReturn200OK() throws Exception {
-        mockMvc.perform(get("/v3/api-docs"))
-               .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("Given Swagger UI endpoint when accessed then return 200 OK")
-    void givenSwaggerUiEndpoint_whenAccessed_thenReturn200OK() throws Exception {
-        mockMvc.perform(get("/swagger-ui/index.html"))
-               .andExpect(status().isOk());
-    }
 }

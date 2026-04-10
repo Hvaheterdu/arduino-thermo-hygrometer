@@ -362,9 +362,11 @@
                 <licenseUrl>https://mit-license.org/</licenseUrl>
                 <booleanGetterPrefix>is</booleanGetterPrefix>
                 <disallowAdditionalPropertiesIfNotPresent>false</disallowAdditionalPropertiesIfNotPresent>
+                <dateLibrary>custom</dateLibrary>
                 <generateBuilders>true</generateBuilders>
                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                 <interfaceOnly>true</interfaceOnly>
+                <java8>true</java8>
                 <modelNameSuffix>Dto</modelNameSuffix>
                 <serializationLibrary>jackson</serializationLibrary>
                 <skipDefaultInterface>true</skipDefaultInterface>
@@ -374,6 +376,14 @@
                 <useJakartaEe>true</useJakartaEe>
                 <serializableModel>true</serializableModel>
               </configOptions>
+              <typeMappings>
+                <typeMapping>DateTime=LocalDateTime</typeMapping>
+                <typeMapping>Date=LocalDate</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>LocalDateTime=java.time.LocalDateTime</importMapping>
+                <importMapping>Date=java.time.LocalDate</importMapping>
+              </importMappings>
             </configuration>
           </execution>
         </executions>
