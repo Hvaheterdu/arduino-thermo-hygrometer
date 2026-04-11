@@ -15,11 +15,11 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import api.arduinothermohygrometer.dtos.TemperatureDto;
-import api.arduinothermohygrometer.entities.Temperature;
+import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.mappers.TemperatureEntityMapper;
+import api.arduinothermohygrometer.models.Temperature;
 import api.arduinothermohygrometer.repositories.TemperatureRepository;
 import api.arduinothermohygrometer.services.implementations.TemperatureServiceImpl;
 

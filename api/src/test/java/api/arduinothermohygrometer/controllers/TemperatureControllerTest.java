@@ -17,8 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
-import api.arduinothermohygrometer.controllers.implementations.TemperatureControllerImpl;
-import api.arduinothermohygrometer.dtos.TemperatureDto;
+import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.exceptions.GlobalExceptionHandler;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.TemperatureService;
@@ -33,9 +32,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Unit tests for TemperatureControllerImpl")
+@DisplayName("Unit tests for TemperatureController")
 @ExtendWith(MockitoExtension.class)
-class TemperatureControllerImplTest {
+class TemperatureControllerTest {
     @Mock
     private TemperatureService temperatureService;
 
@@ -45,7 +44,7 @@ class TemperatureControllerImplTest {
 
     @BeforeEach
     void setup() {
-        mockMvcTester = MockMvcTester.of(new TemperatureControllerImpl(temperatureService), new GlobalExceptionHandler());
+        mockMvcTester = MockMvcTester.of(new TemperatureController(temperatureService), new GlobalExceptionHandler());
         objectMapper = new ObjectMapper();
     }
 

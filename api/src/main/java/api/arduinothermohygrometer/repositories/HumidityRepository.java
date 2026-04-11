@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import api.arduinothermohygrometer.entities.Humidity;
+import api.arduinothermohygrometer.models.Humidity;
 
 public interface HumidityRepository {
     Optional<Humidity> getHumidityById(UUID id);

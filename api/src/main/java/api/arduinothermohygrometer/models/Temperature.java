@@ -1,4 +1,4 @@
-package api.arduinothermohygrometer.entities;
+package api.arduinothermohygrometer.models;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -17,8 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
-import api.arduinothermohygrometer.controllers.implementations.HumidityControllerImpl;
-import api.arduinothermohygrometer.dtos.HumidityDto;
+import api.arduinothermohygrometer.dto.HumidityDto;
 import api.arduinothermohygrometer.exceptions.GlobalExceptionHandler;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.services.HumidityService;
@@ -33,9 +32,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Unit tests for HumidityControllerImpl")
+@DisplayName("Unit tests for HumidityController")
 @ExtendWith(MockitoExtension.class)
-class HumidityControllerImplTest {
+class HumidityControllerTest {
     @Mock
     private HumidityService humidityService;
 
@@ -45,7 +44,7 @@ class HumidityControllerImplTest {
 
     @BeforeEach
     void setup() {
-        mockMvcTester = MockMvcTester.of(new HumidityControllerImpl(humidityService), new GlobalExceptionHandler());
+        mockMvcTester = MockMvcTester.of(new HumidityController(humidityService), new GlobalExceptionHandler());
         objectMapper = new ObjectMapper();
     }
 

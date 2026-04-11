@@ -11,7 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import api.arduinothermohygrometer.entities.Battery;
+import api.arduinothermohygrometer.models.Battery;
 import api.arduinothermohygrometer.repositories.BatteryRepository;
 
 @Repository

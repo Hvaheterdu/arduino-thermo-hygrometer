@@ -11,11 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import api.arduinothermohygrometer.dtos.HumidityDto;
-import api.arduinothermohygrometer.entities.Humidity;
+import api.arduinothermohygrometer.dto.HumidityDto;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.mappers.HumidityEntityMapper;
+import api.arduinothermohygrometer.models.Humidity;
 import api.arduinothermohygrometer.repositories.HumidityRepository;
 import api.arduinothermohygrometer.services.HumidityService;
 

@@ -9,12 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.arduinothermohygrometer.api.BatteryComponentApi;
+import api.arduinothermohygrometer.api.BatteryApi;
 import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.services.BatteryService;
 
 @RestController
-public class BatteryController implements BatteryComponentApi {
+public class BatteryController implements BatteryApi {
     private final BatteryService batteryService;
 
     public BatteryController(BatteryService batteryService) {
@@ -43,7 +43,7 @@ public class BatteryController implements BatteryComponentApi {
     }
 
     @Override
-    public ResponseEntity<BatteryDto> create2(final BatteryDto batteryDto) {
+    public ResponseEntity<BatteryDto> createBattery(final BatteryDto batteryDto) {
         BatteryDto createdBatteryDto = batteryService.createBattery(batteryDto);
 
         return new ResponseEntity<>(createdBatteryDto, HttpStatus.CREATED);
@@ -57,7 +57,7 @@ public class BatteryController implements BatteryComponentApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteBatteryByTimestamp(LocalDateTime timestamp) {
+    public ResponseEntity<Void> deleteBatteryByTimestamp(final LocalDateTime timestamp) {
         batteryService.deleteBatteryByTimestamp(timestamp);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

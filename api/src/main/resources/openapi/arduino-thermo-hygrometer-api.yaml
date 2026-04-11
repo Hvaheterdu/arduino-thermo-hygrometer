@@ -15,20 +15,20 @@ servers:
     description: Local development server.
 
 tags:
-  - name: Battery component.
+  - name: Battery.
     description: Battery status of arduino device.
-  - name: Temperature component.
+  - name: Temperature.
     description: Temperature measured by arduino device.
-  - name: Humidity component.
+  - name: Humidity.
     description: Humidity measured by arduino device.
 
 paths:
   /api/temperatures:
     post:
       tags:
-        - Temperature component.
+        - Temperature.
       summary: Create measured temperature.
-      operationId: create
+      operationId: createTemperature
       requestBody:
         content:
           application/json:
@@ -48,9 +48,9 @@ paths:
   /api/humidities:
     post:
       tags:
-        - Humidity component.
+        - Humidity.
       summary: Create measured humidity.
-      operationId: create_1
+      operationId: createHumidity
       requestBody:
         content:
           application/json:
@@ -70,9 +70,9 @@ paths:
   /api/batteries:
     post:
       tags:
-        - Battery component.
-      summary: Create battery.
-      operationId: create_2
+        - Battery.
+      summary: Create remaining battery.
+      operationId: createBattery
       requestBody:
         content:
           application/json:
@@ -92,18 +92,18 @@ paths:
   /api/temperatures/{id}:
     get:
       tags:
-        - Temperature component.
+        - Temperature.
       summary: Retrieve measured temperature by id.
       operationId: getTemperatureById
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           description: Identifier for measured temperature.
           required: true
           schema:
             type: string
             format: uuid
-            example: "00000000-0000-0000-0000-000000000000"
+            example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
       responses:
         "200":
           description: Temperature found.
@@ -115,18 +115,18 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Temperature component.
+        - Temperature.
       summary: Delete measured temperature by id.
       operationId: deleteTemperatureDtoById
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           description: Identifier for measured temperature.
           required: true
           schema:
             type: string
             format: uuid
-            example: "00000000-0000-0000-0000-000000000000"
+            example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
       responses:
         "204":
           description: Temperature deleted.
@@ -136,12 +136,12 @@ paths:
   /api/temperatures/timestamp:
     get:
       tags:
-        - Temperature component.
+        - Temperature.
       summary: Retrieve measured temperature by timestamp.
       operationId: getTemperatureByTimestamp
       parameters:
-        - name: timestamp
-          in: query
+        - in: query
+          name: timestamp
           description: Timestamp for measured temperature.
           required: true
           schema:
@@ -159,12 +159,12 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Temperature component.
+        - Temperature.
       summary: Delete measured temperature by timestamp.
       operationId: deleteTemperatureByTimestamp
       parameters:
-        - name: timestamp
-          in: query
+        - in: query
+          name: timestamp
           description: Timestamp for measured temperature.
           required: true
           schema:
@@ -180,12 +180,12 @@ paths:
   /api/temperatures/date:
     get:
       tags:
-        - Temperature component.
+        - Temperature.
       summary: Retrieve measured temperatures by date.
       operationId: getTemperaturesByDate
       parameters:
-        - name: date
-          in: query
+        - in: query
+          name: date
           description: Date for measured temperatures.
           required: true
           schema:
@@ -207,18 +207,18 @@ paths:
   /api/humidities/{id}:
     get:
       tags:
-        - Humidity component.
+        - Humidity.
       summary: Retrieve measured humidity by id.
       operationId: getHumidityById
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           description: Identifier for measured humidity.
           required: true
           schema:
             type: string
             format: uuid
-            example: "00000000-0000-0000-0000-000000000000"
+            example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
       responses:
         "200":
           description: Humidity found.
@@ -230,18 +230,18 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Humidity component.
+        - Humidity.
       summary: Delete measured humidity by id.
       operationId: deleteHumidityDtoById
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           description: Identifier for measured humidity.
           required: true
           schema:
             type: string
             format: uuid
-            example: "00000000-0000-0000-0000-000000000000"
+            example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
       responses:
         "204":
           description: Humidity deleted.
@@ -251,12 +251,12 @@ paths:
   /api/humidities/timestamp:
     get:
       tags:
-        - Humidity component.
+        - Humidity.
       summary: Retrieve measured humidity by timestamp.
       operationId: getHumidityByTimestamp
       parameters:
-        - name: timestamp
-          in: query
+        - in: query
+          name: timestamp
           description: Timestamp for measured humidity.
           required: true
           schema:
@@ -274,12 +274,12 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Humidity component.
+        - Humidity.
       summary: Delete measured humidity by timestamp.
       operationId: deleteHumidityByTimestamp
       parameters:
-        - name: timestamp
-          in: query
+        - in: query
+          name: timestamp
           description: Timestamp for measured humidity.
           required: true
           schema:
@@ -295,12 +295,12 @@ paths:
   /api/humidities/date:
     get:
       tags:
-        - Humidity component.
+        - Humidity.
       summary: Retrieve measured humidities by date.
       operationId: getHumiditiesByDate
       parameters:
-        - name: date
-          in: query
+        - in: query
+          name: date
           description: Date for measured humidities.
           required: true
           schema:
@@ -322,18 +322,18 @@ paths:
   /api/batteries/{id}:
     get:
       tags:
-        - Battery component.
+        - Battery.
       summary: Retrieve a battery by id.
       operationId: getBatteryById
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           description: Identifier for battery.
           required: true
           schema:
             type: string
             format: uuid
-            example: "00000000-0000-0000-0000-000000000000"
+            example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
       responses:
         "200":
           description: Battery found.
@@ -345,18 +345,18 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Battery component.
+        - Battery.
       summary: Delete battery by id.
       operationId: deleteBatteryDtoById
       parameters:
-        - name: id
-          in: path
+        - in: path
+          name: id
           description: Identifier for battery.
           required: true
           schema:
             type: string
             format: uuid
-            example: "00000000-0000-0000-0000-000000000000"
+            example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
       responses:
         "204":
           description: Battery deleted.
@@ -366,12 +366,12 @@ paths:
   /api/batteries/timestamp:
     get:
       tags:
-        - Battery component.
+        - Battery.
       summary: Retrieve a battery by timestamp.
       operationId: getBatteryByTimestamp
       parameters:
-        - name: timestamp
-          in: query
+        - in: query
+          name: timestamp
           description: Timestamp for battery.
           required: true
           schema:
@@ -389,12 +389,12 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Battery component.
+        - Battery.
       summary: Delete battery by timestamp.
       operationId: deleteBatteryByTimestamp
       parameters:
-        - name: timestamp
-          in: query
+        - in: query
+          name: timestamp
           description: Timestamp for battery.
           required: true
           schema:
@@ -410,12 +410,12 @@ paths:
   /api/batteries/date:
     get:
       tags:
-        - Battery component.
+        - Battery.
       summary: Retrieve batteries by date.
       operationId: getBatteriesByDate
       parameters:
-        - name: date
-          in: query
+        - in: query
+          name: date
           description: Date for batteries.
           required: true
           schema:
@@ -436,40 +436,20 @@ paths:
 
 components:
   schemas:
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri-reference
-          description: URI reference identifying the problem type.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-        status:
-          type: integer
-          description: HTTP status code for this error occurrence.
-        detail:
-          type: string
-          description: Explanation specific to this occurrence of the problem.
-        instance:
-          type: string
-          format: uri-reference
-          description: URI reference identifying the specific occurrence of the problem.
-
     TemperatureDto:
       type: object
       properties:
         registeredAt:
           type: string
           format: date-time
-          example: "2017-07-21T17:32:28Z"
         temp:
           type: number
           format: double
-          minimum: -55
-          maximum: 125
-          example: 100
+          minimum: -55.00
+          maximum: 125.00
+      example:
+        registeredAt: "2017-07-21T17:32:28Z"
+        temp: 100.00
       required:
         - registeredAt
         - temp
@@ -480,13 +460,14 @@ components:
         registeredAt:
           type: string
           format: date-time
-          example: "2017-07-21T17:32:28Z"
         airHumidity:
           type: number
           format: double
-          minimum: 20
-          maximum: 90
-          example: 70
+          minimum: 20.00
+          maximum: 90.00
+      example:
+        registeredAt: "2017-07-21T17:32:28Z"
+        airHumidity: 70.00
       required:
         - registeredAt
         - airHumidity
@@ -497,13 +478,14 @@ components:
         registeredAt:
           type: string
           format: date-time
-          example: "2017-07-21T17:32:28Z"
         batteryStatus:
           type: integer
           format: int32
           minimum: 0
           maximum: 100
-          example: 50
+      example:
+        registeredAt: "2017-07-21T17:32:28Z"
+        batteryStatus: 50
       required:
         - registeredAt
         - batteryStatus

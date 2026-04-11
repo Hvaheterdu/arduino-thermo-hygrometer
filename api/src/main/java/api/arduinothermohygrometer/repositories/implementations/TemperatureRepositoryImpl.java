@@ -11,7 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import api.arduinothermohygrometer.entities.Temperature;
+import api.arduinothermohygrometer.models.Temperature;
 import api.arduinothermohygrometer.repositories.TemperatureRepository;
 
 @Repository

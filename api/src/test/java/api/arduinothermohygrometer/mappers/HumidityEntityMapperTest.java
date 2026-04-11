@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import api.arduinothermohygrometer.dtos.HumidityDto;
-import api.arduinothermohygrometer.entities.Humidity;
+import api.arduinothermohygrometer.dto.HumidityDto;
+import api.arduinothermohygrometer.models.Humidity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,8 +24,8 @@ class HumidityEntityMapperTest {
 
         Humidity result = HumidityEntityMapper.toEntity(humidityDto);
 
-        assertThat(result.getRegisteredAt()).isEqualTo(humidityDto.registeredAt());
-        assertThat(result.getAirHumidity()).isEqualTo(humidityDto.airHumidity());
+        assertThat(result.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
+        assertThat(result.getAirHumidity()).isEqualTo(humidityDto.getAirHumidity());
     }
 
     @Test
@@ -37,7 +37,7 @@ class HumidityEntityMapperTest {
 
         HumidityDto result = HumidityEntityMapper.toDto(humidity);
 
-        assertThat(result.registeredAt()).isEqualTo(humidity.getRegisteredAt());
-        assertThat(result.airHumidity()).isEqualTo(humidity.getAirHumidity());
+        assertThat(result.getRegisteredAt()).isEqualTo(humidity.getRegisteredAt());
+        assertThat(result.getAirHumidity()).isEqualTo(humidity.getAirHumidity());
     }
 }

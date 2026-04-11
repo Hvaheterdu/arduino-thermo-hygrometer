@@ -1,14 +1,14 @@
 package api.arduinothermohygrometer.mappers;
 
-import api.arduinothermohygrometer.dtos.TemperatureDto;
-import api.arduinothermohygrometer.entities.Temperature;
+import api.arduinothermohygrometer.dto.TemperatureDto;
+import api.arduinothermohygrometer.models.Temperature;
 
 public class TemperatureEntityMapper {
     private TemperatureEntityMapper() {
     }
 
     public static Temperature toEntity(TemperatureDto temperatureDto) {
-        return new Temperature(temperatureDto.registeredAt(), temperatureDto.temp());
+        return new Temperature(temperatureDto.getRegisteredAt(), temperatureDto.getTemp());
     }
 
     public static TemperatureDto toDto(Temperature temperature) {

@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import api.arduinothermohygrometer.dtos.TemperatureDto;
-import api.arduinothermohygrometer.entities.Temperature;
+import api.arduinothermohygrometer.dto.TemperatureDto;
+import api.arduinothermohygrometer.models.Temperature;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,8 +24,8 @@ class TemperatureEntityMapperTest {
 
         Temperature result = TemperatureEntityMapper.toEntity(temperatureDto);
 
-        assertThat(result.getRegisteredAt()).isEqualTo(temperatureDto.registeredAt());
-        assertThat(result.getTemp()).isEqualTo(temperatureDto.temp());
+        assertThat(result.getRegisteredAt()).isEqualTo(temperatureDto.getRegisteredAt());
+        assertThat(result.getTemp()).isEqualTo(temperatureDto.getTemp());
     }
 
     @Test
@@ -37,7 +37,7 @@ class TemperatureEntityMapperTest {
 
         TemperatureDto result = TemperatureEntityMapper.toDto(temperature);
 
-        assertThat(result.registeredAt()).isEqualTo(temperature.getRegisteredAt());
-        assertThat(result.temp()).isEqualTo(temperature.getTemp());
+        assertThat(result.getRegisteredAt()).isEqualTo(temperature.getRegisteredAt());
+        assertThat(result.getTemp()).isEqualTo(temperature.getTemp());
     }
 }

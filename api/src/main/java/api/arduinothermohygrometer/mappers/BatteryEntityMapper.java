@@ -1,7 +1,7 @@
 package api.arduinothermohygrometer.mappers;
 
 import api.arduinothermohygrometer.dto.BatteryDto;
-import api.arduinothermohygrometer.entities.Battery;
+import api.arduinothermohygrometer.models.Battery;
 
 public class BatteryEntityMapper {
     private BatteryEntityMapper() {

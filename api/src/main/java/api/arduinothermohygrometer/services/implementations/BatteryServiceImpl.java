@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import api.arduinothermohygrometer.dto.BatteryDto;
-import api.arduinothermohygrometer.entities.Battery;
+import api.arduinothermohygrometer.models.Battery;
 import api.arduinothermohygrometer.exceptions.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exceptions.ResourceNotFoundException;
 import api.arduinothermohygrometer.mappers.BatteryEntityMapper;

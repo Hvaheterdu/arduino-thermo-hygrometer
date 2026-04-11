@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import api.arduinothermohygrometer.dto.BatteryDto;
-import api.arduinothermohygrometer.entities.Battery;
+import api.arduinothermohygrometer.models.Battery;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
