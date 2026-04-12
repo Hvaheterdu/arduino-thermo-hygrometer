@@ -1,4 +1,4 @@
-openapi: 3.2.0
+openapi: 3.1.2
 info:
   title: Arduino Thermo Hygrometer API.
   description: A Java Web API for an Arduino Thermo Hygrometer IoT device.
@@ -35,7 +35,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TemperatureDto"
             examples:
-              default:
+              temperature:
                 $ref: "#/components/examples/ExampleTemperature"
         required: true
       responses:
@@ -46,64 +46,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/TemperatureDto"
               examples:
-                default:
+                temperature:
                   $ref: "#/components/examples/ExampleTemperature"
-        "400":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
-
-  /api/humidities:
-    post:
-      tags:
-        - Humidity.
-      summary: Create measured humidity.
-      operationId: createHumidity
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/HumidityDto"
-            examples:
-              default:
-                $ref: "#/components/examples/ExampleHumidity"
-        required: true
-      responses:
-        "201":
-          description: Humidity created.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HumidityDto"
-              examples:
-                default:
-                  $ref: "#/components/examples/ExampleHumidity"
-        "400":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
-
-  /api/batteries:
-    post:
-      tags:
-        - Battery.
-      summary: Create remaining battery.
-      operationId: createBattery
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BatteryDto"
-            examples:
-              default:
-                $ref: "#/components/examples/ExampleBattery"
-        required: true
-      responses:
-        "201":
-          description: Battery created.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BatteryDto"
-              examples:
-                default:
-                  $ref: "#/components/examples/ExampleBattery"
         "400":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
 
@@ -130,7 +74,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TemperatureDto"
               examples:
-                default:
+                temperature:
                   $ref: "#/components/examples/ExampleTemperature"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
@@ -161,14 +105,7 @@ paths:
       summary: Retrieve measured temperature by timestamp.
       operationId: getTemperatureByTimestamp
       parameters:
-        - in: query
-          name: timestamp
-          description: Timestamp for measured temperature.
-          required: true
-          schema:
-            type: string
-            format: date-time
-            example: "2017-07-21T17:32:28Z"
+        - $ref: "#/components/parameters/TimestampQuery"
       responses:
         "200":
           description: Temperature found.
@@ -177,7 +114,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TemperatureDto"
               examples:
-                default:
+                temperature:
                   $ref: "#/components/examples/ExampleTemperature"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
@@ -187,14 +124,7 @@ paths:
       summary: Delete measured temperature by timestamp.
       operationId: deleteTemperatureByTimestamp
       parameters:
-        - in: query
-          name: timestamp
-          description: Timestamp for measured temperature.
-          required: true
-          schema:
-            type: string
-            format: date-time
-            example: "2017-07-21T17:32:28Z"
+        - $ref: "#/components/parameters/TimestampQuery"
       responses:
         "204":
           description: Temperature deleted.
@@ -208,14 +138,7 @@ paths:
       summary: Retrieve measured temperatures by date.
       operationId: getTemperaturesByDate
       parameters:
-        - in: query
-          name: date
-          description: Date for measured temperatures.
-          required: true
-          schema:
-            type: string
-            format: date
-            example: "2017-07-21"
+        - $ref: "#/components/parameters/DateQuery"
       responses:
         "200":
           description: Temperatures found.
@@ -227,6 +150,34 @@ paths:
                   $ref: "#/components/schemas/TemperatureDto"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+
+  /api/humidities:
+    post:
+      tags:
+        - Humidity.
+      summary: Create measured humidity.
+      operationId: createHumidity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HumidityDto"
+            examples:
+              humidity:
+                $ref: "#/components/examples/ExampleHumidity"
+        required: true
+      responses:
+        "201":
+          description: Humidity created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HumidityDto"
+              examples:
+                humidity:
+                  $ref: "#/components/examples/ExampleHumidity"
+        "400":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
 
   /api/humidities/{id}:
     get:
@@ -251,7 +202,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/HumidityDto"
               examples:
-                default:
+                humidity:
                   $ref: "#/components/examples/ExampleHumidity"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
@@ -282,14 +233,7 @@ paths:
       summary: Retrieve measured humidity by timestamp.
       operationId: getHumidityByTimestamp
       parameters:
-        - in: query
-          name: timestamp
-          description: Timestamp for measured humidity.
-          required: true
-          schema:
-            type: string
-            format: date-time
-            example: "2017-07-21T17:32:28Z"
+        - $ref: "#/components/parameters/TimestampQuery"
       responses:
         "200":
           description: Humidity found.
@@ -298,7 +242,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/HumidityDto"
               examples:
-                default:
+                humidity:
                   $ref: "#/components/examples/ExampleHumidity"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
@@ -308,14 +252,7 @@ paths:
       summary: Delete measured humidity by timestamp.
       operationId: deleteHumidityByTimestamp
       parameters:
-        - in: query
-          name: timestamp
-          description: Timestamp for measured humidity.
-          required: true
-          schema:
-            type: string
-            format: date-time
-            example: "2017-07-21T17:32:28Z"
+        - $ref: "#/components/parameters/TimestampQuery"
       responses:
         "204":
           description: Humidity deleted.
@@ -329,14 +266,7 @@ paths:
       summary: Retrieve measured humidities by date.
       operationId: getHumiditiesByDate
       parameters:
-        - in: query
-          name: date
-          description: Date for measured humidities.
-          required: true
-          schema:
-            type: string
-            format: date
-            example: "2017-07-21"
+        - $ref: "#/components/parameters/DateQuery"
       responses:
         "200":
           description: Humidities found.
@@ -348,6 +278,34 @@ paths:
                   $ref: "#/components/schemas/HumidityDto"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+
+  /api/batteries:
+    post:
+      tags:
+        - Battery.
+      summary: Create remaining battery.
+      operationId: createBattery
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatteryDto"
+            examples:
+              battery:
+                $ref: "#/components/examples/ExampleBattery"
+        required: true
+      responses:
+        "201":
+          description: Battery created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatteryDto"
+              examples:
+                battery:
+                  $ref: "#/components/examples/ExampleBattery"
+        "400":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
 
   /api/batteries/{id}:
     get:
@@ -372,7 +330,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/BatteryDto"
               examples:
-                default:
+                battery:
                   $ref: "#/components/examples/ExampleBattery"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
@@ -403,14 +361,7 @@ paths:
       summary: Retrieve a battery by timestamp.
       operationId: getBatteryByTimestamp
       parameters:
-        - in: query
-          name: timestamp
-          description: Timestamp for battery.
-          required: true
-          schema:
-            type: string
-            format: date-time
-            example: "2017-07-21T17:32:28Z"
+        - $ref: "#/components/parameters/TimestampQuery"
       responses:
         "200":
           description: Battery found.
@@ -419,7 +370,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/BatteryDto"
               examples:
-                default:
+                battery:
                   $ref: "#/components/examples/ExampleBattery"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
@@ -429,14 +380,7 @@ paths:
       summary: Delete battery by timestamp.
       operationId: deleteBatteryByTimestamp
       parameters:
-        - in: query
-          name: timestamp
-          description: Timestamp for battery.
-          required: true
-          schema:
-            type: string
-            format: date-time
-            example: "2017-07-21T17:32:28Z"
+        - $ref: "#/components/parameters/TimestampQuery"
       responses:
         "204":
           description: Battery deleted.
@@ -450,14 +394,7 @@ paths:
       summary: Retrieve batteries by date.
       operationId: getBatteriesByDate
       parameters:
-        - in: query
-          name: date
-          description: Date for batteries.
-          required: true
-          schema:
-            type: string
-            format: date
-            example: "2017-07-21"
+        - $ref: "#/components/parameters/DateQuery"
       responses:
         "200":
           description: Batteries found.
@@ -490,8 +427,30 @@ components:
         registeredAt: "2017-07-21T17:32:28Z"
         batteryStatus: 50
 
+  parameters:
+    TimestampQuery:
+      in: query
+      name: timestamp
+      description: Timestamp for measurement.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: "2017-07-21T17:32:28Z"
+
+    DateQuery:
+      in: query
+      name: date
+      description: Date for measurement.
+      required: true
+      schema:
+        type: string
+        format: date
+        example: "2017-07-21"
+  
   schemas:
     TemperatureDto:
+      type: object
       properties:
         registeredAt:
           type: string
