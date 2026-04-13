@@ -363,7 +363,6 @@ components:
   schemas:
     DateTimeRequest:
       type: object
-      required: [ dateTime ]
       properties:
         dateTime:
           type: string
@@ -372,6 +371,9 @@ components:
         checkOnlyDate:
           type: boolean
           example: true
+      required:
+        - dateTime
+        - checkOnlyDate
 
     TemperatureDto:
       type: object
