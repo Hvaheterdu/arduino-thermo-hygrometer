@@ -1,7 +1,5 @@
 package api.arduinothermohygrometer.controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.api.TemperatureApi;
+import api.arduinothermohygrometer.dto.DateTimeRequest;
 import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.service.TemperatureService;
 
@@ -22,42 +21,32 @@ public class TemperatureController implements TemperatureApi {
     }
 
     @Override
-    public ResponseEntity<TemperatureDto> getTemperatureById(UUID id) {
+    public ResponseEntity<TemperatureDto> getTemperatureById(final UUID id) {
         TemperatureDto temperatureDto = temperatureService.getTemperatureById(id);
-
         return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<TemperatureDto> getTemperatureByTimestamp(LocalDateTime timestamp) {
-        TemperatureDto temperatureDto = temperatureService.getTemperatureByTimestamp(timestamp);
-
-        return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
+    public ResponseEntity<List<TemperatureDto>> getTemperaturesByDateOrTimestamp(final DateTimeRequest dateTimeRequest) {
+        List<TemperatureDto> temperatureDtos = temperatureService.getTemperaturesByDateOrTimestamp(dateTimeRequest);
+        return new ResponseEntity<>(temperatureDtos, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<List<TemperatureDto>> getTemperaturesByDate(LocalDate date) {
-        List<TemperatureDto> temperatures = temperatureService.getTemperaturesByDate(date);
-
-        return new ResponseEntity<>(temperatures, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<TemperatureDto> createTemperature(TemperatureDto temperatureDto) {
+    public ResponseEntity<TemperatureDto> createTemperature(final TemperatureDto temperatureDto) {
         TemperatureDto createdTemperatureDto = temperatureService.createTemperature(temperatureDto);
-
         return new ResponseEntity<>(createdTemperatureDto, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<Void> deleteTemperatureDtoById(UUID id) {
+    public ResponseEntity<Void> deleteTemperatureDtoById(final UUID id) {
         temperatureService.deleteTemperatureById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<Void> deleteTemperatureByTimestamp(LocalDateTime timestamp) {
-        temperatureService.deleteTemperatureByTimestamp(timestamp);
+    public ResponseEntity<Void> deleteTemperaturesByDateOrTimestamp(final DateTimeRequest dateTimeRequest) {
+        temperatureService.deleteTemperaturesByDateOrTimestamp(dateTimeRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
