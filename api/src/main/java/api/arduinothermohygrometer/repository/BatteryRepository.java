@@ -9,15 +9,17 @@ import java.util.UUID;
 import api.arduinothermohygrometer.model.Battery;
 
 public interface BatteryRepository {
-    Optional<Battery> getBatteryById(UUID id);
+    Optional<Battery> getBatteryById(final UUID id);
 
-    Optional<Battery> getBatteryByTimestamp(LocalDateTime timestamp);
+    List<Battery> getBatteryByTimestamp(final LocalDateTime timestamp);
 
-    List<Battery> getBatteriesByDate(LocalDate date);
+    List<Battery> getBatteriesByDate(final LocalDate date);
 
-    void createBattery(Battery battery);
+    void createBattery(final Battery battery);
 
-    void deleteBatteryById(UUID id);
+    void deleteBatteryById(final UUID id);
 
-    void deleteBatteryByTimestamp(LocalDateTime timestamp);
+    void deleteBatteryByTimestamp(final LocalDateTime timestamp);
+
+    void deleteBatteriesByDate(final LocalDate date);
 }

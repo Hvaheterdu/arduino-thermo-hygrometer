@@ -23,7 +23,7 @@ public class HumidityRepositoryImpl implements HumidityRepository {
     }
 
     @Override
-    public Optional<Humidity> getHumidityById(UUID id) {
+    public Optional<Humidity> getHumidityById(final UUID id) {
         String sql = """
             SELECT *
             FROM humidities
@@ -37,7 +37,7 @@ public class HumidityRepositoryImpl implements HumidityRepository {
     }
 
     @Override
-    public Optional<Humidity> getHumidityByTimestamp(LocalDateTime timestamp) {
+    public List<Humidity> getHumidityByTimestamp(final LocalDateTime timestamp) {
         String sql = """
             SELECT *
             FROM humidities
@@ -47,11 +47,11 @@ public class HumidityRepositoryImpl implements HumidityRepository {
         return jdbcClient.sql(sql)
                          .param("timestamp", timestamp)
                          .query(Humidity.class)
-                         .optional();
+                         .list();
     }
 
     @Override
-    public List<Humidity> getHumiditiesByDate(LocalDate date) {
+    public List<Humidity> getHumiditiesByDate(final LocalDate date) {
         String sql = """
             SELECT *
             FROM humidities
@@ -66,7 +66,7 @@ public class HumidityRepositoryImpl implements HumidityRepository {
     }
 
     @Override
-    public void createHumidity(Humidity humidity) {
+    public void createHumidity(final Humidity humidity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = """
             INSERT INTO humidities (id, registered_at, air_humidity)
@@ -81,7 +81,7 @@ public class HumidityRepositoryImpl implements HumidityRepository {
     }
 
     @Override
-    public void deleteHumidityById(UUID id) {
+    public void deleteHumidityById(final UUID id) {
         String sql = """
             DELETE FROM humidities
             WHERE id = :id
@@ -93,7 +93,7 @@ public class HumidityRepositoryImpl implements HumidityRepository {
     }
 
     @Override
-    public void deleteHumidityByTimestamp(LocalDateTime timestamp) {
+    public void deleteHumidityByTimestamp(final LocalDateTime timestamp) {
         String sql = """
             DELETE FROM humidities
             WHERE registered_at = :timestamp
@@ -101,6 +101,20 @@ public class HumidityRepositoryImpl implements HumidityRepository {
 
         jdbcClient.sql(sql)
                   .param("timestamp", timestamp)
+                  .update();
+    }
+
+    @Override
+    public void deleteHumiditiesByDate(final LocalDate date) {
+        String sql = """
+            SELECT *
+            FROM batteries
+            WHERE registered_at >= :start AND registered_at < :end
+            """;
+
+        jdbcClient.sql(sql)
+                  .param("start", date.atStartOfDay())
+                  .param("end", date.plusDays(1).atStartOfDay())
                   .update();
     }
 }

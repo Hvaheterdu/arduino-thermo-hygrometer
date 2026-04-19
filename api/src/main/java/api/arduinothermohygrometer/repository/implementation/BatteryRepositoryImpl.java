@@ -23,7 +23,7 @@ public class BatteryRepositoryImpl implements BatteryRepository {
     }
 
     @Override
-    public Optional<Battery> getBatteryById(UUID id) {
+    public Optional<Battery> getBatteryById(final UUID id) {
         String sql = """
             SELECT *
             FROM batteries
@@ -37,7 +37,7 @@ public class BatteryRepositoryImpl implements BatteryRepository {
     }
 
     @Override
-    public Optional<Battery> getBatteryByTimestamp(LocalDateTime timestamp) {
+    public List<Battery> getBatteryByTimestamp(final LocalDateTime timestamp) {
         String sql = """
             SELECT *
             FROM batteries
@@ -47,11 +47,11 @@ public class BatteryRepositoryImpl implements BatteryRepository {
         return jdbcClient.sql(sql)
                          .param("timestamp", timestamp)
                          .query(Battery.class)
-                         .optional();
+                         .list();
     }
 
     @Override
-    public List<Battery> getBatteriesByDate(LocalDate date) {
+    public List<Battery> getBatteriesByDate(final LocalDate date) {
         String sql = """
             SELECT *
             FROM batteries
@@ -66,7 +66,7 @@ public class BatteryRepositoryImpl implements BatteryRepository {
     }
 
     @Override
-    public void createBattery(Battery battery) {
+    public void createBattery(final Battery battery) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = """
             INSERT INTO batteries (id, registered_at, battery_status)
@@ -81,7 +81,7 @@ public class BatteryRepositoryImpl implements BatteryRepository {
     }
 
     @Override
-    public void deleteBatteryById(UUID id) {
+    public void deleteBatteryById(final UUID id) {
         String sql = """
             DELETE FROM batteries
             WHERE id = :id
@@ -93,7 +93,7 @@ public class BatteryRepositoryImpl implements BatteryRepository {
     }
 
     @Override
-    public void deleteBatteryByTimestamp(LocalDateTime timestamp) {
+    public void deleteBatteryByTimestamp(final LocalDateTime timestamp) {
         String sql = """
             DELETE FROM batteries
             WHERE registered_at = :timestamp
@@ -101,6 +101,20 @@ public class BatteryRepositoryImpl implements BatteryRepository {
 
         jdbcClient.sql(sql)
                   .param("timestamp", timestamp)
+                  .update();
+    }
+
+    @Override
+    public void deleteBatteriesByDate(final LocalDate date) {
+        String sql = """
+            SELECT *
+            FROM batteries
+            WHERE registered_at >= :start AND registered_at < :end
+            """;
+
+        jdbcClient.sql(sql)
+                  .param("start", date.atStartOfDay())
+                  .param("end", date.plusDays(1).atStartOfDay())
                   .update();
     }
 }

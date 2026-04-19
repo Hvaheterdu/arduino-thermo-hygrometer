@@ -23,7 +23,7 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public Optional<Temperature> getTemperatureById(UUID id) {
+    public Optional<Temperature> getTemperatureById(final UUID id) {
         String sql = """
             SELECT *
             FROM temperatures
@@ -37,7 +37,7 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public Optional<Temperature> getTemperatureByTimestamp(LocalDateTime timestamp) {
+    public List<Temperature> getTemperatureByTimestamp(final LocalDateTime timestamp) {
         String sql = """
             SELECT *
             FROM temperatures
@@ -47,11 +47,11 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
         return jdbcClient.sql(sql)
                          .param("timestamp", timestamp)
                          .query(Temperature.class)
-                         .optional();
+                         .list();
     }
 
     @Override
-    public List<Temperature> getTemperaturesByDate(LocalDate date) {
+    public List<Temperature> getTemperaturesByDate(final LocalDate date) {
         String sql = """
             SELECT *
             FROM temperatures
@@ -66,7 +66,7 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public void createTemperature(Temperature temperature) {
+    public void createTemperature(final Temperature temperature) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = """
             INSERT INTO temperatures (id, registered_at, temp)
@@ -81,7 +81,7 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public void deleteTemperatureById(UUID id) {
+    public void deleteTemperatureById(final UUID id) {
         String sql = """
             DELETE FROM temperatures
             WHERE id = :id
@@ -93,7 +93,7 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public void deleteTemperatureByTimestamp(LocalDateTime timestamp) {
+    public void deleteTemperatureByTimestamp(final LocalDateTime timestamp) {
         String sql = """
             DELETE FROM temperatures
             WHERE registered_at = :timestamp
@@ -101,6 +101,20 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
 
         jdbcClient.sql(sql)
                   .param("timestamp", timestamp)
+                  .update();
+    }
+
+    @Override
+    public void deleteTemperaturesByDate(final LocalDate date) {
+        String sql = """
+            SELECT *
+            FROM batteries
+            WHERE registered_at >= :start AND registered_at < :end
+            """;
+
+        jdbcClient.sql(sql)
+                  .param("start", date.atStartOfDay())
+                  .param("end", date.plusDays(1).atStartOfDay())
                   .update();
     }
 }
