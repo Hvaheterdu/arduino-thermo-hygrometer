@@ -5,55 +5,65 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.test.web.servlet.MockMvc;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class SecurityConfigIntegrationTest {
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvcTester mockMvcTester;
 
     @Test
     @DisplayName("Given actuator endpoint when accessed then return 200 OK")
-    void givenActuatorEndpoint_whenAccessed_thenReturn200OK() throws Exception {
-        mockMvc.perform(get("/actuator/health"))
-               .andExpect(status().isOk());
+    void givenActuatorEndpoint_whenAccessed_thenReturn200OK() {
+        mockMvcTester.get()
+                     .uri("/actuator/health")
+                     .exchange()
+                     .assertThat()
+                     .hasStatusOk();
     }
 
     @Test
     @DisplayName("Given actuator endpoint when accessed then apply security headers")
-    void givenActuatorEndpoint_whenAccessed_thenApplySecurityHeaders() throws Exception {
-        mockMvc.perform(get("/actuator/health"))
-               .andExpect(status().isOk())
-               .andExpect(header().string("X-Content-Type-Options", "nosniff"))
-               .andExpect(header().string("X-Frame-Options", "DENY"))
-               .andExpect(header().string("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate"))
-               .andExpect(header().string("Content-Security-Policy",
-                   "connect-src 'self'; "
-                       + "default-src 'self'; "
-                       + "frame-ancestors 'none'; "
-                       + "img-src 'self' data:; "
-                       + "script-src 'self'; "
-                       + "style-src 'self' 'unsafe-inline';"))
-               .andExpect(header().string("Referrer-Policy", "no-referrer"));
+    void givenActuatorEndpoint_whenAccessed_thenApplySecurityHeaders() {
+        mockMvcTester.get()
+                     .uri("/actuator/health")
+                     .header("X-Content-Type-Options", "nosniff")
+                     .header("X-Frame-Options", "DENY")
+                     .header("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate")
+                     .header("Content-Security-Policy",
+                         "connect-src 'self'; "
+                             + "default-src 'self'; "
+                             + "frame-ancestors 'none'; "
+                             + "img-src 'self' data:; "
+                             + "script-src 'self'; "
+                             + "style-src 'self' 'unsafe-inline';")
+                     .header("Referrer-Policy", "no-referrer")
+                     .exchange()
+                     .assertThat()
+                     .hasStatusOk();
     }
 
     @Test
     @DisplayName("Given actuator endpoint when accessed over HTTPS then apply HSTS header")
-    void givenActuatorEndpoint_whenAccessedOverHttps_thenApplyHstsHeader() throws Exception {
-        mockMvc.perform(get("/actuator/health").secure(true))
-               .andExpect(status().isOk())
-               .andExpect(header().string("Strict-Transport-Security", "max-age=31536000 ; includeSubDomains"));
+    void givenActuatorEndpoint_whenAccessedOverHttps_thenApplyHstsHeader() {
+        mockMvcTester.get()
+                     .uri("/actuator/health")
+                     .secure(true)
+                     .header("Strict-Transport-Security", "max-age=31536000 ; includeSubDomains")
+                     .exchange()
+                     .assertThat()
+                     .hasStatusOk();
     }
 
     @Test
     @DisplayName("Given non actuator endpoint when accessed then return 403 FORBIDDEN")
-    void givenNonActuatorEndpoint_whenAccessed_thenReturn403Forbidden() throws Exception {
-        mockMvc.perform(get("/random-endpoint"))
-               .andExpect(status().isForbidden());
+    void givenNonActuatorEndpoint_whenAccessed_thenReturn403Forbidden() {
+        mockMvcTester.get()
+                     .uri("/random-endpoint")
+                     .exchange()
+                     .assertThat()
+                     .hasStatus(HttpStatus.FORBIDDEN);
     }
 }
