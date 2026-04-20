@@ -6,21 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 import api.arduinothermohygrometer.properties.OpenApiProperties;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class OpenApiConfigIntegrationTest {
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvcTester mockMvcTester;
 
     @Autowired
     private BuildProperties buildProperties;
@@ -32,17 +30,23 @@ class OpenApiConfigIntegrationTest {
     private OpenApiProperties openApiProperties;
 
     @Test
-    @DisplayName("Given OpenAPI docs endpoint when accessed then return 200 OK")
-    void givenOpenApiDocsEndpoint_whenAccessed_thenReturn200OK() throws Exception {
-        mockMvc.perform(get("/v3/api-docs"))
-               .andExpect(status().isOk());
+    @DisplayName("Given Swagger UI endpoint when accessed then return 200 OK")
+    void givenSwaggerUiEndpoint_whenAccessed_thenReturn200OK() {
+        mockMvcTester.get()
+                     .uri("/swagger-ui/index.html")
+                     .exchange()
+                     .assertThat()
+                     .hasStatusOk();
     }
 
     @Test
-    @DisplayName("Given Swagger UI endpoint when accessed then return 200 OK")
-    void givenSwaggerUiEndpoint_whenAccessed_thenReturn200OK() throws Exception {
-        mockMvc.perform(get("/swagger-ui/index.html"))
-               .andExpect(status().isOk());
+    @DisplayName("Given OpenAPI docs endpoint when accessed then return 200 OK")
+    void givenOpenApiDocsEndpoint_whenAccessed_thenReturn200OK() {
+        mockMvcTester.get()
+                     .uri("/v3/api-docs")
+                     .exchange()
+                     .assertThat()
+                     .hasStatusOk();
     }
 
     @Test

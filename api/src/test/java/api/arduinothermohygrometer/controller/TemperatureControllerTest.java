@@ -1,52 +1,40 @@
 package api.arduinothermohygrometer.controller;
 
+import api.arduinothermohygrometer.dto.TemperatureDto;
+import api.arduinothermohygrometer.exception.ResourceNotFoundException;
+import api.arduinothermohygrometer.service.TemperatureService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
+import org.springframework.test.web.servlet.assertj.MvcTestResult;
+import tools.jackson.databind.ObjectMapper;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.assertj.MockMvcTester;
-import org.springframework.test.web.servlet.assertj.MvcTestResult;
-
-import api.arduinothermohygrometer.dto.TemperatureDto;
-import api.arduinothermohygrometer.exception.GlobalExceptionHandler;
-import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.service.TemperatureService;
-import tools.jackson.databind.ObjectMapper;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Unit tests for TemperatureController")
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(TemperatureController.class)
 class TemperatureControllerTest {
-    @Mock
-    private TemperatureService temperatureService;
-
-    private ObjectMapper objectMapper;
-
+    @Autowired
     private MockMvcTester mockMvcTester;
 
-    @BeforeEach
-    void setup() {
-        mockMvcTester = MockMvcTester.of(new TemperatureController(temperatureService), new GlobalExceptionHandler());
-        objectMapper = new ObjectMapper();
-    }
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private TemperatureService temperatureService;
 
     @Test
     @DisplayName("getTemperatureById returns 200 OK with valid id.")
@@ -55,21 +43,21 @@ class TemperatureControllerTest {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 20.01;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(registeredAt)
-                                                      .temp(temp)
-                                                      .build();
+                .registeredAt(registeredAt)
+                .temp(temp)
+                .build();
         when(temperatureService.getTemperatureById(id)).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures/{id}", id)
-                                            .exchange();
+                .uri("/api/temperatures/{id}", id)
+                .exchange();
 
         assertThat(result)
-            .hasStatusOk()
-            .bodyJson()
-            .hasPath("$.registeredAt")
-            .hasPathSatisfying("$.temp",
-                path -> assertThat(path).asNumber().isEqualTo(temp));
+                .hasStatusOk()
+                .bodyJson()
+                .hasPath("$.registeredAt")
+                .hasPathSatisfying("$.temp",
+                        path -> assertThat(path).asNumber().isEqualTo(temp));
     }
 
     @Test
@@ -77,17 +65,17 @@ class TemperatureControllerTest {
     void givenInvalidId_whenGettingTemperatureById_thenReturn404NotFound() {
         UUID id = new UUID(0, 0);
         when(temperatureService.getTemperatureById(id))
-            .thenThrow(new ResourceNotFoundException("Temperature with id=" + id + " not found."));
+                .thenThrow(new ResourceNotFoundException("Temperature with id=" + id + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures/{id}", id)
-                                            .exchange();
+                .uri("/api/temperatures/{id}", id)
+                .exchange();
 
         assertThat(result)
-            .hasStatus(HttpStatus.NOT_FOUND)
-            .failure()
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Temperature with id=" + id + " not found.");
+                .hasStatus(HttpStatus.NOT_FOUND)
+                .failure()
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Temperature with id=" + id + " not found.");
     }
 
     @Test
@@ -96,22 +84,22 @@ class TemperatureControllerTest {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 20.01;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(timestamp)
-                                                      .temp(temp)
-                                                      .build();
+                .registeredAt(timestamp)
+                .temp(temp)
+                .build();
         when(temperatureService.getTemperatureByTimestamp(timestamp)).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures/timestamp")
-                                            .param("timestamp", timestamp.toString())
-                                            .exchange();
+                .uri("/api/temperatures/timestamp")
+                .param("timestamp", timestamp.toString())
+                .exchange();
 
         assertThat(result)
-            .hasStatusOk()
-            .bodyJson()
-            .hasPath("$.registeredAt")
-            .hasPathSatisfying("$.temp",
-                path -> assertThat(path).asNumber().isEqualTo(temp));
+                .hasStatusOk()
+                .bodyJson()
+                .hasPath("$.registeredAt")
+                .hasPathSatisfying("$.temp",
+                        path -> assertThat(path).asNumber().isEqualTo(temp));
     }
 
     @Test
@@ -119,18 +107,18 @@ class TemperatureControllerTest {
     void givenInvalidTimestamp_whenGettingTemperatureByTimestamp_thenReturn404NotFound() {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         when(temperatureService.getTemperatureByTimestamp(timestamp))
-            .thenThrow(new ResourceNotFoundException("Temperature with timestamp=" + timestamp + " not found."));
+                .thenThrow(new ResourceNotFoundException("Temperature with timestamp=" + timestamp + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures/timestamp")
-                                            .param("timestamp", timestamp.toString())
-                                            .exchange();
+                .uri("/api/temperatures/timestamp")
+                .param("timestamp", timestamp.toString())
+                .exchange();
 
         assertThat(result)
-            .hasStatus(HttpStatus.NOT_FOUND)
-            .failure()
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Temperature with timestamp=" + timestamp + " not found.");
+                .hasStatus(HttpStatus.NOT_FOUND)
+                .failure()
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Temperature with timestamp=" + timestamp + " not found.");
     }
 
     @Test
@@ -140,28 +128,28 @@ class TemperatureControllerTest {
         Double temp = 20.01;
         Double temp2 = 90.01;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(timestamp)
-                                                      .temp(temp)
-                                                      .build();
+                .registeredAt(timestamp)
+                .temp(temp)
+                .build();
         TemperatureDto temperatureDto2 = TemperatureDto.builder()
-                                                       .registeredAt(timestamp.minusHours(1))
-                                                       .temp(temp2)
-                                                       .build();
+                .registeredAt(timestamp.minusHours(1))
+                .temp(temp2)
+                .build();
         List<TemperatureDto> temperatures = List.of(temperatureDto, temperatureDto2);
         when(temperatureService.getTemperaturesByDate(timestamp.toLocalDate())).thenReturn(temperatures);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures/date")
-                                            .param("date", timestamp.toLocalDate().toString())
-                                            .exchange();
+                .uri("/api/temperatures/date")
+                .param("date", timestamp.toLocalDate().toString())
+                .exchange();
 
         assertThat(result)
-            .hasStatusOk()
-            .bodyJson()
-            .hasPathSatisfying("$.[0].temp",
-                path -> assertThat(path).asNumber().isEqualTo(temp))
-            .hasPathSatisfying("$.[1].temp",
-                path -> assertThat(path).asNumber().isEqualTo(temp2));
+                .hasStatusOk()
+                .bodyJson()
+                .hasPathSatisfying("$.[0].temp",
+                        path -> assertThat(path).asNumber().isEqualTo(temp))
+                .hasPathSatisfying("$.[1].temp",
+                        path -> assertThat(path).asNumber().isEqualTo(temp2));
     }
 
     @Test
@@ -169,18 +157,18 @@ class TemperatureControllerTest {
     void givenInvalidDate_whenGettingTemperatureByDate_thenReturn404NotFound() {
         LocalDate date = LocalDate.now();
         when(temperatureService.getTemperaturesByDate(date))
-            .thenThrow(new ResourceNotFoundException("Temperatures with date=" + date + " not found."));
+                .thenThrow(new ResourceNotFoundException("Temperatures with date=" + date + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures/date")
-                                            .param("date", date.toString())
-                                            .exchange();
+                .uri("/api/temperatures/date")
+                .param("date", date.toString())
+                .exchange();
 
         assertThat(result)
-            .hasStatus(HttpStatus.NOT_FOUND)
-            .failure()
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Temperatures with date=" + date + " not found.");
+                .hasStatus(HttpStatus.NOT_FOUND)
+                .failure()
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Temperatures with date=" + date + " not found.");
     }
 
     @Test
@@ -189,24 +177,24 @@ class TemperatureControllerTest {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 21.02;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(registeredAt)
-                                                      .temp(temp)
-                                                      .build();
+                .registeredAt(registeredAt)
+                .temp(temp)
+                .build();
         when(temperatureService.createTemperature(any())).thenReturn(temperatureDto);
         String requestJson = objectMapper.writeValueAsString(temperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/api/temperatures")
-                                            .contentType(MediaType.APPLICATION_JSON)
-                                            .content(requestJson)
-                                            .exchange();
+                .uri("/api/temperatures")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .exchange();
 
         assertThat(result)
-            .hasStatus(HttpStatus.CREATED)
-            .bodyJson()
-            .hasPath("$.registeredAt")
-            .hasPathSatisfying("$.temp",
-                path -> assertThat(path).asNumber().isEqualTo(temp));
+                .hasStatus(HttpStatus.CREATED)
+                .bodyJson()
+                .hasPath("$.registeredAt")
+                .hasPathSatisfying("$.temp",
+                        path -> assertThat(path).asNumber().isEqualTo(temp));
     }
 
     @Test
@@ -215,27 +203,27 @@ class TemperatureControllerTest {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 150.03;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(registeredAt)
-                                                      .temp(temp)
-                                                      .build();
+                .registeredAt(registeredAt)
+                .temp(temp)
+                .build();
         String requestJson = objectMapper.writeValueAsString(temperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/api/temperatures")
-                                            .contentType(MediaType.APPLICATION_JSON)
-                                            .content(requestJson)
-                                            .exchange();
+                .uri("/api/temperatures")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson)
+                .exchange();
 
         verifyNoInteractions(temperatureService);
         assertThat(result)
-            .hasStatus(HttpStatus.BAD_REQUEST)
-            .bodyJson()
-            .hasPathSatisfying("$.detail",
-                path -> assertThat(path).asString().isEqualTo("One or more fields are invalid."))
-            .hasPathSatisfying("$.title",
-                path -> assertThat(path).asString().isEqualTo("Entity validation error."))
-            .hasPathSatisfying("$.errors.temp",
-                path -> assertThat(path).asString().isNotBlank());
+                .hasStatus(HttpStatus.BAD_REQUEST)
+                .bodyJson()
+                .hasPathSatisfying("$.detail",
+                        path -> assertThat(path).asString().isEqualTo("One or more fields are invalid."))
+                .hasPathSatisfying("$.title",
+                        path -> assertThat(path).asString().isEqualTo("Entity validation error."))
+                .hasPathSatisfying("$.errors.temp",
+                        path -> assertThat(path).asString().isNotBlank());
     }
 
     @Test
@@ -245,12 +233,12 @@ class TemperatureControllerTest {
         doNothing().when(temperatureService).deleteTemperatureById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/temperatures/{id}", id)
-                                            .exchange();
+                .uri("/api/temperatures/{id}", id)
+                .exchange();
 
         verify(temperatureService, times(1)).deleteTemperatureById(id);
         assertThat(result)
-            .hasStatus(HttpStatus.NO_CONTENT);
+                .hasStatus(HttpStatus.NO_CONTENT);
     }
 
     @Test
@@ -258,18 +246,18 @@ class TemperatureControllerTest {
     void givenInvalidId_whenDeletingTemperatureById_thenReturn404NotFound() {
         UUID id = new UUID(0, 0);
         doThrow(new ResourceNotFoundException("Temperature with id=" + id + " not found.")).when(temperatureService)
-                                                                                           .deleteTemperatureById(id);
+                .deleteTemperatureById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/temperatures/{id}", id)
-                                            .exchange();
+                .uri("/api/temperatures/{id}", id)
+                .exchange();
 
         verify(temperatureService, times(1)).deleteTemperatureById(id);
         assertThat(result)
-            .hasStatus(HttpStatus.NOT_FOUND)
-            .failure()
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Temperature with id=" + id + " not found.");
+                .hasStatus(HttpStatus.NOT_FOUND)
+                .failure()
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Temperature with id=" + id + " not found.");
     }
 
     @Test
@@ -279,13 +267,13 @@ class TemperatureControllerTest {
         doNothing().when(temperatureService).deleteTemperatureByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/temperatures/timestamp")
-                                            .param("timestamp", timestamp.toString())
-                                            .exchange();
+                .uri("/api/temperatures/timestamp")
+                .param("timestamp", timestamp.toString())
+                .exchange();
 
         verify(temperatureService, times(1)).deleteTemperatureByTimestamp(timestamp);
         assertThat(result)
-            .hasStatus(HttpStatus.NO_CONTENT);
+                .hasStatus(HttpStatus.NO_CONTENT);
     }
 
     @Test
@@ -293,19 +281,19 @@ class TemperatureControllerTest {
     void givenInvalidTimestamp_whenDeletingTemperatureByTimestamp_thenReturn404NotFound() {
         LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         doThrow(new ResourceNotFoundException(
-            "Temperature with timestamp=" + timestamp + " not found.")).when(temperatureService)
-                                                                       .deleteTemperatureByTimestamp(timestamp);
+                "Temperature with timestamp=" + timestamp + " not found.")).when(temperatureService)
+                .deleteTemperatureByTimestamp(timestamp);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/temperatures/timestamp")
-                                            .param("timestamp", timestamp.toString())
-                                            .exchange();
+                .uri("/api/temperatures/timestamp")
+                .param("timestamp", timestamp.toString())
+                .exchange();
 
         verify(temperatureService, times(1)).deleteTemperatureByTimestamp(timestamp);
         assertThat(result)
-            .hasStatus(HttpStatus.NOT_FOUND)
-            .failure()
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Temperature with timestamp=" + timestamp + " not found.");
+                .hasStatus(HttpStatus.NOT_FOUND)
+                .failure()
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Temperature with timestamp=" + timestamp + " not found.");
     }
 }

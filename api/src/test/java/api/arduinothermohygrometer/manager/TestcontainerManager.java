@@ -1,4 +1,4 @@
-package api.arduinothermohygrometer.base;
+package api.arduinothermohygrometer.manager;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
-public abstract class TestcontainerBase {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestcontainerBase.class);
+public abstract class TestcontainerManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestcontainerManager.class);
 
     @ServiceConnection
     static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:18.3")
