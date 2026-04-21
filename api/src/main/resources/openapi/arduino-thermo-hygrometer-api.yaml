@@ -28,13 +28,10 @@ paths:
       tags:
         - Battery.
       summary: Retrieve a battery by date or timestamp.
-      operationId: getBatteryByDateOrTimestamp
-      requestBody:
-        content:
-          applicatjon/json:
-            schema:
-              $ref: "#/components/schemas/DateTimeRequest"
-        required: true
+      operationId: getBatteriesByDateOrTimestamp
+      parameters:
+        - $ref: "#/components/parameters/DateTimeParam"
+        - $ref: "#/components/parameters/CheckOnlyDateParam"
       responses:
         "200":
           description: Battery found.
@@ -53,13 +50,10 @@ paths:
       tags:
         - Battery.
       summary: Delete battery by date or timestamp.
-      operationId: deleteBatteryByDateOrTimestamp
-      requestBody:
-        content:
-          applicatjon/json:
-            schema:
-              $ref: "#/components/schemas/DateTimeRequest"
-        required: true
+      operationId: deleteBatteriesByDateOrTimestamp
+      parameters:
+        - $ref: "#/components/parameters/DateTimeParam"
+        - $ref: "#/components/parameters/CheckOnlyDateParam"
       responses:
         "204":
           description: Battery deleted.
@@ -130,13 +124,10 @@ paths:
       tags:
         - Humidity.
       summary: Retrieve measured humidity by date or timestamp.
-      operationId: getHumidityByDateOrTimestamp
-      requestBody:
-        content:
-          applicatjon/json:
-            schema:
-              $ref: "#/components/schemas/DateTimeRequest"
-        required: true
+      operationId: getHumiditiesByDateOrTimestamp
+      parameters:
+        - $ref: "#/components/parameters/DateTimeParam"
+        - $ref: "#/components/parameters/CheckOnlyDateParam"
       responses:
         "200":
           description: Humidity found.
@@ -155,13 +146,10 @@ paths:
       tags:
         - Humidity.
       summary: Delete measured humidity by date or timestamp.
-      operationId: deleteHumidityByDateOrTimestamp
-      requestBody:
-        content:
-          applicatjon/json:
-            schema:
-              $ref: "#/components/schemas/DateTimeRequest"
-        required: true
+      operationId: deleteHumiditiesByDateOrTimestamp
+      parameters:
+        - $ref: "#/components/parameters/DateTimeParam"
+        - $ref: "#/components/parameters/CheckOnlyDateParam"
       responses:
         "204":
           description: Humidity deleted.
@@ -232,13 +220,10 @@ paths:
       tags:
         - Temperature.
       summary: Retrieve measured temperature by date or timestamp.
-      operationId: getTemperatureByDateOrTimestamp
-      requestBody:
-        content:
-          applicatjon/json:
-            schema:
-              $ref: "#/components/schemas/DateTimeRequest"
-        required: true
+      operationId: getTemperaturesByDateOrTimestamp
+      parameters:
+        - $ref: "#/components/parameters/DateTimeParam"
+        - $ref: "#/components/parameters/CheckOnlyDateParam"
       responses:
         "200":
           description: Temperature found.
@@ -257,13 +242,10 @@ paths:
       tags:
         - Temperature.
       summary: Delete measured temperature by date or timestamp.
-      operationId: deleteTemperatureByDateOrTimestamp
-      requestBody:
-        content:
-          applicatjon/json:
-            schema:
-              $ref: "#/components/schemas/DateTimeRequest"
-        required: true
+      operationId: deleteTemperaturesByDateOrTimestamp
+      parameters:
+        - $ref: "#/components/parameters/DateTimeParam"
+        - $ref: "#/components/parameters/CheckOnlyDateParam"
       responses:
         "204":
           description: Temperature deleted.
@@ -350,10 +332,26 @@ components:
         batteryStatus: 50
 
   parameters:
+    DateTimeParam:
+      in: query
+      name: dateTime
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: "2017-07-21T17:32:28Z"
+
+    CheckOnlyDateParam:
+      in: query
+      name: checkOnlyDate
+      required: true
+      schema:
+        type: boolean
+        example: true
+
     IdParam:
       in: path
       name: id
-      description: Identifier for measured temperature.
       required: true
       schema:
         type: string
@@ -361,20 +359,6 @@ components:
         example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
 
   schemas:
-    DateTimeRequest:
-      type: object
-      properties:
-        dateTime:
-          type: string
-          format: date-time
-          example: "2017-07-21T17:32:28Z"
-        checkOnlyDate:
-          type: boolean
-          example: true
-      required:
-        - dateTime
-        - checkOnlyDate
-
     TemperatureDto:
       type: object
       properties:

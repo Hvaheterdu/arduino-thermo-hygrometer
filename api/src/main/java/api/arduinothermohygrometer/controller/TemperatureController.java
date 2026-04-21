@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.api.TemperatureApi;
-import api.arduinothermohygrometer.dto.DateTimeRequest;
 import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.service.TemperatureService;
 
@@ -27,8 +27,8 @@ public class TemperatureController implements TemperatureApi {
     }
 
     @Override
-    public ResponseEntity<List<TemperatureDto>> getTemperaturesByDateOrTimestamp(final DateTimeRequest dateTimeRequest) {
-        List<TemperatureDto> temperatureDtos = temperatureService.getTemperaturesByDateOrTimestamp(dateTimeRequest);
+    public ResponseEntity<List<TemperatureDto>> getTemperaturesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
+        List<TemperatureDto> temperatureDtos = temperatureService.getTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
         return new ResponseEntity<>(temperatureDtos, HttpStatus.OK);
     }
 
@@ -45,8 +45,8 @@ public class TemperatureController implements TemperatureApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteTemperaturesByDateOrTimestamp(final DateTimeRequest dateTimeRequest) {
-        temperatureService.deleteTemperaturesByDateOrTimestamp(dateTimeRequest);
+    public ResponseEntity<Void> deleteTemperaturesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
+        temperatureService.deleteTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

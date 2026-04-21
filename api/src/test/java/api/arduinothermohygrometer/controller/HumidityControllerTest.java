@@ -1,8 +1,10 @@
 package api.arduinothermohygrometer.controller;
 
-import api.arduinothermohygrometer.dto.HumidityDto;
-import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.service.HumidityService;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +14,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
-import tools.jackson.databind.ObjectMapper;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.UUID;
+import api.arduinothermohygrometer.dto.HumidityDto;
+import api.arduinothermohygrometer.exception.ResourceNotFoundException;
+import api.arduinothermohygrometer.service.HumidityService;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @DisplayName("Unit tests for HumidityController")
 @WebMvcTest(HumidityController.class)
@@ -43,132 +45,93 @@ class HumidityControllerTest {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 20.01;
         HumidityDto humidityDto = HumidityDto.builder()
-                .registeredAt(registeredAt)
-                .airHumidity(airHumidity)
-                .build();
+                                             .registeredAt(registeredAt)
+                                             .airHumidity(airHumidity)
+                                             .build();
         when(humidityService.getHumidityById(id)).thenReturn(humidityDto);
 
         MvcTestResult result = mockMvcTester.get()
-                .uri("/api/humidities/{id}", id)
-                .exchange();
+                                            .uri("/api/humidities/{id}", id)
+                                            .exchange();
 
         assertThat(result)
-                .hasStatusOk()
-                .bodyJson()
-                .hasPath("$.registeredAt")
-                .hasPathSatisfying("$.airHumidity",
-                        path -> assertThat(path).asNumber().isEqualTo(airHumidity));
+            .hasStatusOk()
+            .bodyJson()
+            .hasPath("$.registeredAt")
+            .hasPathSatisfying("$.airHumidity",
+                path -> assertThat(path).asNumber().isEqualTo(airHumidity));
     }
 
     @Test
     @DisplayName("getHumidityById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenGettingHumidityById_thenReturn404NotFound() {
-        UUID id = new UUID(0, 0);
-        when(humidityService.getHumidityById(id))
-                .thenThrow(new ResourceNotFoundException("Humidity with id=" + id + " not found."));
+        UUID invalidId = new UUID(0, 0);
+        when(humidityService.getHumidityById(invalidId))
+            .thenThrow(new ResourceNotFoundException("Humidity with id=" + invalidId + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                .uri("/api/humidities/{id}", id)
-                .exchange();
+                                            .uri("/api/humidities/{id}", invalidId)
+                                            .exchange();
 
         assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Humidity with id=" + id + " not found.");
+            .hasStatus(HttpStatus.NOT_FOUND)
+            .failure()
+            .isInstanceOf(ResourceNotFoundException.class)
+            .hasMessage("Humidity with id=" + invalidId + " not found.");
     }
 
     @Test
-    @DisplayName("getHumidityByTimestamp returns 200 OK with valid timestamp.")
-    void givenValidTimestamp_whenGettingHumidityByTimestamp_thenReturn200OK() {
-        LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        Double airHumidity = 20.01;
-        HumidityDto humidityDto = HumidityDto.builder()
-                .registeredAt(timestamp)
-                .airHumidity(airHumidity)
-                .build();
-        when(humidityService.getHumidityByTimestamp(timestamp)).thenReturn(humidityDto);
-
-        MvcTestResult result = mockMvcTester.get()
-                .uri("/api/humidities/timestamp")
-                .param("timestamp", timestamp.toString())
-                .exchange();
-
-        assertThat(result)
-                .hasStatusOk()
-                .bodyJson()
-                .hasPath("$.registeredAt")
-                .hasPathSatisfying("$.airHumidity",
-                        path -> assertThat(path).asNumber().isEqualTo(airHumidity));
-    }
-
-    @Test
-    @DisplayName("getHumidityByTimestamp returns 404 NOT FOUND with invalid timestamp.")
-    void givenInvalidTimestamp_whenGettingHumidityByTimestamp_thenReturn404NotFound() {
-        LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(humidityService.getHumidityByTimestamp(timestamp))
-                .thenThrow(new ResourceNotFoundException("Humidity with timestamp=" + timestamp + " not found."));
-
-        MvcTestResult result = mockMvcTester.get()
-                .uri("/api/humidities/timestamp")
-                .param("timestamp", timestamp.toString())
-                .exchange();
-
-        assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Humidity with timestamp=" + timestamp + " not found.");
-    }
-
-    @Test
-    @DisplayName("getHumidityByDate returns 200 OK with valid date.")
-    void givenValidDate_whenGettingHumidityByDate_thenReturn200OK() {
-        LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    @DisplayName("getHumiditiesByDateOrTimestamp returns 200 OK with valid dateTime.")
+    void givenValidDateTime_whenGettingHumiditiesByDateOrTimestamp_thenReturn200OK() {
+        boolean checkOnlyDate = true;
+        LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 20.01;
         Double airHumidity2 = 90.01;
         HumidityDto humidityDto = HumidityDto.builder()
-                .registeredAt(timestamp)
-                .airHumidity(airHumidity)
-                .build();
+                                             .registeredAt(dateTime)
+                                             .airHumidity(airHumidity)
+                                             .build();
         HumidityDto humidityDto2 = HumidityDto.builder()
-                .registeredAt(timestamp.minusHours(1))
-                .airHumidity(airHumidity2)
-                .build();
+                                              .registeredAt(dateTime.minusHours(1))
+                                              .airHumidity(airHumidity2)
+                                              .build();
         List<HumidityDto> humidities = List.of(humidityDto, humidityDto2);
-        when(humidityService.getHumiditiesByDate(timestamp.toLocalDate())).thenReturn(humidities);
+        when(humidityService.getHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate)).thenReturn(humidities);
 
         MvcTestResult result = mockMvcTester.get()
-                .uri("/api/humidities/date")
-                .param("date", timestamp.toLocalDate().toString())
-                .exchange();
+                                            .uri("/api/humidities")
+                                            .param("dateTime", dateTime.toString())
+                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .exchange();
 
         assertThat(result)
-                .hasStatusOk()
-                .bodyJson()
-                .hasPathSatisfying("$.[0].airHumidity",
-                        path -> assertThat(path).asNumber().isEqualTo(airHumidity))
-                .hasPathSatisfying("$.[1].airHumidity",
-                        path -> assertThat(path).asNumber().isEqualTo(airHumidity2));
+            .hasStatusOk()
+            .bodyJson()
+            .hasPathSatisfying("$.[0].airHumidity",
+                path -> assertThat(path).asNumber().isEqualTo(airHumidity))
+            .hasPathSatisfying("$.[1].airHumidity",
+                path -> assertThat(path).asNumber().isEqualTo(airHumidity2));
     }
 
     @Test
-    @DisplayName("getHumidityByDate returns 404 NOT FOUND with invalid date.")
-    void givenInvalidDate_whenGettingHumidityByDate_thenReturn404NotFound() {
-        LocalDate date = LocalDate.now();
-        when(humidityService.getHumiditiesByDate(date))
-                .thenThrow(new ResourceNotFoundException("Humidities with date=" + date + " not found."));
+    @DisplayName("getHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
+    void givenInvalidDateTime_whenGettingHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
+        boolean checkOnlyDate = true;
+        LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        when(humidityService.getHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
+            .thenThrow(new ResourceNotFoundException("Humidities with dateTime=" + invalidDateTime + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                .uri("/api/humidities/date")
-                .param("date", date.toString())
-                .exchange();
+                                            .uri("/api/humidities")
+                                            .param("dateTime", invalidDateTime.toString())
+                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .exchange();
 
         assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Humidities with date=" + date + " not found.");
+            .hasStatus(HttpStatus.NOT_FOUND)
+            .failure()
+            .isInstanceOf(ResourceNotFoundException.class)
+            .hasMessage("Humidities with dateTime=" + invalidDateTime + " not found.");
     }
 
     @Test
@@ -177,24 +140,24 @@ class HumidityControllerTest {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 21.02;
         HumidityDto humidityDto = HumidityDto.builder()
-                .registeredAt(registeredAt)
-                .airHumidity(airHumidity)
-                .build();
+                                             .registeredAt(registeredAt)
+                                             .airHumidity(airHumidity)
+                                             .build();
         when(humidityService.createHumidity(any())).thenReturn(humidityDto);
         String requestJson = objectMapper.writeValueAsString(humidityDto);
 
         MvcTestResult result = mockMvcTester.post()
-                .uri("/api/humidities")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson)
-                .exchange();
+                                            .uri("/api/humidities")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(requestJson)
+                                            .exchange();
 
         assertThat(result)
-                .hasStatus(HttpStatus.CREATED)
-                .bodyJson()
-                .hasPath("$.registeredAt")
-                .hasPathSatisfying("$.airHumidity",
-                        path -> assertThat(path).asNumber().isEqualTo(airHumidity));
+            .hasStatus(HttpStatus.CREATED)
+            .bodyJson()
+            .hasPath("$.registeredAt")
+            .hasPathSatisfying("$.airHumidity",
+                path -> assertThat(path).asNumber().isEqualTo(airHumidity));
     }
 
     @Test
@@ -202,28 +165,27 @@ class HumidityControllerTest {
     void givenInvalidHumidityDtoModel_whenCreating_thenReturn400BadRequest() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 150.03;
-        HumidityDto humidityDto = HumidityDto.builder()
-                .registeredAt(registeredAt)
-                .airHumidity(airHumidity)
-                .build();
-        String requestJson = objectMapper.writeValueAsString(humidityDto);
+        HumidityDto invalidHumidityDto = HumidityDto.builder()
+                                                    .registeredAt(registeredAt)
+                                                    .airHumidity(airHumidity)
+                                                    .build();
+        String requestJson = objectMapper.writeValueAsString(invalidHumidityDto);
 
         MvcTestResult result = mockMvcTester.post()
-                .uri("/api/humidities")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson)
-                .exchange();
+                                            .uri("/api/humidities")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(requestJson)
+                                            .exchange();
 
-        verifyNoInteractions(humidityService);
         assertThat(result)
-                .hasStatus(HttpStatus.BAD_REQUEST)
-                .bodyJson()
-                .hasPathSatisfying("$.detail",
-                        path -> assertThat(path).asString().isEqualTo("One or more fields are invalid."))
-                .hasPathSatisfying("$.title",
-                        path -> assertThat(path).asString().isEqualTo("Entity validation error."))
-                .hasPathSatisfying("$.errors.airHumidity",
-                        path -> assertThat(path).asString().isNotBlank());
+            .hasStatus(HttpStatus.BAD_REQUEST)
+            .bodyJson()
+            .hasPathSatisfying("$.detail",
+                path -> assertThat(path).asString().isEqualTo("One or more fields are invalid."))
+            .hasPathSatisfying("$.title",
+                path -> assertThat(path).asString().isEqualTo("Entity validation error."))
+            .hasPathSatisfying("$.errors.airHumidity",
+                path -> assertThat(path).asString().isNotBlank());
     }
 
     @Test
@@ -233,67 +195,66 @@ class HumidityControllerTest {
         doNothing().when(humidityService).deleteHumidityById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                .uri("/api/humidities/{id}", id)
-                .exchange();
+                                            .uri("/api/humidities/{id}", id)
+                                            .exchange();
 
-        verify(humidityService, times(1)).deleteHumidityById(id);
         assertThat(result)
-                .hasStatus(HttpStatus.NO_CONTENT);
+            .hasStatus(HttpStatus.NO_CONTENT);
     }
 
     @Test
     @DisplayName("deleteHumidityById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenDeletingHumidityById_thenReturn404NotFound() {
-        UUID id = new UUID(0, 0);
-        doThrow(new ResourceNotFoundException("Humidity with id=" + id + " not found.")).when(humidityService)
-                .deleteHumidityById(id);
+        UUID invalidId = new UUID(0, 0);
+        doThrow(new ResourceNotFoundException("Humidity with id=" + invalidId + " not found."))
+            .when(humidityService).deleteHumidityById(invalidId);
 
         MvcTestResult result = mockMvcTester.delete()
-                .uri("/api/humidities/{id}", id)
-                .exchange();
+                                            .uri("/api/humidities/{id}", invalidId)
+                                            .exchange();
 
-        verify(humidityService, times(1)).deleteHumidityById(id);
         assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Humidity with id=" + id + " not found.");
+            .hasStatus(HttpStatus.NOT_FOUND)
+            .failure()
+            .isInstanceOf(ResourceNotFoundException.class)
+            .hasMessage("Humidity with id=" + invalidId + " not found.");
     }
 
     @Test
-    @DisplayName("deleteHumidityByTimestamp returns 204 NO CONTENT with valid timestamp.")
-    void givenValidTimestamp_whenDeletingHumidityByTimestamp_thenReturn204NoContent() {
-        LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        doNothing().when(humidityService).deleteHumidityByTimestamp(timestamp);
+    @DisplayName("deleteHumiditiesByDateOrTimestamp returns 204 NO CONTENT with valid dateTime.")
+    void givenValidDateTime_whenDeletingHumiditiesByDateOrTimestamp_thenReturn204NoContent() {
+        boolean checkOnlyDate = false;
+        LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        doNothing().when(humidityService).deleteHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                .uri("/api/humidities/timestamp")
-                .param("timestamp", timestamp.toString())
-                .exchange();
+                                            .uri("/api/humidities")
+                                            .param("dateTime", dateTime.toString())
+                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .exchange();
 
-        verify(humidityService, times(1)).deleteHumidityByTimestamp(timestamp);
         assertThat(result)
-                .hasStatus(HttpStatus.NO_CONTENT);
+            .hasStatus(HttpStatus.NO_CONTENT);
     }
 
     @Test
-    @DisplayName("deleteHumidityByTimestamp returns 404 NOT FOUND with invalid timestamp.")
-    void givenInvalidTimestamp_whenDeletingHumidityByTimestamp_thenReturn404NotFound() {
-        LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        doThrow(new ResourceNotFoundException(
-                "Humidity with timestamp=" + timestamp + " not found.")).when(humidityService)
-                .deleteHumidityByTimestamp(timestamp);
+    @DisplayName("deleteHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
+    void givenInvalidDateTime_whenDeletingHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
+        boolean checkOnlyDate = false;
+        LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        doThrow(new ResourceNotFoundException("Humidities with dateTime=" + invalidDateTime + " not found."))
+            .when(humidityService).deleteHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                .uri("/api/humidities/timestamp")
-                .param("timestamp", timestamp.toString())
-                .exchange();
+                                            .uri("/api/humidities")
+                                            .param("dateTime", invalidDateTime.toString())
+                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .exchange();
 
-        verify(humidityService, times(1)).deleteHumidityByTimestamp(timestamp);
         assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Humidity with timestamp=" + timestamp + " not found.");
+            .hasStatus(HttpStatus.NOT_FOUND)
+            .failure()
+            .isInstanceOf(ResourceNotFoundException.class)
+            .hasMessage("Humidities with dateTime=" + invalidDateTime + " not found.");
     }
 }

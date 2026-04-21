@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.api.BatteryApi;
 import api.arduinothermohygrometer.dto.BatteryDto;
-import api.arduinothermohygrometer.dto.DateTimeRequest;
 import api.arduinothermohygrometer.service.BatteryService;
 
 @RestController
@@ -27,8 +27,8 @@ public class BatteryController implements BatteryApi {
     }
 
     @Override
-    public ResponseEntity<List<BatteryDto>> getBatteriesByDateOrTimestamp(final DateTimeRequest dateTimeRequest) {
-        List<BatteryDto> batteryDtos = batteryService.getBatteriesByDateOrTimestamp(dateTimeRequest);
+    public ResponseEntity<List<BatteryDto>> getBatteriesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
+        List<BatteryDto> batteryDtos = batteryService.getBatteriesByDateOrTimestamp(dateTime, checkOnlyDate);
         return new ResponseEntity<>(batteryDtos, HttpStatus.OK);
     }
 
@@ -45,8 +45,8 @@ public class BatteryController implements BatteryApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteBatteriesByDateOrTimestamp(final DateTimeRequest dateTimeRequest) {
-        batteryService.deleteBatteriesByDateOrTimestamp(dateTimeRequest);
+    public ResponseEntity<Void> deleteBatteriesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
+        batteryService.deleteBatteriesByDateOrTimestamp(dateTime, checkOnlyDate);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

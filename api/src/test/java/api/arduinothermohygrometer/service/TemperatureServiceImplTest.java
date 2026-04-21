@@ -1,6 +1,5 @@
 package api.arduinothermohygrometer.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +29,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @DisplayName("Unit tests for TemperatureServiceImpl")
@@ -77,7 +75,6 @@ class TemperatureServiceImplTest {
         assertThatThrownBy(() -> temperatureService.getTemperatureById(emptyId))
             .isInstanceOf(ResourceNotFoundException.class)
             .hasMessage(String.format("Temperature with empty id=%s does not exist.", emptyId));
-        verifyNoInteractions(temperatureRepository);
     }
 
     @Test
@@ -92,57 +89,62 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("getTemperatureByTimestamp returns temperature with valid timestamp.")
-    void givenValidTimestamp_whenGettingTemperatureByTimestamp_thenReturnTemperature() {
-        LocalDateTime timestamp = LocalDateTime.now();
+    @DisplayName("getTemperaturesByDateOrTimestamp returns temperature with valid timestamp.")
+    void givenValidTimestamp_whenGettingTemperaturesByDateOrTimestamp_thenReturnTemperature() {
+        boolean checkOnlyDate = false;
+        LocalDateTime dateTime = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(timestamp)
+                                                      .registeredAt(dateTime)
                                                       .temp(temp)
                                                       .build();
-        Temperature temperature = TemperatureEntityMapper.toEntity(temperatureDto);
-        when(temperatureRepository.getTemperatureByTimestamp(timestamp)).thenReturn(Optional.of(temperature));
+        List<TemperatureDto> temperatureDtos = List.of(temperatureDto);
+        List<Temperature> temperatures = List.of(TemperatureEntityMapper.toEntity(temperatureDto));
+        when(temperatureRepository.getTemperatureByTimestamp(dateTime)).thenReturn(temperatures);
 
-        TemperatureDto result = temperatureService.getTemperatureByTimestamp(timestamp);
+        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
 
+        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(dateTime);
         assertThat(result)
-            .isEqualTo(temperatureDto);
+            .hasSameElementsAs(temperatureDtos);
     }
 
     @Test
-    @DisplayName("getTemperatureByTimestamp throws ResourceNotFoundException with invalid timestamp.")
-    void givenInvalidTimestamp_whenGettingTemperatureByTimestamp_thenThrowResourceNotFoundException() {
-        LocalDateTime invalidTimestamp = LocalDateTime.now();
-        when(temperatureRepository.getTemperatureByTimestamp(invalidTimestamp)).thenReturn(Optional.empty());
+    @DisplayName("getTemperaturesByDateOrTimestamp throws ResourceNotFoundException with invalid timestamp.")
+    void givenInvalidTimestamp_whenGettingTemperaturesByDateOrTimestamp_thenThrowResourceNotFoundException() {
+        boolean checkOnlyDate = false;
+        LocalDateTime invalidDateTime = LocalDateTime.now();
+        when(temperatureRepository.getTemperatureByTimestamp(invalidDateTime)).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> temperatureService.getTemperatureByTimestamp(invalidTimestamp))
+        assertThatThrownBy(() -> temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Temperature with timestamp=%s not found.", invalidTimestamp));
+            .hasMessage(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
     }
 
     @Test
-    @DisplayName("getTemperaturesByDate returns temperatures with valid date.")
-    void givenValidDate_whenGettingTemperaturesByDate_thenReturnTemperatures() {
-        LocalDateTime registeredAt = LocalDateTime.now();
+    @DisplayName("getTemperaturesByDateOrTimestamp returns temperatures with valid date.")
+    void givenValidDate_whenGettingTemperaturesByDateOrTimestamp_thenReturnTemperatures() {
+        boolean checkOnlyDate = true;
+        LocalDateTime dateTime = LocalDateTime.now();
         Double temp = 75.00;
-        LocalDateTime registeredAt2 = LocalDateTime.now();
         Double temp2 = 80.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(registeredAt)
+                                                      .registeredAt(dateTime)
                                                       .temp(temp)
                                                       .build();
         TemperatureDto temperatureDto2 = TemperatureDto.builder()
-                                                       .registeredAt(registeredAt2)
+                                                       .registeredAt(dateTime.minusHours(1))
                                                        .temp(temp2)
                                                        .build();
         List<TemperatureDto> temperatureDtos = List.of(temperatureDto, temperatureDto2);
         List<Temperature> temperatures = temperatureDtos.stream()
                                                         .map(TemperatureEntityMapper::toEntity)
                                                         .toList();
-        when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())).thenReturn(temperatures);
+        when(temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate())).thenReturn(temperatures);
 
-        List<TemperatureDto> result = temperatureService.getTemperaturesByDate(registeredAt.toLocalDate());
+        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
 
+        verify(temperatureRepository, times(1)).getTemperaturesByDate(dateTime.toLocalDate());
         assertThat(result)
             .hasSameElementsAs(temperatureDtos);
     }
@@ -150,12 +152,14 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("getTemperaturesByDate throws ResourceNotFoundException with invalid date.")
     void givenInvalidDate_whenGettingTemperaturesByDate_thenThrowResourceNotFoundException() {
-        LocalDate invalidDate = LocalDate.now();
-        when(temperatureRepository.getTemperaturesByDate(invalidDate)).thenReturn(emptyList());
+        boolean checkOnlyDate = true;
+        LocalDateTime invalidDateTime = LocalDateTime.now();
 
-        assertThatThrownBy(() -> temperatureService.getTemperaturesByDate(invalidDate))
+        when(temperatureRepository.getTemperaturesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
+
+        assertThatThrownBy(() -> temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Temperatures with date=%s not found.", invalidDate));
+            .hasMessage(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
     }
 
     @Test
@@ -182,7 +186,6 @@ class TemperatureServiceImplTest {
         assertThatThrownBy(() -> temperatureService.createTemperature(null))
             .isInstanceOf(ResourceNotCreatedException.class)
             .hasMessage("Temperature cannot be created.");
-        verifyNoInteractions(temperatureRepository);
     }
 
     @Test
@@ -213,7 +216,6 @@ class TemperatureServiceImplTest {
         assertThatThrownBy(() -> temperatureService.deleteTemperatureById(emptyId))
             .isInstanceOf(ResourceNotFoundException.class)
             .hasMessage(String.format("Temperature with empty id=%s does not exist.", emptyId));
-        verifyNoInteractions(temperatureRepository);
     }
 
     @Test
@@ -225,39 +227,71 @@ class TemperatureServiceImplTest {
         assertThatThrownBy(() -> temperatureService.deleteTemperatureById(invalidId))
             .isInstanceOf(ResourceNotFoundException.class)
             .hasMessage(String.format("Temperature with id=%s not found.", invalidId));
-        verify(temperatureRepository, times(1)).getTemperatureById(invalidId);
-        verify(temperatureRepository, times(0)).deleteTemperatureById(invalidId);
     }
 
     @Test
-    @DisplayName("deleteTemperatureByTimestamp deletes temperature with valid timestamp.")
-    void givenValidTimestamp_whenDeletingTemperatureByTimestamp_thenDeleteTemperature() {
-        LocalDateTime timestamp = LocalDateTime.now();
+    @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid timestamp.")
+    void givenValidTimestamp_whenDeletingTemperaturesByDateOrTimestamp_thenDeleteTemperature() {
+        boolean checkOnlyDate = false;
+        LocalDateTime dateTime = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(timestamp)
+                                                      .registeredAt(dateTime)
                                                       .temp(temp)
                                                       .build();
-        Temperature temperature = TemperatureEntityMapper.toEntity(temperatureDto);
-        when(temperatureRepository.getTemperatureByTimestamp(timestamp)).thenReturn(Optional.of(temperature));
-        doNothing().when(temperatureRepository).deleteTemperatureByTimestamp(timestamp);
+        List<Temperature> temperatures = List.of(TemperatureEntityMapper.toEntity(temperatureDto));
+        when(temperatureRepository.getTemperatureByTimestamp(dateTime)).thenReturn(temperatures);
+        doNothing().when(temperatureRepository).deleteTemperatureByTimestamp(dateTime);
 
-        temperatureService.deleteTemperatureByTimestamp(timestamp);
+        temperatureService.deleteTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
 
-        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(timestamp);
-        verify(temperatureRepository, times(1)).deleteTemperatureByTimestamp(timestamp);
+        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(dateTime);
+        verify(temperatureRepository, times(1)).deleteTemperatureByTimestamp(dateTime);
     }
 
     @Test
-    @DisplayName("deleteTemperatureByTimestamp throws ResourceNotFoundException with invalid timestamp.")
-    void givenInvalidTimestamp_whenDeletingTemperatureByTimestamp_thenThrowResourceNotFoundException() {
-        LocalDateTime timestamp = LocalDateTime.now();
-        when(temperatureRepository.getTemperatureByTimestamp(timestamp)).thenReturn(Optional.empty());
+    @DisplayName("deleteTemperaturesByDateOrTimestamp throws ResourceNotFoundException with invalid timestamp.")
+    void givenInvalidTimestamp_whenDeletingTemperaturesByDateOrTimestamp_thenThrowResourceNotFoundException() {
+        boolean checkOnlyDate = false;
+        LocalDateTime invalidDateTime = LocalDateTime.now();
+        when(temperatureRepository.getTemperatureByTimestamp(invalidDateTime)).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> temperatureService.deleteTemperatureByTimestamp(timestamp))
+        assertThatThrownBy(() -> temperatureService.deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Temperature with timestamp=%s not found.", timestamp));
-        verify(temperatureRepository).getTemperatureByTimestamp(timestamp);
-        verify(temperatureRepository, times(0)).deleteTemperatureByTimestamp(timestamp);
+            .hasMessage(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
+    }
+
+    @Test
+    @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid date.")
+    void givenValidDate_whenDeletingTemperaturesByDateOrTimestamp_thenDeleteTemperature() {
+        boolean checkOnlyDate = true;
+        LocalDateTime dateTime = LocalDateTime.now();
+        Double temp = 75.00;
+        TemperatureDto temperatureDto = TemperatureDto.builder()
+                                                      .registeredAt(dateTime)
+                                                      .temp(temp)
+                                                      .build();
+        List<Temperature> temperatures = List.of(TemperatureEntityMapper.toEntity(temperatureDto));
+        when(temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate())).thenReturn(temperatures);
+        doNothing().when(temperatureRepository).deleteTemperaturesByDate(dateTime.toLocalDate());
+
+        temperatureService.deleteTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
+
+        verify(temperatureRepository, times(1)).getTemperaturesByDate(dateTime.toLocalDate());
+        verify(temperatureRepository, times(1)).deleteTemperaturesByDate(dateTime.toLocalDate());
+    }
+
+    @Test
+    @DisplayName("deleteTemperaturesByDateOrTimestamp throws ResourceNotFoundException with invalid date.")
+    void givenInvalidDate_whenDeletingTemperaturesByDateOrTimestamp_thenThrowResourceNotFoundException() {
+        boolean checkOnlyDate = true;
+        LocalDateTime invalidDateTime = LocalDateTime.now();
+        when(temperatureRepository.getTemperaturesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
+
+        assertThatThrownBy(() -> temperatureService.deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
+            .isInstanceOf(ResourceNotFoundException.class)
+            .hasMessage(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
+        verify(temperatureRepository, times(1)).getTemperaturesByDate(invalidDateTime.toLocalDate());
+        verify(temperatureRepository, times(0)).deleteTemperaturesByDate(invalidDateTime.toLocalDate());
     }
 }

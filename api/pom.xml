@@ -318,6 +318,11 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <systemPropertyVariables>
+            <spring.profiles.active>test</spring.profiles.active>
+          </systemPropertyVariables>
+        </configuration>
       </plugin>
 
       <!-- OpenAPI Generator -->
@@ -363,6 +368,7 @@
               <typeMappings>
                 <typeMapping>DateTime=LocalDateTime</typeMapping>
                 <typeMapping>Date=LocalDate</typeMapping>
+                <typeMapping>Boolean=boolean</typeMapping>
               </typeMappings>
               <importMappings>
                 <importMapping>LocalDateTime=java.time.LocalDateTime</importMapping>

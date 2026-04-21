@@ -1,8 +1,6 @@
 package api.arduinothermohygrometer.service.implementation;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,8 +19,9 @@ import api.arduinothermohygrometer.service.HumidityService;
 
 @Service
 public class HumidityServiceImpl implements HumidityService {
-    private static final String ID_NOT_FOUND_EXCEPTION = "Humidity with id=%s not found.";
+    private static final String ID_NOT_FOUND = "Humidity with id=%s not found.";
     private static final String EMPTY_ID_NOT_FOUND = "Humidity with empty id=%s does not exist.";
+    private static final String DATETIME_NOT_FOUND = "Humidities with dateTime=%s not found.";
     private static final UUID EMPTY_UUID = new UUID(0, 0);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HumidityServiceImpl.class);
@@ -34,7 +33,7 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public HumidityDto getHumidityById(UUID id) throws ResourceNotFoundException {
+    public HumidityDto getHumidityById(final UUID id) throws ResourceNotFoundException {
         LOGGER.info("Retrieving Humidity with id={}.", id);
 
         if (EMPTY_UUID.equals(id)) {
@@ -45,7 +44,7 @@ public class HumidityServiceImpl implements HumidityService {
         Optional<Humidity> humidity = humidityRepository.getHumidityById(id);
         if (humidity.isEmpty()) {
             LOGGER.warn("Humidity with id={} not found.", id);
-            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND_EXCEPTION, id));
+            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
         }
 
         HumidityDto humidityDto = HumidityEntityMapper.toDto(humidity.get());
@@ -55,42 +54,33 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public HumidityDto getHumidityByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException {
-        LOGGER.info("Retrieving Humidity with timestamp={}.", timestamp);
+    public List<HumidityDto> getHumiditiesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) throws ResourceNotFoundException {
+        LOGGER.info("Retrieving humidities with dateTime={}.", dateTime);
 
-        Optional<Humidity> humidity = humidityRepository.getHumidityByTimestamp(timestamp);
-        if (humidity.isEmpty()) {
-            LOGGER.warn("Humidity with timestamp={} not found.", timestamp);
-            throw new ResourceNotFoundException(String.format("Humidity with timestamp=%s not found.", timestamp));
+        List<Humidity> humidities;
+        if (checkOnlyDate) {
+            LOGGER.info("Humidities to retrieve with date={}", dateTime.toLocalDate());
+            humidities = humidityRepository.getHumiditiesByDate(dateTime.toLocalDate());
+        } else {
+            LOGGER.info("Humidity to retrieve with timestamp={}", dateTime);
+            humidities = humidityRepository.getHumidityByTimestamp(dateTime);
         }
 
-        HumidityDto humidityDto = HumidityEntityMapper.toDto(humidity.get());
-        LOGGER.info("Humidity with timestamp={} retrieved.", timestamp);
-
-        return humidityDto;
-    }
-
-    @Override
-    public List<HumidityDto> getHumiditiesByDate(LocalDate date) {
-        LOGGER.info("Retrieving temperatures with date={}.", date);
-
-        List<Humidity> humidities = Optional.ofNullable(humidityRepository.getHumiditiesByDate(date))
-                                            .orElse(Collections.emptyList());
         if (humidities.isEmpty()) {
-            LOGGER.warn("Humidities with date={} not found.", date);
-            throw new ResourceNotFoundException(String.format("Humidities with date=%s not found.", date));
+            LOGGER.warn("Humidities with dateTime={} not found.", dateTime);
+            throw new ResourceNotFoundException(String.format(DATETIME_NOT_FOUND, dateTime));
         }
 
         List<HumidityDto> humidityDtos = humidities.stream()
                                                    .map(HumidityEntityMapper::toDto)
                                                    .toList();
-        LOGGER.info("Humidities with date={} retrieved.", date);
+        LOGGER.info("Humidities with dateTime={} retrieved.", dateTime);
 
         return humidityDtos;
     }
 
     @Override
-    public HumidityDto createHumidity(HumidityDto humidityDto) throws ResourceNotCreatedException {
+    public HumidityDto createHumidity(final HumidityDto humidityDto) throws ResourceNotCreatedException {
         LOGGER.info("Creating Humidity.");
 
         if (humidityDto == null) {
@@ -106,7 +96,7 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public void deleteHumidityById(UUID id) throws ResourceNotFoundException {
+    public void deleteHumidityById(final UUID id) throws ResourceNotFoundException {
         LOGGER.info("Deleting Humidity with id={}.", id);
 
         if (EMPTY_UUID.equals(id)) {
@@ -117,7 +107,7 @@ public class HumidityServiceImpl implements HumidityService {
         Optional<Humidity> humidity = humidityRepository.getHumidityById(id);
         if (humidity.isEmpty()) {
             LOGGER.warn("Humidity with id={} not deleted.", id);
-            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND_EXCEPTION, id));
+            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
         }
 
         humidityRepository.deleteHumidityById(id);
@@ -125,16 +115,29 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public void deleteHumidityByTimestamp(LocalDateTime timestamp) throws ResourceNotFoundException {
-        LOGGER.info("Deleting Humidity with timestamp={}.", timestamp);
+    public void deleteHumiditiesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) throws ResourceNotFoundException {
+        LOGGER.info("Deleting humidities with dateTime={}.", dateTime);
 
-        Optional<Humidity> humidity = humidityRepository.getHumidityByTimestamp(timestamp);
-        if (humidity.isEmpty()) {
-            LOGGER.warn("Humidity with timestamp={} not deleted.", timestamp);
-            throw new ResourceNotFoundException(String.format("Humidity with timestamp=%s not found.", timestamp));
+        List<Humidity> humidities;
+        if (checkOnlyDate) {
+            LOGGER.info("Humidities to delete with date={}.", dateTime.toLocalDate());
+            humidities = humidityRepository.getHumiditiesByDate(dateTime.toLocalDate());
+        } else {
+            LOGGER.info("Humidity to delete with timestamp={}", dateTime);
+            humidities = humidityRepository.getHumidityByTimestamp(dateTime);
         }
 
-        humidityRepository.deleteHumidityByTimestamp(timestamp);
-        LOGGER.info("Humidity with timestamp={} deleted.", timestamp);
+        if (humidities.isEmpty()) {
+            LOGGER.warn("Humidities with dateTime={} not found.", dateTime);
+            throw new ResourceNotFoundException(String.format(DATETIME_NOT_FOUND, dateTime));
+        }
+
+        if (checkOnlyDate) {
+            LOGGER.info("Humidities with date={} deleted.", dateTime.toLocalDate());
+            humidityRepository.deleteHumiditiesByDate(dateTime.toLocalDate());
+        } else {
+            LOGGER.info("Humidity with timestamp={} deleted.", dateTime);
+            humidityRepository.deleteHumidityByTimestamp(dateTime);
+        }
     }
 }

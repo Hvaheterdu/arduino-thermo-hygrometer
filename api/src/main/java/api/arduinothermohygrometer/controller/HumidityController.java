@@ -1,5 +1,6 @@
 package api.arduinothermohygrometer.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.api.HumidityApi;
-import api.arduinothermohygrometer.dto.DateTimeRequest;
 import api.arduinothermohygrometer.dto.HumidityDto;
 import api.arduinothermohygrometer.service.HumidityService;
 
@@ -27,8 +27,8 @@ public class HumidityController implements HumidityApi {
     }
 
     @Override
-    public ResponseEntity<List<HumidityDto>> getHumiditiesByDateOrTimestamp(final DateTimeRequest dateTimeRequest) {
-        List<HumidityDto> humidityDtos = humidityService.getHumiditiesByDateOrTimestamp(dateTimeRequest);
+    public ResponseEntity<List<HumidityDto>> getHumiditiesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
+        List<HumidityDto> humidityDtos = humidityService.getHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate);
         return new ResponseEntity<>(humidityDtos, HttpStatus.OK);
     }
 
@@ -45,8 +45,8 @@ public class HumidityController implements HumidityApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteHumiditiesByDateOrTimestamp(final DateTimeRequest dateTimeRequest) {
-        humidityService.deleteHumiditiesByDateOrTimestamp(dateTimeRequest);
+    public ResponseEntity<Void> deleteHumiditiesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
+        humidityService.deleteHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
