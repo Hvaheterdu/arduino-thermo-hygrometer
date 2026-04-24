@@ -22,7 +22,7 @@ import static java.util.Collections.emptyList;
 @Service
 public class BatteryServiceImpl implements BatteryService {
     private static final String ID_NOT_FOUND = "Battery with id=%s not found.";
-    private static final String DATETIME_NOT_FOUND = "Batteries with dateTime=%s not found.";
+    private static final String DATETIME_NOT_FOUND = "Batteries with dateTime={} not found.";
 
     private final BatteryRepository batteryRepository;
 
@@ -34,16 +34,11 @@ public class BatteryServiceImpl implements BatteryService {
     public BatteryDto getBatteryById(final UUID id) throws ResourceNotFoundException {
         log.info("Retrieving battery with id={}.", id);
 
-        Optional<Battery> battery = batteryRepository.getBatteryById(id);
-        if (battery.isEmpty()) {
-            log.warn(String.format(ID_NOT_FOUND, id));
-            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
-        }
+        Battery battery = batteryRepository.getBatteryById(id)
+                                           .orElseThrow(() -> new ResourceNotFoundException(String.format(ID_NOT_FOUND, id)));
 
-        BatteryDto batteryDto = BatteryModelMapper.toDto(battery.get());
         log.info("Battery with id={} retrieved.", id);
-
-        return batteryDto;
+        return BatteryModelMapper.toDto(battery);
     }
 
     @Override
@@ -55,7 +50,7 @@ public class BatteryServiceImpl implements BatteryService {
             : batteryRepository.getBatteryByTimestamp(dateTime);
 
         if (batteries.isEmpty()) {
-            log.info(String.format(DATETIME_NOT_FOUND, dateTime));
+            log.info(DATETIME_NOT_FOUND, dateTime);
             return emptyList();
         }
 
@@ -70,7 +65,6 @@ public class BatteryServiceImpl implements BatteryService {
         log.info("Creating battery.");
 
         if (batteryDto == null) {
-            log.warn("Battery cannot be created.");
             throw new ResourceNotCreatedException("Battery cannot be created.");
         }
 
@@ -87,7 +81,6 @@ public class BatteryServiceImpl implements BatteryService {
 
         Optional<Battery> battery = batteryRepository.getBatteryById(id);
         if (battery.isEmpty()) {
-            log.warn(String.format(ID_NOT_FOUND, id));
             throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
         }
 
@@ -104,7 +97,7 @@ public class BatteryServiceImpl implements BatteryService {
             : batteryRepository.getBatteryByTimestamp(dateTime);
 
         if (batteries.isEmpty()) {
-            log.info("Batteries with dateTime={} not found.", dateTime);
+            log.info(DATETIME_NOT_FOUND, dateTime);
             return;
         }
 

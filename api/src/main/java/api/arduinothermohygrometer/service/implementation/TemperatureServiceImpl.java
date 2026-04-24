@@ -22,7 +22,7 @@ import static java.util.Collections.emptyList;
 @Service
 public class TemperatureServiceImpl implements TemperatureService {
     private static final String ID_NOT_FOUND = "Temperature with id=%s not found.";
-    private static final String DATETIME_NOT_FOUND = "Temperatures with dateTime=%s not found.";
+    private static final String DATETIME_NOT_FOUND = "Temperatures with dateTime={} not found.";
 
     private final TemperatureRepository temperatureRepository;
 
@@ -34,16 +34,12 @@ public class TemperatureServiceImpl implements TemperatureService {
     public TemperatureDto getTemperatureById(final UUID id) throws ResourceNotFoundException {
         log.info("Retrieving Temperature with id={}.", id);
 
-        Optional<Temperature> temperature = temperatureRepository.getTemperatureById(id);
-        if (temperature.isEmpty()) {
-            log.warn(String.format(ID_NOT_FOUND, id));
-            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
-        }
+        Temperature temperature =
+            temperatureRepository.getTemperatureById(id)
+                                 .orElseThrow(() -> new ResourceNotFoundException(String.format(ID_NOT_FOUND, id)));
 
-        TemperatureDto temperatureDto = TemperatureModelMapper.toDto(temperature.get());
         log.info("Temperature with id={} retrieved.", id);
-
-        return temperatureDto;
+        return TemperatureModelMapper.toDto(temperature);
     }
 
     @Override
@@ -55,7 +51,7 @@ public class TemperatureServiceImpl implements TemperatureService {
             : temperatureRepository.getTemperatureByTimestamp(dateTime);
 
         if (temperatures.isEmpty()) {
-            log.info(String.format(DATETIME_NOT_FOUND, dateTime));
+            log.info(DATETIME_NOT_FOUND, dateTime);
             return emptyList();
         }
 
@@ -70,7 +66,6 @@ public class TemperatureServiceImpl implements TemperatureService {
         log.info("Creating Temperature.");
 
         if (temperatureDto == null) {
-            log.warn("Temperature cannot be created.");
             throw new ResourceNotCreatedException("Temperature cannot be created.");
         }
 
@@ -87,7 +82,6 @@ public class TemperatureServiceImpl implements TemperatureService {
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureById(id);
         if (temperature.isEmpty()) {
-            log.warn(String.format(ID_NOT_FOUND, id));
             throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
         }
 
@@ -104,7 +98,7 @@ public class TemperatureServiceImpl implements TemperatureService {
             : temperatureRepository.getTemperatureByTimestamp(dateTime);
 
         if (temperatures.isEmpty()) {
-            log.info(String.format(DATETIME_NOT_FOUND, dateTime));
+            log.info(DATETIME_NOT_FOUND, dateTime);
             return;
         }
 

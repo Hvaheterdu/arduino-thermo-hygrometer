@@ -22,7 +22,7 @@ import static java.util.Collections.emptyList;
 @Service
 public class HumidityServiceImpl implements HumidityService {
     private static final String ID_NOT_FOUND = "Humidity with id=%s not found.";
-    private static final String DATETIME_NOT_FOUND = "Humidities with dateTime=%s not found.";
+    private static final String DATETIME_NOT_FOUND = "Humidities with dateTime={} not found.";
 
     private final HumidityRepository humidityRepository;
 
@@ -34,16 +34,12 @@ public class HumidityServiceImpl implements HumidityService {
     public HumidityDto getHumidityById(final UUID id) throws ResourceNotFoundException {
         log.info("Retrieving Humidity with id={}.", id);
 
-        Optional<Humidity> humidity = humidityRepository.getHumidityById(id);
-        if (humidity.isEmpty()) {
-            log.warn(String.format(DATETIME_NOT_FOUND, id));
-            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
-        }
+        Humidity humidity =
+            humidityRepository.getHumidityById(id)
+                              .orElseThrow(() -> new ResourceNotFoundException(String.format(ID_NOT_FOUND, id)));
 
-        HumidityDto humidityDto = HumidityModelMapper.toDto(humidity.get());
         log.info("Humidity with id={} retrieved.", id);
-
-        return humidityDto;
+        return HumidityModelMapper.toDto(humidity);
     }
 
     @Override
@@ -55,7 +51,7 @@ public class HumidityServiceImpl implements HumidityService {
             : humidityRepository.getHumidityByTimestamp(dateTime);
 
         if (humidities.isEmpty()) {
-            log.info(String.format(DATETIME_NOT_FOUND, dateTime));
+            log.info(DATETIME_NOT_FOUND, dateTime);
             return emptyList();
         }
 
@@ -70,7 +66,6 @@ public class HumidityServiceImpl implements HumidityService {
         log.info("Creating Humidity.");
 
         if (humidityDto == null) {
-            log.warn("Humidity cannot be created.");
             throw new ResourceNotCreatedException("Humidity cannot be created.");
         }
 
@@ -87,7 +82,6 @@ public class HumidityServiceImpl implements HumidityService {
 
         Optional<Humidity> humidity = humidityRepository.getHumidityById(id);
         if (humidity.isEmpty()) {
-            log.warn(String.format(ID_NOT_FOUND, id));
             throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
         }
 
@@ -104,7 +98,7 @@ public class HumidityServiceImpl implements HumidityService {
             : humidityRepository.getHumidityByTimestamp(dateTime);
 
         if (humidities.isEmpty()) {
-            log.info(String.format(DATETIME_NOT_FOUND, dateTime));
+            log.info(DATETIME_NOT_FOUND, dateTime);
             return;
         }
 
