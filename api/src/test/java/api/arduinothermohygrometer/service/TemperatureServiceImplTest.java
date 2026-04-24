@@ -13,6 +13,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
@@ -32,7 +34,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @DisplayName("Unit tests for TemperatureServiceImpl")
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 class TemperatureServiceImplTest {
     @Mock
     private TemperatureRepository temperatureRepository;
@@ -110,15 +112,17 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDateOrTimestamp throws ResourceNotFoundException with invalid timestamp.")
-    void givenInvalidTimestamp_whenGettingTemperaturesByDateOrTimestamp_thenThrowResourceNotFoundException() {
+    @DisplayName("getTemperaturesByDateOrTimestamp returns empty list with invalid timestamp.")
+    void givenInvalidTimestamp_whenGettingTemperaturesByDateOrTimestamp_thenReturnEmptyList() {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(temperatureRepository.getTemperatureByTimestamp(invalidDateTime)).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
+        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+
+        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(invalidDateTime);
+        assertThat(result)
+            .isEmpty();
     }
 
     @Test
@@ -150,16 +154,17 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDate throws ResourceNotFoundException with invalid date.")
-    void givenInvalidDate_whenGettingTemperaturesByDate_thenThrowResourceNotFoundException() {
+    @DisplayName("getTemperaturesByDate returns empty list with invalid date.")
+    void givenInvalidDate_whenGettingTemperaturesByDate_thenReturnEmptyList() {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
-
         when(temperatureRepository.getTemperaturesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
+        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+
+        verify(temperatureRepository, times(1)).getTemperaturesByDate(invalidDateTime.toLocalDate());
+        assertThat(result)
+            .isEmpty();
     }
 
     @Test
@@ -231,7 +236,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid timestamp.")
-    void givenValidTimestamp_whenDeletingTemperaturesByDateOrTimestamp_thenDeleteTemperature() {
+    void givenValidTimestamp_whenDeletingTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now();
         Double temp = 75.00;
@@ -247,23 +252,28 @@ class TemperatureServiceImplTest {
 
         verify(temperatureRepository, times(1)).getTemperatureByTimestamp(dateTime);
         verify(temperatureRepository, times(1)).deleteTemperatureByTimestamp(dateTime);
+        assertThat(capturedOutput)
+            .contains(String.format("Deleted temperature with timestamp=%s.", temperatures.getFirst().getRegisteredAt()));
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp throws ResourceNotFoundException with invalid timestamp.")
-    void givenInvalidTimestamp_whenDeletingTemperaturesByDateOrTimestamp_thenThrowResourceNotFoundException() {
+    @DisplayName("deleteTemperaturesByDateOrTimestamp returns with invalid timestamp.")
+    void givenInvalidTimestamp_whenDeletingTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(temperatureRepository.getTemperatureByTimestamp(invalidDateTime)).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> temperatureService.deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
+        temperatureService.deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+
+        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(invalidDateTime);
+        verify(temperatureRepository, times(0)).deleteTemperatureByTimestamp(invalidDateTime);
+        assertThat(capturedOutput)
+            .contains(String.format("No temperatures with dateTime=%s found for deletion.", invalidDateTime));
     }
 
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid date.")
-    void givenValidDate_whenDeletingTemperaturesByDateOrTimestamp_thenDeleteTemperature() {
+    void givenValidDate_whenDeletingTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now();
         Double temp = 75.00;
@@ -279,19 +289,22 @@ class TemperatureServiceImplTest {
 
         verify(temperatureRepository, times(1)).getTemperaturesByDate(dateTime.toLocalDate());
         verify(temperatureRepository, times(1)).deleteTemperaturesByDate(dateTime.toLocalDate());
+        assertThat(capturedOutput)
+            .contains(String.format("Deleted temperatures with date=%s.", temperatures.getFirst().getRegisteredAt().toLocalDate()));
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp throws ResourceNotFoundException with invalid date.")
-    void givenInvalidDate_whenDeletingTemperaturesByDateOrTimestamp_thenThrowResourceNotFoundException() {
+    @DisplayName("deleteTemperaturesByDateOrTimestamp returns with invalid date.")
+    void givenInvalidDate_whenDeletingTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(temperatureRepository.getTemperaturesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> temperatureService.deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
+        temperatureService.deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+
         verify(temperatureRepository, times(1)).getTemperaturesByDate(invalidDateTime.toLocalDate());
         verify(temperatureRepository, times(0)).deleteTemperaturesByDate(invalidDateTime.toLocalDate());
+        assertThat(capturedOutput)
+            .contains(String.format("No temperatures with dateTime=%s found for deletion.", invalidDateTime));
     }
 }

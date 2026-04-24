@@ -13,6 +13,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import api.arduinothermohygrometer.dto.HumidityDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
@@ -32,7 +34,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @DisplayName("Unit tests for HumidityServiceImpl")
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 class HumidityServiceImplTest {
     @Mock
     private HumidityRepository humidityRepository;
@@ -110,15 +112,17 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp throws ResourceNotFoundException with invalid timestamp.")
-    void givenInvalidTimestamp_whenGettingHumiditiesByDateOrTimestamp_thenThrowResourceNotFoundException() {
+    @DisplayName("getHumiditiesByDateOrTimestamp returns empty list with invalid timestamp.")
+    void givenInvalidTimestamp_whenGettingHumiditiesByDateOrTimestamp_thenReturnEmptyList() {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(humidityRepository.getHumidityByTimestamp(invalidDateTime)).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> humidityService.getHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Humidities with dateTime=%s not found.", invalidDateTime));
+        List<HumidityDto> result = humidityService.getHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+
+        verify(humidityRepository, times(1)).getHumidityByTimestamp(invalidDateTime);
+        assertThat(result)
+            .isEmpty();
     }
 
     @Test
@@ -150,15 +154,17 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp throws ResourceNotFoundException with invalid date.")
-    void givenInvalidDate_whenGettingHumiditiesByDate_thenThrowResourceNotFoundException() {
+    @DisplayName("getHumiditiesByDateOrTimestamp returns empty list with invalid date.")
+    void givenInvalidDate_whenGettingHumiditiesByDate_thenReturnEmptyList() {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(humidityRepository.getHumiditiesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> humidityService.getHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Humidities with dateTime=%s not found.", invalidDateTime));
+        List<HumidityDto> result = humidityService.getHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+
+        verify(humidityRepository, times(1)).getHumiditiesByDate(invalidDateTime.toLocalDate());
+        assertThat(result)
+            .isEmpty();
     }
 
     @Test
@@ -230,7 +236,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("deleteHumiditiesByTimestamp deletes humidity with valid timestamp.")
-    void givenValidTimestamp_whenDeletingHumiditiesByTimestamp_thenDeleteHumidity() {
+    void givenValidTimestamp_whenDeletingHumiditiesByTimestamp_thenDeleteHumidity(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now();
         Double airHumidity = 75.00;
@@ -246,23 +252,28 @@ class HumidityServiceImplTest {
 
         verify(humidityRepository, times(1)).getHumidityByTimestamp(dateTime);
         verify(humidityRepository, times(1)).deleteHumidityByTimestamp(dateTime);
+        assertThat(capturedOutput)
+            .contains(String.format("Deleted humidity with timestamp=%s.", humidities.getFirst().getRegisteredAt()));
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByDateOrTimestamp throws ResourceNotFoundException with invalid timestamp.")
-    void givenInvalidTimestamp_whenDeletingHumiditiesByDateOrTimestamp_thenThrowResourceNotFoundException() {
+    @DisplayName("deleteHumiditiesByDateOrTimestamp returns with invalid timestamp.")
+    void givenInvalidTimestamp_whenDeletingHumiditiesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
-        LocalDateTime dateTime = LocalDateTime.now();
-        when(humidityRepository.getHumidityByTimestamp(dateTime)).thenReturn(emptyList());
+        LocalDateTime invalidDateTime = LocalDateTime.now();
+        when(humidityRepository.getHumidityByTimestamp(invalidDateTime)).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> humidityService.deleteHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Humidities with dateTime=%s not found.", dateTime));
+        humidityService.deleteHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+
+        verify(humidityRepository, times(1)).getHumidityByTimestamp(invalidDateTime);
+        verify(humidityRepository, times(0)).deleteHumidityByTimestamp(invalidDateTime);
+        assertThat(capturedOutput)
+            .contains(String.format("No humidities with dateTime=%s found for deletion.", invalidDateTime));
     }
 
     @Test
     @DisplayName("deleteHumiditiesByDateOrTimestamp deletes humidity with valid date.")
-    void givenValidDate_whenDeletingHumiditiesByDateOrTimestamp_thenDeleteHumidity() {
+    void givenValidDate_whenDeletingHumiditiesByDateOrTimestamp_thenDeleteHumidity(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now();
         Double airHumidity = 75.00;
@@ -278,17 +289,22 @@ class HumidityServiceImplTest {
 
         verify(humidityRepository, times(1)).getHumiditiesByDate(dateTime.toLocalDate());
         verify(humidityRepository, times(1)).deleteHumiditiesByDate(dateTime.toLocalDate());
+        assertThat(capturedOutput)
+            .contains(String.format("Deleted humidities with date=%s.", humidities.getFirst().getRegisteredAt().toLocalDate()));
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByDateOrTimestamp throws ResourceNotFoundException with invalid date.")
-    void givenInvalidDate_whenDeletingHumiditiesByDateOrTimestamp_thenThrowResourceNotFoundException() {
+    @DisplayName("deleteHumiditiesByDateOrTimestamp returns with invalid date.")
+    void givenInvalidDate_whenDeletingHumiditiesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(humidityRepository.getHumiditiesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
 
-        assertThatThrownBy(() -> humidityService.deleteHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Humidities with dateTime=%s not found.", invalidDateTime));
+        humidityService.deleteHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+
+        verify(humidityRepository, times(1)).getHumiditiesByDate(invalidDateTime.toLocalDate());
+        verify(humidityRepository, times(0)).deleteHumiditiesByDate(invalidDateTime.toLocalDate());
+        assertThat(capturedOutput)
+            .contains(String.format("No humidities with dateTime=%s found for deletion.", invalidDateTime.toLocalDate()));
     }
 }

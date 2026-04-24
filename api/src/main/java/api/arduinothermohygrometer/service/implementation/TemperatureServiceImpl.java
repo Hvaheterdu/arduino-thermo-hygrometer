@@ -17,11 +17,12 @@ import api.arduinothermohygrometer.model.Temperature;
 import api.arduinothermohygrometer.repository.TemperatureRepository;
 import api.arduinothermohygrometer.service.TemperatureService;
 
+import static java.util.Collections.emptyList;
+
 @Service
 public class TemperatureServiceImpl implements TemperatureService {
     private static final String ID_NOT_FOUND = "Temperature with id=%s not found.";
     private static final String EMPTY_ID_NOT_FOUND = "Temperature with empty id=%s does not exist.";
-    private static final String DATETIME_NOT_FOUND = "Temperatures with dateTime=%s not found.";
     private static final UUID EMPTY_UUID = new UUID(0, 0);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TemperatureServiceImpl.class);
@@ -54,29 +55,22 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public List<TemperatureDto> getTemperaturesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) throws ResourceNotFoundException {
-        LOGGER.info("Retrieving temperatures with dateTime={}.", dateTime);
+    public List<TemperatureDto> getTemperaturesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
+        LOGGER.info("Retrieving temperatures with dateTime={}, checkOnlyDate={}.", dateTime, checkOnlyDate);
 
-        List<Temperature> temperatures;
-        if (checkOnlyDate) {
-            LOGGER.info("Temperatures to retrieve with date={}.", dateTime.toLocalDate());
-            temperatures = temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate());
-        } else {
-            LOGGER.info("Temperature to retrieve with timestamp={}.", dateTime);
-            temperatures = temperatureRepository.getTemperatureByTimestamp(dateTime);
-        }
+        List<Temperature> temperatures = checkOnlyDate
+            ? temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate())
+            : temperatureRepository.getTemperatureByTimestamp(dateTime);
 
         if (temperatures.isEmpty()) {
-            LOGGER.warn("Temperatures with dateTime={} not found.", dateTime);
-            throw new ResourceNotFoundException(String.format(DATETIME_NOT_FOUND, dateTime));
+            LOGGER.info("No temperatures with dateTime={} found.", dateTime);
+            return emptyList();
         }
 
-        List<TemperatureDto> temperatureDtos = temperatures.stream()
-                                                           .map(TemperatureEntityMapper::toDto)
-                                                           .toList();
         LOGGER.info("Temperatures with dateTime={} retrieved.", dateTime);
-
-        return temperatureDtos;
+        return temperatures.stream()
+                           .map(TemperatureEntityMapper::toDto)
+                           .toList();
     }
 
     @Override
@@ -116,28 +110,24 @@ public class TemperatureServiceImpl implements TemperatureService {
 
     @Override
     public void deleteTemperaturesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) throws ResourceNotFoundException {
-        LOGGER.info("Deleting temperatures with dateTime={}.", dateTime);
+        LOGGER.info("Deleting temperatures with dateTime={}, checkOnlyDate={}.", dateTime, checkOnlyDate);
 
-        List<Temperature> temperatures;
-        if (checkOnlyDate) {
-            LOGGER.info("Temperatures to delete with date={}.", dateTime.toLocalDate());
-            temperatures = temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate());
-        } else {
-            LOGGER.info("Temperature to delete with timestamp={}.", dateTime);
-            temperatures = temperatureRepository.getTemperatureByTimestamp(dateTime);
-        }
+        List<Temperature> temperatures = checkOnlyDate
+            ? temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate())
+            : temperatureRepository.getTemperatureByTimestamp(dateTime);
 
         if (temperatures.isEmpty()) {
-            LOGGER.warn("Temperatures with dateTime={} not found.", dateTime);
-            throw new ResourceNotFoundException(String.format(DATETIME_NOT_FOUND, dateTime));
+            LOGGER.info("No temperatures with dateTime={} found for deletion.", dateTime);
+            return;
         }
 
+        Temperature firstTemperature = temperatures.getFirst();
         if (checkOnlyDate) {
-            LOGGER.info("Temperatures with date={} deleted.", dateTime.toLocalDate());
-            temperatureRepository.deleteTemperaturesByDate(dateTime.toLocalDate());
+            temperatureRepository.deleteTemperaturesByDate(firstTemperature.getRegisteredAt().toLocalDate());
+            LOGGER.info("Temperatures with date={} deleted.", firstTemperature.getRegisteredAt().toLocalDate());
         } else {
-            LOGGER.info("Temperature with timestamp={} deleted.", dateTime);
-            temperatureRepository.deleteTemperatureByTimestamp(dateTime);
+            temperatureRepository.deleteTemperatureByTimestamp(firstTemperature.getRegisteredAt());
+            LOGGER.info("Temperature with timestamp={} deleted.", firstTemperature.getRegisteredAt());
         }
     }
 }
