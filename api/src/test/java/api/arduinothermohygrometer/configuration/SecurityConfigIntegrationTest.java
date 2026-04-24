@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 @SpringBootTest
+@DisplayName("Tests for security configuration.")
 @AutoConfigureMockMvc
 class SecurityConfigIntegrationTest {
     @Autowired

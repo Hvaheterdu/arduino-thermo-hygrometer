@@ -19,7 +19,7 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import api.arduinothermohygrometer.dto.HumidityDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.HumidityEntityMapper;
+import api.arduinothermohygrometer.mapper.HumidityModelMapper;
 import api.arduinothermohygrometer.model.Humidity;
 import api.arduinothermohygrometer.repository.HumidityRepository;
 import api.arduinothermohygrometer.service.implementation.HumidityServiceImpl;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Unit tests for HumidityServiceImpl")
+@DisplayName("Unit tests for HumidityServiceImpl.")
 @ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 class HumidityServiceImplTest {
     @Mock
@@ -59,7 +59,7 @@ class HumidityServiceImplTest {
                                              .registeredAt(registeredAt)
                                              .airHumidity(airHumidity)
                                              .build();
-        Humidity humidity = HumidityEntityMapper.toEntity(humidityDto);
+        Humidity humidity = HumidityModelMapper.toModel(humidityDto);
         UUID id = humidity.getId();
         when(humidityRepository.getHumidityById(id)).thenReturn(Optional.of(humidity));
 
@@ -67,16 +67,6 @@ class HumidityServiceImplTest {
 
         assertThat(result)
             .isEqualTo(humidityDto);
-    }
-
-    @Test
-    @DisplayName("getHumidityById throws ResourceNotFoundException with empty id.")
-    void givenEmptyId_whenGettingHumidityById_thenThrowResourceNotFoundException() {
-        UUID emptyId = new UUID(0, 0);
-
-        assertThatThrownBy(() -> humidityService.getHumidityById(emptyId))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Humidity with empty id=%s does not exist.", emptyId));
     }
 
     @Test
@@ -101,7 +91,7 @@ class HumidityServiceImplTest {
                                              .airHumidity(airHumidity)
                                              .build();
         List<HumidityDto> humidityDtos = List.of(humidityDto);
-        List<Humidity> humidities = List.of(HumidityEntityMapper.toEntity(humidityDto));
+        List<Humidity> humidities = List.of(HumidityModelMapper.toModel(humidityDto));
         when(humidityRepository.getHumidityByTimestamp(dateTime)).thenReturn(humidities);
 
         List<HumidityDto> result = humidityService.getHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate);
@@ -142,7 +132,7 @@ class HumidityServiceImplTest {
                                               .build();
         List<HumidityDto> humidityDtos = List.of(humidityDto, humidityDto2);
         List<Humidity> humidities = humidityDtos.stream()
-                                                .map(HumidityEntityMapper::toEntity)
+                                                .map(HumidityModelMapper::toModel)
                                                 .toList();
         when(humidityRepository.getHumiditiesByDate(dateTime.toLocalDate())).thenReturn(humidities);
 
@@ -195,14 +185,14 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("deleteHumidityById deletes humidity with valid id.")
-    void givenValidId_whenDeletingHumidityById_thenDeleteHumidity() {
+    void givenValidId_whenDeletingHumidityById_thenDeleteHumidity(CapturedOutput capturedOutput) {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 75.00;
         HumidityDto humidityDto = HumidityDto.builder()
                                              .registeredAt(registeredAt)
                                              .airHumidity(airHumidity)
                                              .build();
-        Humidity humidity = HumidityEntityMapper.toEntity(humidityDto);
+        Humidity humidity = HumidityModelMapper.toModel(humidityDto);
         UUID id = humidity.getId();
         when(humidityRepository.getHumidityById(id)).thenReturn(Optional.of(humidity));
         doNothing().when(humidityRepository).deleteHumidityById(id);
@@ -211,16 +201,8 @@ class HumidityServiceImplTest {
 
         verify(humidityRepository, times(1)).getHumidityById(id);
         verify(humidityRepository, times(1)).deleteHumidityById(id);
-    }
-
-    @Test
-    @DisplayName("deleteHumidityById throws ResourceNotFoundException with empty id.")
-    void givenEmptyId_whenDeletingHumidityById_thenThrowResourceNotFoundException() {
-        UUID emptyId = new UUID(0, 0);
-
-        assertThatThrownBy(() -> humidityService.deleteHumidityById(emptyId))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Humidity with empty id=%s does not exist.", emptyId));
+        assertThat(capturedOutput)
+            .contains(String.format("Humidity with id=%s deleted.", id));
     }
 
     @Test
@@ -244,7 +226,7 @@ class HumidityServiceImplTest {
                                              .registeredAt(dateTime)
                                              .airHumidity(airHumidity)
                                              .build();
-        List<Humidity> humidities = List.of(HumidityEntityMapper.toEntity(humidityDto));
+        List<Humidity> humidities = List.of(HumidityModelMapper.toModel(humidityDto));
         when(humidityRepository.getHumidityByTimestamp(dateTime)).thenReturn(humidities);
         doNothing().when(humidityRepository).deleteHumidityByTimestamp(dateTime);
 
@@ -268,7 +250,7 @@ class HumidityServiceImplTest {
         verify(humidityRepository, times(1)).getHumidityByTimestamp(invalidDateTime);
         verify(humidityRepository, times(0)).deleteHumidityByTimestamp(invalidDateTime);
         assertThat(capturedOutput)
-            .contains(String.format("No humidities with dateTime=%s found for deletion.", invalidDateTime));
+            .contains(String.format("Humidities with dateTime=%s not found.", invalidDateTime));
     }
 
     @Test
@@ -281,7 +263,7 @@ class HumidityServiceImplTest {
                                              .registeredAt(dateTime)
                                              .airHumidity(airHumidity)
                                              .build();
-        List<Humidity> humidities = List.of(HumidityEntityMapper.toEntity(humidityDto));
+        List<Humidity> humidities = List.of(HumidityModelMapper.toModel(humidityDto));
         when(humidityRepository.getHumiditiesByDate(dateTime.toLocalDate())).thenReturn(humidities);
         doNothing().when(humidityRepository).deleteHumiditiesByDate(dateTime.toLocalDate());
 
@@ -305,6 +287,6 @@ class HumidityServiceImplTest {
         verify(humidityRepository, times(1)).getHumiditiesByDate(invalidDateTime.toLocalDate());
         verify(humidityRepository, times(0)).deleteHumiditiesByDate(invalidDateTime.toLocalDate());
         assertThat(capturedOutput)
-            .contains(String.format("No humidities with dateTime=%s found for deletion.", invalidDateTime.toLocalDate()));
+            .contains(String.format("Humidities with dateTime=%s not found.", invalidDateTime));
     }
 }

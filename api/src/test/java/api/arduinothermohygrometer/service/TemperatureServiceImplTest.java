@@ -19,7 +19,7 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.TemperatureEntityMapper;
+import api.arduinothermohygrometer.mapper.TemperatureModelMapper;
 import api.arduinothermohygrometer.model.Temperature;
 import api.arduinothermohygrometer.repository.TemperatureRepository;
 import api.arduinothermohygrometer.service.implementation.TemperatureServiceImpl;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Unit tests for TemperatureServiceImpl")
+@DisplayName("Unit tests for TemperatureServiceImpl.")
 @ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 class TemperatureServiceImplTest {
     @Mock
@@ -59,7 +59,7 @@ class TemperatureServiceImplTest {
                                                       .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
-        Temperature temperature = TemperatureEntityMapper.toEntity(temperatureDto);
+        Temperature temperature = TemperatureModelMapper.toModel(temperatureDto);
         UUID id = temperature.getId();
         when(temperatureRepository.getTemperatureById(id)).thenReturn(Optional.of(temperature));
 
@@ -67,16 +67,6 @@ class TemperatureServiceImplTest {
 
         assertThat(result)
             .isEqualTo(temperatureDto);
-    }
-
-    @Test
-    @DisplayName("getTemperatureById throws ResourceNotFoundException with empty id.")
-    void givenEmptyId_whenGettingTemperatureById_thenThrowResourceNotFoundException() {
-        UUID emptyId = new UUID(0, 0);
-
-        assertThatThrownBy(() -> temperatureService.getTemperatureById(emptyId))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Temperature with empty id=%s does not exist.", emptyId));
     }
 
     @Test
@@ -101,7 +91,7 @@ class TemperatureServiceImplTest {
                                                       .temp(temp)
                                                       .build();
         List<TemperatureDto> temperatureDtos = List.of(temperatureDto);
-        List<Temperature> temperatures = List.of(TemperatureEntityMapper.toEntity(temperatureDto));
+        List<Temperature> temperatures = List.of(TemperatureModelMapper.toModel(temperatureDto));
         when(temperatureRepository.getTemperatureByTimestamp(dateTime)).thenReturn(temperatures);
 
         List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
@@ -142,7 +132,7 @@ class TemperatureServiceImplTest {
                                                        .build();
         List<TemperatureDto> temperatureDtos = List.of(temperatureDto, temperatureDto2);
         List<Temperature> temperatures = temperatureDtos.stream()
-                                                        .map(TemperatureEntityMapper::toEntity)
+                                                        .map(TemperatureModelMapper::toModel)
                                                         .toList();
         when(temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate())).thenReturn(temperatures);
 
@@ -195,14 +185,14 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("deleteTemperatureById deletes temperature with valid id.")
-    void givenValidId_whenDeletingTemperatureById_thenDeleteTemperature() {
+    void givenValidId_whenDeletingTemperatureById_thenDeleteTemperature(CapturedOutput capturedOutput) {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
                                                       .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
-        Temperature temperature = TemperatureEntityMapper.toEntity(temperatureDto);
+        Temperature temperature = TemperatureModelMapper.toModel(temperatureDto);
         UUID id = temperature.getId();
         when(temperatureRepository.getTemperatureById(id)).thenReturn(Optional.of(temperature));
         doNothing().when(temperatureRepository).deleteTemperatureById(id);
@@ -211,16 +201,8 @@ class TemperatureServiceImplTest {
 
         verify(temperatureRepository, times(1)).getTemperatureById(id);
         verify(temperatureRepository, times(1)).deleteTemperatureById(id);
-    }
-
-    @Test
-    @DisplayName("deleteTemperatureById throws ResourceNotFoundException with empty id.")
-    void givenEmptyId_whenDeletingTemperatureById_thenThrowResourceNotFoundException() {
-        UUID emptyId = new UUID(0, 0);
-
-        assertThatThrownBy(() -> temperatureService.deleteTemperatureById(emptyId))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Temperature with empty id=%s does not exist.", emptyId));
+        assertThat(capturedOutput)
+            .contains(String.format("Temperature with id=%s deleted.", id));
     }
 
     @Test
@@ -244,7 +226,7 @@ class TemperatureServiceImplTest {
                                                       .registeredAt(dateTime)
                                                       .temp(temp)
                                                       .build();
-        List<Temperature> temperatures = List.of(TemperatureEntityMapper.toEntity(temperatureDto));
+        List<Temperature> temperatures = List.of(TemperatureModelMapper.toModel(temperatureDto));
         when(temperatureRepository.getTemperatureByTimestamp(dateTime)).thenReturn(temperatures);
         doNothing().when(temperatureRepository).deleteTemperatureByTimestamp(dateTime);
 
@@ -268,7 +250,7 @@ class TemperatureServiceImplTest {
         verify(temperatureRepository, times(1)).getTemperatureByTimestamp(invalidDateTime);
         verify(temperatureRepository, times(0)).deleteTemperatureByTimestamp(invalidDateTime);
         assertThat(capturedOutput)
-            .contains(String.format("No temperatures with dateTime=%s found for deletion.", invalidDateTime));
+            .contains(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
     }
 
     @Test
@@ -281,7 +263,7 @@ class TemperatureServiceImplTest {
                                                       .registeredAt(dateTime)
                                                       .temp(temp)
                                                       .build();
-        List<Temperature> temperatures = List.of(TemperatureEntityMapper.toEntity(temperatureDto));
+        List<Temperature> temperatures = List.of(TemperatureModelMapper.toModel(temperatureDto));
         when(temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate())).thenReturn(temperatures);
         doNothing().when(temperatureRepository).deleteTemperaturesByDate(dateTime.toLocalDate());
 
@@ -305,6 +287,6 @@ class TemperatureServiceImplTest {
         verify(temperatureRepository, times(1)).getTemperaturesByDate(invalidDateTime.toLocalDate());
         verify(temperatureRepository, times(0)).deleteTemperaturesByDate(invalidDateTime.toLocalDate());
         assertThat(capturedOutput)
-            .contains(String.format("No temperatures with dateTime=%s found for deletion.", invalidDateTime));
+            .contains(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
     }
 }

@@ -5,27 +5,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.BatteryEntityMapper;
+import api.arduinothermohygrometer.mapper.BatteryModelMapper;
 import api.arduinothermohygrometer.model.Battery;
 import api.arduinothermohygrometer.repository.BatteryRepository;
 import api.arduinothermohygrometer.service.BatteryService;
+import lombok.extern.slf4j.Slf4j;
 
 import static java.util.Collections.emptyList;
 
+@Slf4j
 @Service
 public class BatteryServiceImpl implements BatteryService {
     private static final String ID_NOT_FOUND = "Battery with id=%s not found.";
-    private static final String EMPTY_ID_NOT_FOUND = "Battery with empty id=%s does not exist.";
-    private static final UUID EMPTY_UUID = new UUID(0, 0);
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BatteryServiceImpl.class);
+    private static final String DATETIME_NOT_FOUND = "Batteries with dateTime=%s not found.";
 
     private final BatteryRepository batteryRepository;
 
@@ -35,99 +32,89 @@ public class BatteryServiceImpl implements BatteryService {
 
     @Override
     public BatteryDto getBatteryById(final UUID id) throws ResourceNotFoundException {
-        LOGGER.info("Retrieving battery with id={}.", id);
-
-        if (EMPTY_UUID.equals(id)) {
-            LOGGER.warn("Getting battery with empty id={} failed.", id);
-            throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
-        }
+        log.info("Retrieving battery with id={}.", id);
 
         Optional<Battery> battery = batteryRepository.getBatteryById(id);
         if (battery.isEmpty()) {
-            LOGGER.warn("Battery with id={} not found.", id);
+            log.warn(String.format(ID_NOT_FOUND, id));
             throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
         }
 
-        BatteryDto batteryDto = BatteryEntityMapper.toDto(battery.get());
-        LOGGER.info("Battery with id={} retrieved.", id);
+        BatteryDto batteryDto = BatteryModelMapper.toDto(battery.get());
+        log.info("Battery with id={} retrieved.", id);
 
         return batteryDto;
     }
 
     @Override
     public List<BatteryDto> getBatteriesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
-        LOGGER.info("Retrieving batteries with dateTime={}, checkOnlyDate={}.", dateTime, checkOnlyDate);
+        log.info("Retrieving batteries with dateTime={}, checkOnlyDate={}.", dateTime, checkOnlyDate);
 
         List<Battery> batteries = checkOnlyDate
             ? batteryRepository.getBatteriesByDate(dateTime.toLocalDate())
             : batteryRepository.getBatteryByTimestamp(dateTime);
 
         if (batteries.isEmpty()) {
-            LOGGER.info("No batteries with dateTime={} found.", dateTime);
+            log.info(String.format(DATETIME_NOT_FOUND, dateTime));
             return emptyList();
         }
 
-        LOGGER.info("Batteries with dateTime={} retrieved.", dateTime);
+        log.info("Batteries with dateTime={} retrieved.", dateTime);
         return batteries.stream()
-                        .map(BatteryEntityMapper::toDto)
+                        .map(BatteryModelMapper::toDto)
                         .toList();
     }
 
     @Override
     public BatteryDto createBattery(final BatteryDto batteryDto) throws ResourceNotCreatedException {
-        LOGGER.info("Creating battery.");
+        log.info("Creating battery.");
 
         if (batteryDto == null) {
-            LOGGER.warn("Battery cannot be created.");
+            log.warn("Battery cannot be created.");
             throw new ResourceNotCreatedException("Battery cannot be created.");
         }
 
-        Battery battery = BatteryEntityMapper.toEntity(batteryDto);
+        Battery battery = BatteryModelMapper.toModel(batteryDto);
         batteryRepository.createBattery(battery);
-        LOGGER.info("Battery with id={} and registered_at={} created.", battery.getId(), battery.getRegisteredAt());
+        log.info("Battery with id={} and registered_at={} created.", battery.getId(), battery.getRegisteredAt());
 
-        return BatteryEntityMapper.toDto(battery);
+        return BatteryModelMapper.toDto(battery);
     }
 
     @Override
     public void deleteBatteryById(final UUID id) throws ResourceNotFoundException {
-        LOGGER.info("Deleting battery with id={}.", id);
-
-        if (EMPTY_UUID.equals(id)) {
-            LOGGER.warn("Deleting battery with empty id={} failed.", id);
-            throw new ResourceNotFoundException(String.format(EMPTY_ID_NOT_FOUND, id));
-        }
+        log.info("Deleting battery with id={}.", id);
 
         Optional<Battery> battery = batteryRepository.getBatteryById(id);
         if (battery.isEmpty()) {
-            LOGGER.warn("Battery with id={} not deleted.", id);
+            log.warn(String.format(ID_NOT_FOUND, id));
             throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
         }
 
         batteryRepository.deleteBatteryById(id);
-        LOGGER.info("Battery with id={} deleted.", id);
+        log.info("Battery with id={} deleted.", id);
     }
 
     @Override
     public void deleteBatteriesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
-        LOGGER.info("Deleting batteries with dateTime={}, checkOnlyDate={}.", dateTime, checkOnlyDate);
+        log.info("Deleting batteries with dateTime={}, checkOnlyDate={}.", dateTime, checkOnlyDate);
 
         List<Battery> batteries = checkOnlyDate
             ? batteryRepository.getBatteriesByDate(dateTime.toLocalDate())
             : batteryRepository.getBatteryByTimestamp(dateTime);
 
         if (batteries.isEmpty()) {
-            LOGGER.info("No batteries with dateTime={} found for deletion.", dateTime);
+            log.info("Batteries with dateTime={} not found.", dateTime);
             return;
         }
 
         Battery firstBattery = batteries.getFirst();
         if (checkOnlyDate) {
             batteryRepository.deleteBatteriesByDate(firstBattery.getRegisteredAt().toLocalDate());
-            LOGGER.info("Deleted batteries with date={}.", firstBattery.getRegisteredAt().toLocalDate());
+            log.info("Deleted batteries with date={}.", firstBattery.getRegisteredAt().toLocalDate());
         } else {
             batteryRepository.deleteBatteryByTimestamp(firstBattery.getRegisteredAt());
-            LOGGER.info("Deleted battery with timestamp={}.", firstBattery.getRegisteredAt());
+            log.info("Deleted battery with timestamp={}.", firstBattery.getRegisteredAt());
         }
     }
 }

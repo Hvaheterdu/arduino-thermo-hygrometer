@@ -26,7 +26,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Unit tests for TemperatureController")
+@DisplayName("Unit tests for TemperatureControllerImpl.")
 @WebMvcTest(TemperatureController.class)
 class TemperatureControllerTest {
     @Autowired

@@ -10,11 +10,11 @@ import api.arduinothermohygrometer.model.Temperature;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Unit tests for TemperatureEntityMapper.")
-class TemperatureEntityMapperTest {
+@DisplayName("Unit tests for TemperatureModelMapper.")
+class TemperatureModelMapperTest {
     @Test
-    @DisplayName("toEntity returns temperature entity from valid temperatureDto entity.")
-    void givenValidTemperatureDtoEntity_whenToEntity_thenReturnTemperatureEntity() {
+    @DisplayName("toModel returns temperature model from valid temperatureDto model.")
+    void givenValidTemperatureDtoModel_whenToModel_thenReturnTemperatureModel() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 86.123;
         TemperatureDto temperatureDto = TemperatureDto.builder()
@@ -22,20 +22,20 @@ class TemperatureEntityMapperTest {
                                                       .temp(temp)
                                                       .build();
 
-        Temperature result = TemperatureEntityMapper.toEntity(temperatureDto);
+        Temperature result = TemperatureModelMapper.toModel(temperatureDto);
 
         assertThat(result.getRegisteredAt()).isEqualTo(temperatureDto.getRegisteredAt());
         assertThat(result.getTemp()).isEqualTo(temperatureDto.getTemp());
     }
 
     @Test
-    @DisplayName("toDto returns temperatureDto entity from valid temperature entity.")
-    void givenValidTemperatureEntity_whenToDto_thenReturnTemperatureDtoEntity() {
+    @DisplayName("toDto returns temperatureDto model from valid temperature model.")
+    void givenValidTemperatureModel_whenToDto_thenReturnTemperatureDtoModel() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 86.425;
         Temperature temperature = new Temperature(registeredAt, temp);
 
-        TemperatureDto result = TemperatureEntityMapper.toDto(temperature);
+        TemperatureDto result = TemperatureModelMapper.toDto(temperature);
 
         assertThat(result.getRegisteredAt()).isEqualTo(temperature.getRegisteredAt());
         assertThat(result.getTemp()).isEqualTo(temperature.getTemp());

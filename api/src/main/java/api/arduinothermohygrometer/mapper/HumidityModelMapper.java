@@ -3,11 +3,11 @@ package api.arduinothermohygrometer.mapper;
 import api.arduinothermohygrometer.dto.HumidityDto;
 import api.arduinothermohygrometer.model.Humidity;
 
-public class HumidityEntityMapper {
-    private HumidityEntityMapper() {
+public class HumidityModelMapper {
+    private HumidityModelMapper() {
     }
 
-    public static Humidity toEntity(HumidityDto humidityDto) {
+    public static Humidity toModel(HumidityDto humidityDto) {
         return new Humidity(humidityDto.getRegisteredAt(), humidityDto.getAirHumidity());
     }
 

@@ -26,7 +26,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Unit tests for HumidityController")
+@DisplayName("Unit tests for HumidityControllerImpl.")
 @WebMvcTest(HumidityController.class)
 class HumidityControllerTest {
     @Autowired

@@ -3,11 +3,11 @@ package api.arduinothermohygrometer.mapper;
 import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.model.Temperature;
 
-public class TemperatureEntityMapper {
-    private TemperatureEntityMapper() {
+public class TemperatureModelMapper {
+    private TemperatureModelMapper() {
     }
 
-    public static Temperature toEntity(TemperatureDto temperatureDto) {
+    public static Temperature toModel(TemperatureDto temperatureDto) {
         return new Temperature(temperatureDto.getRegisteredAt(), temperatureDto.getTemp());
     }
 

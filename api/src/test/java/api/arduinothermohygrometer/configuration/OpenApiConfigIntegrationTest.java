@@ -15,6 +15,7 @@ import io.swagger.v3.oas.models.info.Info;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@DisplayName("Tests for OpenAPI configuration.")
 @AutoConfigureMockMvc
 class OpenApiConfigIntegrationTest {
     @Autowired

@@ -19,7 +19,7 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.BatteryEntityMapper;
+import api.arduinothermohygrometer.mapper.BatteryModelMapper;
 import api.arduinothermohygrometer.model.Battery;
 import api.arduinothermohygrometer.repository.BatteryRepository;
 import api.arduinothermohygrometer.service.implementation.BatteryServiceImpl;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Unit tests for BatteryServiceImpl")
+@DisplayName("Unit tests for BatteryServiceImpl.")
 @ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 class BatteryServiceImplTest {
     @Mock
@@ -59,7 +59,7 @@ class BatteryServiceImplTest {
                                           .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
-        Battery battery = BatteryEntityMapper.toEntity(batteryDto);
+        Battery battery = BatteryModelMapper.toModel(batteryDto);
         UUID id = battery.getId();
         when(batteryRepository.getBatteryById(id)).thenReturn(Optional.of(battery));
 
@@ -67,16 +67,6 @@ class BatteryServiceImplTest {
 
         assertThat(result)
             .isEqualTo(batteryDto);
-    }
-
-    @Test
-    @DisplayName("getBatteryById throws ResourceNotFoundException with empty id.")
-    void givenEmptyId_whenGettingBatteryById_thenThrowResourceNotFoundException() {
-        UUID emptyId = new UUID(0, 0);
-
-        assertThatThrownBy(() -> batteryService.getBatteryById(emptyId))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Battery with empty id=%s does not exist.", emptyId));
     }
 
     @Test
@@ -101,7 +91,7 @@ class BatteryServiceImplTest {
                                           .batteryStatus(batteryStatus)
                                           .build();
         List<BatteryDto> batteryDtos = List.of(batteryDto);
-        List<Battery> batteries = List.of(BatteryEntityMapper.toEntity(batteryDto));
+        List<Battery> batteries = List.of(BatteryModelMapper.toModel(batteryDto));
         when(batteryRepository.getBatteryByTimestamp(dateTime)).thenReturn(batteries);
 
         List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(dateTime, checkOnlyDate);
@@ -142,7 +132,7 @@ class BatteryServiceImplTest {
                                            .build();
         List<BatteryDto> batteryDtos = List.of(batteryDto, batteryDto2);
         List<Battery> batteries = batteryDtos.stream()
-                                             .map(BatteryEntityMapper::toEntity)
+                                             .map(BatteryModelMapper::toModel)
                                              .toList();
         when(batteryRepository.getBatteriesByDate(dateTime.toLocalDate())).thenReturn(batteries);
 
@@ -195,14 +185,14 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("deleteBatteryById deletes battery with valid id.")
-    void givenValidId_whenDeletingBatteryById_thenDeleteBattery() {
+    void givenValidId_whenDeletingBatteryById_thenDeleteBattery(CapturedOutput capturedOutput) {
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
                                           .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
-        Battery battery = BatteryEntityMapper.toEntity(batteryDto);
+        Battery battery = BatteryModelMapper.toModel(batteryDto);
         UUID id = battery.getId();
         when(batteryRepository.getBatteryById(id)).thenReturn(Optional.of(battery));
         doNothing().when(batteryRepository).deleteBatteryById(id);
@@ -211,16 +201,8 @@ class BatteryServiceImplTest {
 
         verify(batteryRepository, times(1)).getBatteryById(id);
         verify(batteryRepository, times(1)).deleteBatteryById(id);
-    }
-
-    @Test
-    @DisplayName("deleteBatteryById throws ResourceNotFoundException with empty id.")
-    void givenEmptyId_whenDeletingBatteryById_thenThrowResourceNotFoundException() {
-        UUID emptyId = new UUID(0, 0);
-
-        assertThatThrownBy(() -> batteryService.deleteBatteryById(emptyId))
-            .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage(String.format("Battery with empty id=%s does not exist.", emptyId));
+        assertThat(capturedOutput)
+            .contains(String.format("Battery with id=%s deleted.", id));
     }
 
     @Test
@@ -244,7 +226,7 @@ class BatteryServiceImplTest {
                                           .registeredAt(dateTime)
                                           .batteryStatus(batteryStatus)
                                           .build();
-        List<Battery> batteries = List.of(BatteryEntityMapper.toEntity(batteryDto));
+        List<Battery> batteries = List.of(BatteryModelMapper.toModel(batteryDto));
         when(batteryRepository.getBatteryByTimestamp(dateTime)).thenReturn(batteries);
         doNothing().when(batteryRepository).deleteBatteryByTimestamp(dateTime);
 
@@ -268,7 +250,7 @@ class BatteryServiceImplTest {
         verify(batteryRepository, times(1)).getBatteryByTimestamp(invalidDateTime);
         verify(batteryRepository, times(0)).deleteBatteryByTimestamp(invalidDateTime);
         assertThat(capturedOutput)
-            .contains(String.format("No batteries with dateTime=%s found for deletion.", invalidDateTime));
+            .contains(String.format("Batteries with dateTime=%s not found.", invalidDateTime));
     }
 
     @Test
@@ -287,7 +269,7 @@ class BatteryServiceImplTest {
                                            .build();
         List<BatteryDto> batteryDtos = List.of(batteryDto, batteryDto2);
         List<Battery> batteries = batteryDtos.stream()
-                                             .map(BatteryEntityMapper::toEntity)
+                                             .map(BatteryModelMapper::toModel)
                                              .toList();
         when(batteryRepository.getBatteriesByDate(dateTime.toLocalDate())).thenReturn(batteries);
         doNothing().when(batteryRepository).deleteBatteriesByDate(dateTime.toLocalDate());
@@ -312,6 +294,6 @@ class BatteryServiceImplTest {
         verify(batteryRepository, times(1)).getBatteriesByDate(invalidDateTime.toLocalDate());
         verify(batteryRepository, times(0)).deleteBatteriesByDate(invalidDateTime.toLocalDate());
         assertThat(capturedOutput)
-            .contains(String.format("No batteries with dateTime=%s found for deletion.", invalidDateTime));
+            .contains(String.format("Batteries with dateTime=%s not found.", invalidDateTime));
     }
 }

@@ -10,11 +10,11 @@ import api.arduinothermohygrometer.model.Battery;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Unit tests for BatteryEntityMapper")
-class BatteryEntityMapperTest {
+@DisplayName("Unit tests for BatteryModelMapper.")
+class BatteryModelMapperTest {
     @Test
-    @DisplayName("toEntity returns battery entity from valid batteryDto entity.")
-    void givenValidBatteryDtoEntity_whenToEntity_thenReturnBatteryEntity() {
+    @DisplayName("toModel returns battery model from valid batteryDto model.")
+    void givenValidBatteryDtoModel_whenToModel_thenReturnBatteryModel() {
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 95;
         BatteryDto batteryDto = BatteryDto.builder()
@@ -22,20 +22,20 @@ class BatteryEntityMapperTest {
                                           .batteryStatus(batteryStatus)
                                           .build();
 
-        Battery result = BatteryEntityMapper.toEntity(batteryDto);
+        Battery result = BatteryModelMapper.toModel(batteryDto);
 
         assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.getRegisteredAt());
         assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.getBatteryStatus());
     }
 
     @Test
-    @DisplayName("toDto returns batteryDto entity from valid battery entity.")
-    void givenValidBatteryEntity_whenToDto_thenReturnBatteryDtoEntity() {
+    @DisplayName("toDto returns batteryDto model from valid battery model.")
+    void givenValidBatteryModel_whenToDto_thenReturnBatteryDtoModel() {
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 95;
         Battery battery = new Battery(registeredAt, batteryStatus);
 
-        BatteryDto result = BatteryEntityMapper.toDto(battery);
+        BatteryDto result = BatteryModelMapper.toDto(battery);
 
         assertThat(result.getRegisteredAt()).isEqualTo(battery.getRegisteredAt());
         assertThat(result.getBatteryStatus()).isEqualTo(battery.getBatteryStatus());
