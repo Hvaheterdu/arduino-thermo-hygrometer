@@ -44,6 +44,8 @@ paths:
               examples:
                 battery:
                   $ref: "#/components/examples/ExampleBattery"
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
@@ -57,6 +59,8 @@ paths:
       responses:
         "204":
           description: Battery deleted.
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     post:
@@ -83,6 +87,8 @@ paths:
               examples:
                 battery:
                   $ref: "#/components/examples/ExampleBattery"
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "400":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
 
@@ -104,6 +110,8 @@ paths:
               examples:
                 battery:
                   $ref: "#/components/examples/ExampleBattery"
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
@@ -116,6 +124,8 @@ paths:
       responses:
         "204":
           description: Battery deleted.
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
 
@@ -140,6 +150,8 @@ paths:
               examples:
                 humidity:
                   $ref: "#/components/examples/ExampleHumidity"
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
@@ -153,6 +165,8 @@ paths:
       responses:
         "204":
           description: Humidity deleted.
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     post:
@@ -179,6 +193,8 @@ paths:
               examples:
                 humidity:
                   $ref: "#/components/examples/ExampleHumidity"
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "400":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
 
@@ -200,6 +216,8 @@ paths:
               examples:
                 humidity:
                   $ref: "#/components/examples/ExampleHumidity"
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
@@ -212,6 +230,8 @@ paths:
       responses:
         "204":
           description: Humidity deleted.
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
 
@@ -236,6 +256,8 @@ paths:
               examples:
                 temperature:
                   $ref: "#/components/examples/ExampleTemperature"
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
@@ -249,6 +271,8 @@ paths:
       responses:
         "204":
           description: Temperature deleted.
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     post:
@@ -275,6 +299,8 @@ paths:
               examples:
                 temperature:
                   $ref: "#/components/examples/ExampleTemperature"
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "400":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
 
@@ -296,6 +322,8 @@ paths:
               examples:
                 temperature:
                   $ref: "#/components/examples/ExampleTemperature"
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
@@ -308,10 +336,17 @@ paths:
       responses:
         "204":
           description: Temperature deleted.
+        "403":
+          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
 
 components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
   examples:
     ExampleTemperature:
       description: Example of Temperature object.

@@ -28,13 +28,13 @@ public class OpenApiConfig {
         info.setDescription(openApiProperties.getDescription());
 
         Contact contact = new Contact();
-        contact.setName(openApiProperties.getContact().getName());
-        contact.setEmail(openApiProperties.getContact().getEmail());
+        contact.setName(openApiProperties.getContact().name());
+        contact.setEmail(openApiProperties.getContact().email());
         info.setContact(contact);
 
         License license = new License();
-        license.setName(openApiProperties.getLicense().getName());
-        license.setUrl(openApiProperties.getLicense().getUrl());
+        license.setName(openApiProperties.getLicense().name());
+        license.setUrl(openApiProperties.getLicense().url());
         info.setLicense(license);
 
         OpenAPI openApi = new OpenAPI();

@@ -1,6 +1,7 @@
 package api.arduinothermohygrometer.exception;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,21 +50,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ProblemDetail handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
         log.error("Resource not found exception with message={}.", ex.getMessage());
-
         return buildProblemDetail(HttpStatus.NOT_FOUND, "resource-not-found", "Resource not found.", ex.getMessage(), request);
     }
 
     @ExceptionHandler(ResourceNotCreatedException.class)
     public ProblemDetail handleResourceNotCreated(ResourceNotCreatedException ex, HttpServletRequest request) {
         log.error("Resource not created exception with message={}.", ex.getMessage());
-
         return buildProblemDetail(HttpStatus.BAD_REQUEST, "resource-not-created", "Resource not created.", ex.getMessage(), request);
     }
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGeneralException(Exception ex, HttpServletRequest request) {
         log.error("Internal server error exception with message={}.", ex.getMessage());
-
         return buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, "internal-error", "Internal server error.", ex.getMessage(), request);
     }
 
@@ -73,6 +71,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setType(URI.create(BASE_URL + type));
         problemDetail.setTitle(title);
         problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperty("timestamp", Instant.now());
 
         return problemDetail;
     }

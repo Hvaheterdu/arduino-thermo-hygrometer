@@ -52,6 +52,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/temperatures/{id}", id)
+                                            .header("X-API-KEY", "api-key-secret")
                                             .exchange();
 
         assertThat(result)
@@ -71,6 +72,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/temperatures/{id}", invalidId)
+                                            .header("X-API-KEY", "api-key-secret")
                                             .exchange();
 
         assertThat(result)
@@ -100,6 +102,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/temperatures")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -123,6 +126,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/temperatures")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -148,6 +152,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/api/temperatures")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -173,6 +178,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/api/temperatures")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -196,6 +202,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/temperatures/{id}", id)
+                                            .header("X-API-KEY", "api-key-secret")
                                             .exchange();
 
         assertThat(result)
@@ -211,6 +218,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/temperatures/{id}", invalidId)
+                                            .header("X-API-KEY", "api-key-secret")
                                             .exchange();
 
         assertThat(result)
@@ -229,6 +237,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/temperatures")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -247,6 +256,7 @@ class TemperatureControllerTest {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/temperatures")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();

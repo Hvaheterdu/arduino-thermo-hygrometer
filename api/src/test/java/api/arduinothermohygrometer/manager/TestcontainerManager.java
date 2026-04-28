@@ -5,14 +5,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.flywaydb.core.Flyway;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
-public abstract class TestcontainerManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestcontainerManager.class);
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+public abstract class TestcontainerManager {
     @ServiceConnection
     static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:18.3")
         .withDatabaseName("postgres-test")
@@ -25,7 +24,7 @@ public abstract class TestcontainerManager {
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (postgreSQLContainer != null) {
-                LOGGER.info("JVM is shutting down! Stopping PostgreSQL-testcontainer...");
+                log.info("JVM is shutting down! Stopping PostgreSQL-testcontainer...");
                 postgreSQLContainer.stop();
             }
         }));
@@ -34,17 +33,17 @@ public abstract class TestcontainerManager {
     private static synchronized void runPostgreSQLContainer() {
         LocalDateTime start = LocalDateTime.now();
 
-        LOGGER.info("Starting PostgreSQL-testcontainer...");
+        log.info("Starting PostgreSQL-testcontainer...");
 
         startPostgreSQLContainer();
         migrateFlyway();
 
-        LOGGER.info("PostgreSQL-testcontainer is ready after {} seconds", Duration.between(start, LocalDateTime.now()).toSeconds());
+        log.info("PostgreSQL-testcontainer is ready after {} seconds", Duration.between(start, LocalDateTime.now()).toSeconds());
     }
 
     private static void startPostgreSQLContainer() {
         postgreSQLContainer.start();
-        LOGGER.info("PostgreSQL-testcontainer info: {}", postgreSQLContainer.getCurrentContainerInfo());
+        log.info("PostgreSQL-testcontainer info: {}", postgreSQLContainer.getCurrentContainerInfo());
     }
 
     private static void migrateFlyway() {

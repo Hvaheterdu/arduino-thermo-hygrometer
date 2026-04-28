@@ -52,6 +52,7 @@ class HumidityControllerTest {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/humidities/{id}", id)
+                                            .header("X-API-KEY", "api-key-secret")
                                             .exchange();
 
         assertThat(result)
@@ -71,6 +72,7 @@ class HumidityControllerTest {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/humidities/{id}", invalidId)
+                                            .header("X-API-KEY", "api-key-secret")
                                             .exchange();
 
         assertThat(result)
@@ -100,6 +102,7 @@ class HumidityControllerTest {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/humidities")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -123,6 +126,7 @@ class HumidityControllerTest {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/humidities")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -148,6 +152,7 @@ class HumidityControllerTest {
 
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/api/humidities")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -173,6 +178,7 @@ class HumidityControllerTest {
 
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/api/humidities")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -195,6 +201,7 @@ class HumidityControllerTest {
         doNothing().when(humidityService).deleteHumidityById(id);
 
         MvcTestResult result = mockMvcTester.delete()
+                                            .header("X-API-KEY", "api-key-secret")
                                             .uri("/api/humidities/{id}", id)
                                             .exchange();
 
@@ -210,6 +217,7 @@ class HumidityControllerTest {
             .when(humidityService).deleteHumidityById(invalidId);
 
         MvcTestResult result = mockMvcTester.delete()
+                                            .header("X-API-KEY", "api-key-secret")
                                             .uri("/api/humidities/{id}", invalidId)
                                             .exchange();
 
@@ -229,6 +237,7 @@ class HumidityControllerTest {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/humidities")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -247,6 +256,7 @@ class HumidityControllerTest {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/humidities")
+                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
