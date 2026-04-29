@@ -22,24 +22,21 @@ public class OpenApiConfig {
 
     @Bean
     OpenAPI customOpenAPI() {
-        Info info = new Info();
-        info.setVersion(buildProperties.getVersion());
-        info.setTitle(openApiProperties.getTitle());
-        info.setDescription(openApiProperties.getDescription());
-
-        Contact contact = new Contact();
-        contact.setName(openApiProperties.getContact().name());
-        contact.setEmail(openApiProperties.getContact().email());
-        info.setContact(contact);
-
-        License license = new License();
-        license.setName(openApiProperties.getLicense().name());
-        license.setUrl(openApiProperties.getLicense().url());
-        info.setLicense(license);
-
-        OpenAPI openApi = new OpenAPI();
-        openApi.setInfo(info);
-
-        return openApi;
+        return new OpenAPI().info(
+            new Info()
+                .version(buildProperties.getVersion())
+                .title(openApiProperties.title())
+                .description(openApiProperties.description())
+                .contact(
+                    new Contact()
+                        .name(openApiProperties.contact().name())
+                        .email(openApiProperties.contact().email())
+                )
+                .license(
+                    new License()
+                        .name(openApiProperties.license().name())
+                        .url(openApiProperties.license().url())
+                )
+        );
     }
 }

@@ -52,25 +52,25 @@ class OpenApiConfigIntegrationTest {
 
     @Test
     void givenApplicationYaml_whenPropertiesLoaded_thenValuesMatch() {
-        assertThat(openApiProperties.getTitle()).isEqualTo("Arduino Thermo Hygrometer API.");
-        assertThat(openApiProperties.getDescription()).isEqualTo("A Java Web API for an Arduino Thermo Hygrometer IoT device.");
+        assertThat(openApiProperties.title()).isEqualTo("Arduino Thermo Hygrometer API.");
+        assertThat(openApiProperties.description()).isEqualTo("A Java Web API for an Arduino Thermo Hygrometer IoT device.");
         assertThat(buildProperties.getVersion()).isEqualTo("1.0.0-SNAPSHOT");
-        assertThat(openApiProperties.getContact().name()).isEqualTo("Burhan Mohammad Sarfraz");
-        assertThat(openApiProperties.getContact().email()).isEqualTo("burhan.mohammad.sarfraz@outlook.com");
-        assertThat(openApiProperties.getLicense().name()).isEqualTo("MIT license");
-        assertThat(openApiProperties.getLicense().url()).isEqualTo("https://mit-license.org/");
+        assertThat(openApiProperties.contact().name()).isEqualTo("Burhan Mohammad Sarfraz");
+        assertThat(openApiProperties.contact().email()).isEqualTo("burhan.mohammad.sarfraz@outlook.com");
+        assertThat(openApiProperties.license().name()).isEqualTo("MIT license");
+        assertThat(openApiProperties.license().url()).isEqualTo("https://mit-license.org/");
     }
 
     @Test
     void givenSpringContext_whenOpenApiBeanCreated_thenInfoMatchesProperties() {
         Info info = openAPI.getInfo();
 
-        assertThat(info.getTitle()).isEqualTo(openApiProperties.getTitle());
-        assertThat(info.getDescription()).isEqualTo(openApiProperties.getDescription());
+        assertThat(info.getTitle()).isEqualTo(openApiProperties.title());
+        assertThat(info.getDescription()).isEqualTo(openApiProperties.description());
         assertThat(info.getVersion()).isEqualTo(buildProperties.getVersion());
-        assertThat(info.getContact().getName()).isEqualTo(openApiProperties.getContact().name());
-        assertThat(info.getContact().getEmail()).isEqualTo(openApiProperties.getContact().email());
-        assertThat(info.getLicense().getName()).isEqualTo(openApiProperties.getLicense().name());
-        assertThat(info.getLicense().getUrl()).isEqualTo(openApiProperties.getLicense().url());
+        assertThat(info.getContact().getName()).isEqualTo(openApiProperties.contact().name());
+        assertThat(info.getContact().getEmail()).isEqualTo(openApiProperties.contact().email());
+        assertThat(info.getLicense().getName()).isEqualTo(openApiProperties.license().name());
+        assertThat(info.getLicense().getUrl()).isEqualTo(openApiProperties.license().url());
     }
 }

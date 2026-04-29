@@ -3,7 +3,6 @@ package api.arduinothermohygrometer.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +18,6 @@ import api.arduinothermohygrometer.properties.CorsProperties;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
     private static final Long ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365L;
 
@@ -30,6 +28,20 @@ public class SecurityConfig {
     public SecurityConfig(ApiKeyFilter apiKeyFilter, CorsProperties corsProperties) {
         this.apiKeyFilter = apiKeyFilter;
         this.corsProperties = corsProperties;
+    }
+
+    @Bean
+    protected CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedHeaders(corsProperties.allowedHeaders());
+        corsConfiguration.setAllowedMethods(corsProperties.allowedMethods());
+        corsConfiguration.setAllowedOrigins(corsProperties.allowedOrigins());
+
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+
+        return urlBasedCorsConfigurationSource;
     }
 
     @Bean
@@ -64,19 +76,5 @@ public class SecurityConfig {
             )
             .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
-    }
-
-    @Bean
-    protected CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedHeaders(corsProperties.allowedHeaders());
-        corsConfiguration.setAllowedMethods(corsProperties.allowedMethods());
-        corsConfiguration.setAllowedOrigins(corsProperties.allowedOrigins());
-
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-
-        return urlBasedCorsConfigurationSource;
     }
 }
