@@ -34,6 +34,7 @@ security:
   api-key: ${API_KEY}
   api-header: X-API-KEY
   api-role: ROLE-API
+  api-scheme-name: ApiKeyAuth
   whitelist:
     - /swagger-ui/**
     - /v3/api-docs/**

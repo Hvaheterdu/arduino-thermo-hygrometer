@@ -22,6 +22,9 @@ tags:
   - name: Humidity.
     description: Measured humidity by arduino device.
 
+security:
+  - ApiKeyAuth: [ ]
+
 paths:
   /api/batteries:
     get:
@@ -343,7 +346,7 @@ paths:
 
 components:
   securitySchemes:
-    apiKeyAuth:
+    ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-KEY

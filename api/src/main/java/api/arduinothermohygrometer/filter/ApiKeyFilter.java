@@ -22,7 +22,6 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     private static final String INVALID_API_KEY = "Invalid API-KEY.";
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-
     private final SecurityProperties securityProperties;
 
     public ApiKeyFilter(SecurityProperties securityProperties) {

@@ -36,7 +36,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.5</version>
+    <version>4.0.6</version>
     <relativePath/>
   </parent>
 
@@ -48,10 +48,10 @@
     <maven.version>3.9.11</maven.version>
 
     <!-- Maven dependencies -->
-    <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+    <sonar-maven-plugin.version>5.6.0.6792</sonar-maven-plugin.version>
 
     <!-- Flyway version -->
-    <flyway-database-postgresql.version>12.3.0</flyway-database-postgresql.version>
+    <flyway-database-postgresql.version>12.5.0</flyway-database-postgresql.version>
     <!-- Jakarta persistence version -->
     <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
 
@@ -59,10 +59,10 @@
     <logback-classic.version>1.5.32</logback-classic.version>
 
     <!-- Lombok version -->
-    <lombok.version>1.18.44</lombok.version>
+    <lombok.version>1.18.46</lombok.version>
 
     <!-- Postgresql version -->
-    <postgresql.version>42.7.10</postgresql.version>
+    <postgresql.version>42.7.11</postgresql.version>
 
     <!-- SLF4J version -->
     <slf4j-api.version>2.0.17</slf4j-api.version>
@@ -73,11 +73,11 @@
     <!-- OpenAPI Generator -->
     <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
     <okhttp3.version>5.3.2</okhttp3.version>
-    <swagger.version>2.2.46</swagger.version>
-    <openapi-generator-maven-plugin.version>7.21.0</openapi-generator-maven-plugin.version>
+    <swagger.version>2.2.49</swagger.version>
+    <openapi-generator-maven-plugin.version>7.22.0</openapi-generator-maven-plugin.version>
 
     <!-- Testcontainers version -->
-    <testcontainers.version>2.0.4</testcontainers.version>
+    <testcontainers.version>2.0.5</testcontainers.version>
 
     <!-- Maven compiler properties -->
     <maven.compiler.source>${java.version}</maven.compiler.source>

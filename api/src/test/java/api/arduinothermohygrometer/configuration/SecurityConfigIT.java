@@ -8,10 +8,10 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
-@SpringBootTest
-@DisplayName("Tests for security configuration.")
 @AutoConfigureMockMvc
-class SecurityConfigIntegrationTest {
+@DisplayName("Tests for security configuration.")
+@SpringBootTest
+class SecurityConfigIT {
     @Autowired
     private MockMvcTester mockMvcTester;
 

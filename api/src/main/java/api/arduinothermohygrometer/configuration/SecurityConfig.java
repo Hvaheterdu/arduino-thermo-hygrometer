@@ -22,7 +22,6 @@ public class SecurityConfig {
     private static final Long ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365L;
 
     private final ApiKeyFilter apiKeyFilter;
-
     private final CorsProperties corsProperties;
 
     public SecurityConfig(ApiKeyFilter apiKeyFilter, CorsProperties corsProperties) {

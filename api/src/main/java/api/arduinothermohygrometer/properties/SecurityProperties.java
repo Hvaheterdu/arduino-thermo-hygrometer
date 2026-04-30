@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotEmpty;
 public record SecurityProperties(@NotBlank String apiKey,
                                  @NotBlank String apiHeader,
                                  @NotBlank String apiRole,
+                                 @NotBlank String apiSchemeName,
                                  @NotEmpty List<String> whitelist
 ) {
 }

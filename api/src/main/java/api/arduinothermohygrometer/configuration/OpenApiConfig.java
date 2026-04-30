@@ -5,38 +5,57 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import api.arduinothermohygrometer.properties.OpenApiProperties;
+import api.arduinothermohygrometer.properties.SecurityProperties;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @Configuration
 public class OpenApiConfig {
     private final BuildProperties buildProperties;
     private final OpenApiProperties openApiProperties;
+    private final SecurityProperties securityProperties;
 
-    public OpenApiConfig(BuildProperties buildProperties, OpenApiProperties openApiProperties) {
+    public OpenApiConfig(BuildProperties buildProperties, OpenApiProperties openApiProperties, SecurityProperties securityProperties) {
         this.buildProperties = buildProperties;
         this.openApiProperties = openApiProperties;
+        this.securityProperties = securityProperties;
     }
 
     @Bean
     OpenAPI customOpenAPI() {
-        return new OpenAPI().info(
-            new Info()
-                .version(buildProperties.getVersion())
-                .title(openApiProperties.title())
-                .description(openApiProperties.description())
-                .contact(
-                    new Contact()
-                        .name(openApiProperties.contact().name())
-                        .email(openApiProperties.contact().email())
-                )
-                .license(
-                    new License()
-                        .name(openApiProperties.license().name())
-                        .url(openApiProperties.license().url())
-                )
-        );
+        return new OpenAPI()
+            .addSecurityItem(
+                new SecurityRequirement()
+                    .addList(securityProperties.apiSchemeName())
+            )
+            .components(
+                new Components()
+                    .addSecuritySchemes(securityProperties.apiSchemeName(),
+                        new SecurityScheme()
+                            .type(SecurityScheme.Type.APIKEY)
+                            .in(SecurityScheme.In.HEADER)
+                            .name(securityProperties.apiHeader()))
+            )
+            .info(
+                new Info()
+                    .version(buildProperties.getVersion())
+                    .title(openApiProperties.title())
+                    .description(openApiProperties.description())
+                    .contact(
+                        new Contact()
+                            .name(openApiProperties.contact().name())
+                            .email(openApiProperties.contact().email())
+                    )
+                    .license(
+                        new License()
+                            .name(openApiProperties.license().name())
+                            .url(openApiProperties.license().url())
+                    )
+            );
     }
 }

@@ -14,10 +14,10 @@ import io.swagger.v3.oas.models.info.Info;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@DisplayName("Tests for OpenAPI configuration.")
 @AutoConfigureMockMvc
-class OpenApiConfigIntegrationTest {
+@DisplayName("Tests for OpenAPI configuration.")
+@SpringBootTest
+class OpenApiConfigIT {
     @Autowired
     private MockMvcTester mockMvcTester;
 
@@ -51,7 +51,8 @@ class OpenApiConfigIntegrationTest {
     }
 
     @Test
-    void givenApplicationYaml_whenPropertiesLoaded_thenValuesMatch() {
+    @DisplayName("Given application.yaml when properties are loaded then property values match.")
+    void givenApplicationYaml_whenPropertiesLoaded_thenPropertyValuesMatch() {
         assertThat(openApiProperties.title()).isEqualTo("Arduino Thermo Hygrometer API.");
         assertThat(openApiProperties.description()).isEqualTo("A Java Web API for an Arduino Thermo Hygrometer IoT device.");
         assertThat(buildProperties.getVersion()).isEqualTo("1.0.0-SNAPSHOT");
@@ -62,6 +63,7 @@ class OpenApiConfigIntegrationTest {
     }
 
     @Test
+    @DisplayName("Given Spring Context when creating OpenApi bean then info properties match.")
     void givenSpringContext_whenOpenApiBeanCreated_thenInfoMatchesProperties() {
         Info info = openAPI.getInfo();
 
