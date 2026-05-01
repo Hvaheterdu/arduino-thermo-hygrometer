@@ -3,16 +3,20 @@ package api.arduinothermohygrometer.base;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import api.arduinothermohygrometer.filter.ApiKeyFilter;
+import api.arduinothermohygrometer.properties.CorsProperties;
 import api.arduinothermohygrometer.properties.OpenApiProperties;
 import api.arduinothermohygrometer.properties.SecurityProperties;
 
 public class WebMvcTestBase {
     @MockitoBean
-    private ApiKeyFilter apiKeyFilter;
+    protected ApiKeyFilter apiKeyFilter;
 
     @MockitoBean
-    private OpenApiProperties openApiProperties;
+    protected CorsProperties corsProperties;
 
     @MockitoBean
-    private SecurityProperties securityProperties;
+    protected OpenApiProperties openApiProperties;
+
+    @MockitoBean
+    protected SecurityProperties securityProperties;
 }

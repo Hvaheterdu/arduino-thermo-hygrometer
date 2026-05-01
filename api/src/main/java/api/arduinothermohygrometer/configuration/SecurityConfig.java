@@ -47,10 +47,14 @@ public class SecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         return httpSecurity
             .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator/**").authenticated()
+                authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                                                          .requestMatchers("/swagger-ui.html",
+                                                              "/swagger-ui/**",
+                                                              "/v3/api-docs",
+                                                              "/v3/api-docs/**"
+                                                          ).permitAll()
+                                                          .requestMatchers("/actuator/**").authenticated()
                                                           .requestMatchers("/api/**").authenticated()
-                                                          .requestMatchers("/swagger-ui/**").permitAll()
-                                                          .requestMatchers("/v3/api-docs/**").permitAll()
                                                           .anyRequest().denyAll()
             )
             .csrf(AbstractHttpConfigurer::disable)

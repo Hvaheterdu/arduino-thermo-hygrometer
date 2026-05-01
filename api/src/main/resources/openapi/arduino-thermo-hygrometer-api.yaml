@@ -31,6 +31,7 @@ paths:
       tags:
         - Battery.
       summary: Retrieve a battery by date or timestamp.
+      description: Retrieves the battery status of the arduino device by date or timestamp.
       operationId: getBatteriesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -55,6 +56,7 @@ paths:
       tags:
         - Battery.
       summary: Delete battery by date or timestamp.
+      description: Deletes the battery status of the arduino device by date or timestamp.
       operationId: deleteBatteriesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -70,6 +72,7 @@ paths:
       tags:
         - Battery.
       summary: Create remaining battery.
+      description: Registers the remaining battery status of the arduino device.
       operationId: createBattery
       requestBody:
         content:
@@ -100,6 +103,7 @@ paths:
       tags:
         - Battery.
       summary: Retrieve a battery by id.
+      description: Retrieves the battery status of the arduino device by id.
       operationId: getBatteryById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -121,6 +125,7 @@ paths:
       tags:
         - Battery.
       summary: Delete battery by id.
+      description: Deletes the battery status of the arduino device by id.
       operationId: deleteBatteryDtoById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -137,6 +142,7 @@ paths:
       tags:
         - Humidity.
       summary: Retrieve measured humidity by date or timestamp.
+      description: Retrieves the measured humidity from the arduino device by date or timestamp.
       operationId: getHumiditiesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -161,6 +167,7 @@ paths:
       tags:
         - Humidity.
       summary: Delete measured humidity by date or timestamp.
+      description: Deletes the measured humidity from the arduino device by date or timestamp.
       operationId: deleteHumiditiesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -176,6 +183,7 @@ paths:
       tags:
         - Humidity.
       summary: Create measured humidity.
+      description: Registers the measured humidity from the arduino device.
       operationId: createHumidity
       requestBody:
         content:
@@ -206,6 +214,7 @@ paths:
       tags:
         - Humidity.
       summary: Retrieve measured humidity by id.
+      description: Retrieves the measured humidity from the arduino device by id.
       operationId: getHumidityById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -227,6 +236,7 @@ paths:
       tags:
         - Humidity.
       summary: Delete measured humidity by id.
+      description: Deletes the measured humidity from the arduino device by id.
       operationId: deleteHumidityDtoById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -243,6 +253,7 @@ paths:
       tags:
         - Temperature.
       summary: Retrieve measured temperature by date or timestamp.
+      description: Retrieves the measured temperature from the arduino device by date or timestamp.
       operationId: getTemperaturesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -267,6 +278,7 @@ paths:
       tags:
         - Temperature.
       summary: Delete measured temperature by date or timestamp.
+      description: Deletes the measured temperature from the arduino device by date or timestamp.
       operationId: deleteTemperaturesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -282,6 +294,7 @@ paths:
       tags:
         - Temperature.
       summary: Create measured temperature.
+      description: Registers the measured temperature from the arduino device.
       operationId: createTemperature
       requestBody:
         content:
@@ -312,6 +325,7 @@ paths:
       tags:
         - Temperature.
       summary: Retrieve measured temperature by id.
+      description: Retrieves the measured temperature from the arduino device by id.
       operationId: getTemperatureById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -333,6 +347,7 @@ paths:
       tags:
         - Temperature.
       summary: Delete measured temperature by id.
+      description: Deletes the measured temperature from the arduino device by id.
       operationId: deleteTemperatureDtoById
       parameters:
         - $ref: "#/components/parameters/IdParam"

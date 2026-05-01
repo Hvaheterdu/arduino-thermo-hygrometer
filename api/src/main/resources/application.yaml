@@ -22,12 +22,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info"
+        include: "health,info,metrics"
 
 security:
   api-key: ${API_KEY}
   api-header: X-API-KEY
-  api-role: ROLE-API
+  api-role: ROLE_API
   api-scheme-name: ApiKeyAuth
 
 server:

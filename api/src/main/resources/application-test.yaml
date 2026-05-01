@@ -18,14 +18,10 @@ management:
   health:
     rabbit:
       enabled: false
-  endpoint:
-    health:
-      show-components: when_authorized
-      show-details: when_authorized
   endpoints:
     web:
       exposure:
-        include: "health,info"
+        include: "health,info,metrics"
 
 security:
   api-key: "api-key-secret"
