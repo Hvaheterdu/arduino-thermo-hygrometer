@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres-local
+    password: postgres-local
+    url: jdbc:postgresql://localhost:5432/arduinothermohygrometer-local
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

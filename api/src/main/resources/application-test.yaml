@@ -34,3 +34,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/arduinothermohygrometer-local
   flyway:
     enabled: false
+
+springdoc:
+  api-docs:
+    enabled: true
+  packages-to-scan: api.arduinothermohygrometer
+  swagger-ui:
+    enabled: true
+    operations-sorter: method
+    path: /swagger-ui.html
