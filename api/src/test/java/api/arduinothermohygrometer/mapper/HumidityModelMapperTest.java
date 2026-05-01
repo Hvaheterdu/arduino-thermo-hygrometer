@@ -10,7 +10,7 @@ import api.arduinothermohygrometer.model.Humidity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Unit tests for HumidityModelMapper.")
+@DisplayName("HumidityModelMapper unit tests.")
 class HumidityModelMapperTest {
     @Test
     @DisplayName("toModel returns humidity model from valid humidityDto model.")

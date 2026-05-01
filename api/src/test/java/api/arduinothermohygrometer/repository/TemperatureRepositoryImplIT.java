@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import api.arduinothermohygrometer.manager.TestcontainerManager;
 
-@DisplayName("Integration tests for TemperatureRepositoryImpl.")
+@DisplayName("TemperatureRepositoryImpl integration tests.")
 @SpringBootTest
 @Sql("classpath:sql/insert_temperatures.sql")
 @Transactional

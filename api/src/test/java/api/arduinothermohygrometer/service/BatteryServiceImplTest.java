@@ -33,7 +33,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Unit tests for BatteryServiceImpl.")
+@DisplayName("BatteryServiceImpl unit tests.")
 @ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 class BatteryServiceImplTest {
     @Mock

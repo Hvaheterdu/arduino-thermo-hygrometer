@@ -10,7 +10,7 @@ import api.arduinothermohygrometer.model.Battery;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Unit tests for BatteryModelMapper.")
+@DisplayName("BatteryModelMapper unit tests.")
 class BatteryModelMapperTest {
     @Test
     @DisplayName("toModel returns battery model from valid batteryDto model.")

@@ -33,7 +33,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@DisplayName("Unit tests for HumidityServiceImpl.")
+@DisplayName("HumidityServiceImpl unit tests.")
 @ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 class HumidityServiceImplTest {
     @Mock
