@@ -15,6 +15,8 @@ servers:
     description: Local development server.
 
 tags:
+  - name: Health.
+    description: Health of application from Spring Boot Actuator.
   - name: Battery.
     description: Battery status of arduino device.
   - name: Temperature.

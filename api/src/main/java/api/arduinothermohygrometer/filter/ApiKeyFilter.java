@@ -21,8 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ApiKeyFilter extends OncePerRequestFilter {
     private static final String INVALID_API_KEY = "Invalid API-KEY.";
     private static final List<String> EXCLUDED_URLS = List.of(
-        "/actuator/health",
-        "/actuator/health/**",
+        "/health",
+        "/health/**",
         "/swagger-ui.html",
         "/swagger-ui/**",
         "/v3/api-docs",

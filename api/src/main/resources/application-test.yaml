@@ -15,9 +15,12 @@ info:
   version: 1.0.0-SNAPSHOT
 
 management:
-  health:
-    rabbit:
-      enabled: false
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-components: when_authorized
+      show-details: when_authorized
   endpoints:
     web:
       exposure:
@@ -32,7 +35,6 @@ security:
 springdoc:
   api-docs:
     enabled: true
-  packages-to-scan: api.arduinothermohygrometer
   swagger-ui:
     enabled: true
     operations-sorter: method

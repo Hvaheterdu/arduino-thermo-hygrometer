@@ -17,6 +17,8 @@ info:
 management:
   endpoint:
     health:
+      probes:
+        enabled: true
       show-components: when_authorized
       show-details: when_authorized
   endpoints:

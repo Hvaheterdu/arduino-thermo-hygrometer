@@ -29,9 +29,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @AutoConfigureMockMvc(addFilters = false)
-@DisplayName("TemperatureControllerImpl MVC slice integration tests.")
+@DisplayName("TemperatureController MVC slice unit tests.")
 @WebMvcTest(TemperatureController.class)
-class TemperatureControllerIT extends WebMvcTestBase {
+class TemperatureControllerTest extends WebMvcTestBase {
     @Autowired
     private MockMvcTester mockMvcTester;
 
