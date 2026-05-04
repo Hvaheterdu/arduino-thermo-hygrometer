@@ -57,7 +57,7 @@
     "version-bump-sh": "sh app/scripts/version_bump_sh.sh"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.100.1",
+    "@tanstack/react-query": "^5.100.9",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router": "7.14.2"
@@ -77,10 +77,10 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-plugin-testing-library": "^7.16.2",
-    "globals": "^17.5.0",
+    "globals": "^17.6.0",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.0",
+    "typescript-eslint": "^8.59.1",
     "vite": "^8.0.9",
     "vite-plugin-checker": "^0.13.0",
     "vite-plugin-mkcert": "^2.0.0",
