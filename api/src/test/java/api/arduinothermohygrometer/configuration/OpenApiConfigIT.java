@@ -4,8 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 import api.arduinothermohygrometer.properties.OpenApiProperties;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureMockMvc
 @DisplayName("OpenAPI configuration MVC slice integration tests.")
-@WebMvcTest
+@SpringBootTest
 class OpenApiConfigIT {
     @Autowired
     private MockMvcTester mockMvcTester;

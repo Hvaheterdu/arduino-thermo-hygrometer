@@ -1,6 +1,6 @@
 cors:
   allowed-headers: [ Accept, Content-Type, X-API-KEY ]
-  allowed-methods: [ GET, POST ]
+  allowed-methods: [ GET, DELETE, POST ]
   allowed-origins: http://localhost
 
 info:
@@ -24,13 +24,23 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info,metrics"
+        include: health, info, metrics
 
 security:
-  api-key: "api-key-secret"
-  api-header: X-API-KEY
-  api-role: ROLE_API
+  api-key: "api-secret-key"
+  api-header-name: X-API-KEY
+  api-roles: [ API_ADMIN, ACTUATOR ]
   api-scheme-name: ApiKeyAuth
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres-local
+    password: postgres-local
+    url: jdbc:postgresql://localhost:5432/arduinothermohygrometer-local
+  mvc:
+    problemdetails:
+      enabled: true
 
 springdoc:
   api-docs:

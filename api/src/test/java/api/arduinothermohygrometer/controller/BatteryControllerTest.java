@@ -54,7 +54,6 @@ class BatteryControllerTest extends WebMvcTestBase {
         when(batteryService.getBatteryById(id)).thenReturn(batteryDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .header("X-API-KEY", "api-key-secret")
                                             .uri("/api/batteries/{id}", id)
                                             .exchange();
 
@@ -74,7 +73,6 @@ class BatteryControllerTest extends WebMvcTestBase {
             .thenThrow(new ResourceNotFoundException("Battery with id=" + invalidId + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .header("X-API-KEY", "api-key-secret")
                                             .uri("/api/batteries/{id}", invalidId)
                                             .exchange();
 
@@ -105,7 +103,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/batteries")
-                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -129,7 +126,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/batteries")
-                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -155,7 +151,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/api/batteries")
-                                            .header("X-API-KEY", "api-key-secret")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -181,7 +176,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
         MvcTestResult result = mockMvcTester.post()
                                             .uri("/api/batteries")
-                                            .header("X-API-KEY", "api-key-secret")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -205,7 +199,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/batteries/{id}", id)
-                                            .header("X-API-KEY", "api-key-secret")
                                             .exchange();
 
         assertThat(result)
@@ -220,7 +213,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/batteries/{id}", invalidId)
-                                            .header("X-API-KEY", "api-key-secret")
                                             .exchange();
 
         assertThat(result)
@@ -239,7 +231,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/batteries")
-                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -258,7 +249,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/batteries")
-                                            .header("X-API-KEY", "api-key-secret")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();

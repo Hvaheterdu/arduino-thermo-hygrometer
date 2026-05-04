@@ -1,7 +1,15 @@
 package api.arduinothermohygrometer.configuration;
 
+import java.io.IOException;
+import java.net.URI;
+import java.time.Instant;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -14,6 +22,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import api.arduinothermohygrometer.filter.ApiKeyFilter;
 import api.arduinothermohygrometer.properties.CorsProperties;
+import api.arduinothermohygrometer.properties.SecurityProperties;
+import jakarta.servlet.http.HttpServletResponse;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -21,12 +31,22 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
     private static final Long ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365L;
 
-    private final ApiKeyFilter apiKeyFilter;
     private final CorsProperties corsProperties;
+    private final SecurityProperties securityProperties;
 
-    public SecurityConfig(ApiKeyFilter apiKeyFilter, CorsProperties corsProperties) {
-        this.apiKeyFilter = apiKeyFilter;
+    public SecurityConfig(CorsProperties corsProperties, SecurityProperties securityProperties) {
         this.corsProperties = corsProperties;
+        this.securityProperties = securityProperties;
+    }
+
+    @Bean
+    public ApiKeyFilter apiKeyFilter(AuthenticationManager authenticationManager) {
+        return new ApiKeyFilter(authenticationManager, securityProperties);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -44,16 +64,19 @@ public class SecurityConfig {
     }
 
     @Bean
-    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
+    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, ApiKeyFilter apiKeyFilter) {
         return httpSecurity
             .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                authorizationManagerRequestMatcherRegistry.requestMatchers("/health", "/health/**").permitAll()
+                authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator/health").permitAll()
+                                                          .requestMatchers("/actuator/health/liveness").permitAll()
+                                                          .requestMatchers("/actuator/health/readiness").permitAll()
                                                           .requestMatchers("/swagger-ui.html",
                                                               "/swagger-ui/**",
                                                               "/v3/api-docs",
                                                               "/v3/api-docs/**"
                                                           ).permitAll()
-                                                          .requestMatchers("/api/**").authenticated()
+                                                          .requestMatchers("/actuator/**").hasRole("ACTUATOR")
+                                                          .requestMatchers("/api/**").hasRole("API_ADMIN")
                                                           .anyRequest().denyAll()
             )
             .csrf(AbstractHttpConfigurer::disable)
@@ -76,7 +99,32 @@ public class SecurityConfig {
                                      hstsConfig.maxAgeInSeconds(ONE_YEAR_IN_SECONDS);
                                  })
             )
+            .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                httpSecurityExceptionHandlingConfigurer
+                    .authenticationEntryPoint((request, response, authenticationException) -> {
+                        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, authenticationException.getMessage());
+                        problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/unauthorized"));
+                        problemDetail.setTitle("Unauthorized.");
+                        problemDetail.setProperty("timestamp", Instant.now());
+
+                        writeProblemDetails(response, problemDetail);
+                    })
+                    .accessDeniedHandler((request, response, accessDeniedException) -> {
+                        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, accessDeniedException.getMessage());
+                        problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/forbidden"));
+                        problemDetail.setTitle("Forbidden.");
+                        problemDetail.setProperty("timestamp", Instant.now());
+
+                        writeProblemDetails(response, problemDetail);
+                    })
+            )
             .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
+    }
+
+    private void writeProblemDetails(HttpServletResponse response, ProblemDetail problemDetail) throws IOException {
+        response.setStatus(problemDetail.getStatus());
+        response.setContentType("application/problem+json");
+        response.getWriter().write(problemDetail.toString());
     }
 }

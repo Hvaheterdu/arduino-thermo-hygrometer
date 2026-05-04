@@ -28,34 +28,29 @@ public class OpenApiConfig {
 
     @Bean
     OpenAPI customOpenAPI() {
-        return new OpenAPI()
-            .addSecurityItem(
-                new SecurityRequirement()
-                    .addList(securityProperties.apiSchemeName())
-            )
-            .components(
-                new Components()
-                    .addSecuritySchemes(securityProperties.apiSchemeName(),
-                        new SecurityScheme()
-                            .type(SecurityScheme.Type.APIKEY)
-                            .in(SecurityScheme.In.HEADER)
-                            .name(securityProperties.apiHeader()))
-            )
-            .info(
-                new Info()
-                    .version(buildProperties.getVersion())
-                    .title(openApiProperties.title())
-                    .description(openApiProperties.description())
-                    .contact(
-                        new Contact()
-                            .name(openApiProperties.contact().name())
-                            .email(openApiProperties.contact().email())
-                    )
-                    .license(
-                        new License()
-                            .name(openApiProperties.license().name())
-                            .url(openApiProperties.license().url())
-                    )
-            );
+        return new OpenAPI().addSecurityItem(
+                                new SecurityRequirement()
+                                    .addList(securityProperties.apiSchemeName())
+                            )
+                            .components(new Components()
+                                .addSecuritySchemes(securityProperties.apiSchemeName(), new SecurityScheme()
+                                    .type(SecurityScheme.Type.APIKEY)
+                                    .in(SecurityScheme.In.HEADER)
+                                    .name(securityProperties.apiHeaderName())
+                                )
+                            )
+                            .info(new Info()
+                                .version(buildProperties.getVersion())
+                                .title(openApiProperties.title())
+                                .description(openApiProperties.description())
+                                .contact(new Contact()
+                                    .name(openApiProperties.contact().name())
+                                    .email(openApiProperties.contact().email())
+                                )
+                                .license(new License()
+                                    .name(openApiProperties.license().name())
+                                    .url(openApiProperties.license().url())
+                                )
+                            );
     }
 }

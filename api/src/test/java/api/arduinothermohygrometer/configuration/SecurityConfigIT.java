@@ -1,70 +1,84 @@
 package api.arduinothermohygrometer.configuration;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
-import api.arduinothermohygrometer.base.WebMvcTestBase;
-
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureMockMvc
 @DisplayName("Security configuration MVC slice integration tests.")
-@WebMvcTest
-class SecurityConfigIT extends WebMvcTestBase {
+@SpringBootTest
+class SecurityConfigIT {
     @Autowired
     private MockMvcTester mockMvcTester;
 
-    @BeforeEach
-    void setup() {
-        when(securityProperties.apiKey()).thenReturn("api-key-secret");
-        when(securityProperties.apiHeader()).thenReturn("X-API-KEY");
-        when(securityProperties.apiRole()).thenReturn("ROLE_API");
-    }
+    @MockitoBean
+    private OpenApiConfig openApiConfig;
 
     @Test
-    @DisplayName("Root health endpoint should be public and return UP status.")
-    void givenNoApiKey_whenGettingRootHealth_thenReturnsStatusOk() {
+    @DisplayName("Health endpoint returns 200 OK and UP status with no API key.")
+    void givenNoApiKey_whenGettingHealth_thenReturn200OKAndUpBody() {
         mockMvcTester.get()
-                     .uri("/health")
+                     .uri("/actuator/health")
                      .exchange()
                      .assertThat()
                      .hasStatusOk()
-                     .hasBodyTextEqualTo("{\"status\":\"UP\"}");
+                     .bodyJson()
+                     .hasPathSatisfying("$.status",
+                         path -> assertThat(path).asString().isEqualTo("UP"))
+                     .doesNotHavePath("$.components");
     }
 
     @Test
-    @DisplayName("Liveness probe should be public and return UP status.")
-    void givenNoApiKey_whenGettingLivenessProbe_thenReturnsStatusOkAndUpBody() {
+    @DisplayName("Health endpoint returns 200 OK and components body with API key.")
+    void givenApiKey_whenGettingHealth_thenReturn200OKAndComponentsInBody() {
         mockMvcTester.get()
-                     .uri("/health/liveness")
+                     .uri("/actuator/health")
+                     .header("X-API-KEY", "api-secret-key")
                      .exchange()
                      .assertThat()
                      .hasStatusOk()
-                     .hasBodyTextEqualTo("{\"status\":\"UP\"}");
+                     .bodyJson()
+                     .hasPath("$.components");
     }
 
     @Test
-    @DisplayName("Readiness probe should be public and return UP status.")
-    void givenNoApiKey_whenGettinReadinessProbe_thenReturnsStatusOkAndUpBody() {
+    @DisplayName("Liveness probe returns 200 OK and UP status with no API key.")
+    void givenNoApiKey_whenGettingLivenessProbe_thenReturn200OKAndUpBody() {
         mockMvcTester.get()
-                     .uri("/health/readiness")
+                     .uri("/actuator/health/liveness")
                      .exchange()
                      .assertThat()
                      .hasStatusOk()
-                     .hasBodyTextEqualTo("{\"status\":\"UP\"}");
+                     .bodyJson()
+                     .hasPathSatisfying("$.status",
+                         path -> assertThat(path).asString().isEqualTo("UP"));
     }
 
     @Test
-    @DisplayName("Root health endpoint when accessed then apply security headers.")
-    void givenNoApiKey_whenGettingRootHealth_thenApplySecurityHeaders() {
+    @DisplayName("Readiness probe returns 200 OK and UP status with no API key.")
+    void givenNoApiKey_whenGettingReadinessProbe_thenReturn200OKAndUpBody() {
         mockMvcTester.get()
-                     .uri("/health")
+                     .uri("/actuator/health/readiness")
+                     .exchange()
+                     .assertThat()
+                     .hasStatusOk()
+                     .bodyJson()
+                     .hasPathSatisfying("$.status",
+                         path -> assertThat(path).asString().isEqualTo("UP"));
+    }
+
+    @Test
+    @DisplayName("Health endpoint when accessed without API key applies security headers to response.")
+    void givenNoApiKey_whenGettingHealth_thenApplySecurityHeadersToResponse() {
+        mockMvcTester.get()
+                     .uri("/actuator/health")
                      .exchange()
                      .assertThat()
                      .hasHeader("X-Content-Type-Options", "nosniff")
@@ -82,10 +96,10 @@ class SecurityConfigIT extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("Root health endpoint when accessed over HTTPS then apply HSTS header.")
-    void givenNoApiKey_whenGettingRootHealth_thenApplyHstsHeader() {
+    @DisplayName("Health endpoint when accessed without API key over HTTPS applies HSTS header to response.")
+    void givenNoApiKey_whenGettingHealth_thenApplyHstsHeaderToResponse() {
         mockMvcTester.get()
-                     .uri("/health")
+                     .uri("/actuator/health")
                      .secure(true)
                      .exchange()
                      .assertThat()
@@ -94,20 +108,31 @@ class SecurityConfigIT extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("Given actuator endpoint when accessed without API-KEY then return 403 FORBIDDEN.")
-    void givenNoApiKey_whenGettingRootInfo_thenReturn403Forbidden() {
+    @DisplayName("Info endpoint when accessed without API key returns 401 UNAUTHORIZED.")
+    void givenNoApiKey_whenGettingInfo_thenReturn401Unauthorized() {
         mockMvcTester.get()
-                     .uri("/info")
+                     .uri("/actuator/info")
                      .exchange()
                      .assertThat()
-                     .hasStatus(HttpStatus.FORBIDDEN);
+                     .hasStatus(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    @DisplayName("Given non actuator endpoint when accessed then return 403 FORBIDDEN.")
-    void givenNoApiKey_whenGettingRandomEndpoint_thenReturn403Forbidden() {
+    @DisplayName("Random endpoint when accessed without API key returns 401 UNAUTHORIZED.")
+    void givenNoApiKey_whenGettingRandomEndpoint_thenReturn401Unauthorized() {
         mockMvcTester.get()
                      .uri("/random-endpoint")
+                     .exchange()
+                     .assertThat()
+                     .hasStatus(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    @DisplayName("Random endpoint when accessed with API key returns 403 FORBIDDEN.")
+    void givenApiKey_whenGettingRandomEndpoint_thenReturn403Forbidden() {
+        mockMvcTester.get()
+                     .uri("/random-endpoint")
+                     .header("X-API-KEY", "api-secret-key")
                      .exchange()
                      .assertThat()
                      .hasStatus(HttpStatus.FORBIDDEN);
