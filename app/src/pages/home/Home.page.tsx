@@ -1,21 +1,21 @@
 import type { JSX } from "react";
-import { useNavigate } from "react-router";
+import { type NavigateFunction, useNavigate } from "react-router";
 
 export const Home = (): JSX.Element => {
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   return (
     <>
       <h1>This is the home page.</h1>
       <button
-        onClick={() => {
+        onClick={(): void => {
           void navigate("/about");
         }}
       >
         About page
       </button>
       <button
-        onClick={() => {
+        onClick={(): void => {
           void navigate("/statistics");
         }}
       >

@@ -40,6 +40,6 @@
     "noUnusedParameters": true,
     "strict": true
   },
-  "exclude": [".cert", ".github", "dist", "api", "node_modules"],
+  "exclude": [".cert", ".github", ".idea", "dist", "api", "node_modules", "target"],
   "include": ["src", "**/*.js", "**/*.ts", "**/*.tsx"]
 }
