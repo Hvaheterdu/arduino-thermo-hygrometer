@@ -7,6 +7,5 @@
     {
       "path": "tsconfig.node.json"
     }
-  ],
-  "exclude": [".cert", ".github", ".idea", "api", "dist", "node_modules", "target"]
+  ]
 }

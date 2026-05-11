@@ -44,9 +44,9 @@
     "last 1 edge version"
   ],
   "scripts": {
-    "app:build:dev": "vite build --mode development",
-    "app:build:production": "vite build --mode production",
-    "app:build:staging": "vite build --mode staging",
+    "app:build:dev": "vite build --config app/vite.config.ts --mode development",
+    "app:build:production": "vite build --config app/vite.config.ts --mode production",
+    "app:build:staging": "vite build --config app/vite.config.ts --mode staging",
     "app:format": "prettier --write . \"*.{ts,tsx,html,css,json,md}\"",
     "app:format:check": "prettier --check \"*.{ts,tsx,html,css,json,md}\"",
     "app:lint": "eslint \"app/**/*.{ts,tsx}\"",
@@ -84,6 +84,7 @@
     "vite": "^8.0.11",
     "vite-plugin-checker": "^0.13.0",
     "vite-plugin-mkcert": "^2.0.0",
-    "vite-plugin-svgr": "^5.2.0"
+    "vite-plugin-svgr": "^5.2.0",
+    "vitest": "^4.1.5"
   }
 }

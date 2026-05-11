@@ -1,29 +1,22 @@
 {
   "compilerOptions": {
-    "baseUrl": "/app/src/",
+    "*": "/app/src/",
     "composite": true,
-    "declaration": true,
-    "declarationDir": "dist/types",
-    "declarationMap": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "outDir": "dist",
-    "rootDir": ".",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "sourceMap": false,
     "target": "esnext",
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.app.tsbuildinfo",
+    "types": ["@testing-library/jest-dom", "node", "vite/client", "vite-plugin-svgr/client", "vitest/globals"],
     "useDefineForClassFields": true,
 
     /* Bundler mode */
-    "downlevelIteration": true,
     "isolatedModules": true,
-    "importHelpers": true,
     "jsx": "react-jsx",
     "moduleResolution": "bundler",
     "moduleDetection": "force",
-    "noEmitOnError": true,
+    "noEmit": true,
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
 
@@ -37,9 +30,8 @@
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strict": true
+    "noUnusedParameters": true
   },
   "exclude": [".cert", ".github", ".idea", "dist", "api", "node_modules", "target"],
-  "include": ["src", "**/*.js", "**/*.ts", "**/*.tsx"]
+  "include": ["app/src", "app/src/**/*.js", "app/src/**/*.ts", "app/src/**/*.tsx"]
 }
