@@ -23,8 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("OpenAPI configuration MVC slice integration tests.")
 @SpringBootTest
 class OpenApiConfigIT {
-    private static final String VERSION = "version";
-
     @Autowired
     private MockMvcTester mockMvcTester;
 

@@ -54,7 +54,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         when(temperatureService.getTemperatureById(id)).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/temperatures/{id}", id)
+                                            .uri("/api/v1/temperatures/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -73,7 +73,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
             .thenThrow(new ResourceNotFoundException("Temperature with id=" + invalidId + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/temperatures/{id}", invalidId)
+                                            .uri("/api/v1/temperatures/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -102,7 +102,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         when(temperatureService.getTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate)).thenReturn(temperatureDtos);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/temperatures")
+                                            .uri("/api/v1/temperatures")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -125,7 +125,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
             .thenThrow(new ResourceNotFoundException("Temperatures with dateTime=" + invalidDateTime + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/temperatures")
+                                            .uri("/api/v1/temperatures")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -150,7 +150,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(temperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/temperatures")
+                                            .uri("/api/v1/temperatures")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -175,7 +175,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(invalidTemperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/temperatures")
+                                            .uri("/api/v1/temperatures")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -198,7 +198,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         doNothing().when(temperatureService).deleteTemperatureById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/temperatures/{id}", id)
+                                            .uri("/api/v1/temperatures/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -213,7 +213,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
                                                                                                   .deleteTemperatureById(invalidId);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/temperatures/{id}", invalidId)
+                                            .uri("/api/v1/temperatures/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -231,7 +231,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         doNothing().when(temperatureService).deleteTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/temperatures")
+                                            .uri("/api/v1/temperatures")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -249,7 +249,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
             .when(temperatureService).deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/temperatures")
+                                            .uri("/api/v1/temperatures")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();

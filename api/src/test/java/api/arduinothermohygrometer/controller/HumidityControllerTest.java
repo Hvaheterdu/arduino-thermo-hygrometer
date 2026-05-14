@@ -54,7 +54,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         when(humidityService.getHumidityById(id)).thenReturn(humidityDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/humidities/{id}", id)
+                                            .uri("/api/v1/humidities/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -73,7 +73,7 @@ class HumidityControllerTest extends WebMvcTestBase {
             .thenThrow(new ResourceNotFoundException("Humidity with id=" + invalidId + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/humidities/{id}", invalidId)
+                                            .uri("/api/v1/humidities/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -102,7 +102,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         when(humidityService.getHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate)).thenReturn(humidities);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/humidities")
+                                            .uri("/api/v1/humidities")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -125,7 +125,7 @@ class HumidityControllerTest extends WebMvcTestBase {
             .thenThrow(new ResourceNotFoundException("Humidities with dateTime=" + invalidDateTime + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/humidities")
+                                            .uri("/api/v1/humidities")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -150,7 +150,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(humidityDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/humidities")
+                                            .uri("/api/v1/humidities")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -175,7 +175,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(invalidHumidityDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/humidities")
+                                            .uri("/api/v1/humidities")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -198,7 +198,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         doNothing().when(humidityService).deleteHumidityById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/humidities/{id}", id)
+                                            .uri("/api/v1/humidities/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -213,7 +213,7 @@ class HumidityControllerTest extends WebMvcTestBase {
             .when(humidityService).deleteHumidityById(invalidId);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/humidities/{id}", invalidId)
+                                            .uri("/api/v1/humidities/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -231,7 +231,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         doNothing().when(humidityService).deleteHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/humidities")
+                                            .uri("/api/v1/humidities")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -249,7 +249,7 @@ class HumidityControllerTest extends WebMvcTestBase {
             .when(humidityService).deleteHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/humidities")
+                                            .uri("/api/v1/humidities")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
