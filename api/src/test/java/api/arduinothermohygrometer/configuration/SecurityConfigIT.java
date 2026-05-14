@@ -75,7 +75,7 @@ class SecurityConfigIT {
     }
 
     @Test
-    @DisplayName("Health endpoint when accessed without API key applies security headers to response.")
+    @DisplayName("Health endpoint applies security headers to response when accessed without API key.")
     void givenNoApiKey_whenGettingHealth_thenApplySecurityHeadersToResponse() {
         mockMvcTester.get()
                      .uri("/actuator/health")
@@ -96,7 +96,7 @@ class SecurityConfigIT {
     }
 
     @Test
-    @DisplayName("Health endpoint when accessed without API key over HTTPS applies HSTS header to response.")
+    @DisplayName("Health endpoint over HTTPS applies HSTS header to response when accessed without API key.")
     void givenNoApiKey_whenGettingHealth_thenApplyHstsHeaderToResponse() {
         mockMvcTester.get()
                      .uri("/actuator/health")
@@ -108,7 +108,7 @@ class SecurityConfigIT {
     }
 
     @Test
-    @DisplayName("Info endpoint when accessed without API key returns 401 UNAUTHORIZED.")
+    @DisplayName("Info endpoint accessed without API key returns 401 UNAUTHORIZED.")
     void givenNoApiKey_whenGettingInfo_thenReturn401Unauthorized() {
         mockMvcTester.get()
                      .uri("/actuator/info")
@@ -118,7 +118,7 @@ class SecurityConfigIT {
     }
 
     @Test
-    @DisplayName("Random endpoint when accessed without API key returns 401 UNAUTHORIZED.")
+    @DisplayName("Random endpoint accessed without API key returns 401 UNAUTHORIZED.")
     void givenNoApiKey_whenGettingRandomEndpoint_thenReturn401Unauthorized() {
         mockMvcTester.get()
                      .uri("/random-endpoint")
@@ -128,7 +128,7 @@ class SecurityConfigIT {
     }
 
     @Test
-    @DisplayName("Random endpoint when accessed with API key returns 403 FORBIDDEN.")
+    @DisplayName("Random endpoint accessed with API key returns 403 FORBIDDEN.")
     void givenApiKey_whenGettingRandomEndpoint_thenReturn403Forbidden() {
         mockMvcTester.get()
                      .uri("/random-endpoint")

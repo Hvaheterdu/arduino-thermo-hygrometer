@@ -52,7 +52,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("getTemperatureById returns temperature with valid id.")
-    void givenValidId_whenGettingTemperatureById_thenReturnTemperature() {
+    void givenValidId_whenGetTemperatureById_thenReturnTemperature() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 70.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
@@ -71,7 +71,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("getTemperatureById throws ResourceNotFoundException with invalid id.")
-    void givenInvalidId_whenGettingTemperatureById_thenThrowResourceNotFoundException() {
+    void givenInvalidId_whenGetTemperatureById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(temperatureRepository.getTemperatureById(invalidId)).thenReturn(Optional.empty());
 
@@ -82,7 +82,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("getTemperaturesByDateOrTimestamp returns temperature with valid timestamp.")
-    void givenValidTimestamp_whenGettingTemperaturesByDateOrTimestamp_thenReturnTemperature() {
+    void givenValidTimestamp_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperature() {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now();
         Double temp = 75.00;
@@ -103,7 +103,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("getTemperaturesByDateOrTimestamp returns empty list with invalid timestamp.")
-    void givenInvalidTimestamp_whenGettingTemperaturesByDateOrTimestamp_thenReturnEmptyList() {
+    void givenInvalidTimestamp_whenGetTemperaturesByDateOrTimestamp_thenReturnEmptyList() {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(temperatureRepository.getTemperatureByTimestamp(invalidDateTime)).thenReturn(emptyList());
@@ -117,7 +117,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("getTemperaturesByDateOrTimestamp returns temperatures with valid date.")
-    void givenValidDate_whenGettingTemperaturesByDateOrTimestamp_thenReturnTemperatures() {
+    void givenValidDate_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperatures() {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now();
         Double temp = 75.00;
@@ -145,7 +145,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("getTemperaturesByDate returns empty list with invalid date.")
-    void givenInvalidDate_whenGettingTemperaturesByDate_thenReturnEmptyList() {
+    void givenInvalidDate_whenGetTemperaturesByDate_thenReturnEmptyList() {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(temperatureRepository.getTemperaturesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
@@ -159,7 +159,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("createTemperature returns created temperature with valid temperature model.")
-    void givenValidTemperatureModel_whenCreatingTemperature_thenReturnCreatedTemperature() {
+    void givenValidTemperatureModel_whenCreateTemperature_thenReturnCreatedTemperature() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
@@ -177,7 +177,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("createTemperature throws ResourceNotCreatedException with invalid temperature model.")
-    void givenInvalidTemperatureModel_whenCreatingTemperature_thenThrowResourceNotCreatedException() {
+    void givenInvalidTemperatureModel_whenCreateTemperature_thenThrowResourceNotCreatedException() {
         assertThatThrownBy(() -> temperatureService.createTemperature(null))
             .isInstanceOf(ResourceNotCreatedException.class)
             .hasMessage("Temperature cannot be created.");
@@ -185,7 +185,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("deleteTemperatureById deletes temperature with valid id.")
-    void givenValidId_whenDeletingTemperatureById_thenDeleteTemperature(CapturedOutput capturedOutput) {
+    void givenValidId_whenDeleteTemperatureById_thenDeleteTemperature(CapturedOutput capturedOutput) {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
@@ -207,7 +207,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("deleteTemperatureById throws ResourceNotFoundException with invalid id.")
-    void givenInvalidId_whenDeletingTemperatureById_thenThrowResourceNotFoundException() {
+    void givenInvalidId_whenDeleteTemperatureById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(temperatureRepository.getTemperatureById(invalidId)).thenReturn(Optional.empty());
 
@@ -218,7 +218,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid timestamp.")
-    void givenValidTimestamp_whenDeletingTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
+    void givenValidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now();
         Double temp = 75.00;
@@ -240,7 +240,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp returns with invalid timestamp.")
-    void givenInvalidTimestamp_whenDeletingTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
+    void givenInvalidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(temperatureRepository.getTemperatureByTimestamp(invalidDateTime)).thenReturn(emptyList());
@@ -255,7 +255,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid date.")
-    void givenValidDate_whenDeletingTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
+    void givenValidDate_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now();
         Double temp = 75.00;
@@ -277,7 +277,7 @@ class TemperatureServiceImplTest {
 
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp returns with invalid date.")
-    void givenInvalidDate_whenDeletingTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
+    void givenInvalidDate_whenDeleteTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(temperatureRepository.getTemperaturesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());

@@ -12,3 +12,6 @@ springdoc:
     enabled: true
     operations-sorter: method
     path: /swagger-ui.html
+  servers:
+    - url: http://localhost:5000
+      description: Local development server.

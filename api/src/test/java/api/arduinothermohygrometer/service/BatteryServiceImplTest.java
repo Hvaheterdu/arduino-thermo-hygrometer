@@ -52,7 +52,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("getBatteryById returns battery with valid id.")
-    void givenValidId_whenGettingBatteryById_thenReturnBattery() {
+    void givenValidId_whenGetBatteryById_thenReturnBattery() {
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
@@ -71,7 +71,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("getBatteryById throws ResourceNotFoundException with invalid id.")
-    void givenInvalidId_whenGettingBatteryById_thenThrowResourceNotFoundException() {
+    void givenInvalidId_whenGetBatteryById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(batteryRepository.getBatteryById(invalidId)).thenReturn(Optional.empty());
 
@@ -82,7 +82,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns battery with valid timestamp.")
-    void givenValidTimestamp_whenGettingBatteriesByDateOrTimestamp_thenReturnBattery() {
+    void givenValidTimestamp_whenGetBatteriesByDateOrTimestamp_thenReturnBattery() {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now();
         int batteryStatus = 90;
@@ -103,7 +103,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns empty list with invalid timestamp.")
-    void givenInvalidTimestamp_whenGettingBatteriesByDateOrTimestamp_thenReturnEmptyList() {
+    void givenInvalidTimestamp_whenGetBatteriesByDateOrTimestamp_thenReturnEmptyList() {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(batteryRepository.getBatteryByTimestamp(invalidDateTime)).thenReturn(emptyList());
@@ -117,7 +117,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns batteries with valid date.")
-    void givenValidDate_whenGettingBatteriesByDateOrTimestamp_thenReturnBatteries() {
+    void givenValidDate_whenGetBatteriesByDateOrTimestamp_thenReturnBatteries() {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now();
         int batteryStatus = 90;
@@ -145,7 +145,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns empty list with invalid date.")
-    void givenInvalidDate_whenGettingBatteriesByDateOrTimestamp_thenReturnEmptyList() {
+    void givenInvalidDate_whenGetBatteriesByDateOrTimestamp_thenReturnEmptyList() {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(batteryRepository.getBatteriesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
@@ -159,7 +159,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("createBattery returns created battery with valid battery model.")
-    void givenValidBatteryModel_whenCreatingBattery_thenReturnCreatedBattery() {
+    void givenValidBatteryModel_whenCreateBattery_thenReturnCreatedBattery() {
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
@@ -177,7 +177,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("createBattery throws ResourceNotCreatedException with invalid battery model.")
-    void givenInvalidBatteryModel_whenCreatingBattery_thenThrowResourceNotCreatedException() {
+    void givenInvalidBatteryModel_whenCreateBattery_thenThrowResourceNotCreatedException() {
         assertThatThrownBy(() -> batteryService.createBattery(null))
             .isInstanceOf(ResourceNotCreatedException.class)
             .hasMessage("Battery cannot be created.");
@@ -185,7 +185,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("deleteBatteryById deletes battery with valid id.")
-    void givenValidId_whenDeletingBatteryById_thenDeleteBattery(CapturedOutput capturedOutput) {
+    void givenValidId_whenDeleteBatteryById_thenDeleteBattery(CapturedOutput capturedOutput) {
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
@@ -207,7 +207,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("deleteBatteryById throws ResourceNotFoundException with invalid id.")
-    void givenInvalidId_whenDeletingBatteryById_thenThrowResourceNotFoundException() {
+    void givenInvalidId_whenDeleteBatteryById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(batteryRepository.getBatteryById(invalidId)).thenReturn(Optional.empty());
 
@@ -218,7 +218,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("deleteBatteryByDateOrTimestamp deletes battery with valid timestamp.")
-    void givenValidTimestamp_whenDeletingBatteryByDateOrTimestamp_thenDeleteBattery(CapturedOutput capturedOutput) {
+    void givenValidTimestamp_whenDeleteBatteryByDateOrTimestamp_thenDeleteBattery(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now();
         int batteryStatus = 90;
@@ -240,7 +240,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("deleteBatteryByDateOrTimestamp returns with invalid timestamp.")
-    void givenInvalidTimestamp_whenDeletingBatteryByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
+    void givenInvalidTimestamp_whenDeleteBatteryByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(batteryRepository.getBatteryByTimestamp(invalidDateTime)).thenReturn(emptyList());
@@ -255,7 +255,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("deleteBatteryByDateOrTimestamp deletes battery with valid date.")
-    void givenValidDate_whenDeletingBatteryByDateOrTimestamp_thenDeleteBattery(CapturedOutput capturedOutput) {
+    void givenValidDate_whenDeleteBatteryByDateOrTimestamp_thenDeleteBattery(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now();
         int batteryStatus = 90;
@@ -284,7 +284,7 @@ class BatteryServiceImplTest {
 
     @Test
     @DisplayName("deleteBatteryByDateOrTimestamp returns with invalid date.")
-    void givenInvalidDate_whenDeletingBatteryByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
+    void givenInvalidDate_whenDeleteBatteryByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(batteryRepository.getBatteriesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());

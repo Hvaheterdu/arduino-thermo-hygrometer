@@ -16,22 +16,22 @@ servers:
 
 tags:
   - name: Battery
-    description: Battery status of arduino device.
+    description: Battery status of Arduino device.
   - name: Temperature
-    description: Measured temperature by arduino device.
+    description: Measured temperature by Arduino device.
   - name: Humidity
-    description: Measured humidity by arduino device.
+    description: Measured humidity by Arduino device.
 
 security:
   - ApiKeyAuth: [ ]
 
 paths:
-  /api/batteries:
+  /api/v1/batteries:
     get:
       tags:
-        - Battery.
+        - Battery
       summary: Retrieve a battery by date or timestamp.
-      description: Retrieves the battery status of the arduino device by date or timestamp.
+      description: Retrieves the battery status of the Arduino device by date or timestamp.
       operationId: getBatteriesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -54,9 +54,9 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Battery.
+        - Battery
       summary: Delete battery by date or timestamp.
-      description: Deletes the battery status of the arduino device by date or timestamp.
+      description: Deletes the battery status of the Arduino device by date or timestamp.
       operationId: deleteBatteriesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -70,9 +70,9 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     post:
       tags:
-        - Battery.
+        - Battery
       summary: Create remaining battery.
-      description: Registers the remaining battery status of the arduino device.
+      description: Registers the remaining battery status of the Arduino device.
       operationId: createBattery
       requestBody:
         content:
@@ -98,12 +98,12 @@ paths:
         "400":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
 
-  /api/batteries/{id}:
+  /api/v1/batteries/{id}:
     get:
       tags:
-        - Battery.
+        - Battery
       summary: Retrieve a battery by id.
-      description: Retrieves the battery status of the arduino device by id.
+      description: Retrieves the battery status of the Arduino device by id.
       operationId: getBatteryById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -123,9 +123,9 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Battery.
+        - Battery
       summary: Delete battery by id.
-      description: Deletes the battery status of the arduino device by id.
+      description: Deletes the battery status of the Arduino device by id.
       operationId: deleteBatteryDtoById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -137,12 +137,12 @@ paths:
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
 
-  /api/humidities:
+  /api/v1/humidities:
     get:
       tags:
-        - Humidity.
+        - Humidity
       summary: Retrieve measured humidity by date or timestamp.
-      description: Retrieves the measured humidity from the arduino device by date or timestamp.
+      description: Retrieves the measured humidity from the Arduino device by date or timestamp.
       operationId: getHumiditiesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -165,9 +165,9 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Humidity.
+        - Humidity
       summary: Delete measured humidity by date or timestamp.
-      description: Deletes the measured humidity from the arduino device by date or timestamp.
+      description: Deletes the measured humidity from the Arduino device by date or timestamp.
       operationId: deleteHumiditiesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -181,9 +181,9 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     post:
       tags:
-        - Humidity.
+        - Humidity
       summary: Create measured humidity.
-      description: Registers the measured humidity from the arduino device.
+      description: Registers the measured humidity from the Arduino device.
       operationId: createHumidity
       requestBody:
         content:
@@ -209,12 +209,12 @@ paths:
         "400":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
 
-  /api/humidities/{id}:
+  /api/v1/humidities/{id}:
     get:
       tags:
-        - Humidity.
+        - Humidity
       summary: Retrieve measured humidity by id.
-      description: Retrieves the measured humidity from the arduino device by id.
+      description: Retrieves the measured humidity from the Arduino device by id.
       operationId: getHumidityById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -234,9 +234,9 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Humidity.
+        - Humidity
       summary: Delete measured humidity by id.
-      description: Deletes the measured humidity from the arduino device by id.
+      description: Deletes the measured humidity from the Arduino device by id.
       operationId: deleteHumidityDtoById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -248,12 +248,12 @@ paths:
         "404":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
 
-  /api/temperatures:
+  /api/v1/temperatures:
     get:
       tags:
-        - Temperature.
+        - Temperature
       summary: Retrieve measured temperature by date or timestamp.
-      description: Retrieves the measured temperature from the arduino device by date or timestamp.
+      description: Retrieves the measured temperature from the Arduino device by date or timestamp.
       operationId: getTemperaturesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -276,9 +276,9 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Temperature.
+        - Temperature
       summary: Delete measured temperature by date or timestamp.
-      description: Deletes the measured temperature from the arduino device by date or timestamp.
+      description: Deletes the measured temperature from the Arduino device by date or timestamp.
       operationId: deleteTemperaturesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/DateTimeParam"
@@ -292,9 +292,9 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     post:
       tags:
-        - Temperature.
+        - Temperature
       summary: Create measured temperature.
-      description: Registers the measured temperature from the arduino device.
+      description: Registers the measured temperature from the Arduino device.
       operationId: createTemperature
       requestBody:
         content:
@@ -320,12 +320,12 @@ paths:
         "400":
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
 
-  /api/temperatures/{id}:
+  /api/v1/temperatures/{id}:
     get:
       tags:
-        - Temperature.
+        - Temperature
       summary: Retrieve measured temperature by id.
-      description: Retrieves the measured temperature from the arduino device by id.
+      description: Retrieves the measured temperature from the Arduino device by id.
       operationId: getTemperatureById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -345,9 +345,9 @@ paths:
           $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
     delete:
       tags:
-        - Temperature.
+        - Temperature
       summary: Delete measured temperature by id.
-      description: Deletes the measured temperature from the arduino device by id.
+      description: Deletes the measured temperature from the Arduino device by id.
       operationId: deleteTemperatureDtoById
       parameters:
         - $ref: "#/components/parameters/IdParam"
@@ -365,43 +365,27 @@ components:
       type: apiKey
       in: header
       name: X-API-KEY
+
   examples:
-    ExampleTemperature:
-      description: Example of Temperature object.
+    ExampleBattery:
+      description: Example of Battery object.
       value:
-        registeredAt: "2017-07-21T17:32:28Z"
-        temp: 70.00
+        registeredAt: "2017-07-21T17:00:00Z"
+        batteryStatus: 50
 
     ExampleHumidity:
       description: Example of Humidity object.
       value:
-        registeredAt: "2017-07-21T17:32:28Z"
+        registeredAt: "2017-07-21T17:00:00Z"
         airHumidity: 70.00
 
-    ExampleBattery:
-      description: Example of Battery object.
+    ExampleTemperature:
+      description: Example of Temperature object.
       value:
-        registeredAt: "2017-07-21T17:32:28Z"
-        batteryStatus: 50
+        registeredAt: "2017-07-21T17:00:00Z"
+        temp: 70.00
 
   parameters:
-    DateTimeParam:
-      in: query
-      name: dateTime
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: "2017-07-21T17:32:28Z"
-
-    CheckOnlyDateParam:
-      in: query
-      name: checkOnlyDate
-      required: true
-      schema:
-        type: boolean
-        example: true
-
     IdParam:
       in: path
       name: id
@@ -411,23 +395,40 @@ components:
         format: uuid
         example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
 
+    DateTimeParam:
+      in: query
+      name: dateTime
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: "2017-07-21T17:00:00Z"
+
+    CheckOnlyDateParam:
+      in: query
+      name: checkOnlyDate
+      required: false
+      schema:
+        type: boolean
+        example: true
+
   schemas:
-    TemperatureDto:
+    BatteryDto:
       type: object
       properties:
         registeredAt:
           type: string
           format: date-time
-          example: "2017-07-21T17:32:28Z"
-        temp:
-          type: number
-          format: double
-          minimum: -55.00
-          maximum: 125.00
-          example: 100.00
+          example: "2017-07-21T17:00:00Z"
+        batteryStatus:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          example: 70
       required:
         - registeredAt
-        - temp
+        - batteryStatus
 
     HumidityDto:
       type: object
@@ -435,7 +436,7 @@ components:
         registeredAt:
           type: string
           format: date-time
-          example: "2017-07-21T17:32:28Z"
+          example: "2017-07-21T17:00:00Z"
         airHumidity:
           type: number
           format: double
@@ -446,19 +447,19 @@ components:
         - registeredAt
         - airHumidity
 
-    BatteryDto:
+    TemperatureDto:
       type: object
       properties:
         registeredAt:
           type: string
           format: date-time
-          example: "2017-07-21T17:32:28Z"
-        batteryStatus:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 100
-          example: 50
+          example: "2017-07-21T17:00:00Z"
+        temp:
+          type: number
+          format: double
+          minimum: -55.00
+          maximum: 125.00
+          example: 70.00
       required:
         - registeredAt
-        - batteryStatus
+        - temp

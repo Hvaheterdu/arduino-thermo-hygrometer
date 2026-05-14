@@ -26,8 +26,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String BASE_URL = "https://api.arduinothermohygrometer/errors/";
 
     @Override
-    protected ResponseEntity<@NonNull Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-        @NonNull HttpHeaders httpHeaders,
+    protected ResponseEntity<@NonNull Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NonNull HttpHeaders httpHeaders,
         @NonNull HttpStatusCode httpStatusCode,
         @NonNull WebRequest webRequest) {
         log.error("Method argument not valid exception with message={}.", ex.getMessage());
@@ -65,8 +64,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, "internal-error", "Internal server error.", ex.getMessage(), request);
     }
 
-    private ProblemDetail buildProblemDetail(HttpStatus status, String type, String title, String detail,
-        HttpServletRequest request) {
+    private ProblemDetail buildProblemDetail(HttpStatus status, String type, String title, String detail, HttpServletRequest request) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, detail);
         problemDetail.setType(URI.create(BASE_URL + type));
         problemDetail.setTitle(title);

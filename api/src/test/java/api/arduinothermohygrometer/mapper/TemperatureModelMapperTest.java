@@ -13,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("TemperatureModelMapper unit tests.")
 class TemperatureModelMapperTest {
     @Test
-    @DisplayName("toModel returns temperature model from valid temperatureDto model.")
-    void givenValidTemperatureDtoModel_whenToModel_thenReturnTemperatureModel() {
+    @DisplayName("toModel returns temperature model from valid temperature dto.")
+    void givenValidTemperatureDto_whenToModel_thenReturnTemperatureModel() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 86.123;
         TemperatureDto temperatureDto = TemperatureDto.builder()
@@ -29,8 +29,8 @@ class TemperatureModelMapperTest {
     }
 
     @Test
-    @DisplayName("toDto returns temperatureDto model from valid temperature model.")
-    void givenValidTemperatureModel_whenToDto_thenReturnTemperatureDtoModel() {
+    @DisplayName("toDto returns temperature dto from valid temperature model.")
+    void givenValidTemperatureModel_whenToDto_thenReturnTemperatureDto() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 86.425;
         Temperature temperature = new Temperature(registeredAt, temp);

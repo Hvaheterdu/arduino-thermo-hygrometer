@@ -43,7 +43,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getTemperatureById returns 200 OK with valid id.")
-    void givenValidId_whenGettingTemperatureById_thenReturn200OK() {
+    void givenValidId_whenGetTemperatureById_thenReturn200OK() {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 20.01;
@@ -54,7 +54,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         when(temperatureService.getTemperatureById(id)).thenReturn(temperatureDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures/{id}", id)
+                                            .uri("/temperatures/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -67,13 +67,13 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getTemperatureById returns 404 NOT FOUND with invalid id.")
-    void givenInvalidId_whenGettingTemperatureById_thenReturn404NotFound() {
+    void givenInvalidId_whenGetTemperatureById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         when(temperatureService.getTemperatureById(invalidId))
             .thenThrow(new ResourceNotFoundException("Temperature with id=" + invalidId + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures/{id}", invalidId)
+                                            .uri("/temperatures/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -85,7 +85,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getTemperaturesByDateOrTimestamp returns 200 OK with valid dateTime.")
-    void givenValidDateTime_whenGettingTemperaturesByDateOrTimestamp_thenReturn200OK() {
+    void givenValidDateTime_whenGetTemperaturesByDateOrTimestamp_thenReturn200OK() {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 20.01;
@@ -102,7 +102,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         when(temperatureService.getTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate)).thenReturn(temperatureDtos);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures")
+                                            .uri("/temperatures")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -118,14 +118,14 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getTemperaturesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenGettingTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidDateTime_whenGetTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         when(temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
             .thenThrow(new ResourceNotFoundException("Temperatures with dateTime=" + invalidDateTime + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/temperatures")
+                                            .uri("/temperatures")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -138,8 +138,8 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("create returns 201 CREATED for creating valid temperature model.")
-    void givenValidTemperatureDtoModel_whenCreating_thenReturn201CREATED() {
+    @DisplayName("createTemperature returns 201 CREATED for creating valid temperature model.")
+    void givenValidTemperatureDtoModel_whenCreateTemperature_thenReturn201CREATED() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 21.02;
         TemperatureDto temperatureDto = TemperatureDto.builder()
@@ -150,7 +150,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(temperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/api/temperatures")
+                                            .uri("/temperatures")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -164,8 +164,8 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("create returns 400 BAD REQUEST for creating invalid temperature model.")
-    void givenInvalidTemperatureDtoModel_whenCreating_thenReturn400BadRequest() {
+    @DisplayName("createTemperature returns 400 BAD REQUEST for attempting to create invalid temperature dto.")
+    void givenInvalidTemperatureDto_whenCreateTemperature_thenReturn400BadRequest() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 150.03;
         TemperatureDto invalidTemperatureDto = TemperatureDto.builder()
@@ -175,7 +175,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(invalidTemperatureDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/api/temperatures")
+                                            .uri("/temperatures")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -193,12 +193,12 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteTemperatureById returns 204 NO CONTENT with valid id.")
-    void givenValidId_whenDeletingTemperatureById_thenReturn204NoContent() {
+    void givenValidId_whenDeleteTemperatureById_thenReturn204NoContent() {
         UUID id = UUID.randomUUID();
         doNothing().when(temperatureService).deleteTemperatureById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/temperatures/{id}", id)
+                                            .uri("/temperatures/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -207,13 +207,13 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteTemperatureById returns 404 NOT FOUND with invalid id.")
-    void givenInvalidId_whenDeletingTemperatureById_thenReturn404NotFound() {
+    void givenInvalidId_whenDeleteTemperatureById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         doThrow(new ResourceNotFoundException("Temperature with id=" + invalidId + " not found.")).when(temperatureService)
                                                                                                   .deleteTemperatureById(invalidId);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/temperatures/{id}", invalidId)
+                                            .uri("/temperatures/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -225,13 +225,13 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp returns 204 NO CONTENT with valid dateTime.")
-    void givenValidDateTime_whenDeletingTemperaturesByDateOrTimestamp_thenReturn204NoContent() {
+    void givenValidDateTime_whenDeleteTemperaturesByDateOrTimestamp_thenReturn204NoContent() {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         doNothing().when(temperatureService).deleteTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/temperatures")
+                                            .uri("/temperatures")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -242,14 +242,14 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenDeletingTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidDateTime_whenDeleteTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         doThrow(new ResourceNotFoundException("Temperatures with dateTime=" + invalidDateTime + " not found."))
             .when(temperatureService).deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/temperatures")
+                                            .uri("/temperatures")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();

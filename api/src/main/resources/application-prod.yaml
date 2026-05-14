@@ -10,3 +10,6 @@ springdoc:
     enabled: false
   swagger-ui:
     enabled: false
+  servers:
+    - url: http://localhost:5000
+      description: Production server.

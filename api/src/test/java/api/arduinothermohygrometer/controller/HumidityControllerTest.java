@@ -43,7 +43,7 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getHumidityById returns 200 OK with valid id.")
-    void givenValidId_whenGettingHumidityById_thenReturn200OK() {
+    void givenValidId_whenGetHumidityById_thenReturn200OK() {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 20.01;
@@ -54,7 +54,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         when(humidityService.getHumidityById(id)).thenReturn(humidityDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/humidities/{id}", id)
+                                            .uri("/humidities/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -67,13 +67,13 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getHumidityById returns 404 NOT FOUND with invalid id.")
-    void givenInvalidId_whenGettingHumidityById_thenReturn404NotFound() {
+    void givenInvalidId_whenGetHumidityById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         when(humidityService.getHumidityById(invalidId))
             .thenThrow(new ResourceNotFoundException("Humidity with id=" + invalidId + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/humidities/{id}", invalidId)
+                                            .uri("/humidities/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -85,7 +85,7 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getHumiditiesByDateOrTimestamp returns 200 OK with valid dateTime.")
-    void givenValidDateTime_whenGettingHumiditiesByDateOrTimestamp_thenReturn200OK() {
+    void givenValidDateTime_whenGetHumiditiesByDateOrTimestamp_thenReturn200OK() {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 20.01;
@@ -102,7 +102,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         when(humidityService.getHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate)).thenReturn(humidities);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/humidities")
+                                            .uri("/humidities")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -118,14 +118,14 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenGettingHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidDateTime_whenGetHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         when(humidityService.getHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
             .thenThrow(new ResourceNotFoundException("Humidities with dateTime=" + invalidDateTime + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/humidities")
+                                            .uri("/humidities")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -138,8 +138,8 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("create returns 201 CREATED for creating valid humidity model.")
-    void givenValidHumidityDtoModel_whenCreating_thenReturn201CREATED() {
+    @DisplayName("createHumidity returns 201 CREATED for creating valid humidity model.")
+    void givenValidHumidityDtoModel_whenCreateHumidity_thenReturn201CREATED() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 21.02;
         HumidityDto humidityDto = HumidityDto.builder()
@@ -150,7 +150,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(humidityDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/api/humidities")
+                                            .uri("/humidities")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -164,8 +164,8 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("create returns 400 BAD REQUEST for creating invalid humidity model.")
-    void givenInvalidHumidityDtoModel_whenCreating_thenReturn400BadRequest() {
+    @DisplayName("createHumidity returns 400 BAD REQUEST for attempting to create invalid humidity dto.")
+    void givenInvalidHumidityDto_whenCreateHumidity_thenReturn400BadRequest() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 150.03;
         HumidityDto invalidHumidityDto = HumidityDto.builder()
@@ -175,7 +175,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(invalidHumidityDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/api/humidities")
+                                            .uri("/humidities")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -193,12 +193,12 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteHumidityById returns 204 NO CONTENT with valid id.")
-    void givenValidId_whenDeletingHumidityById_thenReturn204NoContent() {
+    void givenValidId_whenDeleteHumidityById_thenReturn204NoContent() {
         UUID id = UUID.randomUUID();
         doNothing().when(humidityService).deleteHumidityById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/humidities/{id}", id)
+                                            .uri("/humidities/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -207,13 +207,13 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteHumidityById returns 404 NOT FOUND with invalid id.")
-    void givenInvalidId_whenDeletingHumidityById_thenReturn404NotFound() {
+    void givenInvalidId_whenDeleteHumidityById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         doThrow(new ResourceNotFoundException("Humidity with id=" + invalidId + " not found."))
             .when(humidityService).deleteHumidityById(invalidId);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/humidities/{id}", invalidId)
+                                            .uri("/humidities/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -225,13 +225,13 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteHumiditiesByDateOrTimestamp returns 204 NO CONTENT with valid dateTime.")
-    void givenValidDateTime_whenDeletingHumiditiesByDateOrTimestamp_thenReturn204NoContent() {
+    void givenValidDateTime_whenDeleteHumiditiesByDateOrTimestamp_thenReturn204NoContent() {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         doNothing().when(humidityService).deleteHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/humidities")
+                                            .uri("/humidities")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -242,14 +242,14 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenDeletingHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidDateTime_whenDeleteHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         doThrow(new ResourceNotFoundException("Humidities with dateTime=" + invalidDateTime + " not found."))
             .when(humidityService).deleteHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/humidities")
+                                            .uri("/humidities")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();

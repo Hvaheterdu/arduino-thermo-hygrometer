@@ -24,7 +24,6 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) {
         String apiKey = Objects.requireNonNull(authentication.getCredentials()).toString();
-
         if (!securityProperties.apiKey().equals(apiKey)) {
             throw new BadCredentialsException("Invalid API key");
         }

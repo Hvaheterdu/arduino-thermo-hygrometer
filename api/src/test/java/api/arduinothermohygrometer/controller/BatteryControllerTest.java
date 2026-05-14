@@ -43,7 +43,7 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getBatteryById returns 200 OK with valid id.")
-    void givenValidId_whenGettingBatteryById_thenReturn200OK() {
+    void givenValidId_whenGetBatteryById_thenReturn200OK() {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 90;
@@ -54,7 +54,7 @@ class BatteryControllerTest extends WebMvcTestBase {
         when(batteryService.getBatteryById(id)).thenReturn(batteryDto);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/batteries/{id}", id)
+                                            .uri("/api/v1/batteries/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -67,13 +67,13 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getBatteryById returns 404 NOT FOUND with invalid id.")
-    void givenInvalidId_whenGettingBatteryById_thenReturn404NotFound() {
+    void givenInvalidId_whenGetBatteryById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         when(batteryService.getBatteryById(invalidId))
             .thenThrow(new ResourceNotFoundException("Battery with id=" + invalidId + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/batteries/{id}", invalidId)
+                                            .uri("/api/v1/batteries/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -85,7 +85,7 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns 200 OK with valid dateTime.")
-    void givenValidDateTime_whenGettingBatteriesByDateOrTimestamp_thenReturn200OK() {
+    void givenValidDateTime_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 95;
@@ -102,7 +102,7 @@ class BatteryControllerTest extends WebMvcTestBase {
         when(batteryService.getBatteriesByDateOrTimestamp(dateTime, checkOnlyDate)).thenReturn(batteryDtos);
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/batteries")
+                                            .uri("/api/v1/batteries")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -118,14 +118,14 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenGettingBatteriesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidDateTime_whenGetBatteriesByDateOrTimestamp_thenReturn404NotFound() {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         when(batteryService.getBatteriesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
             .thenThrow(new ResourceNotFoundException("Batteries with dateTime=" + invalidDateTime + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
-                                            .uri("/api/batteries")
+                                            .uri("/api/v1/batteries")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -138,8 +138,8 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("create returns 201 CREATED for creating valid battery model.")
-    void givenValidBatteryDtoModel_whenCreating_thenReturn201CREATED() {
+    @DisplayName("createBattery returns 201 CREATED for creating valid battery model.")
+    void givenValidBatteryDtoModel_whenCreateBattery_thenReturn201CREATED() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 95;
         BatteryDto batteryDto = BatteryDto.builder()
@@ -150,7 +150,7 @@ class BatteryControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(batteryDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/api/batteries")
+                                            .uri("/api/v1/batteries")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -164,8 +164,8 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("create returns 400 BAD REQUEST for creating invalid batteryDto model.")
-    void givenInvalidBatteryDtoModel_whenCreating_thenReturn400BadRequest() {
+    @DisplayName("createBattery returns 400 BAD REQUEST for attempting to create invalid battery dto.")
+    void givenInvalidBatteryDto_whenCreateBattery_thenReturn400BadRequest() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 105;
         BatteryDto invalidBatteryDto = BatteryDto.builder()
@@ -175,7 +175,7 @@ class BatteryControllerTest extends WebMvcTestBase {
         String requestJson = objectMapper.writeValueAsString(invalidBatteryDto);
 
         MvcTestResult result = mockMvcTester.post()
-                                            .uri("/api/batteries")
+                                            .uri("/api/v1/batteries")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(requestJson)
                                             .exchange();
@@ -193,12 +193,12 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteBatteryById returns 204 NO CONTENT with valid id.")
-    void givenValidId_whenDeletingBatteryById_thenReturn204NoContent() {
+    void givenValidId_whenDeleteBatteryById_thenReturn204NoContent() {
         UUID id = UUID.randomUUID();
         doNothing().when(batteryService).deleteBatteryById(id);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/batteries/{id}", id)
+                                            .uri("/api/v1/batteries/{id}", id)
                                             .exchange();
 
         assertThat(result)
@@ -207,12 +207,12 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteBatteryById returns 404 NOT FOUND with invalid id.")
-    void givenInvalidId_whenDeletingBatteryById_thenReturn404NotFound() {
+    void givenInvalidId_whenDeleteBatteryById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         doThrow(new ResourceNotFoundException("Battery with id=" + invalidId + " not found.")).when(batteryService).deleteBatteryById(invalidId);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/batteries/{id}", invalidId)
+                                            .uri("/api/v1/batteries/{id}", invalidId)
                                             .exchange();
 
         assertThat(result)
@@ -224,13 +224,13 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteBatteriesByDateOrTimestamp returns 204 NO CONTENT with valid dateTime.")
-    void givenValidDateTime_whenDeletingBatteriesByDateOrTimestamp_thenReturn204NoContent() {
+    void givenValidDateTime_whenDeleteBatteriesByDateOrTimestamp_thenReturn204NoContent() {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         doNothing().when(batteryService).deleteBatteriesByDateOrTimestamp(dateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/batteries")
+                                            .uri("/api/v1/batteries")
                                             .param("dateTime", dateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();
@@ -241,14 +241,14 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Test
     @DisplayName("deleteBatteriesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenDeletingBatteriesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidDateTime_whenDeleteBatteriesByDateOrTimestamp_thenReturn404NotFound() {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         doThrow(new ResourceNotFoundException("Batteries with dateTime=" + invalidDateTime + " not found."))
             .when(batteryService).deleteBatteriesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
 
         MvcTestResult result = mockMvcTester.delete()
-                                            .uri("/api/batteries")
+                                            .uri("/api/v1/batteries")
                                             .param("dateTime", invalidDateTime.toString())
                                             .param("checkOnlyDate", String.valueOf(checkOnlyDate))
                                             .exchange();

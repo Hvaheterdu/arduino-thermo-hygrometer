@@ -357,6 +357,7 @@
                 <skipDefaultInterface>true</skipDefaultInterface>
                 <snapshotVersion>true</snapshotVersion>
                 <useSpringBoot4>true</useSpringBoot4>
+                <useSpringController>true</useSpringController>
                 <useTags>true</useTags>
                 <useJakartaEe>true</useJakartaEe>
                 <serializableModel>true</serializableModel>

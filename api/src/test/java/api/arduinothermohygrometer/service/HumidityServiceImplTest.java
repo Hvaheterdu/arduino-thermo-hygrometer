@@ -52,7 +52,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("getHumidityById returns humidity with valid id.")
-    void givenValidId_whenGettingHumidityById_thenReturnHumidity() {
+    void givenValidId_whenGetHumidityById_thenReturnHumidity() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 70.00;
         HumidityDto humidityDto = HumidityDto.builder()
@@ -71,7 +71,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("getHumidityById throws ResourceNotFoundException with invalid id.")
-    void givenInvalidId_whenGettingHumidityById_thenThrowResourceNotFoundException() {
+    void givenInvalidId_whenGetHumidityById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(humidityRepository.getHumidityById(invalidId)).thenReturn(Optional.empty());
 
@@ -82,7 +82,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("getHumiditiesByDateOrTimestamp returns humidity with valid timestamp.")
-    void givenValidTimestamp_whenGettingHumiditiesByDateOrTimestamp_thenReturnHumidity() {
+    void givenValidTimestamp_whenGetHumiditiesByDateOrTimestamp_thenReturnHumidity() {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now();
         Double airHumidity = 75.00;
@@ -103,7 +103,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("getHumiditiesByDateOrTimestamp returns empty list with invalid timestamp.")
-    void givenInvalidTimestamp_whenGettingHumiditiesByDateOrTimestamp_thenReturnEmptyList() {
+    void givenInvalidTimestamp_whenGetHumiditiesByDateOrTimestamp_thenReturnEmptyList() {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(humidityRepository.getHumidityByTimestamp(invalidDateTime)).thenReturn(emptyList());
@@ -117,7 +117,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("getHumiditiesByDateOrTimestamp returns humidities with valid date.")
-    void givenValidDate_whenGettingHumiditiesByDateOrTimestamp_thenReturnHumidities() {
+    void givenValidDate_whenGetHumiditiesByDateOrTimestamp_thenReturnHumidities() {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now();
         Double airHumidity = 75.00;
@@ -145,7 +145,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("getHumiditiesByDateOrTimestamp returns empty list with invalid date.")
-    void givenInvalidDate_whenGettingHumiditiesByDate_thenReturnEmptyList() {
+    void givenInvalidDate_whenGetHumiditiesByDate_thenReturnEmptyList() {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(humidityRepository.getHumiditiesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
@@ -159,7 +159,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("createHumidity returns created humidity with valid humidity model.")
-    void givenValidHumidityModel_whenCreatingHumidity_thenReturnCreatedHumidity() {
+    void givenValidHumidityModel_whenCreateHumidity_thenReturnCreatedHumidity() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 75.00;
         HumidityDto humidityDto = HumidityDto.builder()
@@ -177,7 +177,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("createHumidity throws ResourceNotCreatedException with invalid humidity model.")
-    void givenInvalidHumidityModel_whenCreatingHumidity_thenThrowResourceNotCreatedException() {
+    void givenInvalidHumidityModel_whenCreateHumidity_thenThrowResourceNotCreatedException() {
         assertThatThrownBy(() -> humidityService.createHumidity(null))
             .isInstanceOf(ResourceNotCreatedException.class)
             .hasMessage("Humidity cannot be created.");
@@ -185,7 +185,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("deleteHumidityById deletes humidity with valid id.")
-    void givenValidId_whenDeletingHumidityById_thenDeleteHumidity(CapturedOutput capturedOutput) {
+    void givenValidId_whenDeleteHumidityById_thenDeleteHumidity(CapturedOutput capturedOutput) {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 75.00;
         HumidityDto humidityDto = HumidityDto.builder()
@@ -207,7 +207,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("deleteHumidityById throws ResourceNotFoundException with invalid id.")
-    void givenInvalidId_whenDeletingHumidityById_thenThrowResourceNotFoundException() {
+    void givenInvalidId_whenDeleteHumidityById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(humidityRepository.getHumidityById(invalidId)).thenReturn(Optional.empty());
 
@@ -218,7 +218,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("deleteHumiditiesByTimestamp deletes humidity with valid timestamp.")
-    void givenValidTimestamp_whenDeletingHumiditiesByTimestamp_thenDeleteHumidity(CapturedOutput capturedOutput) {
+    void givenValidTimestamp_whenDeleteHumiditiesByTimestamp_thenDeleteHumidity(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
         LocalDateTime dateTime = LocalDateTime.now();
         Double airHumidity = 75.00;
@@ -240,7 +240,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("deleteHumiditiesByDateOrTimestamp returns with invalid timestamp.")
-    void givenInvalidTimestamp_whenDeletingHumiditiesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
+    void givenInvalidTimestamp_whenDeleteHumiditiesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = false;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(humidityRepository.getHumidityByTimestamp(invalidDateTime)).thenReturn(emptyList());
@@ -255,7 +255,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("deleteHumiditiesByDateOrTimestamp deletes humidity with valid date.")
-    void givenValidDate_whenDeletingHumiditiesByDateOrTimestamp_thenDeleteHumidity(CapturedOutput capturedOutput) {
+    void givenValidDate_whenDeleteHumiditiesByDateOrTimestamp_thenDeleteHumidity(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime dateTime = LocalDateTime.now();
         Double airHumidity = 75.00;
@@ -277,7 +277,7 @@ class HumidityServiceImplTest {
 
     @Test
     @DisplayName("deleteHumiditiesByDateOrTimestamp returns with invalid date.")
-    void givenInvalidDate_whenDeletingHumiditiesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
+    void givenInvalidDate_whenDeleteHumiditiesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean checkOnlyDate = true;
         LocalDateTime invalidDateTime = LocalDateTime.now();
         when(humidityRepository.getHumiditiesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());

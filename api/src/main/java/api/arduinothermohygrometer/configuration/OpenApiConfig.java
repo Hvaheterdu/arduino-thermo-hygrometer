@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import api.arduinothermohygrometer.properties.OpenApiProperties;
+import api.arduinothermohygrometer.properties.OpenApiServerProperties;
+import api.arduinothermohygrometer.properties.OpenApiSingleServerProperties;
 import api.arduinothermohygrometer.properties.SecurityProperties;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -18,16 +20,19 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 public class OpenApiConfig {
     private final BuildProperties buildProperties;
     private final OpenApiProperties openApiProperties;
+    private final OpenApiServerProperties openApiServerProperties;
     private final SecurityProperties securityProperties;
 
-    public OpenApiConfig(BuildProperties buildProperties, OpenApiProperties openApiProperties, SecurityProperties securityProperties) {
+    public OpenApiConfig(BuildProperties buildProperties, OpenApiProperties openApiProperties,
+        OpenApiServerProperties openApiServerProperties, SecurityProperties securityProperties) {
         this.buildProperties = buildProperties;
         this.openApiProperties = openApiProperties;
+        this.openApiServerProperties = openApiServerProperties;
         this.securityProperties = securityProperties;
     }
 
     @Bean
-    OpenAPI customOpenAPI() {
+    public OpenAPI customOpenAPI() {
         return new OpenAPI().addSecurityItem(
                                 new SecurityRequirement()
                                     .addList(securityProperties.apiSchemeName())
@@ -51,6 +56,11 @@ public class OpenApiConfig {
                                     .name(openApiProperties.license().name())
                                     .url(openApiProperties.license().url())
                                 )
+                            )
+                            .servers(openApiServerProperties.servers()
+                                                            .stream()
+                                                            .map(OpenApiSingleServerProperties::generateOpenApiServer)
+                                                            .toList()
                             );
     }
 }

@@ -105,6 +105,7 @@ public class SecurityConfig {
                         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, authenticationException.getMessage());
                         problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/unauthorized"));
                         problemDetail.setTitle("Unauthorized.");
+                        problemDetail.setInstance(URI.create(request.getRequestURI()));
                         problemDetail.setProperty("timestamp", Instant.now());
 
                         writeProblemDetails(response, problemDetail);
@@ -113,6 +114,7 @@ public class SecurityConfig {
                         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, accessDeniedException.getMessage());
                         problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/forbidden"));
                         problemDetail.setTitle("Forbidden.");
+                        problemDetail.setInstance(URI.create(request.getRequestURI()));
                         problemDetail.setProperty("timestamp", Instant.now());
 
                         writeProblemDetails(response, problemDetail);
