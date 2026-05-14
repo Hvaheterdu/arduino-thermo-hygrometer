@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import api.arduinothermohygrometer.model.Battery;
@@ -66,18 +64,18 @@ public class BatteryRepositoryImpl implements BatteryRepository {
     }
 
     @Override
-    public void createBattery(final Battery battery) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+    public Optional<Battery> createBattery(final Battery battery) {
         String sql = """
-            INSERT INTO batteries (id, registered_at, battery_status)
-            VALUES (:id, :registered_at, :battery_status)
+            INSERT INTO batteries (registered_at, battery_status)
+            VALUES (:registered_at, :battery_status)
+            RETURNING id, registered_at, battery_status
             """;
 
-        jdbcClient.sql(sql)
-                  .param("id", battery.getId())
-                  .param("registered_at", battery.getRegisteredAt())
-                  .param("battery_status", battery.getBatteryStatus())
-                  .update(keyHolder, "id");
+        return jdbcClient.sql(sql)
+                         .param("registered_at", battery.getRegisteredAt())
+                         .param("battery_status", battery.getBatteryStatus())
+                         .query(Battery.class)
+                         .optional();
     }
 
     @Override

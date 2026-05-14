@@ -16,6 +16,7 @@ import api.arduinothermohygrometer.properties.OpenApiSingleServerProperties;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.servers.ServerVariable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -96,6 +97,13 @@ class OpenApiConfigIT {
             .satisfies(server -> {
                 assertThat(server.getUrl()).isEqualTo(openApiSingleServerProperties.url());
                 assertThat(server.getDescription()).isEqualTo(openApiSingleServerProperties.description());
+                assertThat(server.getVariables().keySet()).isEqualTo(openApiSingleServerProperties.variables().keySet());
+                ServerVariable hostServerVariable = server.getVariables().get("host");
+                assertThat(hostServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("host")._default());
+                assertThat(hostServerVariable.getEnum()).isEqualTo(openApiSingleServerProperties.variables().get("host")._enum());
+                ServerVariable portServerVariable = server.getVariables().get("port");
+                assertThat(portServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("port")._default());
+                assertThat(portServerVariable.getEnum()).isEqualTo(openApiSingleServerProperties.variables().get("port")._enum());
             });
     }
 }

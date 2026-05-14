@@ -68,8 +68,8 @@ public class BatteryServiceImpl implements BatteryService {
             throw new ResourceNotCreatedException("Battery cannot be created.");
         }
 
-        Battery battery = BatteryModelMapper.toModel(batteryDto);
-        batteryRepository.createBattery(battery);
+        Battery battery = batteryRepository.createBattery(BatteryModelMapper.toModel(batteryDto))
+                                           .orElseThrow(() -> new ResourceNotCreatedException("Battery cannot be created."));
         log.info("Battery with id={} and registered_at={} created.", battery.getId(), battery.getRegisteredAt());
 
         return BatteryModelMapper.toDto(battery);

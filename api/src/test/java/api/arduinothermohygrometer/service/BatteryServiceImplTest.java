@@ -53,6 +53,7 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("getBatteryById returns battery with valid id.")
     void givenValidId_whenGetBatteryById_thenReturnBattery() {
+        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
@@ -60,7 +61,6 @@ class BatteryServiceImplTest {
                                           .batteryStatus(batteryStatus)
                                           .build();
         Battery battery = BatteryModelMapper.toModel(batteryDto);
-        UUID id = battery.getId();
         when(batteryRepository.getBatteryById(id)).thenReturn(Optional.of(battery));
 
         BatteryDto result = batteryService.getBatteryById(id);
@@ -166,7 +166,8 @@ class BatteryServiceImplTest {
                                           .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
-        doNothing().when(batteryRepository).createBattery(any());
+        Optional<Battery> battery = Optional.of(new Battery(registeredAt, batteryStatus));
+        when(batteryRepository.createBattery(any())).thenReturn(battery);
 
         BatteryDto result = batteryService.createBattery(batteryDto);
 
@@ -186,6 +187,7 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("deleteBatteryById deletes battery with valid id.")
     void givenValidId_whenDeleteBatteryById_thenDeleteBattery(CapturedOutput capturedOutput) {
+        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
@@ -193,7 +195,6 @@ class BatteryServiceImplTest {
                                           .batteryStatus(batteryStatus)
                                           .build();
         Battery battery = BatteryModelMapper.toModel(batteryDto);
-        UUID id = battery.getId();
         when(batteryRepository.getBatteryById(id)).thenReturn(Optional.of(battery));
         doNothing().when(batteryRepository).deleteBatteryById(id);
 

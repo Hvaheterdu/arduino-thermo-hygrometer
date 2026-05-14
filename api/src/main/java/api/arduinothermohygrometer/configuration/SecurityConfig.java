@@ -1,8 +1,6 @@
 package api.arduinothermohygrometer.configuration;
 
 import java.io.IOException;
-import java.net.URI;
-import java.time.Instant;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +23,7 @@ import api.arduinothermohygrometer.properties.CorsProperties;
 import api.arduinothermohygrometer.properties.SecurityProperties;
 import jakarta.servlet.http.HttpServletResponse;
 
+import static api.arduinothermohygrometer.util.ProblemDetailUtil.buildProblemDetail;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -102,21 +101,13 @@ public class SecurityConfig {
             .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
                 httpSecurityExceptionHandlingConfigurer
                     .authenticationEntryPoint((request, response, authenticationException) -> {
-                        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, authenticationException.getMessage());
-                        problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/unauthorized"));
-                        problemDetail.setTitle("Unauthorized.");
-                        problemDetail.setInstance(URI.create(request.getRequestURI()));
-                        problemDetail.setProperty("timestamp", Instant.now());
-
+                        ProblemDetail problemDetail = buildProblemDetail(HttpStatus.UNAUTHORIZED, "unauthorized", "Unauthorized.",
+                            authenticationException.getMessage(), request);
                         writeProblemDetails(response, problemDetail);
                     })
                     .accessDeniedHandler((request, response, accessDeniedException) -> {
-                        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, accessDeniedException.getMessage());
-                        problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/forbidden"));
-                        problemDetail.setTitle("Forbidden.");
-                        problemDetail.setInstance(URI.create(request.getRequestURI()));
-                        problemDetail.setProperty("timestamp", Instant.now());
-
+                        ProblemDetail problemDetail = buildProblemDetail(HttpStatus.FORBIDDEN, "forbidden", "Forbidden.",
+                            accessDeniedException.getMessage(), request);
                         writeProblemDetails(response, problemDetail);
                     })
             )

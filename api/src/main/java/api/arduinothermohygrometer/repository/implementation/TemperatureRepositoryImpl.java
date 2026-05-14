@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import api.arduinothermohygrometer.model.Temperature;
@@ -66,18 +64,18 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public void createTemperature(final Temperature temperature) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+    public Optional<Temperature> createTemperature(final Temperature temperature) {
         String sql = """
-            INSERT INTO temperatures (id, registered_at, temp)
-            VALUES (:id, :registered_at, :temp)
+            INSERT INTO temperatures (registered_at, temp)
+            VALUES (:registered_at, :temp)
+            RETURNING id, registered_at, temp
             """;
 
-        jdbcClient.sql(sql)
-                  .param("id", temperature.getId())
-                  .param("registered_at", temperature.getRegisteredAt())
-                  .param("temp", temperature.getTemp())
-                  .update(keyHolder, "id");
+        return jdbcClient.sql(sql)
+                         .param("registered_at", temperature.getRegisteredAt())
+                         .param("temp", temperature.getTemp())
+                         .query(Temperature.class)
+                         .optional();
     }
 
     @Override

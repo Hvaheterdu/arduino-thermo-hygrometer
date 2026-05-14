@@ -53,6 +53,7 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("getTemperatureById returns temperature with valid id.")
     void givenValidId_whenGetTemperatureById_thenReturnTemperature() {
+        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 70.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
@@ -60,7 +61,6 @@ class TemperatureServiceImplTest {
                                                       .temp(temp)
                                                       .build();
         Temperature temperature = TemperatureModelMapper.toModel(temperatureDto);
-        UUID id = temperature.getId();
         when(temperatureRepository.getTemperatureById(id)).thenReturn(Optional.of(temperature));
 
         TemperatureDto result = temperatureService.getTemperatureById(id);
@@ -166,7 +166,8 @@ class TemperatureServiceImplTest {
                                                       .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
-        doNothing().when(temperatureRepository).createTemperature(any());
+        Optional<Temperature> temperature = Optional.of(new Temperature(registeredAt, temp));
+        when(temperatureRepository.createTemperature(any())).thenReturn(temperature);
 
         TemperatureDto result = temperatureService.createTemperature(temperatureDto);
 
@@ -186,6 +187,7 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("deleteTemperatureById deletes temperature with valid id.")
     void givenValidId_whenDeleteTemperatureById_thenDeleteTemperature(CapturedOutput capturedOutput) {
+        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
@@ -193,7 +195,6 @@ class TemperatureServiceImplTest {
                                                       .temp(temp)
                                                       .build();
         Temperature temperature = TemperatureModelMapper.toModel(temperatureDto);
-        UUID id = temperature.getId();
         when(temperatureRepository.getTemperatureById(id)).thenReturn(Optional.of(temperature));
         doNothing().when(temperatureRepository).deleteTemperatureById(id);
 

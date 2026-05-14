@@ -15,7 +15,7 @@ public interface HumidityRepository {
 
     List<Humidity> getHumiditiesByDate(final LocalDate date);
 
-    void createHumidity(final Humidity humidity);
+    Optional<Humidity> createHumidity(final Humidity humidity);
 
     void deleteHumidityById(final UUID id);
 

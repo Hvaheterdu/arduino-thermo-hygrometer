@@ -13,6 +13,7 @@ public class BatteryModelMapper {
 
     public static BatteryDto toDto(Battery battery) {
         return BatteryDto.builder()
+                         .id(battery.getId())
                          .registeredAt(battery.getRegisteredAt())
                          .batteryStatus(battery.getBatteryStatus())
                          .build();

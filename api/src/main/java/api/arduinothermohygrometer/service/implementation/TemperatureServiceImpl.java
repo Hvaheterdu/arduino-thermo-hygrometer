@@ -69,8 +69,8 @@ public class TemperatureServiceImpl implements TemperatureService {
             throw new ResourceNotCreatedException("Temperature cannot be created.");
         }
 
-        Temperature temperature = TemperatureModelMapper.toModel(temperatureDto);
-        temperatureRepository.createTemperature(temperature);
+        Temperature temperature = temperatureRepository.createTemperature(TemperatureModelMapper.toModel(temperatureDto))
+                                                       .orElseThrow(() -> new ResourceNotCreatedException("Temperature cannot be created."));
         log.info("Temperature with id={} and registered_at={} created.", temperature.getId(), temperature.getRegisteredAt());
 
         return TemperatureModelMapper.toDto(temperature);

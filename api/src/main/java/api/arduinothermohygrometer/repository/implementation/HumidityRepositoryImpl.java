@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import api.arduinothermohygrometer.model.Humidity;
@@ -66,18 +64,18 @@ public class HumidityRepositoryImpl implements HumidityRepository {
     }
 
     @Override
-    public void createHumidity(final Humidity humidity) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+    public Optional<Humidity> createHumidity(final Humidity humidity) {
         String sql = """
-            INSERT INTO humidities (id, registered_at, air_humidity)
-            VALUES (:id, :registered_at, :air_humidity)
+            INSERT INTO humidities (registered_at, air_humidity)
+            VALUES (:registered_at, :air_humidity)
+            RETURNING id, registered_at, temp
             """;
 
-        jdbcClient.sql(sql)
-                  .param("id", humidity.getId())
-                  .param("registered_at", humidity.getRegisteredAt())
-                  .param("air_humidity", humidity.getAirHumidity())
-                  .update(keyHolder, "id");
+        return jdbcClient.sql(sql)
+                         .param("registered_at", humidity.getRegisteredAt())
+                         .param("air_humidity", humidity.getAirHumidity())
+                         .query(Humidity.class)
+                         .optional();
     }
 
     @Override

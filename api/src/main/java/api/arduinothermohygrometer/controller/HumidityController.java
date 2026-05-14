@@ -39,7 +39,7 @@ public class HumidityController implements HumidityApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteHumidityDtoById(final UUID id) {
+    public ResponseEntity<Void> deleteHumidityById(final UUID id) {
         humidityService.deleteHumidityById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

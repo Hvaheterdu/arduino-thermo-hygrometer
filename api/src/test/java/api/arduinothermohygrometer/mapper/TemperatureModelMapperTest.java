@@ -37,6 +37,7 @@ class TemperatureModelMapperTest {
 
         TemperatureDto result = TemperatureModelMapper.toDto(temperature);
 
+        assertThat(result.getId()).isNull();
         assertThat(result.getRegisteredAt()).isEqualTo(temperature.getRegisteredAt());
         assertThat(result.getTemp()).isEqualTo(temperature.getTemp());
     }

@@ -15,7 +15,7 @@ public interface TemperatureRepository {
 
     List<Temperature> getTemperaturesByDate(final LocalDate date);
 
-    void createTemperature(final Temperature temperature);
+    Optional<Temperature> createTemperature(final Temperature temperature);
 
     void deleteTemperatureById(final UUID id);
 

@@ -53,6 +53,7 @@ class HumidityServiceImplTest {
     @Test
     @DisplayName("getHumidityById returns humidity with valid id.")
     void givenValidId_whenGetHumidityById_thenReturnHumidity() {
+        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 70.00;
         HumidityDto humidityDto = HumidityDto.builder()
@@ -60,7 +61,6 @@ class HumidityServiceImplTest {
                                              .airHumidity(airHumidity)
                                              .build();
         Humidity humidity = HumidityModelMapper.toModel(humidityDto);
-        UUID id = humidity.getId();
         when(humidityRepository.getHumidityById(id)).thenReturn(Optional.of(humidity));
 
         HumidityDto result = humidityService.getHumidityById(id);
@@ -166,7 +166,8 @@ class HumidityServiceImplTest {
                                              .registeredAt(registeredAt)
                                              .airHumidity(airHumidity)
                                              .build();
-        doNothing().when(humidityRepository).createHumidity(any());
+        Optional<Humidity> humidity = Optional.of(new Humidity(registeredAt, airHumidity));
+        when(humidityRepository.createHumidity(any())).thenReturn(humidity);
 
         HumidityDto result = humidityService.createHumidity(humidityDto);
 
@@ -186,6 +187,7 @@ class HumidityServiceImplTest {
     @Test
     @DisplayName("deleteHumidityById deletes humidity with valid id.")
     void givenValidId_whenDeleteHumidityById_thenDeleteHumidity(CapturedOutput capturedOutput) {
+        UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 75.00;
         HumidityDto humidityDto = HumidityDto.builder()
@@ -193,7 +195,6 @@ class HumidityServiceImplTest {
                                              .airHumidity(airHumidity)
                                              .build();
         Humidity humidity = HumidityModelMapper.toModel(humidityDto);
-        UUID id = humidity.getId();
         when(humidityRepository.getHumidityById(id)).thenReturn(Optional.of(humidity));
         doNothing().when(humidityRepository).deleteHumidityById(id);
 

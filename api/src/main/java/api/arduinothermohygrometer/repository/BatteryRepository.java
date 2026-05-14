@@ -15,7 +15,7 @@ public interface BatteryRepository {
 
     List<Battery> getBatteriesByDate(final LocalDate date);
 
-    void createBattery(final Battery battery);
+    Optional<Battery> createBattery(final Battery battery);
 
     void deleteBatteryById(final UUID id);
 

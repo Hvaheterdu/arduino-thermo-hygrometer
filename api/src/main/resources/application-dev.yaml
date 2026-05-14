@@ -13,5 +13,12 @@ springdoc:
     operations-sorter: method
     path: /swagger-ui.html
   servers:
-    - url: http://localhost:5000
+    - url: http://{host}:{port}
       description: Development server.
+      variables:
+        host:
+          default: localhost
+          enum: [ localhost ]
+        port:
+          default: 5000
+          enum: [ 5000 ]

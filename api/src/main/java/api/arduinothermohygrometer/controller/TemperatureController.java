@@ -39,7 +39,7 @@ public class TemperatureController implements TemperatureApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteTemperatureDtoById(final UUID id) {
+    public ResponseEntity<Void> deleteTemperatureById(final UUID id) {
         temperatureService.deleteTemperatureById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

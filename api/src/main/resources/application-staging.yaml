@@ -11,5 +11,12 @@ springdoc:
   swagger-ui:
     enabled: false
   servers:
-    - url: http://localhost:5000
+    - url: http://{host}:{port}
       description: Staging server.
+      variables:
+        host:
+          default: localhost
+          enum: [ localhost ]
+        port:
+          default: 5000
+          enum: [ 5000 ]

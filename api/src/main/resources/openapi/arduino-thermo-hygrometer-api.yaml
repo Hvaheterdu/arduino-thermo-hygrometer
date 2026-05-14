@@ -11,8 +11,15 @@ info:
   version: 1.0.0-SNAPSHOT
 
 servers:
-  - url: http://localhost:5000
+  - url: http://{host}:{port}
     description: Local development server.
+    variables:
+      host:
+        default: localhost
+        enum: [ localhost ]
+      port:
+        default: "5000"
+        enum: [ "5000" ]
 
 tags:
   - name: Battery
@@ -21,9 +28,6 @@ tags:
     description: Measured temperature by Arduino device.
   - name: Humidity
     description: Measured humidity by Arduino device.
-
-security:
-  - ApiKeyAuth: [ ]
 
 paths:
   /api/v1/batteries:
@@ -49,9 +53,9 @@ paths:
                 battery:
                   $ref: "#/components/examples/ExampleBattery"
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
     delete:
       tags:
         - Battery
@@ -65,9 +69,9 @@ paths:
         "204":
           description: Battery deleted.
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
     post:
       tags:
         - Battery
@@ -93,10 +97,10 @@ paths:
               examples:
                 battery:
                   $ref: "#/components/examples/ExampleBattery"
-        "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "400":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
+          $ref: "#/components/responses/ProblemDetailResponse"
+        "403":
+          $ref: "#/components/responses/ProblemDetailResponse"
 
   /api/v1/batteries/{id}:
     get:
@@ -118,24 +122,24 @@ paths:
                 battery:
                   $ref: "#/components/examples/ExampleBattery"
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
     delete:
       tags:
         - Battery
       summary: Delete battery by id.
       description: Deletes the battery status of the Arduino device by id.
-      operationId: deleteBatteryDtoById
+      operationId: deleteBatteryById
       parameters:
         - $ref: "#/components/parameters/IdParam"
       responses:
         "204":
           description: Battery deleted.
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
 
   /api/v1/humidities:
     get:
@@ -160,9 +164,9 @@ paths:
                 humidity:
                   $ref: "#/components/examples/ExampleHumidity"
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
     delete:
       tags:
         - Humidity
@@ -176,9 +180,9 @@ paths:
         "204":
           description: Humidity deleted.
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
     post:
       tags:
         - Humidity
@@ -204,10 +208,10 @@ paths:
               examples:
                 humidity:
                   $ref: "#/components/examples/ExampleHumidity"
-        "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "400":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
+          $ref: "#/components/responses/ProblemDetailResponse"
+        "403":
+          $ref: "#/components/responses/ProblemDetailResponse"
 
   /api/v1/humidities/{id}:
     get:
@@ -229,24 +233,24 @@ paths:
                 humidity:
                   $ref: "#/components/examples/ExampleHumidity"
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
     delete:
       tags:
         - Humidity
       summary: Delete measured humidity by id.
       description: Deletes the measured humidity from the Arduino device by id.
-      operationId: deleteHumidityDtoById
+      operationId: deleteHumidityById
       parameters:
         - $ref: "#/components/parameters/IdParam"
       responses:
         "204":
           description: Humidity deleted.
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
 
   /api/v1/temperatures:
     get:
@@ -271,9 +275,9 @@ paths:
                 temperature:
                   $ref: "#/components/examples/ExampleTemperature"
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
     delete:
       tags:
         - Temperature
@@ -287,9 +291,9 @@ paths:
         "204":
           description: Temperature deleted.
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
     post:
       tags:
         - Temperature
@@ -315,10 +319,10 @@ paths:
               examples:
                 temperature:
                   $ref: "#/components/examples/ExampleTemperature"
-        "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
         "400":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/BadRequest"
+          $ref: "#/components/responses/ProblemDetailResponse"
+        "403":
+          $ref: "#/components/responses/ProblemDetailResponse"
 
   /api/v1/temperatures/{id}:
     get:
@@ -340,32 +344,26 @@ paths:
                 temperature:
                   $ref: "#/components/examples/ExampleTemperature"
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
     delete:
       tags:
         - Temperature
       summary: Delete measured temperature by id.
       description: Deletes the measured temperature from the Arduino device by id.
-      operationId: deleteTemperatureDtoById
+      operationId: deleteTemperatureById
       parameters:
         - $ref: "#/components/parameters/IdParam"
       responses:
         "204":
           description: Temperature deleted.
         "403":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/Forbidden"
+          $ref: "#/components/responses/ProblemDetailResponse"
         "404":
-          $ref: "https://api.swaggerhub.com/domains/smartbear-public/ProblemDetails/1.0.0#/components/responses/NotFound"
+          $ref: "#/components/responses/ProblemDetailResponse"
 
 components:
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-KEY
-
   examples:
     ExampleBattery:
       description: Example of Battery object.
@@ -407,20 +405,109 @@ components:
     CheckOnlyDateParam:
       in: query
       name: checkOnlyDate
-      required: false
+      required: true
       schema:
         type: boolean
-        example: true
+        default: false
+        example: false
+
+  responses:
+    ProblemDetailResponse:
+      description: Problem detail error response.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetail"
 
   schemas:
+    ProblemDetail:
+      description: A tailored problem details schema, respecting the RFC `https://www.rfc-editor.org/rfc/rfc9457`.
+      type: object
+      properties:
+        type:
+          description: A URI identifying the problem type.
+          type: string
+          example: "https://example.com/problems/resource-not-found"
+        title:
+          description: A short, human-readable summary of the problem (not localized).
+          type: string
+          example: "Resource not found."
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem (not localized).
+          type: string
+          example: "Resource with id 00000000-0000-0000-0000-000000000000 not found."
+        status:
+          description: The HTTP status code for the request with the problem.
+          type: integer
+          example: 404
+        instance:
+          description: A URI reference that identifies the specific occurrence of the problem.
+          type: string
+          example: "/api/v1/batteries/{id}"
+        traceId:
+          description: A unique identifier used to correlate logs and diagnostics.
+          type: string
+          example: "00-80e7f8c9f3b2a14d9c1e4b2d9f9c1234-91f3a2b1c4d5e6f7-00"
+        timestamp:
+          description: The time at which the error occurred.
+          type: string
+          format: date-time
+          example: "2017-07-21T17:00:00Z"
+        errors:
+          description: A collection of validation errors. Occurs only during validation failures.
+          type: array
+          items:
+            $ref: "#/components/schemas/ProblemDetailsValidationError"
+      required:
+        - type
+        - title
+        - detail
+        - status
+        - instance
+        - traceId
+        - timestamp
+    
+    ProblemDetailsValidationError:
+      description: Includes details about validation errors.
+      type: object
+      properties:
+        description:
+          description: Non-localized description of the error.
+          type: string
+        parameter:
+          description: Included to identify a path or query parameter that is invalid.
+          type: string
+          nullable: true
+        header:
+          description: Included to identify a header parameter that is invalid.
+          type: string
+          nullable: true
+        pointer:
+          description: Identifies a property of a JSON payload that is invalid, following RFC `https://www.rfc-editor.org/rfc/rfc6901`.
+          type: string
+          nullable: true
+      required:
+        - description
+        - parameter
+        - header
+        - pointer
+
     BatteryDto:
       type: object
       properties:
+        id:
+          description: Id of object with remaining battery percentage of the Arduino device.
+          type: string
+          format: uuid
+          readOnly: true
+          example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
         registeredAt:
+          description: Registration time of the remaining battery percentage of the Arduino device.
           type: string
           format: date-time
           example: "2017-07-21T17:00:00Z"
         batteryStatus:
+          description: Remaining battery percentage of the Arduino device.
           type: integer
           format: int32
           minimum: 0
@@ -433,11 +520,19 @@ components:
     HumidityDto:
       type: object
       properties:
+        id:
+          description: Id of object with measured air humidity by the Arduino device.
+          type: string
+          format: uuid
+          readOnly: true
+          example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
         registeredAt:
+          description: Registration time of measured air humidity by the Arduino device.
           type: string
           format: date-time
           example: "2017-07-21T17:00:00Z"
         airHumidity:
+          description: Measured air humidity by the Arduino device.
           type: number
           format: double
           minimum: 20.00
@@ -450,11 +545,19 @@ components:
     TemperatureDto:
       type: object
       properties:
+        id:
+          description: Id of object with measured temperature by the Arduino device.
+          type: string
+          format: uuid
+          readOnly: true
+          example: "86644f52-f3d4-4285-9f2f-4d2ee4c15035"
         registeredAt:
+          description: Registration time of measured temperature by the Arduino device.
           type: string
           format: date-time
           example: "2017-07-21T17:00:00Z"
         temp:
+          description: Measured temperature by the Arduino device.
           type: number
           format: double
           minimum: -55.00
@@ -463,3 +566,12 @@ components:
       required:
         - registeredAt
         - temp
+  
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+
+security:
+  - ApiKeyAuth: [ ]

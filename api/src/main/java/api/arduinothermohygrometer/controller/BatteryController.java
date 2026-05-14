@@ -39,7 +39,7 @@ public class BatteryController implements BatteryApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteBatteryDtoById(final UUID id) {
+    public ResponseEntity<Void> deleteBatteryById(final UUID id) {
         batteryService.deleteBatteryById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
