@@ -11,11 +11,11 @@ import api.arduinothermohygrometer.exception.ResourceNotFoundException;
 public interface HumidityService {
     HumidityDto getHumidityById(final UUID id) throws ResourceNotFoundException;
 
-    List<HumidityDto> getHumiditiesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) throws ResourceNotFoundException;
+    List<HumidityDto> getHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException;
 
     HumidityDto createHumidity(final HumidityDto humidityDto) throws ResourceNotCreatedException;
 
     void deleteHumidityById(final UUID id) throws ResourceNotFoundException;
 
-    void deleteHumiditiesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) throws ResourceNotFoundException;
+    void deleteHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException;
 }

@@ -83,20 +83,20 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns battery with valid timestamp.")
     void givenValidTimestamp_whenGetBatteriesByDateOrTimestamp_thenReturnBattery() {
-        boolean checkOnlyDate = false;
-        LocalDateTime dateTime = LocalDateTime.now();
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .registeredAt(dateTime)
+                                          .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
         List<BatteryDto> batteryDtos = List.of(batteryDto);
         List<Battery> batteries = List.of(BatteryModelMapper.toModel(batteryDto));
-        when(batteryRepository.getBatteryByTimestamp(dateTime)).thenReturn(batteries);
+        when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(batteries);
 
-        List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(dateTime, checkOnlyDate);
+        List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(batteryRepository, times(1)).getBatteryByTimestamp(dateTime);
+        verify(batteryRepository, times(1)).getBatteryByTimestamp(registeredAt);
         assertThat(result)
             .hasSameElementsAs(batteryDtos);
     }
@@ -104,13 +104,13 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns empty list with invalid timestamp.")
     void givenInvalidTimestamp_whenGetBatteriesByDateOrTimestamp_thenReturnEmptyList() {
-        boolean checkOnlyDate = false;
-        LocalDateTime invalidDateTime = LocalDateTime.now();
-        when(batteryRepository.getBatteryByTimestamp(invalidDateTime)).thenReturn(emptyList());
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now();
+        when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(emptyList());
 
-        List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+        List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(batteryRepository, times(1)).getBatteryByTimestamp(invalidDateTime);
+        verify(batteryRepository, times(1)).getBatteryByTimestamp(registeredAt);
         assertThat(result)
             .isEmpty();
     }
@@ -118,27 +118,27 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns batteries with valid date.")
     void givenValidDate_whenGetBatteriesByDateOrTimestamp_thenReturnBatteries() {
-        boolean checkOnlyDate = true;
-        LocalDateTime dateTime = LocalDateTime.now();
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         int batteryStatus2 = 95;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .registeredAt(dateTime)
+                                          .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
         BatteryDto batteryDto2 = BatteryDto.builder()
-                                           .registeredAt(dateTime.minusHours(1))
+                                           .registeredAt(registeredAt.minusHours(1))
                                            .batteryStatus(batteryStatus2)
                                            .build();
         List<BatteryDto> batteryDtos = List.of(batteryDto, batteryDto2);
         List<Battery> batteries = batteryDtos.stream()
                                              .map(BatteryModelMapper::toModel)
                                              .toList();
-        when(batteryRepository.getBatteriesByDate(dateTime.toLocalDate())).thenReturn(batteries);
+        when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())).thenReturn(batteries);
 
-        List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(dateTime, checkOnlyDate);
+        List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(batteryRepository, times(1)).getBatteriesByDate(dateTime.toLocalDate());
+        verify(batteryRepository, times(1)).getBatteriesByDate(registeredAt.toLocalDate());
         assertThat(result)
             .hasSameElementsAs(batteryDtos);
     }
@@ -146,13 +146,13 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("getBatteriesByDateOrTimestamp returns empty list with invalid date.")
     void givenInvalidDate_whenGetBatteriesByDateOrTimestamp_thenReturnEmptyList() {
-        boolean checkOnlyDate = true;
-        LocalDateTime invalidDateTime = LocalDateTime.now();
-        when(batteryRepository.getBatteriesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now();
+        when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())).thenReturn(emptyList());
 
-        List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+        List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(batteryRepository, times(1)).getBatteriesByDate(invalidDateTime.toLocalDate());
+        verify(batteryRepository, times(1)).getBatteriesByDate(registeredAt.toLocalDate());
         assertThat(result)
             .isEmpty();
     }
@@ -220,21 +220,21 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("deleteBatteryByDateOrTimestamp deletes battery with valid timestamp.")
     void givenValidTimestamp_whenDeleteBatteryByDateOrTimestamp_thenDeleteBattery(CapturedOutput capturedOutput) {
-        boolean checkOnlyDate = false;
-        LocalDateTime dateTime = LocalDateTime.now();
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .registeredAt(dateTime)
+                                          .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
         List<Battery> batteries = List.of(BatteryModelMapper.toModel(batteryDto));
-        when(batteryRepository.getBatteryByTimestamp(dateTime)).thenReturn(batteries);
-        doNothing().when(batteryRepository).deleteBatteryByTimestamp(dateTime);
+        when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(batteries);
+        doNothing().when(batteryRepository).deleteBatteryByTimestamp(registeredAt);
 
-        batteryService.deleteBatteriesByDateOrTimestamp(dateTime, checkOnlyDate);
+        batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(batteryRepository, times(1)).getBatteryByTimestamp(dateTime);
-        verify(batteryRepository, times(1)).deleteBatteryByTimestamp(dateTime);
+        verify(batteryRepository, times(1)).getBatteryByTimestamp(registeredAt);
+        verify(batteryRepository, times(1)).deleteBatteryByTimestamp(registeredAt);
         assertThat(capturedOutput)
             .contains(String.format("Deleted battery with timestamp=%s.", batteries.getFirst().getRegisteredAt()));
     }
@@ -242,43 +242,43 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("deleteBatteryByDateOrTimestamp returns with invalid timestamp.")
     void givenInvalidTimestamp_whenDeleteBatteryByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
-        boolean checkOnlyDate = false;
-        LocalDateTime invalidDateTime = LocalDateTime.now();
-        when(batteryRepository.getBatteryByTimestamp(invalidDateTime)).thenReturn(emptyList());
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now();
+        when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(emptyList());
 
-        batteryService.deleteBatteriesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+        batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(batteryRepository, times(1)).getBatteryByTimestamp(invalidDateTime);
-        verify(batteryRepository, times(0)).deleteBatteryByTimestamp(invalidDateTime);
+        verify(batteryRepository, times(1)).getBatteryByTimestamp(registeredAt);
+        verify(batteryRepository, times(0)).deleteBatteryByTimestamp(registeredAt);
         assertThat(capturedOutput)
-            .contains(String.format("Batteries with dateTime=%s not found.", invalidDateTime));
+            .contains(String.format("Batteries registeredAt=%s not found.", registeredAt));
     }
 
     @Test
     @DisplayName("deleteBatteryByDateOrTimestamp deletes battery with valid date.")
     void givenValidDate_whenDeleteBatteryByDateOrTimestamp_thenDeleteBattery(CapturedOutput capturedOutput) {
-        boolean checkOnlyDate = true;
-        LocalDateTime dateTime = LocalDateTime.now();
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 90;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .registeredAt(dateTime)
+                                          .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
         BatteryDto batteryDto2 = BatteryDto.builder()
-                                           .registeredAt(dateTime.minusHours(1))
+                                           .registeredAt(registeredAt.minusHours(1))
                                            .batteryStatus(batteryStatus)
                                            .build();
         List<BatteryDto> batteryDtos = List.of(batteryDto, batteryDto2);
         List<Battery> batteries = batteryDtos.stream()
                                              .map(BatteryModelMapper::toModel)
                                              .toList();
-        when(batteryRepository.getBatteriesByDate(dateTime.toLocalDate())).thenReturn(batteries);
-        doNothing().when(batteryRepository).deleteBatteriesByDate(dateTime.toLocalDate());
+        when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())).thenReturn(batteries);
+        doNothing().when(batteryRepository).deleteBatteriesByDate(registeredAt.toLocalDate());
 
-        batteryService.deleteBatteriesByDateOrTimestamp(dateTime, checkOnlyDate);
+        batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(batteryRepository, times(1)).getBatteriesByDate(dateTime.toLocalDate());
-        verify(batteryRepository, times(1)).deleteBatteriesByDate(dateTime.toLocalDate());
+        verify(batteryRepository, times(1)).getBatteriesByDate(registeredAt.toLocalDate());
+        verify(batteryRepository, times(1)).deleteBatteriesByDate(registeredAt.toLocalDate());
         assertThat(capturedOutput)
             .contains(String.format("Deleted batteries with date=%s.", batteries.getFirst().getRegisteredAt().toLocalDate()));
     }
@@ -286,15 +286,15 @@ class BatteryServiceImplTest {
     @Test
     @DisplayName("deleteBatteryByDateOrTimestamp returns with invalid date.")
     void givenInvalidDate_whenDeleteBatteryByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
-        boolean checkOnlyDate = true;
-        LocalDateTime invalidDateTime = LocalDateTime.now();
-        when(batteryRepository.getBatteriesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now();
+        when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())).thenReturn(emptyList());
 
-        batteryService.deleteBatteriesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+        batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(batteryRepository, times(1)).getBatteriesByDate(invalidDateTime.toLocalDate());
-        verify(batteryRepository, times(0)).deleteBatteriesByDate(invalidDateTime.toLocalDate());
+        verify(batteryRepository, times(1)).getBatteriesByDate(registeredAt.toLocalDate());
+        verify(batteryRepository, times(0)).deleteBatteriesByDate(registeredAt.toLocalDate());
         assertThat(capturedOutput)
-            .contains(String.format("Batteries with dateTime=%s not found.", invalidDateTime));
+            .contains(String.format("Batteries registeredAt=%s not found.", registeredAt));
     }
 }

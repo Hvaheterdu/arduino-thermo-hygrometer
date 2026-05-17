@@ -15,8 +15,7 @@ public record OpenApiSingleServerProperties(@NotEmpty String url,
         ServerVariables serverVariables = new ServerVariables();
         variables.forEach((key, openApiServerVariableProperties) ->
             serverVariables.addServerVariable(key, new ServerVariable()
-                ._default(openApiServerVariableProperties._default())
-                ._enum(openApiServerVariableProperties._enum())));
+                ._default(openApiServerVariableProperties._default())));
 
         return new Server()
             .url(url)

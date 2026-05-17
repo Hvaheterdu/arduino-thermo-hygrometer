@@ -27,8 +27,8 @@ public class HumidityController implements HumidityApi {
     }
 
     @Override
-    public ResponseEntity<List<HumidityDto>> getHumiditiesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
-        List<HumidityDto> humidityDtos = humidityService.getHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate);
+    public ResponseEntity<List<HumidityDto>> getHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+        List<HumidityDto> humidityDtos = humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
         return new ResponseEntity<>(humidityDtos, HttpStatus.OK);
     }
 
@@ -45,8 +45,8 @@ public class HumidityController implements HumidityApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteHumiditiesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
-        humidityService.deleteHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate);
+    public ResponseEntity<Void> deleteHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+        humidityService.deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

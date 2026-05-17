@@ -84,27 +84,27 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getBatteriesByDateOrTimestamp returns 200 OK with valid dateTime.")
-    void givenValidDateTime_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
-        boolean checkOnlyDate = true;
-        LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    @DisplayName("getBatteriesByDateOrTimestamp returns 200 OK with valid registeredAt.")
+    void givenValidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 95;
         int batteryStatus2 = 90;
         BatteryDto batteryDto = BatteryDto.builder()
-                                          .registeredAt(dateTime)
+                                          .registeredAt(registeredAt)
                                           .batteryStatus(batteryStatus)
                                           .build();
         BatteryDto batteryDto2 = BatteryDto.builder()
-                                           .registeredAt(dateTime.minusHours(1))
+                                           .registeredAt(registeredAt.minusHours(1))
                                            .batteryStatus(batteryStatus2)
                                            .build();
         List<BatteryDto> batteryDtos = List.of(batteryDto, batteryDto2);
-        when(batteryService.getBatteriesByDateOrTimestamp(dateTime, checkOnlyDate)).thenReturn(batteryDtos);
+        when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly)).thenReturn(batteryDtos);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/v1/batteries")
-                                            .param("dateTime", dateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
@@ -117,24 +117,24 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getBatteriesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenGetBatteriesByDateOrTimestamp_thenReturn404NotFound() {
-        boolean checkOnlyDate = true;
-        LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(batteryService.getBatteriesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .thenThrow(new ResourceNotFoundException("Batteries with dateTime=" + invalidDateTime + " not found."));
+    @DisplayName("getBatteriesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
+    void givenInvalidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn404NotFound() {
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly))
+            .thenThrow(new ResourceNotFoundException("Batteries registeredAt=" + registeredAt + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/v1/batteries")
-                                            .param("dateTime", invalidDateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.NOT_FOUND)
             .failure()
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Batteries with dateTime=" + invalidDateTime + " not found.");
+            .hasMessage("Batteries registeredAt=" + registeredAt + " not found.");
     }
 
     @Test
@@ -223,16 +223,16 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteBatteriesByDateOrTimestamp returns 204 NO CONTENT with valid dateTime.")
-    void givenValidDateTime_whenDeleteBatteriesByDateOrTimestamp_thenReturn204NoContent() {
-        boolean checkOnlyDate = false;
-        LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        doNothing().when(batteryService).deleteBatteriesByDateOrTimestamp(dateTime, checkOnlyDate);
+    @DisplayName("deleteBatteriesByDateOrTimestamp returns 204 NO CONTENT with valid registeredAt.")
+    void givenValidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn204NoContent() {
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        doNothing().when(batteryService).deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/v1/batteries")
-                                            .param("dateTime", dateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
@@ -240,23 +240,23 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteBatteriesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenDeleteBatteriesByDateOrTimestamp_thenReturn404NotFound() {
-        boolean checkOnlyDate = false;
-        LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        doThrow(new ResourceNotFoundException("Batteries with dateTime=" + invalidDateTime + " not found."))
-            .when(batteryService).deleteBatteriesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+    @DisplayName("deleteBatteriesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
+    void givenInvalidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn404NotFound() {
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        doThrow(new ResourceNotFoundException("Batteries registeredAt=" + registeredAt + " not found."))
+            .when(batteryService).deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/v1/batteries")
-                                            .param("dateTime", invalidDateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.NOT_FOUND)
             .failure()
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Batteries with dateTime=" + invalidDateTime + " not found.");
+            .hasMessage("Batteries registeredAt=" + registeredAt + " not found.");
     }
 }

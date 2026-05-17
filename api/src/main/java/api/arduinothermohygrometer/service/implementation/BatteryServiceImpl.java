@@ -22,7 +22,7 @@ import static java.util.Collections.emptyList;
 @Service
 public class BatteryServiceImpl implements BatteryService {
     private static final String ID_NOT_FOUND = "Battery with id=%s not found.";
-    private static final String DATETIME_NOT_FOUND = "Batteries with dateTime={} not found.";
+    private static final String REGISTERED_AT_NOT_FOUND = "Batteries registeredAt={} not found.";
 
     private final BatteryRepository batteryRepository;
 
@@ -42,19 +42,19 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public List<BatteryDto> getBatteriesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
-        log.info("Retrieving batteries with dateTime={}, checkOnlyDate={}.", dateTime, checkOnlyDate);
+    public List<BatteryDto> getBatteriesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+        log.info("Retrieving batteries registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
-        List<Battery> batteries = checkOnlyDate
-            ? batteryRepository.getBatteriesByDate(dateTime.toLocalDate())
-            : batteryRepository.getBatteryByTimestamp(dateTime);
+        List<Battery> batteries = dateOnly
+            ? batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())
+            : batteryRepository.getBatteryByTimestamp(registeredAt);
 
         if (batteries.isEmpty()) {
-            log.info(DATETIME_NOT_FOUND, dateTime);
+            log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
             return emptyList();
         }
 
-        log.info("Batteries with dateTime={} retrieved.", dateTime);
+        log.info("Batteries registeredAt={} retrieved.", registeredAt);
         return batteries.stream()
                         .map(BatteryModelMapper::toDto)
                         .toList();
@@ -89,20 +89,20 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public void deleteBatteriesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) {
-        log.info("Deleting batteries with dateTime={}, checkOnlyDate={}.", dateTime, checkOnlyDate);
+    public void deleteBatteriesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+        log.info("Deleting batteries registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
-        List<Battery> batteries = checkOnlyDate
-            ? batteryRepository.getBatteriesByDate(dateTime.toLocalDate())
-            : batteryRepository.getBatteryByTimestamp(dateTime);
+        List<Battery> batteries = dateOnly
+            ? batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())
+            : batteryRepository.getBatteryByTimestamp(registeredAt);
 
         if (batteries.isEmpty()) {
-            log.info(DATETIME_NOT_FOUND, dateTime);
+            log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
             return;
         }
 
         Battery firstBattery = batteries.getFirst();
-        if (checkOnlyDate) {
+        if (dateOnly) {
             batteryRepository.deleteBatteriesByDate(firstBattery.getRegisteredAt().toLocalDate());
             log.info("Deleted batteries with date={}.", firstBattery.getRegisteredAt().toLocalDate());
         } else {

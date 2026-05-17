@@ -84,27 +84,27 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp returns 200 OK with valid dateTime.")
-    void givenValidDateTime_whenGetHumiditiesByDateOrTimestamp_thenReturn200OK() {
-        boolean checkOnlyDate = true;
-        LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    @DisplayName("getHumiditiesByDateOrTimestamp returns 200 OK with valid registeredAt.")
+    void givenValidRegisteredAt_whenGetHumiditiesByDateOrTimestamp_thenReturn200OK() {
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 20.01;
         Double airHumidity2 = 90.01;
         HumidityDto humidityDto = HumidityDto.builder()
-                                             .registeredAt(dateTime)
+                                             .registeredAt(registeredAt)
                                              .airHumidity(airHumidity)
                                              .build();
         HumidityDto humidityDto2 = HumidityDto.builder()
-                                              .registeredAt(dateTime.minusHours(1))
+                                              .registeredAt(registeredAt.minusHours(1))
                                               .airHumidity(airHumidity2)
                                               .build();
         List<HumidityDto> humidities = List.of(humidityDto, humidityDto2);
-        when(humidityService.getHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate)).thenReturn(humidities);
+        when(humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly)).thenReturn(humidities);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/v1/humidities")
-                                            .param("dateTime", dateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
@@ -117,24 +117,24 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenGetHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
-        boolean checkOnlyDate = true;
-        LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(humidityService.getHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .thenThrow(new ResourceNotFoundException("Humidities with dateTime=" + invalidDateTime + " not found."));
+    @DisplayName("getHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
+    void givenInvalidRegisteredAt_whenGetHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        when(humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly))
+            .thenThrow(new ResourceNotFoundException("Humidities registeredAt=" + registeredAt + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/v1/humidities")
-                                            .param("dateTime", invalidDateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.NOT_FOUND)
             .failure()
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Humidities with dateTime=" + invalidDateTime + " not found.");
+            .hasMessage("Humidities registeredAt=" + registeredAt + " not found.");
     }
 
     @Test
@@ -224,16 +224,16 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByDateOrTimestamp returns 204 NO CONTENT with valid dateTime.")
-    void givenValidDateTime_whenDeleteHumiditiesByDateOrTimestamp_thenReturn204NoContent() {
-        boolean checkOnlyDate = false;
-        LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        doNothing().when(humidityService).deleteHumiditiesByDateOrTimestamp(dateTime, checkOnlyDate);
+    @DisplayName("deleteHumiditiesByDateOrTimestamp returns 204 NO CONTENT with valid registeredAt.")
+    void givenValidRegisteredAt_whenDeleteHumiditiesByDateOrTimestamp_thenReturn204NoContent() {
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        doNothing().when(humidityService).deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/v1/humidities")
-                                            .param("dateTime", dateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
@@ -241,23 +241,23 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenDeleteHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
-        boolean checkOnlyDate = false;
-        LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        doThrow(new ResourceNotFoundException("Humidities with dateTime=" + invalidDateTime + " not found."))
-            .when(humidityService).deleteHumiditiesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+    @DisplayName("deleteHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
+    void givenInvalidRegisteredAt_whenDeleteHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        doThrow(new ResourceNotFoundException("Humidities registeredAt=" + registeredAt + " not found."))
+            .when(humidityService).deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/v1/humidities")
-                                            .param("dateTime", invalidDateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.NOT_FOUND)
             .failure()
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Humidities with dateTime=" + invalidDateTime + " not found.");
+            .hasMessage("Humidities registeredAt=" + registeredAt + " not found.");
     }
 }

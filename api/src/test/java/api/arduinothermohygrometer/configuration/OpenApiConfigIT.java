@@ -63,7 +63,7 @@ class OpenApiConfigIT {
     @DisplayName("Properties in application.yaml are loaded and match OpenAPI Info property values.")
     void givenApplicationYaml_whenInfoPropertiesLoaded_thenPropertyValuesMatch() {
         assertThat(openApiProperties.title()).isEqualTo("Arduino Thermo Hygrometer API.");
-        assertThat(openApiProperties.description()).isEqualTo("A Java Web API for an Arduino Thermo Hygrometer IoT device.");
+        assertThat(openApiProperties.description()).isEqualTo("A Java RESTful API for an Arduino Thermo Hygrometer IoT device.");
         assertThat(buildProperties.getVersion()).isEqualTo("1.0.0-SNAPSHOT");
         assertThat(openApiProperties.contact().name()).isEqualTo("Burhan Mohammad Sarfraz");
         assertThat(openApiProperties.contact().email()).isEqualTo("burhan.mohammad.sarfraz@outlook.com");
@@ -100,10 +100,8 @@ class OpenApiConfigIT {
                 assertThat(server.getVariables().keySet()).isEqualTo(openApiSingleServerProperties.variables().keySet());
                 ServerVariable hostServerVariable = server.getVariables().get("host");
                 assertThat(hostServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("host")._default());
-                assertThat(hostServerVariable.getEnum()).isEqualTo(openApiSingleServerProperties.variables().get("host")._enum());
                 ServerVariable portServerVariable = server.getVariables().get("port");
                 assertThat(portServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("port")._default());
-                assertThat(portServerVariable.getEnum()).isEqualTo(openApiSingleServerProperties.variables().get("port")._enum());
             });
     }
 }

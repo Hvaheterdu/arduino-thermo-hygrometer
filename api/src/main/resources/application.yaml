@@ -7,7 +7,7 @@ info:
   contact:
     name: Burhan Mohammad Sarfraz
     email: burhan.mohammad.sarfraz@outlook.com
-  description: A Java Web API for an Arduino Thermo Hygrometer IoT device.
+  description: A Java RESTful API for an Arduino Thermo Hygrometer IoT device.
   license:
     name: MIT license
     url: https://mit-license.org/

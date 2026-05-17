@@ -16,7 +16,5 @@ springdoc:
       variables:
         host:
           default: localhost
-          enum: [ localhost ]
         port:
           default: 5000
-          enum: [ 5000 ]

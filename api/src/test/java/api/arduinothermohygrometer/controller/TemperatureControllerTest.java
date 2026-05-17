@@ -84,27 +84,27 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDateOrTimestamp returns 200 OK with valid dateTime.")
-    void givenValidDateTime_whenGetTemperaturesByDateOrTimestamp_thenReturn200OK() {
-        boolean checkOnlyDate = true;
-        LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    @DisplayName("getTemperaturesByDateOrTimestamp returns 200 OK with valid registeredAt.")
+    void givenValidRegisteredAt_whenGetTemperaturesByDateOrTimestamp_thenReturn200OK() {
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 20.01;
         Double temp2 = 90.01;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(dateTime)
+                                                      .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
         TemperatureDto temperatureDto2 = TemperatureDto.builder()
-                                                       .registeredAt(dateTime.minusHours(1))
+                                                       .registeredAt(registeredAt.minusHours(1))
                                                        .temp(temp2)
                                                        .build();
         List<TemperatureDto> temperatureDtos = List.of(temperatureDto, temperatureDto2);
-        when(temperatureService.getTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate)).thenReturn(temperatureDtos);
+        when(temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly)).thenReturn(temperatureDtos);
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/v1/temperatures")
-                                            .param("dateTime", dateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
@@ -117,24 +117,24 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenGetTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
-        boolean checkOnlyDate = true;
-        LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        when(temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate))
-            .thenThrow(new ResourceNotFoundException("Temperatures with dateTime=" + invalidDateTime + " not found."));
+    @DisplayName("getTemperaturesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
+    void givenInvalidRegisteredAt_whenGetTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        when(temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly))
+            .thenThrow(new ResourceNotFoundException("Temperatures registeredAt=" + registeredAt + " not found."));
 
         MvcTestResult result = mockMvcTester.get()
                                             .uri("/api/v1/temperatures")
-                                            .param("dateTime", invalidDateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.NOT_FOUND)
             .failure()
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Temperatures with dateTime=" + invalidDateTime + " not found.");
+            .hasMessage("Temperatures registeredAt=" + registeredAt + " not found.");
     }
 
     @Test
@@ -224,16 +224,16 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp returns 204 NO CONTENT with valid dateTime.")
-    void givenValidDateTime_whenDeleteTemperaturesByDateOrTimestamp_thenReturn204NoContent() {
-        boolean checkOnlyDate = false;
-        LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        doNothing().when(temperatureService).deleteTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
+    @DisplayName("deleteTemperaturesByDateOrTimestamp returns 204 NO CONTENT with valid registeredAt.")
+    void givenValidRegisteredAt_whenDeleteTemperaturesByDateOrTimestamp_thenReturn204NoContent() {
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        doNothing().when(temperatureService).deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/v1/temperatures")
-                                            .param("dateTime", dateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
@@ -241,23 +241,23 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp returns 404 NOT FOUND with invalid dateTime.")
-    void givenInvalidDateTime_whenDeleteTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
-        boolean checkOnlyDate = false;
-        LocalDateTime invalidDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        doThrow(new ResourceNotFoundException("Temperatures with dateTime=" + invalidDateTime + " not found."))
-            .when(temperatureService).deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+    @DisplayName("deleteTemperaturesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
+    void givenInvalidRegisteredAt_whenDeleteTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        doThrow(new ResourceNotFoundException("Temperatures registeredAt=" + registeredAt + " not found."))
+            .when(temperatureService).deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
         MvcTestResult result = mockMvcTester.delete()
                                             .uri("/api/v1/temperatures")
-                                            .param("dateTime", invalidDateTime.toString())
-                                            .param("checkOnlyDate", String.valueOf(checkOnlyDate))
+                                            .param("registeredAt", registeredAt.toString())
+                                            .param("dateOnly", String.valueOf(dateOnly))
                                             .exchange();
 
         assertThat(result)
             .hasStatus(HttpStatus.NOT_FOUND)
             .failure()
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("Temperatures with dateTime=" + invalidDateTime + " not found.");
+            .hasMessage("Temperatures registeredAt=" + registeredAt + " not found.");
     }
 }

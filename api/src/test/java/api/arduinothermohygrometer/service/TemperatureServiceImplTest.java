@@ -83,20 +83,20 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("getTemperaturesByDateOrTimestamp returns temperature with valid timestamp.")
     void givenValidTimestamp_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperature() {
-        boolean checkOnlyDate = false;
-        LocalDateTime dateTime = LocalDateTime.now();
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(dateTime)
+                                                      .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
         List<TemperatureDto> temperatureDtos = List.of(temperatureDto);
         List<Temperature> temperatures = List.of(TemperatureModelMapper.toModel(temperatureDto));
-        when(temperatureRepository.getTemperatureByTimestamp(dateTime)).thenReturn(temperatures);
+        when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(temperatures);
 
-        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
+        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(dateTime);
+        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(registeredAt);
         assertThat(result)
             .hasSameElementsAs(temperatureDtos);
     }
@@ -104,13 +104,13 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("getTemperaturesByDateOrTimestamp returns empty list with invalid timestamp.")
     void givenInvalidTimestamp_whenGetTemperaturesByDateOrTimestamp_thenReturnEmptyList() {
-        boolean checkOnlyDate = false;
-        LocalDateTime invalidDateTime = LocalDateTime.now();
-        when(temperatureRepository.getTemperatureByTimestamp(invalidDateTime)).thenReturn(emptyList());
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now();
+        when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(emptyList());
 
-        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(invalidDateTime);
+        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(registeredAt);
         assertThat(result)
             .isEmpty();
     }
@@ -118,27 +118,27 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("getTemperaturesByDateOrTimestamp returns temperatures with valid date.")
     void givenValidDate_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperatures() {
-        boolean checkOnlyDate = true;
-        LocalDateTime dateTime = LocalDateTime.now();
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         Double temp2 = 80.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(dateTime)
+                                                      .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
         TemperatureDto temperatureDto2 = TemperatureDto.builder()
-                                                       .registeredAt(dateTime.minusHours(1))
+                                                       .registeredAt(registeredAt.minusHours(1))
                                                        .temp(temp2)
                                                        .build();
         List<TemperatureDto> temperatureDtos = List.of(temperatureDto, temperatureDto2);
         List<Temperature> temperatures = temperatureDtos.stream()
                                                         .map(TemperatureModelMapper::toModel)
                                                         .toList();
-        when(temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate())).thenReturn(temperatures);
+        when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())).thenReturn(temperatures);
 
-        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
+        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(temperatureRepository, times(1)).getTemperaturesByDate(dateTime.toLocalDate());
+        verify(temperatureRepository, times(1)).getTemperaturesByDate(registeredAt.toLocalDate());
         assertThat(result)
             .hasSameElementsAs(temperatureDtos);
     }
@@ -146,13 +146,13 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("getTemperaturesByDate returns empty list with invalid date.")
     void givenInvalidDate_whenGetTemperaturesByDate_thenReturnEmptyList() {
-        boolean checkOnlyDate = true;
-        LocalDateTime invalidDateTime = LocalDateTime.now();
-        when(temperatureRepository.getTemperaturesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now();
+        when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())).thenReturn(emptyList());
 
-        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+        List<TemperatureDto> result = temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(temperatureRepository, times(1)).getTemperaturesByDate(invalidDateTime.toLocalDate());
+        verify(temperatureRepository, times(1)).getTemperaturesByDate(registeredAt.toLocalDate());
         assertThat(result)
             .isEmpty();
     }
@@ -220,21 +220,21 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid timestamp.")
     void givenValidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
-        boolean checkOnlyDate = false;
-        LocalDateTime dateTime = LocalDateTime.now();
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(dateTime)
+                                                      .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
         List<Temperature> temperatures = List.of(TemperatureModelMapper.toModel(temperatureDto));
-        when(temperatureRepository.getTemperatureByTimestamp(dateTime)).thenReturn(temperatures);
-        doNothing().when(temperatureRepository).deleteTemperatureByTimestamp(dateTime);
+        when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(temperatures);
+        doNothing().when(temperatureRepository).deleteTemperatureByTimestamp(registeredAt);
 
-        temperatureService.deleteTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
+        temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(dateTime);
-        verify(temperatureRepository, times(1)).deleteTemperatureByTimestamp(dateTime);
+        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(registeredAt);
+        verify(temperatureRepository, times(1)).deleteTemperatureByTimestamp(registeredAt);
         assertThat(capturedOutput)
             .contains(String.format("Deleted temperature with timestamp=%s.", temperatures.getFirst().getRegisteredAt()));
     }
@@ -242,36 +242,36 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp returns with invalid timestamp.")
     void givenInvalidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
-        boolean checkOnlyDate = false;
-        LocalDateTime invalidDateTime = LocalDateTime.now();
-        when(temperatureRepository.getTemperatureByTimestamp(invalidDateTime)).thenReturn(emptyList());
+        boolean dateOnly = false;
+        LocalDateTime registeredAt = LocalDateTime.now();
+        when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(emptyList());
 
-        temperatureService.deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+        temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(invalidDateTime);
-        verify(temperatureRepository, times(0)).deleteTemperatureByTimestamp(invalidDateTime);
+        verify(temperatureRepository, times(1)).getTemperatureByTimestamp(registeredAt);
+        verify(temperatureRepository, times(0)).deleteTemperatureByTimestamp(registeredAt);
         assertThat(capturedOutput)
-            .contains(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
+            .contains(String.format("Temperatures registeredAt=%s not found.", registeredAt));
     }
 
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid date.")
     void givenValidDate_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
-        boolean checkOnlyDate = true;
-        LocalDateTime dateTime = LocalDateTime.now();
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                      .registeredAt(dateTime)
+                                                      .registeredAt(registeredAt)
                                                       .temp(temp)
                                                       .build();
         List<Temperature> temperatures = List.of(TemperatureModelMapper.toModel(temperatureDto));
-        when(temperatureRepository.getTemperaturesByDate(dateTime.toLocalDate())).thenReturn(temperatures);
-        doNothing().when(temperatureRepository).deleteTemperaturesByDate(dateTime.toLocalDate());
+        when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())).thenReturn(temperatures);
+        doNothing().when(temperatureRepository).deleteTemperaturesByDate(registeredAt.toLocalDate());
 
-        temperatureService.deleteTemperaturesByDateOrTimestamp(dateTime, checkOnlyDate);
+        temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(temperatureRepository, times(1)).getTemperaturesByDate(dateTime.toLocalDate());
-        verify(temperatureRepository, times(1)).deleteTemperaturesByDate(dateTime.toLocalDate());
+        verify(temperatureRepository, times(1)).getTemperaturesByDate(registeredAt.toLocalDate());
+        verify(temperatureRepository, times(1)).deleteTemperaturesByDate(registeredAt.toLocalDate());
         assertThat(capturedOutput)
             .contains(String.format("Deleted temperatures with date=%s.", temperatures.getFirst().getRegisteredAt().toLocalDate()));
     }
@@ -279,15 +279,15 @@ class TemperatureServiceImplTest {
     @Test
     @DisplayName("deleteTemperaturesByDateOrTimestamp returns with invalid date.")
     void givenInvalidDate_whenDeleteTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
-        boolean checkOnlyDate = true;
-        LocalDateTime invalidDateTime = LocalDateTime.now();
-        when(temperatureRepository.getTemperaturesByDate(invalidDateTime.toLocalDate())).thenReturn(emptyList());
+        boolean dateOnly = true;
+        LocalDateTime registeredAt = LocalDateTime.now();
+        when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())).thenReturn(emptyList());
 
-        temperatureService.deleteTemperaturesByDateOrTimestamp(invalidDateTime, checkOnlyDate);
+        temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
 
-        verify(temperatureRepository, times(1)).getTemperaturesByDate(invalidDateTime.toLocalDate());
-        verify(temperatureRepository, times(0)).deleteTemperaturesByDate(invalidDateTime.toLocalDate());
+        verify(temperatureRepository, times(1)).getTemperaturesByDate(registeredAt.toLocalDate());
+        verify(temperatureRepository, times(0)).deleteTemperaturesByDate(registeredAt.toLocalDate());
         assertThat(capturedOutput)
-            .contains(String.format("Temperatures with dateTime=%s not found.", invalidDateTime));
+            .contains(String.format("Temperatures registeredAt=%s not found.", registeredAt));
     }
 }

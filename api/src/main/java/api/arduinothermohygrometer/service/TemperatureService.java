@@ -11,11 +11,11 @@ import api.arduinothermohygrometer.exception.ResourceNotFoundException;
 public interface TemperatureService {
     TemperatureDto getTemperatureById(final UUID id) throws ResourceNotFoundException;
 
-    List<TemperatureDto> getTemperaturesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) throws ResourceNotFoundException;
+    List<TemperatureDto> getTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException;
 
     TemperatureDto createTemperature(final TemperatureDto temperatureDto) throws ResourceNotCreatedException;
 
     void deleteTemperatureById(final UUID id) throws ResourceNotFoundException;
 
-    void deleteTemperaturesByDateOrTimestamp(final LocalDateTime dateTime, final boolean checkOnlyDate) throws ResourceNotFoundException;
+    void deleteTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException;
 }
