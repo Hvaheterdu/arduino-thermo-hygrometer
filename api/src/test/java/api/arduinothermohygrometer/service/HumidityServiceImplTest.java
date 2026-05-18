@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.CapturedOutput;
@@ -40,18 +40,12 @@ class HumidityServiceImplTest {
     private HumidityRepository humidityRepository;
 
     @Captor
-    private ArgumentCaptor<Humidity> humidityArgumentCaptor;
+    private ArgumentCaptor<Humidity> humidityArgumentCaptor = ArgumentCaptor.forClass(Humidity.class);
 
+    @InjectMocks
     private HumidityServiceImpl humidityService;
 
-    @BeforeEach
-    void setUp() {
-        humidityService = new HumidityServiceImpl(humidityRepository);
-        humidityArgumentCaptor = ArgumentCaptor.forClass(Humidity.class);
-    }
-
     @Test
-    @DisplayName("getHumidityById returns humidity with valid id.")
     void givenValidId_whenGetHumidityById_thenReturnHumidity() {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -70,7 +64,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("getHumidityById throws ResourceNotFoundException with invalid id.")
     void givenInvalidId_whenGetHumidityById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(humidityRepository.getHumidityById(invalidId)).thenReturn(Optional.empty());
@@ -81,7 +74,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp returns humidity with valid timestamp.")
     void givenValidTimestamp_whenGetHumiditiesByDateOrTimestamp_thenReturnHumidity() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -102,7 +94,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp returns empty list with invalid timestamp.")
     void givenInvalidTimestamp_whenGetHumiditiesByDateOrTimestamp_thenReturnEmptyList() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -116,7 +107,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp returns humidities with valid date.")
     void givenValidDate_whenGetHumiditiesByDateOrTimestamp_thenReturnHumidities() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -144,7 +134,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp returns empty list with invalid date.")
     void givenInvalidDate_whenGetHumiditiesByDate_thenReturnEmptyList() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -158,7 +147,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("createHumidity returns created humidity with valid humidity model.")
     void givenValidHumidityModel_whenCreateHumidity_thenReturnCreatedHumidity() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 75.00;
@@ -177,7 +165,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("createHumidity throws ResourceNotCreatedException with invalid humidity model.")
     void givenInvalidHumidityModel_whenCreateHumidity_thenThrowResourceNotCreatedException() {
         assertThatThrownBy(() -> humidityService.createHumidity(null))
             .isInstanceOf(ResourceNotCreatedException.class)
@@ -185,7 +172,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteHumidityById deletes humidity with valid id.")
     void givenValidId_whenDeleteHumidityById_thenDeleteHumidity(CapturedOutput capturedOutput) {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -207,7 +193,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteHumidityById throws ResourceNotFoundException with invalid id.")
     void givenInvalidId_whenDeleteHumidityById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(humidityRepository.getHumidityById(invalidId)).thenReturn(Optional.empty());
@@ -218,7 +203,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByTimestamp deletes humidity with valid timestamp.")
     void givenValidTimestamp_whenDeleteHumiditiesByTimestamp_thenDeleteHumidity(CapturedOutput capturedOutput) {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -240,7 +224,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByDateOrTimestamp returns with invalid timestamp.")
     void givenInvalidTimestamp_whenDeleteHumiditiesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -255,7 +238,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByDateOrTimestamp deletes humidity with valid date.")
     void givenValidDate_whenDeleteHumiditiesByDateOrTimestamp_thenDeleteHumidity(CapturedOutput capturedOutput) {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -277,7 +259,6 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByDateOrTimestamp returns with invalid date.")
     void givenInvalidDate_whenDeleteHumiditiesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now();

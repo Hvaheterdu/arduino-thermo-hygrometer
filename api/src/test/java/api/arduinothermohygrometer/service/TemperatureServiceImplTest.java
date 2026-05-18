@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.CapturedOutput;
@@ -40,18 +40,12 @@ class TemperatureServiceImplTest {
     private TemperatureRepository temperatureRepository;
 
     @Captor
-    private ArgumentCaptor<Temperature> temperatureArgumentCaptor;
+    private ArgumentCaptor<Temperature> temperatureArgumentCaptor = ArgumentCaptor.forClass(Temperature.class);
 
+    @InjectMocks
     private TemperatureServiceImpl temperatureService;
 
-    @BeforeEach
-    void setUp() {
-        temperatureService = new TemperatureServiceImpl(temperatureRepository);
-        temperatureArgumentCaptor = ArgumentCaptor.forClass(Temperature.class);
-    }
-
     @Test
-    @DisplayName("getTemperatureById returns temperature with valid id.")
     void givenValidId_whenGetTemperatureById_thenReturnTemperature() {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -70,7 +64,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("getTemperatureById throws ResourceNotFoundException with invalid id.")
     void givenInvalidId_whenGetTemperatureById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(temperatureRepository.getTemperatureById(invalidId)).thenReturn(Optional.empty());
@@ -81,7 +74,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDateOrTimestamp returns temperature with valid timestamp.")
     void givenValidTimestamp_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperature() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -102,7 +94,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDateOrTimestamp returns empty list with invalid timestamp.")
     void givenInvalidTimestamp_whenGetTemperaturesByDateOrTimestamp_thenReturnEmptyList() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -116,7 +107,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDateOrTimestamp returns temperatures with valid date.")
     void givenValidDate_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperatures() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -144,7 +134,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDate returns empty list with invalid date.")
     void givenInvalidDate_whenGetTemperaturesByDate_thenReturnEmptyList() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -158,7 +147,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("createTemperature returns created temperature with valid temperature model.")
     void givenValidTemperatureModel_whenCreateTemperature_thenReturnCreatedTemperature() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double temp = 75.00;
@@ -177,7 +165,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("createTemperature throws ResourceNotCreatedException with invalid temperature model.")
     void givenInvalidTemperatureModel_whenCreateTemperature_thenThrowResourceNotCreatedException() {
         assertThatThrownBy(() -> temperatureService.createTemperature(null))
             .isInstanceOf(ResourceNotCreatedException.class)
@@ -185,7 +172,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteTemperatureById deletes temperature with valid id.")
     void givenValidId_whenDeleteTemperatureById_thenDeleteTemperature(CapturedOutput capturedOutput) {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -207,7 +193,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteTemperatureById throws ResourceNotFoundException with invalid id.")
     void givenInvalidId_whenDeleteTemperatureById_thenThrowResourceNotFoundException() {
         UUID invalidId = UUID.randomUUID();
         when(temperatureRepository.getTemperatureById(invalidId)).thenReturn(Optional.empty());
@@ -218,7 +203,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid timestamp.")
     void givenValidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -240,7 +224,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp returns with invalid timestamp.")
     void givenInvalidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -255,7 +238,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp deletes temperature with valid date.")
     void givenValidDate_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature(CapturedOutput capturedOutput) {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -277,7 +259,6 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp returns with invalid date.")
     void givenInvalidDate_whenDeleteTemperaturesByDateOrTimestamp_thenReturn(CapturedOutput capturedOutput) {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now();

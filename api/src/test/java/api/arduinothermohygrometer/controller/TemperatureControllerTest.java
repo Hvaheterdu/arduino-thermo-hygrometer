@@ -42,7 +42,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     private TemperatureService temperatureService;
 
     @Test
-    @DisplayName("getTemperatureById returns 200 OK with valid id.")
     void givenValidId_whenGetTemperatureById_thenReturn200OK() {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -66,7 +65,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getTemperatureById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenGetTemperatureById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         when(temperatureService.getTemperatureById(invalidId))
@@ -84,7 +82,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDateOrTimestamp returns 200 OK with valid registeredAt.")
     void givenValidRegisteredAt_whenGetTemperaturesByDateOrTimestamp_thenReturn200OK() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -117,7 +114,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getTemperaturesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
     void givenInvalidRegisteredAt_whenGetTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -138,7 +134,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("createTemperature returns 201 CREATED for creating valid temperature model.")
     void givenValidTemperatureDtoModel_whenCreateTemperature_thenReturn201CREATED() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 21.02;
@@ -164,7 +159,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("createTemperature returns 400 BAD REQUEST for attempting to create invalid temperature dto.")
     void givenInvalidTemperatureDto_whenCreateTemperature_thenReturn400BadRequest() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double temp = 150.03;
@@ -192,7 +186,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteTemperatureById returns 204 NO CONTENT with valid id.")
     void givenValidId_whenDeleteTemperatureById_thenReturn204NoContent() {
         UUID id = UUID.randomUUID();
         doNothing().when(temperatureService).deleteTemperatureById(id);
@@ -206,7 +199,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteTemperatureById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenDeleteTemperatureById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         doThrow(new ResourceNotFoundException("Temperature with id=" + invalidId + " not found.")).when(temperatureService)
@@ -224,7 +216,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp returns 204 NO CONTENT with valid registeredAt.")
     void givenValidRegisteredAt_whenDeleteTemperaturesByDateOrTimestamp_thenReturn204NoContent() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -241,7 +232,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteTemperaturesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
     void givenInvalidRegisteredAt_whenDeleteTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);

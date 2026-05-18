@@ -42,7 +42,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     private BatteryService batteryService;
 
     @Test
-    @DisplayName("getBatteryById returns 200 OK with valid id.")
     void givenValidId_whenGetBatteryById_thenReturn200OK() {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -66,7 +65,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getBatteryById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenGetBatteryById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         when(batteryService.getBatteryById(invalidId))
@@ -84,7 +82,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getBatteriesByDateOrTimestamp returns 200 OK with valid registeredAt.")
     void givenValidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -117,7 +114,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getBatteriesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
     void givenInvalidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn404NotFound() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -138,7 +134,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("createBattery returns 201 CREATED for creating valid battery model.")
     void givenValidBatteryDtoModel_whenCreateBattery_thenReturn201CREATED() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 95;
@@ -164,7 +159,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("createBattery returns 400 BAD REQUEST for attempting to create invalid battery dto.")
     void givenInvalidBatteryDto_whenCreateBattery_thenReturn400BadRequest() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         int batteryStatus = 105;
@@ -192,7 +186,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteBatteryById returns 204 NO CONTENT with valid id.")
     void givenValidId_whenDeleteBatteryById_thenReturn204NoContent() {
         UUID id = UUID.randomUUID();
         doNothing().when(batteryService).deleteBatteryById(id);
@@ -206,7 +199,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteBatteryById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenDeleteBatteryById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         doThrow(new ResourceNotFoundException("Battery with id=" + invalidId + " not found.")).when(batteryService).deleteBatteryById(invalidId);
@@ -223,7 +215,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteBatteriesByDateOrTimestamp returns 204 NO CONTENT with valid registeredAt.")
     void givenValidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn204NoContent() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -240,7 +231,6 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteBatteriesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
     void givenInvalidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn404NotFound() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);

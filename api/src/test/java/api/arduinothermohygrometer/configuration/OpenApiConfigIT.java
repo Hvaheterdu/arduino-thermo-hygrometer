@@ -40,7 +40,6 @@ class OpenApiConfigIT {
     private OpenApiServerProperties openApiServerProperties;
 
     @Test
-    @DisplayName("Swagger UI endpoint returns 200 OK when accessed.")
     void givenSwaggerUiEndpoint_whenAccessed_thenReturn200OK() {
         mockMvcTester.get()
                      .uri("/swagger-ui/index.html")
@@ -50,7 +49,6 @@ class OpenApiConfigIT {
     }
 
     @Test
-    @DisplayName("OpenAPI docs endpoint returns 200 OK when accessed.")
     void givenOpenApiDocsEndpoint_whenAccessed_thenReturn200OK() {
         mockMvcTester.get()
                      .uri("/v3/api-docs")
@@ -60,7 +58,6 @@ class OpenApiConfigIT {
     }
 
     @Test
-    @DisplayName("Properties in application.yaml are loaded and match OpenAPI Info property values.")
     void givenApplicationYaml_whenInfoPropertiesLoaded_thenPropertyValuesMatch() {
         assertThat(openApiProperties.title()).isEqualTo("Arduino Thermo Hygrometer API.");
         assertThat(openApiProperties.description()).isEqualTo("A Java RESTful API for an Arduino Thermo Hygrometer IoT device.");
@@ -72,7 +69,6 @@ class OpenApiConfigIT {
     }
 
     @Test
-    @DisplayName("Info properties from OpenApi bean match info properties from application.yaml file.")
     void givenSpringContext_whenOpenApiBeanCreated_thenInfoPropertiesMatch() {
         Info info = openAPI.getInfo();
 
@@ -86,7 +82,6 @@ class OpenApiConfigIT {
     }
 
     @Test
-    @DisplayName("Server properties from OpenApi bean match server properties from application.yaml file.")
     void givenSpringContext_whenOpenApiBeanCreated_thenServerPropertiesMatch() {
         List<Server> servers = openAPI.getServers();
         OpenApiSingleServerProperties openApiSingleServerProperties = openApiServerProperties.servers().getFirst();

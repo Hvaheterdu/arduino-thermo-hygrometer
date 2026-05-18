@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("BatteryModelMapper unit tests.")
 class BatteryModelMapperTest {
     @Test
-    @DisplayName("toModel returns battery model from valid battery dto.")
     void givenValidBatteryDto_whenToModel_thenReturnBatteryModel() {
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 95;
@@ -29,7 +28,6 @@ class BatteryModelMapperTest {
     }
 
     @Test
-    @DisplayName("toDto returns battery dto from valid battery model.")
     void givenValidBatteryModel_whenToDto_thenReturnBatteryDto() {
         LocalDateTime registeredAt = LocalDateTime.now();
         int batteryStatus = 95;

@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("HumidityModelMapper unit tests.")
 class HumidityModelMapperTest {
     @Test
-    @DisplayName("toModel returns humidity model from valid humidity dto.")
     void givenValidHumidityDto_whenToModel_thenReturnHumidityModel() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 86.123;
@@ -29,7 +28,6 @@ class HumidityModelMapperTest {
     }
 
     @Test
-    @DisplayName("toDto returns humidity dto from valid humidity model.")
     void givenValidHumidityModel_whenToDto_thenReturnHumidityDto() {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 86.425;

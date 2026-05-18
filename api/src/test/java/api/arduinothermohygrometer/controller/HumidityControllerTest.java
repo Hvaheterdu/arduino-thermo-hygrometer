@@ -42,7 +42,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     private HumidityService humidityService;
 
     @Test
-    @DisplayName("getHumidityById returns 200 OK with valid id.")
     void givenValidId_whenGetHumidityById_thenReturn200OK() {
         UUID id = UUID.randomUUID();
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -66,7 +65,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getHumidityById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenGetHumidityById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         when(humidityService.getHumidityById(invalidId))
@@ -84,7 +82,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp returns 200 OK with valid registeredAt.")
     void givenValidRegisteredAt_whenGetHumiditiesByDateOrTimestamp_thenReturn200OK() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -117,7 +114,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("getHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
     void givenInvalidRegisteredAt_whenGetHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
         boolean dateOnly = true;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -138,7 +134,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("createHumidity returns 201 CREATED for creating valid humidity model.")
     void givenValidHumidityDtoModel_whenCreateHumidity_thenReturn201CREATED() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 21.02;
@@ -164,7 +159,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("createHumidity returns 400 BAD REQUEST for attempting to create invalid humidity dto.")
     void givenInvalidHumidityDto_whenCreateHumidity_thenReturn400BadRequest() {
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Double airHumidity = 150.03;
@@ -192,7 +186,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteHumidityById returns 204 NO CONTENT with valid id.")
     void givenValidId_whenDeleteHumidityById_thenReturn204NoContent() {
         UUID id = UUID.randomUUID();
         doNothing().when(humidityService).deleteHumidityById(id);
@@ -206,7 +199,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteHumidityById returns 404 NOT FOUND with invalid id.")
     void givenInvalidId_whenDeleteHumidityById_thenReturn404NotFound() {
         UUID invalidId = new UUID(0, 0);
         doThrow(new ResourceNotFoundException("Humidity with id=" + invalidId + " not found."))
@@ -224,7 +216,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByDateOrTimestamp returns 204 NO CONTENT with valid registeredAt.")
     void givenValidRegisteredAt_whenDeleteHumiditiesByDateOrTimestamp_thenReturn204NoContent() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -241,7 +232,6 @@ class HumidityControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    @DisplayName("deleteHumiditiesByDateOrTimestamp returns 404 NOT FOUND with invalid registeredAt.")
     void givenInvalidRegisteredAt_whenDeleteHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
         boolean dateOnly = false;
         LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);

@@ -69,10 +69,10 @@ public class SecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, ApiKeyFilter apiKeyFilter) {
         return httpSecurity
             .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator/health", "/actuator/health/liveness",
-                                                              "/actuator/health/readiness").permitAll()
-                                                          .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs",
-                                                              "/v3/api-docs/**").permitAll()
+                authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator/health",
+                                                              "/actuator/health/liveness", "/actuator/health/readiness").permitAll()
+                                                          .requestMatchers("/swagger-ui.html",
+                                                              "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
                                                           .requestMatchers("/actuator/**").hasRole("ACTUATOR")
                                                           .requestMatchers("/api/**").hasRole("API_ADMIN")
                                                           .anyRequest().denyAll()
