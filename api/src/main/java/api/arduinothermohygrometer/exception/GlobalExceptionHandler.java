@@ -1,73 +1,88 @@
 package api.arduinothermohygrometer.exception;
 
-import java.net.URI;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.jspecify.annotations.NonNull;
 import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import api.arduinothermohygrometer.dto.ProblemDetailsDto;
+import api.arduinothermohygrometer.dto.ProblemDetailsValidationErrorDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
-import static api.arduinothermohygrometer.util.ProblemDetailUtil.buildProblemDetail;
+import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
-    protected ResponseEntity<@NonNull Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NonNull HttpHeaders httpHeaders,
-        @NonNull HttpStatusCode httpStatusCode,
-        @NonNull WebRequest webRequest) {
-        log.error("Method argument not valid exception with message={}.", ex.getMessage());
+    protected ResponseEntity<@NonNull Object> handleMethodArgumentNotValid(MethodArgumentNotValidException methodArgumentNotValidException,
+        @NonNull HttpHeaders httpHeaders, @NonNull HttpStatusCode httpStatusCode, @NonNull WebRequest webRequest) {
+        log.error("Method argument not valid exception with message={}.", methodArgumentNotValidException.getMessage());
 
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(httpStatusCode, "One or more fields are invalid.");
-        problemDetail.setType(URI.create("https://api.arduinothermohygrometer/errors/validation-error"));
-        problemDetail.setTitle("Entity validation error.");
-        problemDetail.setInstance(URI.create(webRequest.getContextPath()));
+        List<ProblemDetailsValidationErrorDto> errors = methodArgumentNotValidException.getBindingResult()
+                                                                                       .getFieldErrors()
+                                                                                       .stream()
+                                                                                       .map(this::toValidationError)
+                                                                                       .toList();
+
         String traceId = MDC.get("traceId");
-        if (traceId != null) {
-            problemDetail.setProperty("traceId", traceId);
-        }
-        problemDetail.setProperty("timestamp", Instant.now());
+        ProblemDetailsDto body = ProblemDetailsDto.builder()
+                                                  .type("https://api.arduinothermohygrometer/errors/validation-error")
+                                                  .title("Entity validation error.")
+                                                  .detail("One or more fields are invalid.")
+                                                  .status(httpStatusCode.value())
+                                                  .instance(webRequest.getContextPath())
+                                                  .traceId(traceId != null
+                                                      ? traceId
+                                                      : "unknown")
+                                                  .timestamp(LocalDateTime.now())
+                                                  .errors(errors)
+                                                  .build();
 
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult()
-          .getFieldErrors()
-          .forEach(error ->
-              errors.put(error.getField(), error.getDefaultMessage())
-          );
-        problemDetail.setProperty("errors", errors);
-
-        return createResponseEntity(problemDetail, httpHeaders, httpStatusCode, webRequest);
+        return new ResponseEntity<>(body, httpHeaders, httpStatusCode);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ProblemDetail handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
-        log.error("Resource not found exception with message={}.", ex.getMessage());
-        return buildProblemDetail(HttpStatus.NOT_FOUND, "resource-not-found", "Resource not found.", ex.getMessage(), request);
+    public ResponseEntity<ProblemDetailsDto> handleResourceNotFound(ResourceNotFoundException resourceNotFoundException, HttpServletRequest request) {
+        log.error("Resource not found exception with message={}.", resourceNotFoundException.getMessage());
+        ProblemDetailsDto body = buildProblemDetail(HttpStatus.NOT_FOUND, "resource-not-found", "Resource not found.",
+            resourceNotFoundException.getMessage(), request);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
     @ExceptionHandler(ResourceNotCreatedException.class)
-    public ProblemDetail handleResourceNotCreated(ResourceNotCreatedException ex, HttpServletRequest request) {
-        log.error("Resource not created exception with message={}.", ex.getMessage());
-        return buildProblemDetail(HttpStatus.BAD_REQUEST, "resource-not-created", "Resource not created.", ex.getMessage(), request);
+    public ResponseEntity<ProblemDetailsDto> handleResourceNotCreated(ResourceNotCreatedException resourceNotCreatedException, HttpServletRequest request) {
+        log.error("Resource not created exception with message={}.", resourceNotCreatedException.getMessage());
+        ProblemDetailsDto body = buildProblemDetail(HttpStatus.BAD_REQUEST, "resource-not-created", "Resource not created.",
+            resourceNotCreatedException.getMessage(), request);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     @ExceptionHandler(Exception.class)
-    public ProblemDetail handleGeneralException(Exception ex, HttpServletRequest request) {
-        log.error("Internal server error exception with message={}.", ex.getMessage());
-        return buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, "internal-error", "Internal server error.", ex.getMessage(), request);
+    public ResponseEntity<ProblemDetailsDto> handleGeneralException(Exception exception, HttpServletRequest request) {
+        log.error("Internal server error exception with message={}.", exception.getMessage());
+        ProblemDetailsDto body = buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, "internal-error", "Internal server error.", exception.getMessage(), request);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    private ProblemDetailsValidationErrorDto toValidationError(FieldError error) {
+        return ProblemDetailsValidationErrorDto.builder()
+                                               .description(error.getDefaultMessage())
+                                               .parameter(error.getField())
+                                               .header(null)
+                                               .pointer("/" + error.getField())
+                                               .build();
     }
 }

@@ -187,8 +187,8 @@ class TemperatureControllerTest extends WebMvcTestBase {
                 path -> assertThat(path).asString().isEqualTo("One or more fields are invalid."))
             .hasPathSatisfying("$.title",
                 path -> assertThat(path).asString().isEqualTo("Entity validation error."))
-            .hasPathSatisfying("$.errors.temp",
-                path -> assertThat(path).asString().isNotBlank());
+            .hasPathSatisfying("$.errors.[0].parameter",
+                path -> assertThat(path).asString().isEqualTo("temp"));
     }
 
     @Test

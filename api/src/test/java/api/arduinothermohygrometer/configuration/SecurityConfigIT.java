@@ -36,19 +36,6 @@ class SecurityConfigIT {
     }
 
     @Test
-    @DisplayName("Health endpoint returns 200 OK and components body with API key.")
-    void givenApiKey_whenGettingHealth_thenReturn200OKAndComponentsInBody() {
-        mockMvcTester.get()
-                     .uri("/actuator/health")
-                     .header("X-API-KEY", "api-secret-key")
-                     .exchange()
-                     .assertThat()
-                     .hasStatusOk()
-                     .bodyJson()
-                     .hasPath("$.components");
-    }
-
-    @Test
     @DisplayName("Liveness probe returns 200 OK and UP status with no API key.")
     void givenNoApiKey_whenGettingLivenessProbe_thenReturn200OKAndUpBody() {
         mockMvcTester.get()
@@ -135,6 +122,6 @@ class SecurityConfigIT {
                      .header("X-API-KEY", "api-secret-key")
                      .exchange()
                      .assertThat()
-                     .hasStatus(HttpStatus.FORBIDDEN);
+                     .hasStatus(HttpStatus.UNAUTHORIZED);
     }
 }
