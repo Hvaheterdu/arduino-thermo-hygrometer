@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import api.arduinothermohygrometer.dto.ProblemDetailsDto;
 import api.arduinothermohygrometer.filter.ApiKeyFilter;
+import api.arduinothermohygrometer.filter.RateLimitingFilter;
 import api.arduinothermohygrometer.properties.CorsProperties;
 import api.arduinothermohygrometer.properties.SecurityProperties;
 import jakarta.servlet.http.HttpServletResponse;
@@ -42,12 +44,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public ApiKeyFilter apiKeyFilter(AuthenticationManager authenticationManager) {
+    protected ApiKeyFilter apiKeyFilter(AuthenticationManager authenticationManager) {
         return new ApiKeyFilter(authenticationManager, objectMapper, securityProperties);
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
+    protected AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -66,7 +68,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, ApiKeyFilter apiKeyFilter) {
+    protected RateLimitingFilter rateLimitingFilter() {
+        return new RateLimitingFilter(objectMapper, securityProperties);
+    }
+
+    @Bean
+    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, ApiKeyFilter apiKeyFilter, RateLimitingFilter rateLimitingFilter) {
         return httpSecurity
             .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                 authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator/health",
@@ -121,12 +128,13 @@ public class SecurityConfig {
                     })
             )
             .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(rateLimitingFilter, ApiKeyFilter.class)
             .build();
     }
 
     private void writeProblemDetails(HttpServletResponse response, ProblemDetailsDto body) throws IOException {
         response.setStatus(body.getStatus());
-        response.setContentType("application/problem+json");
+        response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(body));
     }
 }

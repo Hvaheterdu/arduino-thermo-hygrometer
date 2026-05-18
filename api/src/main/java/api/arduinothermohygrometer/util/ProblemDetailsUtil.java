@@ -7,11 +7,11 @@ import org.springframework.http.HttpStatus;
 
 import api.arduinothermohygrometer.dto.ProblemDetailsDto;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProblemDetailsUtil {
-    private ProblemDetailsUtil() {
-    }
-
     public static ProblemDetailsDto buildProblemDetail(HttpStatus httpStatus, String type, String title, String detail, HttpServletRequest request) {
         String traceId = MDC.get("traceId");
         return ProblemDetailsDto.builder()

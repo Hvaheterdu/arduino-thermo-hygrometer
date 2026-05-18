@@ -71,8 +71,8 @@ public class HumidityServiceImpl implements HumidityService {
 
         Humidity humidity = humidityRepository.createHumidity(HumidityModelMapper.toModel(humidityDto))
                                               .orElseThrow(() -> new ResourceNotCreatedException("Humidity cannot be created."));
-        log.info("Humidity with id={} and registered_at={} created.", humidity.getId(), humidity.getRegisteredAt());
 
+        log.info("Humidity with id={} and registered_at={} created.", humidity.getId(), humidity.getRegisteredAt());
         return HumidityModelMapper.toDto(humidity);
     }
 

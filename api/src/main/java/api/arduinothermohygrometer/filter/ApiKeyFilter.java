@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -76,7 +77,7 @@ public class ApiKeyFilter extends OncePerRequestFilter {
         ProblemDetailsDto body = buildProblemDetail(httpStatus, type, title, detail, request);
 
         response.setStatus(httpStatus.value());
-        response.setContentType("application/problem+json");
+        response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(body));
     }
 }
