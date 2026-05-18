@@ -25,7 +25,7 @@ import tools.jackson.databind.ObjectMapper;
 import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
 
 public class RateLimitingFilter extends OncePerRequestFilter {
-    private static final Duration DURATION = Duration.ofMinutes(10);
+    private static final Duration DURATION = Duration.ofSeconds(600);
     private static final long TOKENS = 10;
 
     private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();

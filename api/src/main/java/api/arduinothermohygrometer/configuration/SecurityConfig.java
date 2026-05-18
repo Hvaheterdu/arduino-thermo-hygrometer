@@ -1,6 +1,7 @@
 package api.arduinothermohygrometer.configuration;
 
 import java.io.IOException;
+import java.time.Duration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -44,22 +44,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    protected ApiKeyFilter apiKeyFilter(AuthenticationManager authenticationManager) {
+    public ApiKeyFilter apiKeyFilter(AuthenticationManager authenticationManager) {
         return new ApiKeyFilter(authenticationManager, objectMapper, securityProperties);
     }
 
     @Bean
-    protected AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    protected CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowCredentials(false);
         corsConfiguration.setAllowedHeaders(corsProperties.allowedHeaders());
         corsConfiguration.setAllowedMethods(corsProperties.allowedMethods());
         corsConfiguration.setAllowedOrigins(corsProperties.allowedOrigins());
+        corsConfiguration.setMaxAge(Duration.ofSeconds(3600L));
 
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
@@ -68,12 +69,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    protected RateLimitingFilter rateLimitingFilter() {
+    public RateLimitingFilter rateLimitingFilter() {
         return new RateLimitingFilter(objectMapper, securityProperties);
     }
 
     @Bean
-    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, ApiKeyFilter apiKeyFilter, RateLimitingFilter rateLimitingFilter) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, ApiKeyFilter apiKeyFilter, RateLimitingFilter rateLimitingFilter) {
         return httpSecurity
             .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                 authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator/health",
@@ -84,7 +85,6 @@ public class SecurityConfig {
                                                           .requestMatchers("/api/**").hasRole("API_ADMIN")
                                                           .anyRequest().denyAll()
             )
-            .csrf(AbstractHttpConfigurer::disable)
             .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
             .headers(headersConfigurer ->
                 headersConfigurer.contentTypeOptions(withDefaults())
