@@ -46,6 +46,7 @@ class HumidityServiceImplTest {
     @InjectMocks
     private HumidityServiceImpl humidityService;
 
+    @DisplayName("Get methods for HumidityServiceImpl.")
     @Nested
     class GetMethods {
         @Test
@@ -150,6 +151,7 @@ class HumidityServiceImplTest {
         }
     }
 
+    @DisplayName("Create methods for HumidityServiceImpl.")
     @Nested
     class CreateMethods {
         @Test
@@ -178,6 +180,7 @@ class HumidityServiceImplTest {
         }
     }
 
+    @DisplayName("Delete methods for HumidityServiceImpl.")
     @Nested
     class DeleteMethods {
         @Test

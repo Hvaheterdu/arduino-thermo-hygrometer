@@ -13,7 +13,7 @@ public record OpenApiSingleServerProperties(@NotEmpty String url, @NotEmpty Stri
     public Server generateOpenApiServer() {
         ServerVariables serverVariables = new ServerVariables();
         variables.forEach((key, openApiServerVariableProperties) -> serverVariables.addServerVariable(key, new ServerVariable()
-                ._default(openApiServerVariableProperties._default())));
+                ._default(openApiServerVariableProperties.getDefaultValue())));
 
         return new Server()
                 .url(url)

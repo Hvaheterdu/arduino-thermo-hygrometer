@@ -56,7 +56,7 @@ public class ApiKeyFilter extends OncePerRequestFilter {
         }
 
         try {
-            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(null, apiKey);
+            var authRequest = new UsernamePasswordAuthenticationToken(null, apiKey);
             Authentication authResult = authenticationManager.authenticate(authRequest);
             SecurityContextHolder.getContext().setAuthentication(authResult);
         } catch (final AuthenticationException ex) {

@@ -46,6 +46,7 @@ class BatteryServiceImplTest {
     @InjectMocks
     private BatteryServiceImpl batteryService;
 
+    @DisplayName("Get methods for BatteryServiceImpl.")
     @Nested
     class GetMethods {
         @Test
@@ -150,6 +151,7 @@ class BatteryServiceImplTest {
         }
     }
 
+    @DisplayName("Create methods for BatteryServiceImpl.")
     @Nested
     class CreateMethods {
         @Test
@@ -178,6 +180,7 @@ class BatteryServiceImplTest {
         }
     }
 
+    @DisplayName("Delete methods for BatteryServiceImpl.")
     @Nested
     class DeleteMethods {
         @Test

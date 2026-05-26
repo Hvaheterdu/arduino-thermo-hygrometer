@@ -43,6 +43,7 @@ class BatteryControllerTest extends WebMvcTestBase {
     @MockitoBean
     private BatteryService batteryService;
 
+    @DisplayName("GET methods for BatteryController.")
     @Nested
     class GetMethods {
         @Test
@@ -138,6 +139,7 @@ class BatteryControllerTest extends WebMvcTestBase {
         }
     }
 
+    @DisplayName("CREATE methods for BatteryController.")
     @Nested
     class CreateMethods {
         @Test
@@ -193,6 +195,7 @@ class BatteryControllerTest extends WebMvcTestBase {
         }
     }
 
+    @DisplayName("DELETE methods for BatteryController.")
     @Nested
     class DeleteMethods {
         @Test

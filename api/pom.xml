@@ -74,7 +74,8 @@
     <slf4j-api.version>2.0.17</slf4j-api.version>
 
     <!-- Springdoc/Swagger version -->
-    <springdoc-openapi-starter-webmcv-ui.version>3.0.3</springdoc-openapi-starter-webmcv-ui.version>
+    <springdoc-openapi-starter-webmvc-ui.version>3.0.3</springdoc-openapi-starter-webmvc-ui.version>
+    <springdoc-openapi-starter-common.version>3.0.3</springdoc-openapi-starter-common.version>
 
     <!-- OpenAPI Generator -->
     <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
@@ -129,6 +130,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-webmvc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <!-- Bucket4J -->
@@ -189,7 +195,12 @@
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-      <version>${springdoc-openapi-starter-webmcv-ui.version}</version>
+      <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-common</artifactId>
+      <version>${springdoc-openapi-starter-common.version}</version>
     </dependency>
 
     <!-- OpenApi Generator -->
@@ -297,6 +308,10 @@
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
+            </path>
+            <path>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-configuration-processor</artifactId>
             </path>
           </annotationProcessorPaths>
         </configuration>
@@ -449,9 +464,7 @@
           <sourceDirectories>
             <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
           </sourceDirectories>
-          <testSourceDirectories>
-            <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>
-          </testSourceDirectories>
+          <includeTestDirectory>true</includeTestDirectory>
           <violationSeverity>warning</violationSeverity>
         </configuration>
       </plugin>

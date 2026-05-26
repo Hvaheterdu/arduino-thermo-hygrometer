@@ -46,6 +46,7 @@ class TemperatureServiceImplTest {
     @InjectMocks
     private TemperatureServiceImpl temperatureService;
 
+    @DisplayName("Get methods for TemperatureServiceImpl.")
     @Nested
     class GetMethods {
         @Test
@@ -150,6 +151,7 @@ class TemperatureServiceImplTest {
         }
     }
 
+    @DisplayName("Create methods for TemperatureServiceImpl.")
     @Nested
     class CreateMethods {
         @Test
@@ -178,6 +180,7 @@ class TemperatureServiceImplTest {
         }
     }
 
+    @DisplayName("Delete methods for TemperatureServiceImpl.")
     @Nested
     class DeleteMethods {
         @Test

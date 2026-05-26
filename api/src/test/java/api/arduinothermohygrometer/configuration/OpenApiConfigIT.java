@@ -95,9 +95,9 @@ class OpenApiConfigIT {
                     assertThat(server.getDescription()).isEqualTo(openApiSingleServerProperties.description());
                     assertThat(server.getVariables().keySet()).isEqualTo(openApiSingleServerProperties.variables().keySet());
                     ServerVariable hostServerVariable = server.getVariables().get("host");
-                    assertThat(hostServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("host")._default());
+                    assertThat(hostServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("host").getDefaultValue());
                     ServerVariable portServerVariable = server.getVariables().get("port");
-                    assertThat(portServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("port")._default());
+                    assertThat(portServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("port").getDefaultValue());
                 });
     }
 }

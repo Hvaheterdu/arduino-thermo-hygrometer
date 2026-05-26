@@ -43,6 +43,7 @@ class HumidityControllerTest extends WebMvcTestBase {
     @MockitoBean
     private HumidityService humidityService;
 
+    @DisplayName("GET methods for HumidityController.")
     @Nested
     class GetMethods {
         @Test
@@ -138,6 +139,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         }
     }
 
+    @DisplayName("CREATE methods for HumidityController.")
     @Nested
     class CreateMethods {
         @Test
@@ -193,6 +195,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         }
     }
 
+    @DisplayName("DELETE methods for HumidityController.")
     @Nested
     class DeleteMethods {
         @Test

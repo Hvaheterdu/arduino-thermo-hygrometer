@@ -86,6 +86,7 @@
   },
   "yaml.format.printWidth": 150,
   "yaml.format.trailingComma": false,
+  "yaml.schemaStore.enable": false,
   "[yaml]": {
     "diffEditor.ignoreTrimWhitespace": false,
     "editor.autoIndent": "keep",

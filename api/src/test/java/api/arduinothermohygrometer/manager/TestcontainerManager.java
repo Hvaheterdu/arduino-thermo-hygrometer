@@ -47,6 +47,12 @@ public abstract class TestcontainerManager {
         log.info("PostgreSQL-testcontainer info: {}", postgreSQLContainer.getCurrentContainerInfo());
     }
 
+    private static void stopAndClosePostgreSQLContainer() {
+        postgreSQLContainer.stop();
+        postgreSQLContainer.close();
+        log.info("PostgreSQL-testcontainer stopped and closed successfully.");
+    }
+
     private static void migrateFlyway() {
         Flyway.configure()
                 .dataSource(postgreSQLContainer.getJdbcUrl(), postgreSQLContainer.getUsername(), postgreSQLContainer.getPassword())
@@ -54,11 +60,5 @@ public abstract class TestcontainerManager {
                 .locations("classpath:db/migration")
                 .load()
                 .migrate();
-    }
-
-    private static void stopAndClosePostgreSQLContainer() {
-        postgreSQLContainer.stop();
-        postgreSQLContainer.close();
-        log.info("PostgreSQL-testcontainer stopped and closed successfully.");
     }
 }

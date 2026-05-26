@@ -43,6 +43,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
     @MockitoBean
     private TemperatureService temperatureService;
 
+    @DisplayName("GET methods for TemperatureController.")
     @Nested
     class GetMethods {
         @Test
@@ -138,6 +139,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         }
     }
 
+    @DisplayName("CREATE methods for TemperatureController.")
     @Nested
     class CreateMethods {
         @Test
@@ -193,6 +195,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
         }
     }
 
+    @DisplayName("DELETE methods for TemperatureController.")
     @Nested
     class DeleteMethods {
         @Test

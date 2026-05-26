@@ -25,6 +25,7 @@ class SecurityConfigIT {
     @MockitoBean
     private OpenApiConfig openApiConfig;
 
+    @DisplayName("Health endpoint tests.")
     @Nested
     class HealthEndpoint {
         @Test
@@ -65,6 +66,7 @@ class SecurityConfigIT {
         }
     }
 
+    @DisplayName("Security headers tests.")
     @Nested
     class SecurityHeaders {
         @Test
@@ -127,6 +129,7 @@ class SecurityConfigIT {
         }
     }
 
+    @DisplayName("Rate limiting tests-")
     @Nested
     class RateLimitingFilter {
         @Test
