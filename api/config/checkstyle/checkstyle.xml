@@ -6,13 +6,13 @@
   <property name="severity" value="warning" />
   <property name="fileExtensions" value="java" />
 
-  <module name="LineLength">
-    <property name="max" value="150" />
-    <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://" />
-  </module>
-
   <module name="FileTabCharacter">
     <property name="eachLine" value="true" />
+  </module>
+
+  <module name="LineLength">
+    <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://" />
+    <property name="max" value="150" />
   </module>
 
   <module name="RegexpSingleline">
@@ -25,56 +25,39 @@
   <module name="NewlineAtEndOfFile" />
 
   <module name="TreeWalker">
+    <module name="SuppressionXpathSingleFilter">
+      <property name="checks" value="ImportOrder" />
+      <property name="message" value="Wrong lexicographical order" />
+      <property name="query" value="//IMPORT[starts-with(@text, 'api.') or starts-with(@text, 'api/')]" />
+    </module>
+
     <module name="AvoidStarImport" />
-    <module name="RedundantImport" />
-    <module name="UnusedImports" />
+    <module name="ArrayTypeStyle" />
 
-    <module name="ImportOrder">
-      <property name="groups" value="/^java\./,/^javax\./,/^org\./,/^com\./,/^io\./,/^api\./" />
-      <property name="separated" value="true" />
-      <property name="separatedStaticGroups" value="true" />
-      <property name="option" value="top" />
-      <property name="sortStaticImportsAlphabetically" value="true" />
-      <property name="useContainerOrderingForStatic" value="true" />
-    </module>
+    <module name="ConstantName" />
 
-    <module name="NeedBraces">
+    <module name="EmptyBlock">
+      <property name="option" value="TEXT" />
       <property name="tokens"
-        value="LITERAL_IF, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO" />
+        value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH" />
     </module>
-
-    <module name="LeftCurly" />
-
-    <module name="RightCurly">
-      <property name="tokens"
-        value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO, STATIC_INIT, INSTANCE_INIT, ANNOTATION_DEF, ENUM_DEF, INTERFACE_DEF, RECORD_DEF, COMPACT_CTOR_DEF" />
+    <module name="EmptyCatchBlock">
+      <property name="exceptionVariableName" value="expected|ignored" />
     </module>
-
     <module name="EmptyLineSeparator">
-      <property name="allowNoEmptyLineBetweenFields" value="true" />
       <property name="allowMultipleEmptyLines" value="false" />
       <property name="allowMultipleEmptyLinesInsideClassMembers" value="false" />
+      <property name="allowNoEmptyLineBetweenFields" value="true" />
       <property name="tokens"
         value="IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF, STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, RECORD_DEF, COMPACT_CTOR_DEF" />
     </module>
 
-    <module name="TypeName" />
-    <module name="MethodName">
-      <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$" />
-    </module>
-    <module name="ParameterName" />
-    <module name="LocalVariableName" />
-    <module name="MemberName" />
-    <module name="StaticVariableName" />
-    <module name="ConstantName" />
-
-    <module name="PackageName">
-      <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$" />
-    </module>
-
+    <module name="FallThrough" />
     <module name="FinalLocalVariable">
       <property name="tokens" value="PARAMETER_DEF" />
     </module>
+
+    <module name="GenericWhitespace" />
 
     <module name="Indentation">
       <property name="basicOffset" value="4" />
@@ -85,16 +68,54 @@
       <property name="arrayInitIndent" value="4" />
       <property name="forceStrictCondition" value="false" />
     </module>
+    <module name="ImportOrder">
+      <property name="groups" value="/^java\./,/^javax\./,/^org\./,/^com\./,/^io\./,/^api\./" />
+      <property name="option" value="top" />
+      <property name="separated" value="true" />
+      <property name="separatedStaticGroups" value="true" />
+      <property name="sortStaticImportsAlphabetically" value="true" />
+      <property name="useContainerOrderingForStatic" value="true" />
+    </module>
 
-    <module name="GenericWhitespace" />
+    <module name="LeftCurly" />
+    <module name="LocalVariableName" />
+
+    <module name="MemberName" />
+    <module name="MethodName">
+      <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$" />
+    </module>
     <module name="MethodParamPad" />
+    <module name="MissingSwitchDefault" />
+    <module name="ModifierOrder" />
+    <module name="MultipleVariableDeclarations" />
+
+    <module name="NeedBraces">
+      <property name="tokens" value="LITERAL_IF, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO" />
+    </module>
     <module name="NoWhitespaceAfter" />
     <module name="NoWhitespaceBefore" />
+    <module name="NoFinalizer" />
 
+    <module name="OneStatementPerLine" />
     <module name="OperatorWrap">
       <property name="option" value="nl" />
       <property name="tokens"
         value="QUESTION, COLON, EQUAL, NOT_EQUAL, DIV, PLUS, MINUS, STAR, MOD, SR, BSR, GE, GT, SL, LE, LT, BXOR, BOR, LOR, BAND, LAND, TYPE_EXTENSION_AND, LITERAL_INSTANCEOF" />
+    </module>
+    <module name="OverloadMethodsDeclarationOrder" />
+
+    <module name="PackageName">
+      <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$" />
+    </module>
+    <module name="ParameterName" />
+    <module name="ParenPad" />
+
+
+    <module name="RedundantImport" />
+    <module name="RedundantModifier" />
+    <module name="RightCurly">
+      <property name="tokens"
+        value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO, STATIC_INIT, INSTANCE_INIT, ANNOTATION_DEF, ENUM_DEF, INTERFACE_DEF, RECORD_DEF, COMPACT_CTOR_DEF" />
     </module>
 
     <module name="SeparatorWrap">
@@ -102,52 +123,28 @@
       <property name="option" value="nl" />
       <property name="tokens" value="DOT" />
     </module>
-
     <module name="SeparatorWrap">
       <property name="id" value="SeparatorWrapComma" />
       <property name="option" value="EOL" />
       <property name="tokens" value="COMMA" />
     </module>
+    <module name="StaticVariableName" />
 
-    <module name="ParenPad" />
     <module name="TypecastParenPad" />
-    <module name="WhitespaceAfter" />
+    <module name="TypeName" />
 
+    <module name="UnusedImports" />
+    <module name="UpperEll" />
+
+    <module name="VariableDeclarationUsageDistance" />
+
+    <module name="WhitespaceAfter" />
     <module name="WhitespaceAround">
       <property name="allowEmptyConstructors" value="true" />
       <property name="allowEmptyLambdas" value="true" />
       <property name="allowEmptyMethods" value="true" />
       <property name="allowEmptyTypes" value="true" />
       <property name="allowEmptyLoops" value="true" />
-    </module>
-
-    <module name="ModifierOrder" />
-    <module name="RedundantModifier" />
-
-    <module name="EmptyBlock">
-      <property name="option" value="TEXT" />
-      <property name="tokens"
-        value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH" />
-    </module>
-
-    <module name="EmptyCatchBlock">
-      <property name="exceptionVariableName" value="expected|ignored" />
-    </module>
-
-    <module name="UpperEll" />
-    <module name="ArrayTypeStyle" />
-    <module name="MissingSwitchDefault" />
-    <module name="FallThrough" />
-    <module name="OneStatementPerLine" />
-    <module name="MultipleVariableDeclarations" />
-    <module name="NoFinalizer" />
-    <module name="OverloadMethodsDeclarationOrder" />
-    <module name="VariableDeclarationUsageDistance" />
-
-    <module name="SuppressionXpathSingleFilter">
-      <property name="checks" value="ImportOrder" />
-      <property name="query" value="//IMPORT[starts-with(@text, 'api.') or starts-with(@text, 'api/')]" />
-      <property name="message" value="Wrong lexicographical order" />
     </module>
   </module>
 </module>
