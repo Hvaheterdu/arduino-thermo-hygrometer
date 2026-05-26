@@ -26,7 +26,7 @@ public class Temperature {
     @Column(name = "temp", nullable = false, precision = 6, scale = 2)
     private Double temp;
 
-    public Temperature(LocalDateTime registeredAt, Double temp) {
+    public Temperature(final LocalDateTime registeredAt, final Double temp) {
         this.registeredAt = registeredAt;
         this.temp = temp;
     }

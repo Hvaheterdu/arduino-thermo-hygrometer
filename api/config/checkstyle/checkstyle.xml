@@ -1,5 +1,6 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN" "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
 <module name="Checker">
   <property name="charset" value="UTF-8" />
   <property name="severity" value="warning" />
@@ -29,18 +30,21 @@
     <module name="UnusedImports" />
 
     <module name="ImportOrder">
-      <property name="groups" value="/^api\./,/^java\./,/^javax\./,/^org\./,/^jakarta\./,/^com\./" />
+      <property name="groups" value="/^java\./,/^javax\./,/^org\./,/^com\./,/^io\./,/^api\./" />
       <property name="separated" value="true" />
       <property name="separatedStaticGroups" value="true" />
-      <property name="option" value="bottom" />
+      <property name="option" value="top" />
       <property name="sortStaticImportsAlphabetically" value="true" />
+      <property name="useContainerOrderingForStatic" value="true" />
     </module>
 
     <module name="NeedBraces">
       <property name="tokens"
         value="LITERAL_IF, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO" />
     </module>
+
     <module name="LeftCurly" />
+
     <module name="RightCurly">
       <property name="tokens"
         value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO, STATIC_INIT, INSTANCE_INIT, ANNOTATION_DEF, ENUM_DEF, INTERFACE_DEF, RECORD_DEF, COMPACT_CTOR_DEF" />
@@ -55,18 +59,21 @@
     </module>
 
     <module name="TypeName" />
-    <module name="MethodName" />
+    <module name="MethodName">
+      <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$" />
+    </module>
     <module name="ParameterName" />
     <module name="LocalVariableName" />
     <module name="MemberName" />
     <module name="StaticVariableName" />
     <module name="ConstantName" />
+
     <module name="PackageName">
       <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$" />
     </module>
 
     <module name="FinalLocalVariable">
-      <property name="tokens" value="VARIABLE_DEF, PARAMETER_DEF" />
+      <property name="tokens" value="PARAMETER_DEF" />
     </module>
 
     <module name="Indentation">
@@ -105,6 +112,7 @@
     <module name="ParenPad" />
     <module name="TypecastParenPad" />
     <module name="WhitespaceAfter" />
+
     <module name="WhitespaceAround">
       <property name="allowEmptyConstructors" value="true" />
       <property name="allowEmptyLambdas" value="true" />
@@ -121,6 +129,7 @@
       <property name="tokens"
         value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH" />
     </module>
+
     <module name="EmptyCatchBlock">
       <property name="exceptionVariableName" value="expected|ignored" />
     </module>
@@ -135,5 +144,10 @@
     <module name="OverloadMethodsDeclarationOrder" />
     <module name="VariableDeclarationUsageDistance" />
 
+    <module name="SuppressionXpathSingleFilter">
+      <property name="checks" value="ImportOrder" />
+      <property name="query" value="//IMPORT[starts-with(@text, 'api.') or starts-with(@text, 'api/')]" />
+      <property name="message" value="Wrong lexicographical order" />
+    </module>
   </module>
 </module>

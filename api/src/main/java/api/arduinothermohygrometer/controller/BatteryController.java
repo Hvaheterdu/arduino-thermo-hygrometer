@@ -16,7 +16,7 @@ import api.arduinothermohygrometer.service.BatteryService;
 public class BatteryController implements BatteryApi {
     private final BatteryService batteryService;
 
-    public BatteryController(BatteryService batteryService) {
+    public BatteryController(final BatteryService batteryService) {
         this.batteryService = batteryService;
     }
 

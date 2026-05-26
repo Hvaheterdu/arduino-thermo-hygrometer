@@ -17,31 +17,30 @@ import api.arduinothermohygrometer.properties.SecurityProperties;
 public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
     private final SecurityProperties securityProperties;
 
-    public ApiKeyAuthenticationProvider(SecurityProperties securityProperties) {
+    public ApiKeyAuthenticationProvider(final SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
     }
 
     @Override
-    public Authentication authenticate(Authentication authentication) {
+    public Authentication authenticate(final Authentication authentication) {
         String apiKey = Objects.requireNonNull(authentication.getCredentials()).toString();
         if (!securityProperties.apiKey().equals(apiKey)) {
             throw new BadCredentialsException("Invalid API key");
         }
 
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = securityProperties.apiRoles()
-                                                                                  .stream()
-                                                                                  .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                                                                                  .toList();
+                .stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .toList();
 
         return new UsernamePasswordAuthenticationToken(
-            "api-client",
-            apiKey,
-            simpleGrantedAuthorities
-        );
+                "api-client",
+                apiKey,
+                simpleGrantedAuthorities);
     }
 
     @Override
-    public boolean supports(@NonNull Class<?> authentication) {
+    public boolean supports(@NonNull final Class<?> authentication) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

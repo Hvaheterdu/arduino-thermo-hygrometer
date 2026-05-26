@@ -9,17 +9,17 @@ import java.util.UUID;
 import api.arduinothermohygrometer.model.Temperature;
 
 public interface TemperatureRepository {
-    Optional<Temperature> getTemperatureById(final UUID id);
+    Optional<Temperature> getTemperatureById(UUID id);
 
-    List<Temperature> getTemperatureByTimestamp(final LocalDateTime timestamp);
+    List<Temperature> getTemperatureByTimestamp(LocalDateTime timestamp);
 
-    List<Temperature> getTemperaturesByDate(final LocalDate date);
+    List<Temperature> getTemperaturesByDate(LocalDate date);
 
-    Optional<Temperature> createTemperature(final Temperature temperature);
+    Optional<Temperature> createTemperature(Temperature temperature);
 
-    void deleteTemperatureById(final UUID id);
+    void deleteTemperatureById(UUID id);
 
-    void deleteTemperatureByTimestamp(final LocalDateTime timestamp);
+    void deleteTemperatureByTimestamp(LocalDateTime timestamp);
 
-    void deleteTemperaturesByDate(final LocalDate date);
+    void deleteTemperaturesByDate(LocalDate date);
 }

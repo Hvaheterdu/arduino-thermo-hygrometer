@@ -16,7 +16,7 @@ import api.arduinothermohygrometer.service.TemperatureService;
 public class TemperatureController implements TemperatureApi {
     private final TemperatureService temperatureService;
 
-    public TemperatureController(TemperatureService temperatureService) {
+    public TemperatureController(final TemperatureService temperatureService) {
         this.temperatureService = temperatureService;
     }
 

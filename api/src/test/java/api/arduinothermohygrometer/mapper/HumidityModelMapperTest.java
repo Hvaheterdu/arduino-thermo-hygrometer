@@ -1,5 +1,7 @@
 package api.arduinothermohygrometer.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
@@ -8,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import api.arduinothermohygrometer.dto.HumidityDto;
 import api.arduinothermohygrometer.model.Humidity;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DisplayName("HumidityModelMapper unit tests.")
 class HumidityModelMapperTest {
     @Test
@@ -17,9 +17,9 @@ class HumidityModelMapperTest {
         LocalDateTime registeredAt = LocalDateTime.now();
         Double airHumidity = 86.123;
         HumidityDto humidityDto = HumidityDto.builder()
-                                             .registeredAt(registeredAt)
-                                             .airHumidity(airHumidity)
-                                             .build();
+                .registeredAt(registeredAt)
+                .airHumidity(airHumidity)
+                .build();
 
         Humidity result = HumidityModelMapper.toModel(humidityDto);
 

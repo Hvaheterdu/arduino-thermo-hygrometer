@@ -1,5 +1,7 @@
 package api.arduinothermohygrometer.service.implementation;
 
+import static java.util.Collections.emptyList;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +16,8 @@ import api.arduinothermohygrometer.mapper.TemperatureModelMapper;
 import api.arduinothermohygrometer.model.Temperature;
 import api.arduinothermohygrometer.repository.TemperatureRepository;
 import api.arduinothermohygrometer.service.TemperatureService;
-import lombok.extern.slf4j.Slf4j;
 
-import static java.util.Collections.emptyList;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -26,7 +27,7 @@ public class TemperatureServiceImpl implements TemperatureService {
 
     private final TemperatureRepository temperatureRepository;
 
-    public TemperatureServiceImpl(TemperatureRepository temperatureRepository) {
+    public TemperatureServiceImpl(final TemperatureRepository temperatureRepository) {
         this.temperatureRepository = temperatureRepository;
     }
 
@@ -34,9 +35,8 @@ public class TemperatureServiceImpl implements TemperatureService {
     public TemperatureDto getTemperatureById(final UUID id) throws ResourceNotFoundException {
         log.info("Retrieving Temperature with id={}.", id);
 
-        Temperature temperature =
-            temperatureRepository.getTemperatureById(id)
-                                 .orElseThrow(() -> new ResourceNotFoundException(String.format(ID_NOT_FOUND, id)));
+        Temperature temperature = temperatureRepository.getTemperatureById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(ID_NOT_FOUND, id)));
 
         log.info("Temperature with id={} retrieved.", id);
         return TemperatureModelMapper.toDto(temperature);
@@ -47,8 +47,8 @@ public class TemperatureServiceImpl implements TemperatureService {
         log.info("Retrieving temperatures registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
         List<Temperature> temperatures = dateOnly
-            ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())
-            : temperatureRepository.getTemperatureByTimestamp(registeredAt);
+                ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())
+                : temperatureRepository.getTemperatureByTimestamp(registeredAt);
 
         if (temperatures.isEmpty()) {
             log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
@@ -57,8 +57,8 @@ public class TemperatureServiceImpl implements TemperatureService {
 
         log.info("Temperatures registeredAt={} retrieved.", registeredAt);
         return temperatures.stream()
-                           .map(TemperatureModelMapper::toDto)
-                           .toList();
+                .map(TemperatureModelMapper::toDto)
+                .toList();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TemperatureServiceImpl implements TemperatureService {
         }
 
         Temperature temperature = temperatureRepository.createTemperature(TemperatureModelMapper.toModel(temperatureDto))
-                                                       .orElseThrow(() -> new ResourceNotCreatedException("Temperature cannot be created."));
+                .orElseThrow(() -> new ResourceNotCreatedException("Temperature cannot be created."));
 
         log.info("Temperature with id={} and registered_at={} created.", temperature.getId(), temperature.getRegisteredAt());
         return TemperatureModelMapper.toDto(temperature);
@@ -94,8 +94,8 @@ public class TemperatureServiceImpl implements TemperatureService {
         log.info("Deleting temperatures registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
         List<Temperature> temperatures = dateOnly
-            ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())
-            : temperatureRepository.getTemperatureByTimestamp(registeredAt);
+                ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())
+                : temperatureRepository.getTemperatureByTimestamp(registeredAt);
 
         if (temperatures.isEmpty()) {
             log.info(REGISTERED_AT_NOT_FOUND, registeredAt);

@@ -1,21 +1,20 @@
+// Workspace settings. These override user settings and can be overridden by language-specific settings.
 {
   "diffEditor.ignoreTrimWhitespace": false,
   "editor.detectIndentation": false,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
-  "editor.indentSize": "tabSize",
   "editor.insertSpaces": true,
+  "editor.indentSize": "tabSize",
   "editor.tabCompletion": "on",
-  "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 1000,
+  "files.insertFinalNewline": true,
   "files.exclude": {
     "**/.classpath": true,
     "**/.factorypath": true,
     "**/.project": true,
     "**/.settings": true
   },
-  "files.insertFinalNewline": true,
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.tabSize": 2
@@ -27,16 +26,28 @@
   "java.checkstyle.configuration": "${workspaceFolder}/api/config/checkstyle/checkstyle.xml",
   "java.checkstyle.version": "13.4.2",
   "java.compile.nullAnalysis.mode": "automatic",
+  "java.completion.importOrder": [
+    "#",
+    "java",
+    "javax",
+    "org",
+    "com",
+    "io",
+    "api",
+    ""
+  ],
   "java.configuration.updateBuildConfiguration": "automatic",
+  "java.format.settings.profile": "ArduinoThermoHygrometerCheckstyle",
+  "java.format.settings.url": "${workspaceFolder}/api/config/formatter/formatter.xml",
+  "java.saveActions.cleanup": true,
   "[java]": {
     "editor.codeActionsOnSave": {
+      "source.fixAll.checkstyle": "explicit",
       "source.organizeImports": "explicit",
-      "source.fixAll.checkstyle": "explicit"
+      "source.unusedImports": "explicit"
     },
     "editor.defaultFormatter": "redhat.java",
-    "editor.rulers": [150],
-    "editor.tabSize": 4,
-    "files.trimTrailingWhitespace": true
+    "editor.tabSize": 4
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -53,7 +64,8 @@
   "[typescript]": {
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit"
+      "source.organizeImports": "explicit",
+      "source.unusedImports": "explicit"
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.tabSize": 2
@@ -61,11 +73,13 @@
   "[typescriptreact]": {
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit"
+      "source.organizeImports": "explicit",
+      "source.unusedImports": "explicit"
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.tabSize": 2
   },
+  "xml.format.maxLineWidth": 150,
   "[xml]": {
     "editor.defaultFormatter": "redhat.vscode-xml",
     "editor.tabSize": 2
@@ -79,9 +93,9 @@
     "editor.defaultFormatter": "redhat.vscode-yaml",
     "editor.insertSpaces": true,
     "editor.quickSuggestions": {
-      "comments": false,
+      "strings": true,
       "other": true,
-      "strings": true
+      "comments": false
     },
     "editor.tabSize": 2
   }

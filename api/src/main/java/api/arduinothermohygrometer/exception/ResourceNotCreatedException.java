@@ -1,7 +1,7 @@
 package api.arduinothermohygrometer.exception;
 
 public class ResourceNotCreatedException extends RuntimeException {
-    public ResourceNotCreatedException(String message) {
+    public ResourceNotCreatedException(final String message) {
         super(message);
     }
 }

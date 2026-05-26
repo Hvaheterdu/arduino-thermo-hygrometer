@@ -3,19 +3,19 @@ package api.arduinothermohygrometer.mapper;
 import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.model.Temperature;
 
-public class TemperatureModelMapper {
-    private TemperatureModelMapper() {
-    }
+import lombok.NoArgsConstructor;
 
-    public static Temperature toModel(TemperatureDto temperatureDto) {
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+public class TemperatureModelMapper {
+    public static Temperature toModel(final TemperatureDto temperatureDto) {
         return new Temperature(temperatureDto.getRegisteredAt(), temperatureDto.getTemp());
     }
 
-    public static TemperatureDto toDto(Temperature temperature) {
+    public static TemperatureDto toDto(final Temperature temperature) {
         return TemperatureDto.builder()
-                             .id(temperature.getId())
-                             .registeredAt(temperature.getRegisteredAt())
-                             .temp(temperature.getTemp())
-                             .build();
+                .id(temperature.getId())
+                .registeredAt(temperature.getRegisteredAt())
+                .temp(temperature.getTemp())
+                .build();
     }
 }
