@@ -464,7 +464,9 @@
           <sourceDirectories>
             <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
           </sourceDirectories>
-          <includeTestDirectory>true</includeTestDirectory>
+          <testDirectories>
+            <testDirectory>${project.build.testSourceDirectory}</testDirectory>
+          </testDirectories>
           <violationSeverity>warning</violationSeverity>
         </configuration>
       </plugin>
