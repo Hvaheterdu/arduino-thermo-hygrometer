@@ -16,7 +16,7 @@ import api.arduinothermohygrometer.service.HumidityService;
 public class HumidityController implements HumidityApi {
     private final HumidityService humidityService;
 
-    public HumidityController(HumidityService humidityService) {
+    public HumidityController(final HumidityService humidityService) {
         this.humidityService = humidityService;
     }
 

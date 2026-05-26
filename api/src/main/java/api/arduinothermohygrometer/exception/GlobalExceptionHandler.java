@@ -1,5 +1,7 @@
 package api.arduinothermohygrometer.exception;
 
+import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,71 +20,71 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import api.arduinothermohygrometer.dto.ProblemDetailsDto;
 import api.arduinothermohygrometer.dto.ProblemDetailsValidationErrorDto;
+
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-
-import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
-    protected ResponseEntity<@NonNull Object> handleMethodArgumentNotValid(MethodArgumentNotValidException methodArgumentNotValidException,
-        @NonNull HttpHeaders httpHeaders, @NonNull HttpStatusCode httpStatusCode, @NonNull WebRequest webRequest) {
+    protected ResponseEntity<@NonNull Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException methodArgumentNotValidException,
+            @NonNull final HttpHeaders httpHeaders, @NonNull final HttpStatusCode httpStatusCode, @NonNull final WebRequest webRequest) {
         log.error("Method argument not valid exception with message={}.", methodArgumentNotValidException.getMessage());
 
         List<ProblemDetailsValidationErrorDto> errors = methodArgumentNotValidException.getBindingResult()
-                                                                                       .getFieldErrors()
-                                                                                       .stream()
-                                                                                       .map(this::toValidationError)
-                                                                                       .toList();
+                .getFieldErrors()
+                .stream()
+                .map(this::toValidationError)
+                .toList();
 
         String traceId = MDC.get("traceId");
-        ProblemDetailsDto body = ProblemDetailsDto.builder()
-                                                  .type("https://api.arduinothermohygrometer/errors/validation-error")
-                                                  .title("Entity validation error.")
-                                                  .detail("One or more fields are invalid.")
-                                                  .status(httpStatusCode.value())
-                                                  .instance(webRequest.getContextPath())
-                                                  .traceId(traceId != null
-                                                      ? traceId
-                                                      : "unknown")
-                                                  .timestamp(LocalDateTime.now())
-                                                  .errors(errors)
-                                                  .build();
+        var body = ProblemDetailsDto.builder()
+                .type("https://api.arduinothermohygrometer/errors/validation-error")
+                .title("Entity validation error.")
+                .detail("One or more fields are invalid.")
+                .status(httpStatusCode.value())
+                .instance(webRequest.getContextPath())
+                .traceId(traceId != null ? traceId : "unknown")
+                .timestamp(LocalDateTime.now())
+                .errors(errors)
+                .build();
 
         return new ResponseEntity<>(body, httpHeaders, httpStatusCode);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ProblemDetailsDto> handleResourceNotFound(ResourceNotFoundException resourceNotFoundException, HttpServletRequest request) {
+    public ResponseEntity<ProblemDetailsDto> handleResourceNotFound(final ResourceNotFoundException resourceNotFoundException,
+            final HttpServletRequest request) {
         log.error("Resource not found exception with message={}.", resourceNotFoundException.getMessage());
         ProblemDetailsDto body = buildProblemDetail(HttpStatus.NOT_FOUND, "resource-not-found", "Resource not found.",
-            resourceNotFoundException.getMessage(), request);
+                resourceNotFoundException.getMessage(), request);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
     @ExceptionHandler(ResourceNotCreatedException.class)
-    public ResponseEntity<ProblemDetailsDto> handleResourceNotCreated(ResourceNotCreatedException resourceNotCreatedException, HttpServletRequest request) {
+    public ResponseEntity<ProblemDetailsDto> handleResourceNotCreated(final ResourceNotCreatedException resourceNotCreatedException,
+            final HttpServletRequest request) {
         log.error("Resource not created exception with message={}.", resourceNotCreatedException.getMessage());
         ProblemDetailsDto body = buildProblemDetail(HttpStatus.BAD_REQUEST, "resource-not-created", "Resource not created.",
-            resourceNotCreatedException.getMessage(), request);
+                resourceNotCreatedException.getMessage(), request);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetailsDto> handleGeneralException(Exception exception, HttpServletRequest request) {
+    public ResponseEntity<ProblemDetailsDto> handleGeneralException(final Exception exception, final HttpServletRequest request) {
         log.error("Internal server error exception with message={}.", exception.getMessage());
-        ProblemDetailsDto body = buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, "internal-error", "Internal server error.", exception.getMessage(), request);
+        ProblemDetailsDto body = buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, "internal-error", "Internal server error.",
+                exception.getMessage(), request);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
-    private ProblemDetailsValidationErrorDto toValidationError(FieldError error) {
+    private ProblemDetailsValidationErrorDto toValidationError(final FieldError error) {
         return ProblemDetailsValidationErrorDto.builder()
-                                               .description(error.getDefaultMessage())
-                                               .parameter(error.getField())
-                                               .header(null)
-                                               .pointer("/" + error.getField())
-                                               .build();
+                .description(error.getDefaultMessage())
+                .parameter(error.getField())
+                .header(null)
+                .pointer("/" + error.getField())
+                .build();
     }
 }

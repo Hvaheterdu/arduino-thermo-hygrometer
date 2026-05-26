@@ -9,17 +9,17 @@ import java.util.UUID;
 import api.arduinothermohygrometer.model.Humidity;
 
 public interface HumidityRepository {
-    Optional<Humidity> getHumidityById(final UUID id);
+    Optional<Humidity> getHumidityById(UUID id);
 
-    List<Humidity> getHumidityByTimestamp(final LocalDateTime timestamp);
+    List<Humidity> getHumidityByTimestamp(LocalDateTime timestamp);
 
-    List<Humidity> getHumiditiesByDate(final LocalDate date);
+    List<Humidity> getHumiditiesByDate(LocalDate date);
 
-    Optional<Humidity> createHumidity(final Humidity humidity);
+    Optional<Humidity> createHumidity(Humidity humidity);
 
-    void deleteHumidityById(final UUID id);
+    void deleteHumidityById(UUID id);
 
-    void deleteHumidityByTimestamp(final LocalDateTime timestamp);
+    void deleteHumidityByTimestamp(LocalDateTime timestamp);
 
-    void deleteHumiditiesByDate(final LocalDate date);
+    void deleteHumiditiesByDate(LocalDate date);
 }

@@ -26,7 +26,7 @@ public class Humidity {
     @Column(name = "air_humidity", nullable = false, precision = 5, scale = 2)
     private Double airHumidity;
 
-    public Humidity(LocalDateTime registeredAt, Double airHumidity) {
+    public Humidity(final LocalDateTime registeredAt, final Double airHumidity) {
         this.registeredAt = registeredAt;
         this.airHumidity = airHumidity;
     }

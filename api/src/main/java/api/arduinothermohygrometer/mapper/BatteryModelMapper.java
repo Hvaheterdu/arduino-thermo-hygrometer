@@ -3,19 +3,19 @@ package api.arduinothermohygrometer.mapper;
 import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.model.Battery;
 
-public class BatteryModelMapper {
-    private BatteryModelMapper() {
-    }
+import lombok.NoArgsConstructor;
 
-    public static Battery toModel(BatteryDto batteryDto) {
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+public class BatteryModelMapper {
+    public static Battery toModel(final BatteryDto batteryDto) {
         return new Battery(batteryDto.getRegisteredAt(), batteryDto.getBatteryStatus());
     }
 
-    public static BatteryDto toDto(Battery battery) {
+    public static BatteryDto toDto(final Battery battery) {
         return BatteryDto.builder()
-                         .id(battery.getId())
-                         .registeredAt(battery.getRegisteredAt())
-                         .batteryStatus(battery.getBatteryStatus())
-                         .build();
+                .id(battery.getId())
+                .registeredAt(battery.getRegisteredAt())
+                .batteryStatus(battery.getBatteryStatus())
+                .build();
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 @ConfigurationPropertiesScan
 public class ApiApplication extends SpringBootServletInitializer {
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Oslo"));
         SpringApplication.run(ApiApplication.class, args);
     }
