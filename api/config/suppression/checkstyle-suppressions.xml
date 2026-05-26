@@ -2,6 +2,5 @@
 <!DOCTYPE suppressions PUBLIC "-//Checkstyle//DTD Suppressions 1.2//EN" "https://checkstyle.org/dtds/suppressions_1_2.dtd">
 
 <suppressions>
-  <!-- Suppress all checks for files in the target directory -->
   <suppress checks="[a-zA-Z0-9]*" files="[\\/]target[\\/]" />
 </suppressions>
