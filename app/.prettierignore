@@ -2,11 +2,7 @@
 **/.git
 **/.svn
 **/.hg
-**/node_modules
-**/api
-**/.husky
-**/.cert
-**/.github
+node_modules
 
 # Ignore artifacts
 build
