@@ -1,6 +1,3 @@
-/* eslint import-x/no-default-export: 0 */
-/* eslint @typescript-eslint/naming-convention: 0 */
-
 import viteReact from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
@@ -40,7 +37,7 @@ export default defineConfig({
     sourcemap: true,
     reportCompressedSize: true
   },
-  cacheDir: "../node_modules/.vite/app",
+  cacheDir: "node_modules/.vite/app",
   server: {
     https: {
       key: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/dev.pem")),
