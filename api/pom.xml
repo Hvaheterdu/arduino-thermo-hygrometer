@@ -456,17 +456,17 @@
         <configuration>
           <configLocation>${project.basedir}/config/checkstyle/checkstyle.xml</configLocation>
           <consoleOutput>true</consoleOutput>
+          <excludeGeneratedSources>true</excludeGeneratedSources>
+          <excludes>${project.build.directory}/**</excludes>
           <failsOnError>true</failsOnError>
           <failOnViolation>true</failOnViolation>
+          <includeResources>true</includeResources>
+          <includeTestResources>true</includeTestResources>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <linkXRef>false</linkXRef>
+          <suppressionsLocation>${project.basedir}/config/suppressions/checkstyle-suppressions.xml</suppressionsLocation>
           <outputFile>${project.build.directory}/checkstyle/checkstyle-report.xml</outputFile>
           <outputFileFormat>xml</outputFileFormat>
-          <sourceDirectories>
-            <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-          </sourceDirectories>
-          <testDirectories>
-            <testDirectory>${project.build.testSourceDirectory}</testDirectory>
-          </testDirectories>
           <violationSeverity>warning</violationSeverity>
         </configuration>
       </plugin>

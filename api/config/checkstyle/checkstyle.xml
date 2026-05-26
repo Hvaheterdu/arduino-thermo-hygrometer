@@ -25,6 +25,10 @@
   <module name="NewlineAtEndOfFile" />
 
   <module name="TreeWalker">
+    <module name="SuppressionFilter">
+      <property name="file" value="../suppression/checkstyle-suppressions.xml" />
+      <property name="optional" value="false" />
+    </module>
     <module name="SuppressionXpathSingleFilter">
       <property name="checks" value="ImportOrder" />
       <property name="message" value="Wrong lexicographical order" />
