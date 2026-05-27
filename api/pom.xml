@@ -464,7 +464,6 @@
           <includeTestResources>true</includeTestResources>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <linkXRef>false</linkXRef>
-          <suppressionsLocation>${project.basedir}/config/suppressions/checkstyle-suppressions.xml</suppressionsLocation>
           <outputFile>${project.build.directory}/checkstyle/checkstyle-report.xml</outputFile>
           <outputFileFormat>xml</outputFileFormat>
           <violationSeverity>warning</violationSeverity>
