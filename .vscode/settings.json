@@ -37,6 +37,7 @@
     ""
   ],
   "java.configuration.updateBuildConfiguration": "automatic",
+  "java.diagnostic.filter": ["**/target/generated-sources/**/*"],
   "java.format.settings.profile": "ArduinoThermoHygrometerCheckstyle",
   "java.format.settings.url": "${workspaceFolder}/api/config/formatter/formatter.xml",
   "java.saveActions.cleanup": true,
