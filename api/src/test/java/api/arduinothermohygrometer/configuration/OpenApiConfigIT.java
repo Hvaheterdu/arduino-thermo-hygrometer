@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -21,6 +22,7 @@ import api.arduinothermohygrometer.properties.OpenApiProperties;
 import api.arduinothermohygrometer.properties.OpenApiServerProperties;
 import api.arduinothermohygrometer.properties.OpenApiSingleServerProperties;
 
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @DisplayName("OpenAPI configuration MVC slice integration tests.")
 @SpringBootTest
