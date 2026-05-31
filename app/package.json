@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.100.14",
+    "openapi-fetch": "^0.17.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router": "7.16.0"
