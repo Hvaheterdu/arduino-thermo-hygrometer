@@ -95,7 +95,7 @@ export default [
         },
         {
           selector: "typeProperty",
-          format: ["snake_case", "UPPER_CASE"]
+          format: ["camelCase", "PascalCase"]
         },
         {
           selector: "variable",
