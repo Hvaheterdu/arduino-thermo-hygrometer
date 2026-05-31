@@ -95,9 +95,10 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         response.getWriter().write(objectMapper.writeValueAsString(body));
     }
 
-    private Bucket computeBuckets(final String clientId) {
-        return buckets.computeIfAbsent(clientId, id -> Bucket.builder()
-                .addLimit(limit -> limit.capacity(TOKENS).refillGreedy(TOKENS, DURATION))
-                .build());
+    private Bucket computeBuckets(final String apiKey) {
+        return buckets.computeIfAbsent(apiKey,
+                id -> Bucket.builder()
+                        .addLimit(limit -> limit.capacity(TOKENS).refillGreedy(TOKENS, DURATION))
+                        .build());
     }
 }
