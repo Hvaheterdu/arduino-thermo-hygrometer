@@ -1,7 +1,7 @@
 cors:
   allowed-headers: [ Accept, Content-Type, X-API-KEY ]
   allowed-methods: [ GET, POST, DELETE ]
-  allowed-origins: [ http://localhost:3000 ]
+  allowed-origins: [ https://localhost:3000 ]
 
 info:
   contact:
