@@ -68,7 +68,7 @@ public class HumidityRepositoryImpl implements HumidityRepository {
         String sql = """
                 INSERT INTO humidities (registered_at, air_humidity)
                 VALUES (:registered_at, :air_humidity)
-                RETURNING id, registered_at, temp
+                RETURNING id, registered_at, air_humidity
                 """;
 
         return jdbcClient.sql(sql)

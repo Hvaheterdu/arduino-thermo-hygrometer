@@ -96,13 +96,6 @@ public class SecurityConfig {
                 .headers(headersConfigurer -> headersConfigurer.contentTypeOptions(withDefaults())
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::deny)
                         .cacheControl(withDefaults())
-                        .contentSecurityPolicy(contentSecurityPolicyConfig -> contentSecurityPolicyConfig
-                                .policyDirectives("connect-src 'self'; "
-                                        + "default-src 'self'; "
-                                        + "frame-ancestors 'none'; "
-                                        + "img-src 'self' data:; "
-                                        + "script-src 'self'; "
-                                        + "style-src 'self' 'unsafe-inline';"))
                         .referrerPolicy(referrerPolicyConfig -> referrerPolicyConfig.policy(ReferrerPolicy.NO_REFERRER))
                         .httpStrictTransportSecurity(hstsConfig -> {
                             hstsConfig.includeSubDomains(true);
