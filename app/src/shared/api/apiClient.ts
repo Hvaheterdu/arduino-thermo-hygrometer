@@ -31,16 +31,6 @@ const resolveBaseUrl = (rawUrl: string | undefined): string => {
   if (!rawUrl) {
     return defaultApiBaseUrl;
   }
-
-  try {
-    const parsed = new URL(rawUrl);
-    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
-      return parsed.toString().replace(/\/$/, "");
-    }
-  } catch {
-    return defaultApiBaseUrl;
-  }
-
   return defaultApiBaseUrl;
 };
 
@@ -98,7 +88,7 @@ const authMiddleware: Middleware = {
 
     timedRequest.headers.set("Accept", "application/json");
 
-    const apiKey = import.meta.env.VITE_APIKEY;
+    const apiKey = typeof import.meta.env.VITE_API_KEY === "string" ? import.meta.env.VITE_API_KEY : undefined;
     if (typeof apiKey === "string" && apiKey.trim().length > 0) {
       timedRequest.headers.set("X-API-KEY", apiKey);
     }
@@ -119,27 +109,37 @@ const authMiddleware: Middleware = {
 
     return response;
   },
-  onError({ error, request }) {
+  onError({ error, request }: { error: unknown; request: Request }) {
     clearRequestTimeout(request);
+
+    const normalizedError = error instanceof Error ? error : new Error(String(error));
 
     frontendLogger.error("API request failed before response completion.", {
       url: request.url,
       method: request.method,
-      errorName: error instanceof Error ? error.name : "UnknownError",
-      errorMessage: error instanceof Error ? error.message : "Unknown API request error"
+      errorName: normalizedError.name,
+      errorMessage: normalizedError.message
     });
 
-    return error instanceof Error ? error : new Error(String(error));
+    return normalizedError;
   }
 };
 
 export const apiClient = createClient<ApiPaths>({
   baseUrl: resolveApiBaseUrlByEnvironment({
     environment: import.meta.env.VITE_ENVIRONMENT ?? import.meta.env.MODE,
-    fallbackBaseUrl: import.meta.env.VITE_APIBASEURL,
-    localBaseUrl: import.meta.env.VITE_APIBASEURL_LOCAL,
-    stagingBaseUrl: import.meta.env.VITE_APIBASEURL_STAGING,
-    productionBaseUrl: import.meta.env.VITE_APIBASEURL_PRODUCTION
+    fallbackBaseUrl:
+      typeof import.meta.env.VITE_API_BASEURL === "string" ? import.meta.env.VITE_API_BASEURL : undefined,
+    localBaseUrl:
+      typeof import.meta.env.VITE_API_BASEURL_LOCAL === "string" ? import.meta.env.VITE_API_BASEURL_LOCAL : undefined,
+    stagingBaseUrl:
+      typeof import.meta.env.VITE_API_BASEURL_STAGING === "string" ?
+        import.meta.env.VITE_API_BASEURL_STAGING
+      : undefined,
+    productionBaseUrl:
+      typeof import.meta.env.VITE_API_BASEURL_PRODUCTION === "string" ?
+        import.meta.env.VITE_API_BASEURL_PRODUCTION
+      : undefined
   })
 });
 

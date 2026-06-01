@@ -47,9 +47,8 @@ E2E tests run against Vite preview and are configured in `playwright.config.ts`.
 Set these in `.env.local` as needed:
 
 - `VITE_ENVIRONMENT`: active API environment (`local`, `staging`, `production`)
-- `VITE_APIBASEURL`, `VITE_APIBASEURL_LOCAL`, `VITE_APIBASEURL_STAGING`, `VITE_APIBASEURL_PRODUCTION`: API base URLs
-- `VITE_APIKEY`: optional API key sent as `X-API-KEY`
-- `VITE_DEV_HTTPS`: `true`/`false` for optional HTTPS in local dev (requires cert files)
+- `VITE_API_BASEURL`, `VITE_API_BASEURL_LOCAL`, `VITE_API_BASEURL_STAGING`, `VITE_API_BASEURL_PRODUCTION`: API base URLs
+- `VITE_API_KEY`: API key sent as `X-API-KEY`. Required, store in a `.env.local` file.
 - `VITE_API_TIMEOUT_MS`: API request timeout in milliseconds (clamped to 1000-30000, default 10000)
 - `VITE_API_RETRY_ATTEMPTS`: retry attempts for idempotent API GET failures (clamped to 0-3, default 2)
 
