@@ -54,8 +54,6 @@
     "app:lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
     "app:dev": "vite --mode development",
     "app:test": "vitest",
-    "app:test:e2e": "playwright test",
-    "app:test:e2e:headed": "playwright test --headed",
     "app:test:run": "vitest run",
     "preview": "vite preview",
     "version-bump-ps": "pwsh scripts/version_bump_ps.ps1",
@@ -70,9 +68,7 @@
     "react-router": "7.16.0"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^9.39.4",
-    "@playwright/test": "^1.60.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^25.9.1",
@@ -89,7 +85,6 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-plugin-testing-library": "^7.16.2",
     "globals": "^17.6.0",
-    "jsdom": "^29.1.1",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.60.1",
