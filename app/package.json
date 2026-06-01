@@ -44,9 +44,9 @@
     "last 1 edge version"
   ],
   "scripts": {
-    "app:build:dev": "vite build --mode development",
-    "app:build:production": "vite build --mode production",
-    "app:build:staging": "vite build --mode staging",
+    "app:build:dev": "vite build --mode development && tsc --noEmit",
+    "app:build:production": "vite build --mode production && tsc --noEmit",
+    "app:build:staging": "vite build --mode staging && tsc --noEmit",
     "app:format": "prettier --write . \"*.{ts,tsx,html,css,json,md}\"",
     "app:format:check": "prettier --check \"*.{ts,tsx,html,css,json,md}\"",
     "app:lint": "eslint \"**/*.{ts,tsx}\"",
@@ -72,7 +72,7 @@
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
-    "@vitest/eslint-plugin": "^1.6.18",
+    "@vitest/eslint-plugin": "^1.6.19",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-check-file": "^3.3.1",
@@ -85,10 +85,10 @@
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.60.0",
-    "vite": "^8.0.14",
+    "vite": "^8.0.16",
     "vite-plugin-checker": "^0.14.1",
     "vite-plugin-mkcert": "^2.0.0",
     "vite-plugin-svgr": "^5.2.0",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.8"
   }
 }
