@@ -362,3 +362,4 @@ $RECYCLE.BIN/
 
 ### Project specific folders and items ###
 **/*.cert
+**/test-results/

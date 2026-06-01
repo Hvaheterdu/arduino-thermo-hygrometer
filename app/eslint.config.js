@@ -124,6 +124,7 @@ export default [
     ignores: [
       "api",
       "build",
+      "e2e/**",
       "coverage",
       "dist",
       "node_modules",
@@ -133,6 +134,7 @@ export default [
       "tsconfig.app.json",
       "tsconfig.node.json",
       "app/vite.config.ts",
+      "playwright.config.ts",
       "**/*.d.ts",
       "**/*.generated.ts",
       "**/.git",

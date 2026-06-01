@@ -1,14 +1,67 @@
 import viteReact from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
-import { defineConfig } from "vite";
 import { checker } from "vite-plugin-checker";
-import plugin from "vite-plugin-mkcert";
 import vitePluginSvgr from "vite-plugin-svgr";
+import { defineConfig } from "vitest/config";
 
-export default defineConfig({
-  root: import.meta.dirname,
-  plugins: [
+const certDirectory = path.resolve(import.meta.dirname, "../.cert");
+const devKeyPath = path.resolve(certDirectory, "dev.pem");
+const devCertPath = path.resolve(certDirectory, "cert.pem");
+const hasDevCertificates = fs.existsSync(devKeyPath) && fs.existsSync(devCertPath);
+
+const toBoolean = (value: string | undefined): boolean => {
+  return value === "true" || value === "1";
+};
+
+const buildBaseSecurityHeaders = (): Record<string, string> => {
+  return {
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "permissions-policy":
+      "accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()",
+    "cross-origin-opener-policy": "same-origin",
+    "cross-origin-resource-policy": "same-site",
+    "x-permitted-cross-domain-policies": "none"
+  };
+};
+
+const buildDevelopmentServerSecurityHeaders = (isHttpsEnabledForDevelopmentServer: boolean): Record<string, string> => {
+  const developmentServerSecurityHeaders: Record<string, string> = {
+    ...buildBaseSecurityHeaders(),
+    "cross-origin-opener-policy": "same-origin",
+    "cross-origin-embedder-policy": "require-corp",
+    "cross-origin-resource-policy": "same-site",
+    "content-security-policy":
+      "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; " +
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; " +
+      "img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' http: https: ws: wss:"
+  };
+
+  if (isHttpsEnabledForDevelopmentServer) {
+    developmentServerSecurityHeaders["strict-transport-security"] = "max-age=31536000; includeSubDomains";
+  }
+
+  return developmentServerSecurityHeaders;
+};
+
+const buildPreviewSecurityHeaders = (): Record<string, string> => {
+  return {
+    ...buildBaseSecurityHeaders(),
+    "cross-origin-embedder-policy": "credentialless",
+    "content-security-policy":
+      "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; " +
+      "script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; " +
+      "font-src 'self' data:; connect-src 'self' https:"
+  };
+};
+
+export default defineConfig(({ command }) => {
+  const isHttpsEnabledForDevelopmentServer =
+    command === "serve" && toBoolean(process.env.VITE_DEV_HTTPS) && hasDevCertificates;
+
+  const plugins = [
     checker({
       overlay: {
         initialIsOpen: true,
@@ -23,39 +76,45 @@ export default defineConfig({
         lintCommand: `eslint ${import.meta.dirname}`
       }
     }),
-    plugin({
-      savePath: "../.cert"
-    }),
     viteReact(),
     vitePluginSvgr({
       include: "**/*.svg"
     })
-  ],
-  build: {
-    outDir: "dist",
-    sourcemap: true,
-    reportCompressedSize: true
-  },
-  cacheDir: "node_modules/.vite/app",
-  server: {
-    https: {
-      key: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/dev.pem")),
-      cert: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/cert.pem"))
+  ];
+
+  return {
+    root: import.meta.dirname,
+    plugins,
+    build: {
+      outDir: "dist",
+      sourcemap: true,
+      reportCompressedSize: true
     },
-    host: "localhost",
-    port: 3000,
-    strictPort: true,
-    cors: {
-      origin: "http://localhost:5000"
+    test: {
+      include: ["src/tests/**/*Test.{ts,tsx}"],
+      environment: "node",
+      globals: true,
+      clearMocks: true
     },
-    headers: {
-      "content-security-policy":
-        "base-uri 'self'; connect-src 'self' https://localhost:5000; default-src 'self'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; worker-src 'self'",
-      "permissions-policy":
-        "accelerometer=(), autoplay=(), bluetooth=(), camera=(), compute-pressure=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), hid=(), identity-credentials-get=(), idle-detection=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-create=(), publickey-credentials-get=(), screen-wake-lock=(), storage-access=(), sync-xhr=(), usb=(), web-share=(), window-management=(), xr-spatial-tracking=()",
-      "referrer-policy": "no-referrer",
-      "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
-      "x-content-type-options": "nosniff"
+    cacheDir: "node_modules/.vite/app",
+    server: {
+      https:
+        isHttpsEnabledForDevelopmentServer ?
+          {
+            key: fs.readFileSync(devKeyPath),
+            cert: fs.readFileSync(devCertPath)
+          }
+        : undefined,
+      host: "localhost",
+      port: 3000,
+      strictPort: true,
+      headers: buildDevelopmentServerSecurityHeaders(isHttpsEnabledForDevelopmentServer)
+    },
+    preview: {
+      host: "localhost",
+      port: 4173,
+      strictPort: true,
+      headers: buildPreviewSecurityHeaders()
     }
-  }
+  };
 });
