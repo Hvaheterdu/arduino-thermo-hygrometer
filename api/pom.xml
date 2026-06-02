@@ -56,7 +56,7 @@
     <bucket4j.version>8.18.0</bucket4j.version>
 
     <!-- Flyway version -->
-    <flyway-database-postgresql.version>12.5.0</flyway-database-postgresql.version>
+    <flyway-database-postgresql.version>12.7.0</flyway-database-postgresql.version>
 
     <!-- Jakarta persistence version -->
     <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
