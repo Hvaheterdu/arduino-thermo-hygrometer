@@ -38,6 +38,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "exclude": ["../.cert", "../.github", "../.idea", "dist", "node_modules", "../api", "../api/target"],
+  "exclude": ["../.github", "dist", "node_modules", "../api", "../api/target"],
   "include": ["src", "src/**/*.js", "src/**/*.ts", "src/**/*.tsx"]
 }

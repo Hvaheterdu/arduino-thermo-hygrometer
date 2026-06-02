@@ -48,14 +48,14 @@
     "app:build:dev": "vite build --mode development && tsc --noEmit",
     "app:build:production": "vite build --mode production && tsc --noEmit",
     "app:build:staging": "vite build --mode staging && tsc --noEmit",
-    "app:format": "prettier --write . \"*.{ts,tsx,html,css,json,md}\"",
-    "app:format:check": "prettier --check \"*.{ts,tsx,html,css,json,md}\"",
+    "app:format": "prettier --write . \"*.{ts,tsx,html,css,json,md, yaml, yml}\"",
+    "app:format:check": "prettier --check \"*.{ts,tsx,html,css,json,md, yaml, yml}\"",
     "app:lint": "eslint \"**/*.{ts,tsx}\"",
     "app:lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
     "app:dev": "vite --mode development",
+    "app:preview": "vite preview --mode development",
     "app:test": "vitest",
     "app:test:run": "vitest run",
-    "preview": "vite preview",
     "version-bump-ps": "pwsh scripts/version_bump_ps.ps1",
     "version-bump-sh": "sh scripts/version_bump_sh.sh"
   },
@@ -90,7 +90,6 @@
     "typescript-eslint": "^8.60.1",
     "vite": "^8.0.16",
     "vite-plugin-checker": "^0.14.1",
-    "vite-plugin-mkcert": "^2.0.0",
     "vite-plugin-svgr": "^5.2.0",
     "vitest": "^4.1.8"
   }

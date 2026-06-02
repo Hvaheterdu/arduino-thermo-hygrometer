@@ -1,8 +1,5 @@
 import viteReact from "@vitejs/plugin-react";
-import fs from "fs";
-import path from "path";
 import { checker } from "vite-plugin-checker";
-import plugin from "vite-plugin-mkcert";
 import vitePluginSvgr from "vite-plugin-svgr";
 import { defineConfig } from "vitest/config";
 
@@ -12,15 +9,14 @@ const buildSecurityHeaders = (): Record<string, string> => {
     "referrer-policy": "no-referrer",
     "permissions-policy":
       "accelerometer=(), autoplay=(), bluetooth=(), camera=(), compute-pressure=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), hid=(), identity-credentials-get=(), idle-detection=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-create=(), publickey-credentials-get=(), screen-wake-lock=(), storage-access=(), sync-xhr=(), usb=(), web-share=(), window-management=(), xr-spatial-tracking=()",
-    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
     "content-security-policy": [
       "base-uri 'self'",
+      "connect-src 'self' http://localhost:5000",
       "default-src 'self'",
       "frame-ancestors 'none'",
       "manifest-src 'none'",
       "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline'",
-      "connect-src 'self' ws://localhost:5000 http://localhost:5000",
       "worker-src 'self'"
     ].join("; ")
   };
@@ -41,9 +37,6 @@ export default defineConfig(() => {
         useFlatConfig: true,
         lintCommand: `eslint ${import.meta.dirname}`
       }
-    }),
-    plugin({
-      savePath: "../.cert"
     }),
     viteReact(),
     vitePluginSvgr({
@@ -70,20 +63,12 @@ export default defineConfig(() => {
       host: "localhost",
       port: 3000,
       strictPort: true,
-      https: {
-        key: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/dev.pem")),
-        cert: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/cert.pem"))
-      },
       headers: buildSecurityHeaders()
     },
     preview: {
       host: "localhost",
       port: 4173,
-      strictPort: true,
-      https: {
-        key: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/dev.pem")),
-        cert: fs.readFileSync(path.resolve(import.meta.dirname, "../.cert/cert.pem"))
-      }
+      strictPort: true
     }
   };
 });
