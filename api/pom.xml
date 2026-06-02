@@ -53,7 +53,7 @@
     <checkstyle.version>13.4.2</checkstyle.version>
 
     <!-- Bucket4J -->
-    <bucket4j.version>8.18.0</bucket4j.version>
+    <bucket4j.version>8.19.0</bucket4j.version>
 
     <!-- Flyway version -->
     <flyway-database-postgresql.version>12.5.0</flyway-database-postgresql.version>
