@@ -63,11 +63,7 @@ public class HumidityServiceImpl implements HumidityService {
 
     @Override
     public HumidityDto createHumidity(final HumidityDto humidityDto) throws ResourceNotCreatedException {
-        log.info("Creating Humidity.");
-
-        if (humidityDto == null) {
-            throw new ResourceNotCreatedException("Humidity cannot be created.");
-        }
+        log.info("Creating humidity.");
 
         Humidity humidity = humidityRepository.createHumidity(HumidityModelMapper.toModel(humidityDto))
                 .orElseThrow(() -> new ResourceNotCreatedException("Humidity cannot be created."));
