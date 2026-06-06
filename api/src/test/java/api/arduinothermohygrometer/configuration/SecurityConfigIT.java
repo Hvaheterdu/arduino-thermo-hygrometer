@@ -131,7 +131,7 @@ class SecurityConfigIT {
         }
     }
 
-    @DisplayName("Rate limiting tests-")
+    @DisplayName("Rate limiting tests.")
     @Nested
     class RateLimitingFilter {
         @Test

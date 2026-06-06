@@ -19,8 +19,8 @@ import api.arduinothermohygrometer.service.BatteryService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
+@Slf4j
 public class BatteryServiceImpl implements BatteryService {
     private static final String ID_NOT_FOUND = "Battery with id=%s not found.";
     private static final String REGISTERED_AT_NOT_FOUND = "Batteries registeredAt={} not found.";

@@ -37,7 +37,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .stream()
                 .map(this::toValidationError)
                 .toList();
-
         String traceId = MDC.get("traceId");
         var body = ProblemDetailsDto.builder()
                 .type("https://api.arduinothermohygrometer/errors/validation-error")

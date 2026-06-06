@@ -19,8 +19,8 @@ import api.arduinothermohygrometer.service.TemperatureService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
+@Slf4j
 public class TemperatureServiceImpl implements TemperatureService {
     private static final String ID_NOT_FOUND = "Temperature with id=%s not found.";
     private static final String REGISTERED_AT_NOT_FOUND = "Temperatures registeredAt={} not found.";

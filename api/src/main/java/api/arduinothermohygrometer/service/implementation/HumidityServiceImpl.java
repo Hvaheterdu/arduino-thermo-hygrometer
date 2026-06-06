@@ -19,8 +19,8 @@ import api.arduinothermohygrometer.service.HumidityService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
+@Slf4j
 public class HumidityServiceImpl implements HumidityService {
     private static final String ID_NOT_FOUND = "Humidity with id=%s not found.";
     private static final String REGISTERED_AT_NOT_FOUND = "Humidities registeredAt={} not found.";
