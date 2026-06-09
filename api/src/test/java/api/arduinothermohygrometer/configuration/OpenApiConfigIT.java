@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
@@ -24,7 +23,6 @@ import api.arduinothermohygrometer.properties.OpenApiSingleServerProperties;
 
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@DisplayName("OpenAPI configuration MVC slice integration tests.")
 @SpringBootTest
 class OpenApiConfigIT {
     @Autowired

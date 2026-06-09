@@ -1,6 +1,5 @@
 package api.arduinothermohygrometer.repository;
 
-import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,14 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import api.arduinothermohygrometer.manager.TestcontainerManager;
 
-@DisplayName("HumidityRepositoryImpl integration tests.")
 @SpringBootTest
 @Sql("classpath:sql/insert_humidities.sql")
 @Transactional
 class HumidityRepositoryImplIT extends TestcontainerManager {
-    @Autowired
-    private HumidityRepository humidityRepository;
-
     @MockitoBean
     protected BuildProperties buildProperties;
+
+    @Autowired
+    private HumidityRepository humidityRepository;
 }

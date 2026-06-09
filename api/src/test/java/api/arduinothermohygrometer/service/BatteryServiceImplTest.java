@@ -14,17 +14,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
@@ -34,19 +32,14 @@ import api.arduinothermohygrometer.model.Battery;
 import api.arduinothermohygrometer.repository.BatteryRepository;
 import api.arduinothermohygrometer.service.implementation.BatteryServiceImpl;
 
-@DisplayName("BatteryServiceImpl unit tests.")
 @ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
 class BatteryServiceImplTest {
     @Mock
     private BatteryRepository batteryRepository;
 
-    @Captor
-    private ArgumentCaptor<Battery> batteryArgumentCaptor = ArgumentCaptor.forClass(Battery.class);
-
     @InjectMocks
     private BatteryServiceImpl batteryService;
 
-    @DisplayName("Get methods for BatteryServiceImpl.")
     @Nested
     class GetMethods {
         @Test
@@ -92,7 +85,7 @@ class BatteryServiceImplTest {
 
             List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-            verify(batteryRepository, times(1)).getBatteryByTimestamp(registeredAt);
+            verify(batteryRepository).getBatteryByTimestamp(registeredAt);
             assertThat(result)
                     .containsExactlyElementsOf(batteryDtos);
         }
@@ -105,7 +98,7 @@ class BatteryServiceImplTest {
 
             List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-            verify(batteryRepository, times(1)).getBatteryByTimestamp(registeredAt);
+            verify(batteryRepository).getBatteryByTimestamp(registeredAt);
             assertThat(result)
                     .isEmpty();
         }
@@ -116,15 +109,9 @@ class BatteryServiceImplTest {
             LocalDateTime registeredAt = LocalDateTime.now();
             int batteryStatus = 90;
             int batteryStatus2 = 95;
-            BatteryDto batteryDto = BatteryDto.builder()
-                    .registeredAt(registeredAt)
-                    .batteryStatus(batteryStatus)
-                    .build();
-            BatteryDto batteryDto2 = BatteryDto.builder()
-                    .registeredAt(registeredAt.minusHours(1))
-                    .batteryStatus(batteryStatus2)
-                    .build();
-            List<BatteryDto> batteryDtos = List.of(batteryDto, batteryDto2);
+            List<BatteryDto> batteryDtos = List.of(
+                    BatteryDto.builder().registeredAt(registeredAt).batteryStatus(batteryStatus).build(),
+                    BatteryDto.builder().registeredAt(registeredAt.minusHours(1)).batteryStatus(batteryStatus2).build());
             List<Battery> batteries = batteryDtos.stream()
                     .map(BatteryModelMapper::toModel)
                     .toList();
@@ -132,7 +119,7 @@ class BatteryServiceImplTest {
 
             List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-            verify(batteryRepository, times(1)).getBatteriesByDate(registeredAt.toLocalDate());
+            verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
             assertThat(result)
                     .containsExactlyElementsOf(batteryDtos);
         }
@@ -145,13 +132,12 @@ class BatteryServiceImplTest {
 
             List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-            verify(batteryRepository, times(1)).getBatteriesByDate(registeredAt.toLocalDate());
+            verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
             assertThat(result)
                     .isEmpty();
         }
     }
 
-    @DisplayName("Create methods for BatteryServiceImpl.")
     @Nested
     class CreateMethods {
         @Test
@@ -162,25 +148,34 @@ class BatteryServiceImplTest {
                     .registeredAt(registeredAt)
                     .batteryStatus(batteryStatus)
                     .build();
-            Optional<Battery> battery = Optional.of(new Battery(registeredAt, batteryStatus));
-            when(batteryRepository.createBattery(any())).thenReturn(battery);
+            Battery battery = new Battery(registeredAt, batteryStatus);
+            ReflectionTestUtils.setField(battery, "id", UUID.randomUUID());
+            when(batteryRepository.createBattery(any(Battery.class))).thenReturn(Optional.of(battery));
 
             BatteryDto result = batteryService.createBattery(batteryDto);
 
-            verify(batteryRepository, times(1)).createBattery(batteryArgumentCaptor.capture());
-            assertThat(result)
-                    .isEqualTo(batteryDto);
+            verify(batteryRepository).createBattery(any(Battery.class));
+            assertThat(result.getId()).isEqualTo(battery.getId());
+            assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.getRegisteredAt());
+            assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.getBatteryStatus());
         }
 
         @Test
-        void givenInvalidBatteryModel_whenCreateBattery_thenThrowResourceNotCreatedException() {
-            assertThatThrownBy(() -> batteryService.createBattery(null))
+        void givenEmptyBatteryModel_whenCreateBattery_thenThrowResourceNotCreatedException() {
+            LocalDateTime registeredAt = LocalDateTime.now();
+            int batteryStatus = 90;
+            BatteryDto batteryDto = BatteryDto.builder()
+                    .registeredAt(registeredAt)
+                    .batteryStatus(batteryStatus)
+                    .build();
+            when(batteryRepository.createBattery(any(Battery.class))).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> batteryService.createBattery(batteryDto))
                     .isInstanceOf(ResourceNotCreatedException.class)
                     .hasMessage("Battery cannot be created.");
         }
     }
 
-    @DisplayName("Delete methods for BatteryServiceImpl.")
     @Nested
     class DeleteMethods {
         @Test
@@ -198,8 +193,8 @@ class BatteryServiceImplTest {
 
             batteryService.deleteBatteryById(id);
 
-            verify(batteryRepository, times(1)).getBatteryById(id);
-            verify(batteryRepository, times(1)).deleteBatteryById(id);
+            verify(batteryRepository).getBatteryById(id);
+            verify(batteryRepository).deleteBatteryById(id);
             assertThat(capturedOutput)
                     .contains(String.format("Battery with id=%s deleted.", id));
         }
@@ -229,8 +224,8 @@ class BatteryServiceImplTest {
 
             batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-            verify(batteryRepository, times(1)).getBatteryByTimestamp(registeredAt);
-            verify(batteryRepository, times(1)).deleteBatteryByTimestamp(registeredAt);
+            verify(batteryRepository).getBatteryByTimestamp(registeredAt);
+            verify(batteryRepository).deleteBatteryByTimestamp(registeredAt);
             assertThat(capturedOutput)
                     .contains(String.format("Deleted battery with timestamp=%s.", batteries.getFirst().getRegisteredAt()));
         }
@@ -243,7 +238,7 @@ class BatteryServiceImplTest {
 
             batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-            verify(batteryRepository, times(1)).getBatteryByTimestamp(registeredAt);
+            verify(batteryRepository).getBatteryByTimestamp(registeredAt);
             verify(batteryRepository, times(0)).deleteBatteryByTimestamp(registeredAt);
             assertThat(capturedOutput)
                     .contains(String.format("Batteries registeredAt=%s not found.", registeredAt));
@@ -254,15 +249,9 @@ class BatteryServiceImplTest {
             boolean dateOnly = true;
             LocalDateTime registeredAt = LocalDateTime.now();
             int batteryStatus = 90;
-            BatteryDto batteryDto = BatteryDto.builder()
-                    .registeredAt(registeredAt)
-                    .batteryStatus(batteryStatus)
-                    .build();
-            BatteryDto batteryDto2 = BatteryDto.builder()
-                    .registeredAt(registeredAt.minusHours(1))
-                    .batteryStatus(batteryStatus)
-                    .build();
-            List<BatteryDto> batteryDtos = List.of(batteryDto, batteryDto2);
+            List<BatteryDto> batteryDtos = List.of(
+                    BatteryDto.builder().registeredAt(registeredAt).batteryStatus(batteryStatus).build(),
+                    BatteryDto.builder().registeredAt(registeredAt.minusHours(1)).batteryStatus(batteryStatus).build());
             List<Battery> batteries = batteryDtos.stream()
                     .map(BatteryModelMapper::toModel)
                     .toList();
@@ -271,8 +260,8 @@ class BatteryServiceImplTest {
 
             batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-            verify(batteryRepository, times(1)).getBatteriesByDate(registeredAt.toLocalDate());
-            verify(batteryRepository, times(1)).deleteBatteriesByDate(registeredAt.toLocalDate());
+            verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
+            verify(batteryRepository).deleteBatteriesByDate(registeredAt.toLocalDate());
             assertThat(capturedOutput)
                     .contains(String.format("Deleted batteries with date=%s.", batteries.getFirst().getRegisteredAt().toLocalDate()));
         }
@@ -285,7 +274,7 @@ class BatteryServiceImplTest {
 
             batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
-            verify(batteryRepository, times(1)).getBatteriesByDate(registeredAt.toLocalDate());
+            verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
             verify(batteryRepository, times(0)).deleteBatteriesByDate(registeredAt.toLocalDate());
             assertThat(capturedOutput)
                     .contains(String.format("Batteries registeredAt=%s not found.", registeredAt));

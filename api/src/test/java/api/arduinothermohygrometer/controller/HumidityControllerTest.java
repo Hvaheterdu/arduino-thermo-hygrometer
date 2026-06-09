@@ -11,7 +11,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,25 +30,23 @@ import api.arduinothermohygrometer.service.HumidityService;
 import tools.jackson.databind.ObjectMapper;
 
 @AutoConfigureMockMvc(addFilters = false)
-@DisplayName("HumidityController MVC slice unit tests.")
 @WebMvcTest(HumidityController.class)
 class HumidityControllerTest extends WebMvcTestBase {
+    @MockitoBean
+    private HumidityService humidityService;
+
     @Autowired
     private MockMvcTester mockMvcTester;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockitoBean
-    private HumidityService humidityService;
-
-    @DisplayName("GET methods for HumidityController.")
     @Nested
     class GetMethods {
         @Test
         void givenValidId_whenGetHumidityById_thenReturn200OK() {
             UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             Double airHumidity = 20.01;
             HumidityDto humidityDto = HumidityDto.builder()
                     .registeredAt(registeredAt)
@@ -89,18 +86,12 @@ class HumidityControllerTest extends WebMvcTestBase {
         @Test
         void givenValidRegisteredAt_whenGetHumiditiesByDateOrTimestamp_thenReturn200OK() {
             boolean dateOnly = true;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             Double airHumidity = 20.01;
             Double airHumidity2 = 90.01;
-            HumidityDto humidityDto = HumidityDto.builder()
-                    .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
-                    .build();
-            HumidityDto humidityDto2 = HumidityDto.builder()
-                    .registeredAt(registeredAt.minusHours(1))
-                    .airHumidity(airHumidity2)
-                    .build();
-            List<HumidityDto> humidities = List.of(humidityDto, humidityDto2);
+            List<HumidityDto> humidities = List.of(
+                    HumidityDto.builder().registeredAt(registeredAt).airHumidity(airHumidity).build(),
+                    HumidityDto.builder().registeredAt(registeredAt.minusHours(1)).airHumidity(airHumidity2).build());
             when(humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly)).thenReturn(humidities);
 
             MvcTestResult result = mockMvcTester.get()
@@ -121,7 +112,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         @Test
         void givenInvalidRegisteredAt_whenGetHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
             boolean dateOnly = true;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             when(humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly))
                     .thenThrow(new ResourceNotFoundException("Humidities registeredAt=" + registeredAt + " not found."));
 
@@ -139,18 +130,17 @@ class HumidityControllerTest extends WebMvcTestBase {
         }
     }
 
-    @DisplayName("CREATE methods for HumidityController.")
     @Nested
     class CreateMethods {
         @Test
         void givenValidHumidityDtoModel_whenCreateHumidity_thenReturn201CREATED() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             Double airHumidity = 21.02;
             HumidityDto humidityDto = HumidityDto.builder()
                     .registeredAt(registeredAt)
                     .airHumidity(airHumidity)
                     .build();
-            when(humidityService.createHumidity(any())).thenReturn(humidityDto);
+            when(humidityService.createHumidity(any(HumidityDto.class))).thenReturn(humidityDto);
             String requestJson = objectMapper.writeValueAsString(humidityDto);
 
             MvcTestResult result = mockMvcTester.post()
@@ -169,7 +159,7 @@ class HumidityControllerTest extends WebMvcTestBase {
 
         @Test
         void givenInvalidHumidityDto_whenCreateHumidity_thenReturn400BadRequest() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             Double airHumidity = 150.03;
             HumidityDto invalidHumidityDto = HumidityDto.builder()
                     .registeredAt(registeredAt)
@@ -195,7 +185,6 @@ class HumidityControllerTest extends WebMvcTestBase {
         }
     }
 
-    @DisplayName("DELETE methods for HumidityController.")
     @Nested
     class DeleteMethods {
         @Test
@@ -231,7 +220,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         @Test
         void givenValidRegisteredAt_whenDeleteHumiditiesByDateOrTimestamp_thenReturn204NoContent() {
             boolean dateOnly = false;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             doNothing().when(humidityService).deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
 
             MvcTestResult result = mockMvcTester.delete()
@@ -247,7 +236,7 @@ class HumidityControllerTest extends WebMvcTestBase {
         @Test
         void givenInvalidRegisteredAt_whenDeleteHumiditiesByDateOrTimestamp_thenReturn404NotFound() {
             boolean dateOnly = false;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             doThrow(new ResourceNotFoundException("Humidities registeredAt=" + registeredAt + " not found."))
                     .when(humidityService).deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
 

@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.UUID;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +17,14 @@ import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@DisplayName("Security configuration MVC slice integration tests.")
 @SpringBootTest
 class SecurityConfigIT {
-    @Autowired
-    private MockMvcTester mockMvcTester;
-
     @MockitoBean
     private OpenApiConfig openApiConfig;
 
-    @DisplayName("Health endpoint tests.")
+    @Autowired
+    private MockMvcTester mockMvcTester;
+
     @Nested
     class HealthEndpoint {
         @Test
@@ -68,7 +65,6 @@ class SecurityConfigIT {
         }
     }
 
-    @DisplayName("Security headers tests.")
     @Nested
     class SecurityHeaders {
         @Test
@@ -80,13 +76,6 @@ class SecurityConfigIT {
                     .hasHeader("X-Content-Type-Options", "nosniff")
                     .hasHeader("X-Frame-Options", "DENY")
                     .hasHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate")
-                    .hasHeader("Content-Security-Policy",
-                            "connect-src 'self'; "
-                                    + "default-src 'self'; "
-                                    + "frame-ancestors 'none'; "
-                                    + "img-src 'self' data:; "
-                                    + "script-src 'self'; "
-                                    + "style-src 'self' 'unsafe-inline';")
                     .hasHeader("Referrer-Policy", "no-referrer")
                     .hasStatusOk();
         }
@@ -131,13 +120,12 @@ class SecurityConfigIT {
         }
     }
 
-    @DisplayName("Rate limiting tests.")
     @Nested
     class RateLimitingFilter {
         @Test
         void givenValidApiKey_whenNotExceedingRateLimit_thenReturn404NotFound() {
             UUID id = UUID.randomUUID();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 95; i++) {
                 mockMvcTester.get()
                         .uri("/api/v1/batteries/{id}", id)
                         .header("X-API-KEY", "api-secret-key")

@@ -11,7 +11,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,25 +30,23 @@ import api.arduinothermohygrometer.service.BatteryService;
 import tools.jackson.databind.ObjectMapper;
 
 @AutoConfigureMockMvc(addFilters = false)
-@DisplayName("BatteryController MVC slice unit tests.")
 @WebMvcTest(BatteryController.class)
 class BatteryControllerTest extends WebMvcTestBase {
+    @MockitoBean
+    private BatteryService batteryService;
+
     @Autowired
     private MockMvcTester mockMvcTester;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockitoBean
-    private BatteryService batteryService;
-
-    @DisplayName("GET methods for BatteryController.")
     @Nested
     class GetMethods {
         @Test
         void givenValidId_whenGetBatteryById_thenReturn200OK() {
             UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             int batteryStatus = 90;
             BatteryDto batteryDto = BatteryDto.builder()
                     .registeredAt(registeredAt)
@@ -89,18 +86,12 @@ class BatteryControllerTest extends WebMvcTestBase {
         @Test
         void givenValidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
             boolean dateOnly = true;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             int batteryStatus = 95;
             int batteryStatus2 = 90;
-            BatteryDto batteryDto = BatteryDto.builder()
-                    .registeredAt(registeredAt)
-                    .batteryStatus(batteryStatus)
-                    .build();
-            BatteryDto batteryDto2 = BatteryDto.builder()
-                    .registeredAt(registeredAt.minusHours(1))
-                    .batteryStatus(batteryStatus2)
-                    .build();
-            List<BatteryDto> batteryDtos = List.of(batteryDto, batteryDto2);
+            List<BatteryDto> batteryDtos = List.of(
+                    BatteryDto.builder().registeredAt(registeredAt).batteryStatus(batteryStatus).build(),
+                    BatteryDto.builder().registeredAt(registeredAt.minusHours(1)).batteryStatus(batteryStatus2).build());
             when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly)).thenReturn(batteryDtos);
 
             MvcTestResult result = mockMvcTester.get()
@@ -121,7 +112,7 @@ class BatteryControllerTest extends WebMvcTestBase {
         @Test
         void givenInvalidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn404NotFound() {
             boolean dateOnly = true;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly))
                     .thenThrow(new ResourceNotFoundException("Batteries registeredAt=" + registeredAt + " not found."));
 
@@ -139,18 +130,17 @@ class BatteryControllerTest extends WebMvcTestBase {
         }
     }
 
-    @DisplayName("CREATE methods for BatteryController.")
     @Nested
     class CreateMethods {
         @Test
         void givenValidBatteryDtoModel_whenCreateBattery_thenReturn201CREATED() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             int batteryStatus = 95;
             BatteryDto batteryDto = BatteryDto.builder()
                     .registeredAt(registeredAt)
                     .batteryStatus(batteryStatus)
                     .build();
-            when(batteryService.createBattery(any())).thenReturn(batteryDto);
+            when(batteryService.createBattery(any(BatteryDto.class))).thenReturn(batteryDto);
             String requestJson = objectMapper.writeValueAsString(batteryDto);
 
             MvcTestResult result = mockMvcTester.post()
@@ -169,7 +159,7 @@ class BatteryControllerTest extends WebMvcTestBase {
 
         @Test
         void givenInvalidBatteryDto_whenCreateBattery_thenReturn400BadRequest() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             int batteryStatus = 105;
             BatteryDto invalidBatteryDto = BatteryDto.builder()
                     .registeredAt(registeredAt)
@@ -195,7 +185,6 @@ class BatteryControllerTest extends WebMvcTestBase {
         }
     }
 
-    @DisplayName("DELETE methods for BatteryController.")
     @Nested
     class DeleteMethods {
         @Test
@@ -230,7 +219,7 @@ class BatteryControllerTest extends WebMvcTestBase {
         @Test
         void givenValidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn204NoContent() {
             boolean dateOnly = false;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             doNothing().when(batteryService).deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 
             MvcTestResult result = mockMvcTester.delete()
@@ -246,7 +235,7 @@ class BatteryControllerTest extends WebMvcTestBase {
         @Test
         void givenInvalidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn404NotFound() {
             boolean dateOnly = false;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
             doThrow(new ResourceNotFoundException("Batteries registeredAt=" + registeredAt + " not found."))
                     .when(batteryService).deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
 

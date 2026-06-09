@@ -4,13 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.model.Battery;
 
-@DisplayName("BatteryModelMapper unit tests.")
 class BatteryModelMapperTest {
     @Test
     void givenValidBatteryDto_whenToModel_thenReturnBatteryModel() {
