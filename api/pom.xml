@@ -36,7 +36,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.6</version>
+    <version>4.0.7</version>
     <relativePath />
   </parent>
 
@@ -48,21 +48,21 @@
     <maven.version>3.9.11</maven.version>
 
     <!-- Maven dependencies -->
-    <sonar-maven-plugin.version>5.6.0.6792</sonar-maven-plugin.version>
+    <checkstyle.version>13.5.0</checkstyle.version>
     <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
-    <checkstyle.version>13.4.2</checkstyle.version>
+    <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 
     <!-- Bucket4J -->
-    <bucket4j.version>8.18.0</bucket4j.version>
+    <bucket4j.version>8.19.0</bucket4j.version>
 
     <!-- Flyway version -->
-    <flyway-database-postgresql.version>12.5.0</flyway-database-postgresql.version>
+    <flyway-database-postgresql.version>12.8.1</flyway-database-postgresql.version>
 
     <!-- Jakarta persistence version -->
     <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
 
     <!-- Logback version -->
-    <logback-classic.version>1.5.32</logback-classic.version>
+    <logback-classic.version>1.5.34</logback-classic.version>
 
     <!-- Lombok version -->
     <lombok.version>1.18.46</lombok.version>
@@ -71,16 +71,16 @@
     <postgresql.version>42.7.11</postgresql.version>
 
     <!-- SLF4J version -->
-    <slf4j-api.version>2.0.17</slf4j-api.version>
+    <slf4j-api.version>2.0.18</slf4j-api.version>
 
     <!-- Springdoc/Swagger version -->
     <springdoc-openapi-starter-webmvc-ui.version>3.0.3</springdoc-openapi-starter-webmvc-ui.version>
 
     <!-- OpenAPI Generator -->
     <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
-    <okhttp3.version>5.3.2</okhttp3.version>
+    <okhttp3.version>5.4.0</okhttp3.version>
     <swagger.version>2.2.49</swagger.version>
-    <openapi-generator-maven-plugin.version>7.22.0</openapi-generator-maven-plugin.version>
+    <openapi-generator-maven-plugin.version>7.23.0</openapi-generator-maven-plugin.version>
 
     <!-- Testcontainers version -->
     <testcontainers.version>2.0.5</testcontainers.version>

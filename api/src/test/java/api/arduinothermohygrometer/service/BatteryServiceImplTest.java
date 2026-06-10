@@ -67,7 +67,7 @@ class BatteryServiceImplTest {
 
             assertThatThrownBy(() -> batteryService.getBatteryById(invalidId))
                     .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessage(String.format("Battery with id=%s not found.", invalidId));
+                    .hasMessage("Battery with id=%s not found.".formatted(invalidId));
         }
 
         @Test
@@ -196,7 +196,7 @@ class BatteryServiceImplTest {
             verify(batteryRepository).getBatteryById(id);
             verify(batteryRepository).deleteBatteryById(id);
             assertThat(capturedOutput)
-                    .contains(String.format("Battery with id=%s deleted.", id));
+                    .contains("Battery with id=%s deleted.".formatted(id));
         }
 
         @Test
@@ -206,7 +206,7 @@ class BatteryServiceImplTest {
 
             assertThatThrownBy(() -> batteryService.deleteBatteryById(invalidId))
                     .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessage(String.format("Battery with id=%s not found.", invalidId));
+                    .hasMessage("Battery with id=%s not found.".formatted(invalidId));
         }
 
         @Test
@@ -227,7 +227,7 @@ class BatteryServiceImplTest {
             verify(batteryRepository).getBatteryByTimestamp(registeredAt);
             verify(batteryRepository).deleteBatteryByTimestamp(registeredAt);
             assertThat(capturedOutput)
-                    .contains(String.format("Deleted battery with timestamp=%s.", batteries.getFirst().getRegisteredAt()));
+                    .contains("Deleted battery with timestamp=%s.".formatted(batteries.getFirst().getRegisteredAt()));
         }
 
         @Test
@@ -241,7 +241,7 @@ class BatteryServiceImplTest {
             verify(batteryRepository).getBatteryByTimestamp(registeredAt);
             verify(batteryRepository, times(0)).deleteBatteryByTimestamp(registeredAt);
             assertThat(capturedOutput)
-                    .contains(String.format("Batteries registeredAt=%s not found.", registeredAt));
+                    .contains("Batteries registeredAt=%s not found.".formatted(registeredAt));
         }
 
         @Test
@@ -263,7 +263,7 @@ class BatteryServiceImplTest {
             verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
             verify(batteryRepository).deleteBatteriesByDate(registeredAt.toLocalDate());
             assertThat(capturedOutput)
-                    .contains(String.format("Deleted batteries with date=%s.", batteries.getFirst().getRegisteredAt().toLocalDate()));
+                    .contains("Deleted batteries with date=%s.".formatted(batteries.getFirst().getRegisteredAt().toLocalDate()));
         }
 
         @Test
@@ -277,7 +277,7 @@ class BatteryServiceImplTest {
             verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
             verify(batteryRepository, times(0)).deleteBatteriesByDate(registeredAt.toLocalDate());
             assertThat(capturedOutput)
-                    .contains(String.format("Batteries registeredAt=%s not found.", registeredAt));
+                    .contains("Batteries registeredAt=%s not found.".formatted(registeredAt));
         }
     }
 }

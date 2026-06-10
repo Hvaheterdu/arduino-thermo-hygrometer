@@ -36,7 +36,7 @@ public class BatteryServiceImpl implements BatteryService {
         log.info("Retrieving battery with id={}.", id);
 
         Battery battery = batteryRepository.getBatteryById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(ID_NOT_FOUND, id)));
+                .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
 
         log.info("Battery with id={} retrieved.", id);
         return BatteryModelMapper.toDto(battery);
@@ -78,7 +78,7 @@ public class BatteryServiceImpl implements BatteryService {
 
         Optional<Battery> battery = batteryRepository.getBatteryById(id);
         if (battery.isEmpty()) {
-            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
+            throw new ResourceNotFoundException(ID_NOT_FOUND.formatted(id));
         }
 
         batteryRepository.deleteBatteryById(id);

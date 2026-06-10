@@ -36,7 +36,7 @@ public class TemperatureServiceImpl implements TemperatureService {
         log.info("Retrieving Temperature with id={}.", id);
 
         Temperature temperature = temperatureRepository.getTemperatureById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(ID_NOT_FOUND, id)));
+                .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
 
         log.info("Temperature with id={} retrieved.", id);
         return TemperatureModelMapper.toDto(temperature);
@@ -78,7 +78,7 @@ public class TemperatureServiceImpl implements TemperatureService {
 
         Optional<Temperature> temperature = temperatureRepository.getTemperatureById(id);
         if (temperature.isEmpty()) {
-            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
+            throw new ResourceNotFoundException(ID_NOT_FOUND.formatted(id));
         }
 
         temperatureRepository.deleteTemperatureById(id);

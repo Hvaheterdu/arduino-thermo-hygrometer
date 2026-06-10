@@ -67,7 +67,7 @@ class HumidityServiceImplTest {
 
             assertThatThrownBy(() -> humidityService.getHumidityById(invalidId))
                     .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessage(String.format("Humidity with id=%s not found.", invalidId));
+                    .hasMessage("Humidity with id=%s not found.".formatted(invalidId));
         }
 
         @Test
@@ -196,7 +196,8 @@ class HumidityServiceImplTest {
             verify(humidityRepository).getHumidityById(id);
             verify(humidityRepository).deleteHumidityById(id);
             assertThat(capturedOutput)
-                    .contains(String.format("Humidity with id=%s deleted.", id));
+                    .contains("Humidity with id=%s deleted.".formatted(id));
+            ;
         }
 
         @Test
@@ -206,7 +207,7 @@ class HumidityServiceImplTest {
 
             assertThatThrownBy(() -> humidityService.deleteHumidityById(invalidId))
                     .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessage(String.format("Humidity with id=%s not found.", invalidId));
+                    .hasMessage("Humidity with id=%s not found.".formatted(invalidId));
         }
 
         @Test
@@ -227,7 +228,7 @@ class HumidityServiceImplTest {
             verify(humidityRepository).getHumidityByTimestamp(registeredAt);
             verify(humidityRepository).deleteHumidityByTimestamp(registeredAt);
             assertThat(capturedOutput)
-                    .contains(String.format("Deleted humidity with timestamp=%s.", humidities.getFirst().getRegisteredAt()));
+                    .contains("Deleted humidity with timestamp=%s.".formatted(humidities.getFirst().getRegisteredAt()));
         }
 
         @Test
@@ -241,7 +242,7 @@ class HumidityServiceImplTest {
             verify(humidityRepository).getHumidityByTimestamp(registeredAt);
             verify(humidityRepository, times(0)).deleteHumidityByTimestamp(registeredAt);
             assertThat(capturedOutput)
-                    .contains(String.format("Humidities registeredAt=%s not found.", registeredAt));
+                    .contains("Humidities registeredAt=%s not found.".formatted(registeredAt));
         }
 
         @Test
@@ -262,7 +263,7 @@ class HumidityServiceImplTest {
             verify(humidityRepository).getHumiditiesByDate(registeredAt.toLocalDate());
             verify(humidityRepository).deleteHumiditiesByDate(registeredAt.toLocalDate());
             assertThat(capturedOutput)
-                    .contains(String.format("Deleted humidities with date=%s.", humidities.getFirst().getRegisteredAt().toLocalDate()));
+                    .contains("Deleted humidities with date=%s.".formatted(humidities.getFirst().getRegisteredAt().toLocalDate()));
         }
 
         @Test
@@ -276,7 +277,7 @@ class HumidityServiceImplTest {
             verify(humidityRepository).getHumiditiesByDate(registeredAt.toLocalDate());
             verify(humidityRepository, times(0)).deleteHumiditiesByDate(registeredAt.toLocalDate());
             assertThat(capturedOutput)
-                    .contains(String.format("Humidities registeredAt=%s not found.", registeredAt));
+                    .contains("Humidities registeredAt=%s not found.".formatted(registeredAt));
         }
     }
 }

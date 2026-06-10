@@ -36,7 +36,7 @@ public class HumidityServiceImpl implements HumidityService {
         log.info("Retrieving Humidity with id={}.", id);
 
         Humidity humidity = humidityRepository.getHumidityById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(ID_NOT_FOUND, id)));
+                .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
 
         log.info("Humidity with id={} retrieved.", id);
         return HumidityModelMapper.toDto(humidity);
@@ -78,7 +78,7 @@ public class HumidityServiceImpl implements HumidityService {
 
         Optional<Humidity> humidity = humidityRepository.getHumidityById(id);
         if (humidity.isEmpty()) {
-            throw new ResourceNotFoundException(String.format(ID_NOT_FOUND, id));
+            throw new ResourceNotFoundException(ID_NOT_FOUND.formatted(id));
         }
 
         humidityRepository.deleteHumidityById(id);

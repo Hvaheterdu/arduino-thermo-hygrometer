@@ -67,7 +67,7 @@ class TemperatureServiceImplTest {
 
             assertThatThrownBy(() -> temperatureService.getTemperatureById(invalidId))
                     .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessage(String.format("Temperature with id=%s not found.", invalidId));
+                    .hasMessage("Temperature with id=%s not found.".formatted(invalidId));
         }
 
         @Test
@@ -196,7 +196,7 @@ class TemperatureServiceImplTest {
             verify(temperatureRepository).getTemperatureById(id);
             verify(temperatureRepository).deleteTemperatureById(id);
             assertThat(capturedOutput)
-                    .contains(String.format("Temperature with id=%s deleted.", id));
+                    .contains("Temperature with id=%s deleted.".formatted(id));
         }
 
         @Test
@@ -206,7 +206,7 @@ class TemperatureServiceImplTest {
 
             assertThatThrownBy(() -> temperatureService.deleteTemperatureById(invalidId))
                     .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessage(String.format("Temperature with id=%s not found.", invalidId));
+                    .hasMessage("Temperature with id=%s not found.".formatted(invalidId));
         }
 
         @Test
@@ -227,7 +227,7 @@ class TemperatureServiceImplTest {
             verify(temperatureRepository).getTemperatureByTimestamp(registeredAt);
             verify(temperatureRepository).deleteTemperatureByTimestamp(registeredAt);
             assertThat(capturedOutput)
-                    .contains(String.format("Deleted temperature with timestamp=%s.", temperatures.getFirst().getRegisteredAt()));
+                    .contains("Deleted temperature with timestamp=%s.".formatted(temperatures.getFirst().getRegisteredAt()));
         }
 
         @Test
@@ -241,7 +241,7 @@ class TemperatureServiceImplTest {
             verify(temperatureRepository).getTemperatureByTimestamp(registeredAt);
             verify(temperatureRepository, times(0)).deleteTemperatureByTimestamp(registeredAt);
             assertThat(capturedOutput)
-                    .contains(String.format("Temperatures registeredAt=%s not found.", registeredAt));
+                    .contains("Temperatures registeredAt=%s not found.".formatted(registeredAt));
         }
 
         @Test
@@ -262,7 +262,7 @@ class TemperatureServiceImplTest {
             verify(temperatureRepository).getTemperaturesByDate(registeredAt.toLocalDate());
             verify(temperatureRepository).deleteTemperaturesByDate(registeredAt.toLocalDate());
             assertThat(capturedOutput)
-                    .contains(String.format("Deleted temperatures with date=%s.", temperatures.getFirst().getRegisteredAt().toLocalDate()));
+                    .contains("Deleted temperatures with date=%s.".formatted(temperatures.getFirst().getRegisteredAt().toLocalDate()));
         }
 
         @Test
@@ -276,7 +276,7 @@ class TemperatureServiceImplTest {
             verify(temperatureRepository).getTemperaturesByDate(registeredAt.toLocalDate());
             verify(temperatureRepository, times(0)).deleteTemperaturesByDate(registeredAt.toLocalDate());
             assertThat(capturedOutput)
-                    .contains(String.format("Temperatures registeredAt=%s not found.", registeredAt));
+                    .contains("Temperatures registeredAt=%s not found.".formatted(registeredAt));
         }
     }
 }
