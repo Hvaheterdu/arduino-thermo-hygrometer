@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <profiles version="21">
-  <profile name="ArduinoThermoHygrometerCheckstyle" kind="CodeFormatterProfile">
+  <profile name="ArduinoThermoHygrometerFormatter" kind="CodeFormatterProfile">
 
     <!-- Indentation -->
     <setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space" />
@@ -11,9 +11,15 @@
     <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="150" />
 
     <!-- Braces -->
-    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_type_declaration" value="end_of_line" />
-    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_method_declaration" value="end_of_line" />
+    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_anonymous_type_declaration" value="end_of_line" />
+    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_array_initializer" value="next_line" />
     <setting id="org.eclipse.jdt.core.formatter.brace_position_for_block" value="end_of_line" />
+    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_block_in_case" value="end_of_line" />
+    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_constructor_declaration" value="end_of_line" />
+    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_enum_constant" value="end_of_line" />
+    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_enum_declaration" value="end_of_line" />
+    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_method_declaration" value="end_of_line" />
+    <setting id="org.eclipse.jdt.core.formatter.brace_position_for_type_declaration" value="end_of_line" />
 
     <!-- Spaces -->
     <setting id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_invocation_arguments" value="insert" />

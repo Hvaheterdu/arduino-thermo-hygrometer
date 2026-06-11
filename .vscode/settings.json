@@ -44,8 +44,8 @@
     }
   ],
   "java.diagnostic.filter": ["**/target/generated-sources/**/*"],
-  "java.format.settings.profile": "ArduinoThermoHygrometerCheckstyle",
-  "java.format.settings.url": "${workspaceFolder}/api/config/formatter/formatter.xml",
+  "java.format.settings.profile": "ArduinoThermoHygrometerFormatter",
+  "java.format.settings.url": "api/config/formatter/formatter.xml",
   "java.saveActions.cleanup": true,
   "[java]": {
     "editor.codeActionsOnSave": {
