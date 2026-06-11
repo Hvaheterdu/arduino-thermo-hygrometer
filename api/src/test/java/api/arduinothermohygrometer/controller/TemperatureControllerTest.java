@@ -46,11 +46,9 @@ class TemperatureControllerTest extends WebMvcTestBase {
         @Test
         void givenValidId_whenGetTemperatureById_thenReturn200OK() {
             UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            Double temp = 20.01;
             TemperatureDto temperatureDto = TemperatureDto.builder()
-                    .registeredAt(registeredAt)
-                    .temp(temp)
+                    .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                    .temp(20.01)
                     .build();
             when(temperatureService.getTemperatureById(id)).thenReturn(temperatureDto);
 
@@ -63,7 +61,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.temp",
-                            path -> assertThat(path).asNumber().isEqualTo(temp));
+                            path -> assertThat(path).asNumber().isEqualTo(temperatureDto.getTemp()));
         }
 
         @Test
@@ -87,11 +85,9 @@ class TemperatureControllerTest extends WebMvcTestBase {
         void givenValidRegisteredAt_whenGetTemperaturesByDateOrTimestamp_thenReturn200OK() {
             boolean dateOnly = true;
             LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            Double temp = 20.01;
-            Double temp2 = 90.01;
             List<TemperatureDto> temperatureDtos = List.of(
-                    TemperatureDto.builder().registeredAt(registeredAt).temp(temp).build(),
-                    TemperatureDto.builder().registeredAt(registeredAt.minusHours(1)).temp(temp2).build());
+                    TemperatureDto.builder().registeredAt(registeredAt).temp(20.01).build(),
+                    TemperatureDto.builder().registeredAt(registeredAt.minusHours(1)).temp(90.01).build());
             when(temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly)).thenReturn(temperatureDtos);
 
             MvcTestResult result = mockMvcTester.get()
@@ -104,9 +100,9 @@ class TemperatureControllerTest extends WebMvcTestBase {
                     .hasStatusOk()
                     .bodyJson()
                     .hasPathSatisfying("$.[0].temp",
-                            path -> assertThat(path).asNumber().isEqualTo(temp))
+                            path -> assertThat(path).asNumber().isEqualTo(temperatureDtos.getFirst().getTemp()))
                     .hasPathSatisfying("$.[1].temp",
-                            path -> assertThat(path).asNumber().isEqualTo(temp2));
+                            path -> assertThat(path).asNumber().isEqualTo(temperatureDtos.getLast().getTemp()));
         }
 
         @Test
@@ -134,11 +130,9 @@ class TemperatureControllerTest extends WebMvcTestBase {
     class CreateMethods {
         @Test
         void givenValidTemperatureDtoModel_whenCreateTemperature_thenReturn201CREATED() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            Double temp = 21.02;
             TemperatureDto temperatureDto = TemperatureDto.builder()
-                    .registeredAt(registeredAt)
-                    .temp(temp)
+                    .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                    .temp(21.01)
                     .build();
             when(temperatureService.createTemperature(any(TemperatureDto.class))).thenReturn(temperatureDto);
             String requestJson = objectMapper.writeValueAsString(temperatureDto);
@@ -154,16 +148,14 @@ class TemperatureControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.temp",
-                            path -> assertThat(path).asNumber().isEqualTo(temp));
+                            path -> assertThat(path).asNumber().isEqualTo(temperatureDto.getTemp()));
         }
 
         @Test
         void givenInvalidTemperatureDto_whenCreateTemperature_thenReturn400BadRequest() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            Double temp = 150.03;
             TemperatureDto invalidTemperatureDto = TemperatureDto.builder()
-                    .registeredAt(registeredAt)
-                    .temp(temp)
+                    .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                    .temp(150.03)
                     .build();
             String requestJson = objectMapper.writeValueAsString(invalidTemperatureDto);
 

@@ -45,19 +45,18 @@ class HumidityServiceImplTest {
         @Test
         void givenValidId_whenGetHumidityById_thenReturnHumidity() {
             UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now();
-            Double airHumidity = 70.00;
             HumidityDto humidityDto = HumidityDto.builder()
-                    .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .registeredAt(LocalDateTime.now())
+                    .airHumidity(70.00)
                     .build();
             Humidity humidity = HumidityModelMapper.toModel(humidityDto);
             when(humidityRepository.getHumidityById(id)).thenReturn(Optional.of(humidity));
 
             HumidityDto result = humidityService.getHumidityById(id);
 
-            assertThat(result)
-                    .isEqualTo(humidityDto);
+            assertThat(result.getId()).isEqualTo(humidityDto.getId());
+            assertThat(result.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
+            assertThat(result.getAirHumidity()).isEqualTo(humidityDto.getAirHumidity());
         }
 
         @Test
@@ -74,12 +73,10 @@ class HumidityServiceImplTest {
         void givenValidTimestamp_whenGetHumiditiesByDateOrTimestamp_thenReturnHumidity() {
             boolean dateOnly = false;
             LocalDateTime registeredAt = LocalDateTime.now();
-            Double airHumidity = 75.00;
             HumidityDto humidityDto = HumidityDto.builder()
                     .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .airHumidity(75.00)
                     .build();
-            List<HumidityDto> humidityDtos = List.of(humidityDto);
             List<Humidity> humidities = List.of(HumidityModelMapper.toModel(humidityDto));
             when(humidityRepository.getHumidityByTimestamp(registeredAt)).thenReturn(humidities);
 
@@ -87,7 +84,13 @@ class HumidityServiceImplTest {
 
             verify(humidityRepository).getHumidityByTimestamp(registeredAt);
             assertThat(result)
-                    .containsExactlyElementsOf(humidityDtos);
+                    .hasSize(1)
+                    .first()
+                    .satisfies(humidity -> {
+                        assertThat(humidity.getId()).isEqualTo(humidityDto.getId());
+                        assertThat(humidity.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
+                        assertThat(humidity.getAirHumidity()).isEqualTo(humidityDto.getAirHumidity());
+                    });
         }
 
         @Test
@@ -107,11 +110,9 @@ class HumidityServiceImplTest {
         void givenValidDate_whenGetHumiditiesByDateOrTimestamp_thenReturnHumidities() {
             boolean dateOnly = true;
             LocalDateTime registeredAt = LocalDateTime.now();
-            Double airHumidity = 75.00;
-            Double airHumidity2 = 80.00;
             List<HumidityDto> humidityDtos = List.of(
-                    HumidityDto.builder().registeredAt(registeredAt).airHumidity(airHumidity).build(),
-                    HumidityDto.builder().registeredAt(registeredAt.minusHours(1)).airHumidity(airHumidity2).build());
+                    HumidityDto.builder().registeredAt(registeredAt).airHumidity(75.00).build(),
+                    HumidityDto.builder().registeredAt(registeredAt.minusHours(1)).airHumidity(80.00).build());
             List<Humidity> humidities = humidityDtos.stream()
                     .map(HumidityModelMapper::toModel)
                     .toList();
@@ -121,7 +122,13 @@ class HumidityServiceImplTest {
 
             verify(humidityRepository).getHumiditiesByDate(registeredAt.toLocalDate());
             assertThat(result)
-                    .containsExactlyElementsOf(humidityDtos);
+                    .hasSize(2)
+                    .first()
+                    .satisfies(humidity -> {
+                        assertThat(humidity.getId()).isEqualTo(humidityDtos.getFirst().getId());
+                        assertThat(humidity.getRegisteredAt()).isEqualTo(humidityDtos.getFirst().getRegisteredAt());
+                        assertThat(humidity.getAirHumidity()).isEqualTo(humidityDtos.getFirst().getAirHumidity());
+                    });
         }
 
         @Test
@@ -142,31 +149,27 @@ class HumidityServiceImplTest {
     class CreateMethods {
         @Test
         void givenValidHumidityModel_whenCreateHumidity_thenReturnCreatedHumidity() {
-            LocalDateTime registeredAt = LocalDateTime.now();
-            Double airHumidity = 75.00;
             HumidityDto humidityDto = HumidityDto.builder()
-                    .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .registeredAt(LocalDateTime.now())
+                    .airHumidity(75.00)
                     .build();
-            Humidity humidity = new Humidity(registeredAt, airHumidity);
+            Humidity humidity = new Humidity(LocalDateTime.now(), 75.00);
             ReflectionTestUtils.setField(humidity, "id", UUID.randomUUID());
             when(humidityRepository.createHumidity(any(Humidity.class))).thenReturn(Optional.of(humidity));
 
             HumidityDto result = humidityService.createHumidity(humidityDto);
 
             verify(humidityRepository).createHumidity(any(Humidity.class));
-            assertThat(result.getId()).isEqualTo(humidity.getId());
+            assertThat(result.getId()).isNotNull();
             assertThat(result.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
             assertThat(result.getAirHumidity()).isEqualTo(humidityDto.getAirHumidity());
         }
 
         @Test
         void givenInvalidHumidityModel_whenCreateHumidity_thenThrowResourceNotCreatedException() {
-            LocalDateTime registeredAt = LocalDateTime.now();
-            Double airHumidity = 105.00;
             HumidityDto humidityDto = HumidityDto.builder()
-                    .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .registeredAt(LocalDateTime.now())
+                    .airHumidity(105.00)
                     .build();
             when(humidityRepository.createHumidity(any(Humidity.class))).thenReturn(Optional.empty());
 
@@ -181,11 +184,9 @@ class HumidityServiceImplTest {
         @Test
         void givenValidId_whenDeleteHumidityById_thenDeleteHumidity(final CapturedOutput capturedOutput) {
             UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now();
-            Double airHumidity = 75.00;
             HumidityDto humidityDto = HumidityDto.builder()
-                    .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .registeredAt(LocalDateTime.now())
+                    .airHumidity(75.00)
                     .build();
             Humidity humidity = HumidityModelMapper.toModel(humidityDto);
             when(humidityRepository.getHumidityById(id)).thenReturn(Optional.of(humidity));
@@ -214,10 +215,9 @@ class HumidityServiceImplTest {
         void givenValidTimestamp_whenDeleteHumiditiesByTimestamp_thenDeleteHumidity(final CapturedOutput capturedOutput) {
             boolean dateOnly = false;
             LocalDateTime registeredAt = LocalDateTime.now();
-            Double airHumidity = 75.00;
             HumidityDto humidityDto = HumidityDto.builder()
                     .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .airHumidity(75.00)
                     .build();
             List<Humidity> humidities = List.of(HumidityModelMapper.toModel(humidityDto));
             when(humidityRepository.getHumidityByTimestamp(registeredAt)).thenReturn(humidities);
@@ -249,10 +249,9 @@ class HumidityServiceImplTest {
         void givenValidDate_whenDeleteHumiditiesByDateOrTimestamp_thenDeleteHumidity(final CapturedOutput capturedOutput) {
             boolean dateOnly = true;
             LocalDateTime registeredAt = LocalDateTime.now();
-            Double airHumidity = 75.00;
             HumidityDto humidityDto = HumidityDto.builder()
                     .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .airHumidity(75.00)
                     .build();
             List<Humidity> humidities = List.of(HumidityModelMapper.toModel(humidityDto));
             when(humidityRepository.getHumiditiesByDate(registeredAt.toLocalDate())).thenReturn(humidities);

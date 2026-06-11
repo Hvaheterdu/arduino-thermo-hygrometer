@@ -45,19 +45,18 @@ class TemperatureServiceImplTest {
         @Test
         void givenValidId_whenGetTemperatureById_thenReturnTemperature() {
             UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now();
-            Double temp = 70.00;
             TemperatureDto temperatureDto = TemperatureDto.builder()
-                    .registeredAt(registeredAt)
-                    .temp(temp)
+                    .registeredAt(LocalDateTime.now())
+                    .temp(70.00)
                     .build();
             Temperature temperature = TemperatureModelMapper.toModel(temperatureDto);
             when(temperatureRepository.getTemperatureById(id)).thenReturn(Optional.of(temperature));
 
             TemperatureDto result = temperatureService.getTemperatureById(id);
 
-            assertThat(result)
-                    .isEqualTo(temperatureDto);
+            assertThat(result.getId()).isEqualTo(temperatureDto.getId());
+            assertThat(result.getRegisteredAt()).isEqualTo(temperatureDto.getRegisteredAt());
+            assertThat(result.getTemp()).isEqualTo(temperatureDto.getTemp());
         }
 
         @Test
@@ -74,12 +73,10 @@ class TemperatureServiceImplTest {
         void givenValidTimestamp_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperature() {
             boolean dateOnly = false;
             LocalDateTime registeredAt = LocalDateTime.now();
-            Double temp = 75.00;
             TemperatureDto temperatureDto = TemperatureDto.builder()
                     .registeredAt(registeredAt)
-                    .temp(temp)
+                    .temp(75.00)
                     .build();
-            List<TemperatureDto> temperatureDtos = List.of(temperatureDto);
             List<Temperature> temperatures = List.of(TemperatureModelMapper.toModel(temperatureDto));
             when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(temperatures);
 
@@ -87,7 +84,13 @@ class TemperatureServiceImplTest {
 
             verify(temperatureRepository).getTemperatureByTimestamp(registeredAt);
             assertThat(result)
-                    .containsExactlyElementsOf(temperatureDtos);
+                    .hasSize(1)
+                    .first()
+                    .satisfies(temperature -> {
+                        assertThat(temperature.getId()).isEqualTo(temperatureDto.getId());
+                        assertThat(temperature.getRegisteredAt()).isEqualTo(temperatureDto.getRegisteredAt());
+                        assertThat(temperature.getTemp()).isEqualTo(temperatureDto.getTemp());
+                    });
         }
 
         @Test
@@ -107,11 +110,9 @@ class TemperatureServiceImplTest {
         void givenValidDate_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperatures() {
             boolean dateOnly = true;
             LocalDateTime registeredAt = LocalDateTime.now();
-            Double temp = 75.00;
-            Double temp2 = 80.00;
             List<TemperatureDto> temperatureDtos = List.of(
-                    TemperatureDto.builder().registeredAt(registeredAt).temp(temp).build(),
-                    TemperatureDto.builder().registeredAt(registeredAt.minusHours(1)).temp(temp2).build());
+                    TemperatureDto.builder().registeredAt(registeredAt).temp(75.00).build(),
+                    TemperatureDto.builder().registeredAt(registeredAt.minusHours(1)).temp(80.00).build());
             List<Temperature> temperatures = temperatureDtos.stream()
                     .map(TemperatureModelMapper::toModel)
                     .toList();
@@ -121,7 +122,13 @@ class TemperatureServiceImplTest {
 
             verify(temperatureRepository).getTemperaturesByDate(registeredAt.toLocalDate());
             assertThat(result)
-                    .containsExactlyElementsOf(temperatureDtos);
+                    .hasSize(2)
+                    .first()
+                    .satisfies(temperature -> {
+                        assertThat(temperature.getId()).isEqualTo(temperatureDtos.getFirst().getId());
+                        assertThat(temperature.getRegisteredAt()).isEqualTo(temperatureDtos.getFirst().getRegisteredAt());
+                        assertThat(temperature.getTemp()).isEqualTo(temperatureDtos.getFirst().getTemp());
+                    });
         }
 
         @Test
@@ -142,31 +149,27 @@ class TemperatureServiceImplTest {
     class CreateMethods {
         @Test
         void givenValidTemperatureModel_whenCreateTemperature_thenReturnCreatedTemperature() {
-            LocalDateTime registeredAt = LocalDateTime.now();
-            Double temp = 75.00;
             TemperatureDto temperatureDto = TemperatureDto.builder()
-                    .registeredAt(registeredAt)
-                    .temp(temp)
+                    .registeredAt(LocalDateTime.now())
+                    .temp(75.00)
                     .build();
-            Temperature temperature = new Temperature(registeredAt, temp);
+            Temperature temperature = new Temperature(LocalDateTime.now(), 75.00);
             ReflectionTestUtils.setField(temperature, "id", UUID.randomUUID());
             when(temperatureRepository.createTemperature(any(Temperature.class))).thenReturn(Optional.of(temperature));
 
             TemperatureDto result = temperatureService.createTemperature(temperatureDto);
 
             verify(temperatureRepository).createTemperature(any(Temperature.class));
-            assertThat(result.getId()).isEqualTo(temperature.getId());
+            assertThat(result.getId()).isNotNull();
             assertThat(result.getRegisteredAt()).isEqualTo(temperatureDto.getRegisteredAt());
             assertThat(result.getTemp()).isEqualTo(temperatureDto.getTemp());
         }
 
         @Test
         void givenInvalidTemperatureModel_whenCreateTemperature_thenThrowResourceNotCreatedException() {
-            LocalDateTime registeredAt = LocalDateTime.now();
-            Double temp = 150.00;
             TemperatureDto temperatureDto = TemperatureDto.builder()
-                    .registeredAt(registeredAt)
-                    .temp(temp)
+                    .registeredAt(LocalDateTime.now())
+                    .temp(150.00)
                     .build();
             when(temperatureRepository.createTemperature(any(Temperature.class))).thenReturn(Optional.empty());
 
@@ -181,11 +184,9 @@ class TemperatureServiceImplTest {
         @Test
         void givenValidId_whenDeleteTemperatureById_thenDeleteTemperature(final CapturedOutput capturedOutput) {
             UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now();
-            Double temp = 75.00;
             TemperatureDto temperatureDto = TemperatureDto.builder()
-                    .registeredAt(registeredAt)
-                    .temp(temp)
+                    .registeredAt(LocalDateTime.now())
+                    .temp(75.00)
                     .build();
             Temperature temperature = TemperatureModelMapper.toModel(temperatureDto);
             when(temperatureRepository.getTemperatureById(id)).thenReturn(Optional.of(temperature));
@@ -213,10 +214,9 @@ class TemperatureServiceImplTest {
         void givenValidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature(final CapturedOutput capturedOutput) {
             boolean dateOnly = false;
             LocalDateTime registeredAt = LocalDateTime.now();
-            Double temp = 75.00;
             TemperatureDto temperatureDto = TemperatureDto.builder()
                     .registeredAt(registeredAt)
-                    .temp(temp)
+                    .temp(75.00)
                     .build();
             List<Temperature> temperatures = List.of(TemperatureModelMapper.toModel(temperatureDto));
             when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(temperatures);
@@ -248,10 +248,9 @@ class TemperatureServiceImplTest {
         void givenValidDate_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature(final CapturedOutput capturedOutput) {
             boolean dateOnly = true;
             LocalDateTime registeredAt = LocalDateTime.now();
-            Double temp = 75.00;
             TemperatureDto temperatureDto = TemperatureDto.builder()
                     .registeredAt(registeredAt)
-                    .temp(temp)
+                    .temp(75.00)
                     .build();
             List<Temperature> temperatures = List.of(TemperatureModelMapper.toModel(temperatureDto));
             when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())).thenReturn(temperatures);

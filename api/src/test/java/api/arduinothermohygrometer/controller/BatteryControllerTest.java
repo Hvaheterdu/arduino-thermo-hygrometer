@@ -46,11 +46,9 @@ class BatteryControllerTest extends WebMvcTestBase {
         @Test
         void givenValidId_whenGetBatteryById_thenReturn200OK() {
             UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            int batteryStatus = 90;
             BatteryDto batteryDto = BatteryDto.builder()
-                    .registeredAt(registeredAt)
-                    .batteryStatus(batteryStatus)
+                    .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                    .batteryStatus(90)
                     .build();
             when(batteryService.getBatteryById(id)).thenReturn(batteryDto);
 
@@ -63,7 +61,7 @@ class BatteryControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.batteryStatus",
-                            path -> assertThat(path).asNumber().isEqualTo(batteryStatus));
+                            path -> assertThat(path).asNumber().isEqualTo(batteryDto.getBatteryStatus()));
         }
 
         @Test
@@ -87,11 +85,9 @@ class BatteryControllerTest extends WebMvcTestBase {
         void givenValidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
             boolean dateOnly = true;
             LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            int batteryStatus = 95;
-            int batteryStatus2 = 90;
             List<BatteryDto> batteryDtos = List.of(
-                    BatteryDto.builder().registeredAt(registeredAt).batteryStatus(batteryStatus).build(),
-                    BatteryDto.builder().registeredAt(registeredAt.minusHours(1)).batteryStatus(batteryStatus2).build());
+                    BatteryDto.builder().registeredAt(registeredAt).batteryStatus(95).build(),
+                    BatteryDto.builder().registeredAt(registeredAt.minusHours(1)).batteryStatus(90).build());
             when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly)).thenReturn(batteryDtos);
 
             MvcTestResult result = mockMvcTester.get()
@@ -104,9 +100,9 @@ class BatteryControllerTest extends WebMvcTestBase {
                     .hasStatusOk()
                     .bodyJson()
                     .hasPathSatisfying("$.[0].batteryStatus",
-                            path -> assertThat(path).asNumber().isEqualTo(batteryStatus))
+                            path -> assertThat(path).asNumber().isEqualTo(batteryDtos.getFirst().getBatteryStatus()))
                     .hasPathSatisfying("$.[1].batteryStatus",
-                            path -> assertThat(path).asNumber().isEqualTo(batteryStatus2));
+                            path -> assertThat(path).asNumber().isEqualTo(batteryDtos.getLast().getBatteryStatus()));
         }
 
         @Test
@@ -134,11 +130,9 @@ class BatteryControllerTest extends WebMvcTestBase {
     class CreateMethods {
         @Test
         void givenValidBatteryDtoModel_whenCreateBattery_thenReturn201CREATED() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            int batteryStatus = 95;
             BatteryDto batteryDto = BatteryDto.builder()
-                    .registeredAt(registeredAt)
-                    .batteryStatus(batteryStatus)
+                    .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                    .batteryStatus(95)
                     .build();
             when(batteryService.createBattery(any(BatteryDto.class))).thenReturn(batteryDto);
             String requestJson = objectMapper.writeValueAsString(batteryDto);
@@ -154,16 +148,14 @@ class BatteryControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.batteryStatus",
-                            path -> assertThat(path).asNumber().isEqualTo(batteryStatus));
+                            path -> assertThat(path).asNumber().isEqualTo(batteryDto.getBatteryStatus()));
         }
 
         @Test
         void givenInvalidBatteryDto_whenCreateBattery_thenReturn400BadRequest() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            int batteryStatus = 105;
             BatteryDto invalidBatteryDto = BatteryDto.builder()
-                    .registeredAt(registeredAt)
-                    .batteryStatus(batteryStatus)
+                    .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                    .batteryStatus(105)
                     .build();
             String requestJson = objectMapper.writeValueAsString(invalidBatteryDto);
 

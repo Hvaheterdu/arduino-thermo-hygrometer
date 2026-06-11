@@ -46,11 +46,9 @@ class HumidityControllerTest extends WebMvcTestBase {
         @Test
         void givenValidId_whenGetHumidityById_thenReturn200OK() {
             UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            Double airHumidity = 20.01;
             HumidityDto humidityDto = HumidityDto.builder()
-                    .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                    .airHumidity(20.01)
                     .build();
             when(humidityService.getHumidityById(id)).thenReturn(humidityDto);
 
@@ -63,7 +61,7 @@ class HumidityControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.airHumidity",
-                            path -> assertThat(path).asNumber().isEqualTo(airHumidity));
+                            path -> assertThat(path).asNumber().isEqualTo(humidityDto.getAirHumidity()));
         }
 
         @Test
@@ -87,11 +85,9 @@ class HumidityControllerTest extends WebMvcTestBase {
         void givenValidRegisteredAt_whenGetHumiditiesByDateOrTimestamp_thenReturn200OK() {
             boolean dateOnly = true;
             LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            Double airHumidity = 20.01;
-            Double airHumidity2 = 90.01;
             List<HumidityDto> humidities = List.of(
-                    HumidityDto.builder().registeredAt(registeredAt).airHumidity(airHumidity).build(),
-                    HumidityDto.builder().registeredAt(registeredAt.minusHours(1)).airHumidity(airHumidity2).build());
+                    HumidityDto.builder().registeredAt(registeredAt).airHumidity(20.01).build(),
+                    HumidityDto.builder().registeredAt(registeredAt.minusHours(1)).airHumidity(90.01).build());
             when(humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly)).thenReturn(humidities);
 
             MvcTestResult result = mockMvcTester.get()
@@ -104,9 +100,9 @@ class HumidityControllerTest extends WebMvcTestBase {
                     .hasStatusOk()
                     .bodyJson()
                     .hasPathSatisfying("$.[0].airHumidity",
-                            path -> assertThat(path).asNumber().isEqualTo(airHumidity))
+                            path -> assertThat(path).asNumber().isEqualTo(humidities.getFirst().getAirHumidity()))
                     .hasPathSatisfying("$.[1].airHumidity",
-                            path -> assertThat(path).asNumber().isEqualTo(airHumidity2));
+                            path -> assertThat(path).asNumber().isEqualTo(humidities.getLast().getAirHumidity()));
         }
 
         @Test
@@ -134,11 +130,9 @@ class HumidityControllerTest extends WebMvcTestBase {
     class CreateMethods {
         @Test
         void givenValidHumidityDtoModel_whenCreateHumidity_thenReturn201CREATED() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            Double airHumidity = 21.02;
             HumidityDto humidityDto = HumidityDto.builder()
-                    .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                    .airHumidity(21.02)
                     .build();
             when(humidityService.createHumidity(any(HumidityDto.class))).thenReturn(humidityDto);
             String requestJson = objectMapper.writeValueAsString(humidityDto);
@@ -154,16 +148,14 @@ class HumidityControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.airHumidity",
-                            path -> assertThat(path).asNumber().isEqualTo(airHumidity));
+                            path -> assertThat(path).asNumber().isEqualTo(humidityDto.getAirHumidity()));
         }
 
         @Test
         void givenInvalidHumidityDto_whenCreateHumidity_thenReturn400BadRequest() {
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            Double airHumidity = 150.03;
             HumidityDto invalidHumidityDto = HumidityDto.builder()
-                    .registeredAt(registeredAt)
-                    .airHumidity(airHumidity)
+                    .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                    .airHumidity(150.03)
                     .build();
             String requestJson = objectMapper.writeValueAsString(invalidHumidityDto);
 

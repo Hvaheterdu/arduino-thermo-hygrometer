@@ -12,11 +12,9 @@ import api.arduinothermohygrometer.model.Temperature;
 class TemperatureModelMapperTest {
     @Test
     void givenValidTemperatureDto_whenToModel_thenReturnTemperatureModel() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        Double temp = 86.123;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                .registeredAt(registeredAt)
-                .temp(temp)
+                .registeredAt(LocalDateTime.now())
+                .temp(86.123)
                 .build();
 
         Temperature result = TemperatureModelMapper.toModel(temperatureDto);
@@ -27,9 +25,7 @@ class TemperatureModelMapperTest {
 
     @Test
     void givenValidTemperatureModel_whenToDto_thenReturnTemperatureDto() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        Double temp = 86.425;
-        Temperature temperature = new Temperature(registeredAt, temp);
+        Temperature temperature = new Temperature(LocalDateTime.now(), 86.425);
 
         TemperatureDto result = TemperatureModelMapper.toDto(temperature);
 

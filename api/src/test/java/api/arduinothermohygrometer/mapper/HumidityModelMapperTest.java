@@ -12,11 +12,9 @@ import api.arduinothermohygrometer.model.Humidity;
 class HumidityModelMapperTest {
     @Test
     void givenValidHumidityDto_whenToModel_thenReturnHumidityModel() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        Double airHumidity = 86.123;
         HumidityDto humidityDto = HumidityDto.builder()
-                .registeredAt(registeredAt)
-                .airHumidity(airHumidity)
+                .registeredAt(LocalDateTime.now())
+                .airHumidity(86.123)
                 .build();
 
         Humidity result = HumidityModelMapper.toModel(humidityDto);
@@ -27,9 +25,7 @@ class HumidityModelMapperTest {
 
     @Test
     void givenValidHumidityModel_whenToDto_thenReturnHumidityDto() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        Double airHumidity = 86.425;
-        Humidity humidity = new Humidity(registeredAt, airHumidity);
+        Humidity humidity = new Humidity(LocalDateTime.now(), 86.425);
 
         HumidityDto result = HumidityModelMapper.toDto(humidity);
 

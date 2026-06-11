@@ -73,13 +73,13 @@ class OpenApiConfigIT {
     void givenSpringContext_whenOpenApiBeanCreated_thenInfoPropertiesMatch() {
         Info info = openAPI.getInfo();
 
-        assertThat(info.getTitle()).isEqualTo(openApiProperties.title());
-        assertThat(info.getDescription()).isEqualTo(openApiProperties.description());
-        assertThat(info.getVersion()).isEqualTo(buildProperties.getVersion());
-        assertThat(info.getContact().getName()).isEqualTo(openApiProperties.contact().name());
-        assertThat(info.getContact().getEmail()).isEqualTo(openApiProperties.contact().email());
-        assertThat(info.getLicense().getName()).isEqualTo(openApiProperties.license().name());
-        assertThat(info.getLicense().getUrl()).isEqualTo(openApiProperties.license().url());
+        assertThat(openApiProperties.title()).isEqualTo(info.getTitle());
+        assertThat(openApiProperties.description()).isEqualTo(info.getDescription());
+        assertThat(buildProperties.getVersion()).isEqualTo(info.getVersion());
+        assertThat(openApiProperties.contact().name()).isEqualTo(info.getContact().getName());
+        assertThat(openApiProperties.contact().email()).isEqualTo(info.getContact().getEmail());
+        assertThat(openApiProperties.license().name()).isEqualTo(info.getLicense().getName());
+        assertThat(openApiProperties.license().url()).isEqualTo(info.getLicense().getUrl());
     }
 
     @Test
