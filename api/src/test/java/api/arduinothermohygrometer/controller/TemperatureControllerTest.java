@@ -61,7 +61,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.temp",
-                            path -> assertThat(path).asNumber().isEqualTo(temperatureDto.getTemp()));
+                            path -> assertThat(path).asNumber().isEqualTo(20.01));
         }
 
         @Test
@@ -100,9 +100,9 @@ class TemperatureControllerTest extends WebMvcTestBase {
                     .hasStatusOk()
                     .bodyJson()
                     .hasPathSatisfying("$.[0].temp",
-                            path -> assertThat(path).asNumber().isEqualTo(temperatureDtos.getFirst().getTemp()))
+                            path -> assertThat(path).asNumber().isEqualTo(20.01))
                     .hasPathSatisfying("$.[1].temp",
-                            path -> assertThat(path).asNumber().isEqualTo(temperatureDtos.getLast().getTemp()));
+                            path -> assertThat(path).asNumber().isEqualTo(90.01));
         }
 
         @Test
@@ -148,7 +148,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.temp",
-                            path -> assertThat(path).asNumber().isEqualTo(temperatureDto.getTemp()));
+                            path -> assertThat(path).asNumber().isEqualTo(21.01));
         }
 
         @Test

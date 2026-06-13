@@ -61,7 +61,7 @@ class HumidityControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.airHumidity",
-                            path -> assertThat(path).asNumber().isEqualTo(humidityDto.getAirHumidity()));
+                            path -> assertThat(path).asNumber().isEqualTo(20.01));
         }
 
         @Test
@@ -100,9 +100,9 @@ class HumidityControllerTest extends WebMvcTestBase {
                     .hasStatusOk()
                     .bodyJson()
                     .hasPathSatisfying("$.[0].airHumidity",
-                            path -> assertThat(path).asNumber().isEqualTo(humidities.getFirst().getAirHumidity()))
+                            path -> assertThat(path).asNumber().isEqualTo(20.01))
                     .hasPathSatisfying("$.[1].airHumidity",
-                            path -> assertThat(path).asNumber().isEqualTo(humidities.getLast().getAirHumidity()));
+                            path -> assertThat(path).asNumber().isEqualTo(90.01));
         }
 
         @Test
@@ -148,7 +148,7 @@ class HumidityControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.airHumidity",
-                            path -> assertThat(path).asNumber().isEqualTo(humidityDto.getAirHumidity()));
+                            path -> assertThat(path).asNumber().isEqualTo(21.02));
         }
 
         @Test

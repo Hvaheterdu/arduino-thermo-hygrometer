@@ -19,6 +19,7 @@ class HumidityModelMapperTest {
 
         Humidity result = HumidityModelMapper.toModel(humidityDto);
 
+        assertThat(result.getId()).isNull();
         assertThat(result.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
         assertThat(result.getAirHumidity()).isEqualTo(humidityDto.getAirHumidity());
     }

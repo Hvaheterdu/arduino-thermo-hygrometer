@@ -61,7 +61,7 @@ class BatteryControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.batteryStatus",
-                            path -> assertThat(path).asNumber().isEqualTo(batteryDto.getBatteryStatus()));
+                            path -> assertThat(path).asNumber().isEqualTo(90));
         }
 
         @Test
@@ -100,9 +100,9 @@ class BatteryControllerTest extends WebMvcTestBase {
                     .hasStatusOk()
                     .bodyJson()
                     .hasPathSatisfying("$.[0].batteryStatus",
-                            path -> assertThat(path).asNumber().isEqualTo(batteryDtos.getFirst().getBatteryStatus()))
+                            path -> assertThat(path).asNumber().isEqualTo(95))
                     .hasPathSatisfying("$.[1].batteryStatus",
-                            path -> assertThat(path).asNumber().isEqualTo(batteryDtos.getLast().getBatteryStatus()));
+                            path -> assertThat(path).asNumber().isEqualTo(90));
         }
 
         @Test
@@ -148,7 +148,7 @@ class BatteryControllerTest extends WebMvcTestBase {
                     .bodyJson()
                     .hasPath("$.registeredAt")
                     .hasPathSatisfying("$.batteryStatus",
-                            path -> assertThat(path).asNumber().isEqualTo(batteryDto.getBatteryStatus()));
+                            path -> assertThat(path).asNumber().isEqualTo(95));
         }
 
         @Test
