@@ -14,17 +14,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProblemDetailsUtil {
     public static ProblemDetailsDto buildProblemDetail(final HttpStatus httpStatus, final String type, final String title, final String detail,
-            final HttpServletRequest request) {
+                                                       final HttpServletRequest request) {
         String traceId = MDC.get("traceId");
         return ProblemDetailsDto.builder()
-                .type("https://api.arduinothermohygrometer/errors/" + type)
-                .title(title)
-                .detail(detail)
-                .status(httpStatus.value())
-                .instance(request.getRequestURI())
-                .traceId(traceId != null ? traceId : "unknown")
-                .timestamp(LocalDateTime.now())
-                .errors(null)
-                .build();
+                                .type("https://api.arduinothermohygrometer/errors/" + type)
+                                .title(title)
+                                .detail(detail)
+                                .status(httpStatus.value())
+                                .instance(request.getRequestURI())
+                                .traceId(traceId != null ? traceId : "unknown")
+                                .timestamp(LocalDateTime.now())
+                                .errors(null)
+                                .build();
     }
 }

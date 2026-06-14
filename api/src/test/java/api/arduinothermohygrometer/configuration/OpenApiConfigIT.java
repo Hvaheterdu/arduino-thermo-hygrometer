@@ -1,7 +1,5 @@
 package api.arduinothermohygrometer.configuration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -12,14 +10,15 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
+import api.arduinothermohygrometer.properties.OpenApiProperties;
+import api.arduinothermohygrometer.properties.OpenApiServerProperties;
+import api.arduinothermohygrometer.properties.OpenApiSingleServerProperties;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariable;
 
-import api.arduinothermohygrometer.properties.OpenApiProperties;
-import api.arduinothermohygrometer.properties.OpenApiServerProperties;
-import api.arduinothermohygrometer.properties.OpenApiSingleServerProperties;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
@@ -42,20 +41,12 @@ class OpenApiConfigIT {
 
     @Test
     void givenSwaggerUiEndpoint_whenAccessed_thenReturn200OK() {
-        mockMvcTester.get()
-                .uri("/swagger-ui/index.html")
-                .exchange()
-                .assertThat()
-                .hasStatusOk();
+        mockMvcTester.get().uri("/swagger-ui/index.html").exchange().assertThat().hasStatusOk();
     }
 
     @Test
     void givenOpenApiDocsEndpoint_whenAccessed_thenReturn200OK() {
-        mockMvcTester.get()
-                .uri("/v3/api-docs")
-                .exchange()
-                .assertThat()
-                .hasStatusOk();
+        mockMvcTester.get().uri("/v3/api-docs").exchange().assertThat().hasStatusOk();
     }
 
     @Test
@@ -88,16 +79,16 @@ class OpenApiConfigIT {
         OpenApiSingleServerProperties openApiSingleServerProperties = openApiServerProperties.servers().getFirst();
 
         assertThat(servers)
-                .hasSize(1)
-                .first()
-                .satisfies(server -> {
-                    assertThat(server.getUrl()).isEqualTo(openApiSingleServerProperties.url());
-                    assertThat(server.getDescription()).isEqualTo(openApiSingleServerProperties.description());
-                    assertThat(server.getVariables().keySet()).isEqualTo(openApiSingleServerProperties.variables().keySet());
-                    ServerVariable hostServerVariable = server.getVariables().get("host");
-                    assertThat(hostServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("host").defaultValue());
-                    ServerVariable portServerVariable = server.getVariables().get("port");
-                    assertThat(portServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("port").defaultValue());
-                });
+            .hasSize(1)
+            .first()
+            .satisfies(server -> {
+                assertThat(server.getUrl()).isEqualTo(openApiSingleServerProperties.url());
+                assertThat(server.getDescription()).isEqualTo(openApiSingleServerProperties.description());
+                assertThat(server.getVariables().keySet()).isEqualTo(openApiSingleServerProperties.variables().keySet());
+                ServerVariable hostServerVariable = server.getVariables().get("host");
+                assertThat(hostServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("host").defaultValue());
+                ServerVariable portServerVariable = server.getVariables().get("port");
+                assertThat(portServerVariable.getDefault()).isEqualTo(openApiSingleServerProperties.variables().get("port").defaultValue());
+            });
     }
 }

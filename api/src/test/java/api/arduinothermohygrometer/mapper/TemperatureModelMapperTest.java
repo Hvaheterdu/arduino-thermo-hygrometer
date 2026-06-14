@@ -1,7 +1,5 @@
 package api.arduinothermohygrometer.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
@@ -9,13 +7,15 @@ import org.junit.jupiter.api.Test;
 import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.model.Temperature;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class TemperatureModelMapperTest {
     @Test
     void givenValidTemperatureDto_whenToModel_thenReturnTemperatureModel() {
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                .registeredAt(LocalDateTime.now())
-                .temp(86.123)
-                .build();
+                                                      .registeredAt(LocalDateTime.now())
+                                                      .temp(86.123)
+                                                      .build();
 
         Temperature result = TemperatureModelMapper.toModel(temperatureDto);
 

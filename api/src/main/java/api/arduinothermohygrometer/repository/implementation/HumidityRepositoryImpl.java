@@ -23,95 +23,95 @@ public class HumidityRepositoryImpl implements HumidityRepository {
     @Override
     public Optional<Humidity> getHumidityById(final UUID id) {
         String sql = """
-                SELECT *
-                FROM humidities
-                WHERE id = :id
-                """;
+            SELECT *
+            FROM humidities
+            WHERE id = :id
+            """;
 
         return jdbcClient.sql(sql)
-                .param("id", id)
-                .query(Humidity.class)
-                .optional();
+                         .param("id", id)
+                         .query(Humidity.class)
+                         .optional();
     }
 
     @Override
     public List<Humidity> getHumidityByTimestamp(final LocalDateTime timestamp) {
         String sql = """
-                SELECT *
-                FROM humidities
-                WHERE registered_at = :timestamp
-                """;
+            SELECT *
+            FROM humidities
+            WHERE registered_at = :timestamp
+            """;
 
         return jdbcClient.sql(sql)
-                .param("timestamp", timestamp)
-                .query(Humidity.class)
-                .list();
+                         .param("timestamp", timestamp)
+                         .query(Humidity.class)
+                         .list();
     }
 
     @Override
     public List<Humidity> getHumiditiesByDate(final LocalDate date) {
         String sql = """
-                SELECT *
-                FROM humidities
-                WHERE registered_at >= :start AND registered_at < :end
-                """;
+            SELECT *
+            FROM humidities
+            WHERE registered_at >= :start AND registered_at < :end
+            """;
 
         return jdbcClient.sql(sql)
-                .param("start", date.atStartOfDay())
-                .param("end", date.plusDays(1).atStartOfDay())
-                .query(Humidity.class)
-                .list();
+                         .param("start", date.atStartOfDay())
+                         .param("end", date.plusDays(1).atStartOfDay())
+                         .query(Humidity.class)
+                         .list();
     }
 
     @Override
     public Optional<Humidity> createHumidity(final Humidity humidity) {
         String sql = """
-                INSERT INTO humidities (registered_at, air_humidity)
-                VALUES (:registered_at, :air_humidity)
-                RETURNING id, registered_at, air_humidity
-                """;
+            INSERT INTO humidities (registered_at, air_humidity)
+            VALUES (:registered_at, :air_humidity)
+            RETURNING id, registered_at, air_humidity
+            """;
 
         return jdbcClient.sql(sql)
-                .param("registered_at", humidity.getRegisteredAt())
-                .param("air_humidity", humidity.getAirHumidity())
-                .query(Humidity.class)
-                .optional();
+                         .param("registered_at", humidity.getRegisteredAt())
+                         .param("air_humidity", humidity.getAirHumidity())
+                         .query(Humidity.class)
+                         .optional();
     }
 
     @Override
     public void deleteHumidityById(final UUID id) {
         String sql = """
-                DELETE FROM humidities
-                WHERE id = :id
-                """;
+            DELETE FROM humidities
+            WHERE id = :id
+            """;
 
         jdbcClient.sql(sql)
-                .param("id", id)
-                .update();
+                  .param("id", id)
+                  .update();
     }
 
     @Override
     public void deleteHumidityByTimestamp(final LocalDateTime timestamp) {
         String sql = """
-                DELETE FROM humidities
-                WHERE registered_at = :timestamp
-                """;
+            DELETE FROM humidities
+            WHERE registered_at = :timestamp
+            """;
 
         jdbcClient.sql(sql)
-                .param("timestamp", timestamp)
-                .update();
+                  .param("timestamp", timestamp)
+                  .update();
     }
 
     @Override
     public void deleteHumiditiesByDate(final LocalDate date) {
         String sql = """
-                DELETE FROM batteries
-                WHERE registered_at >= :start AND registered_at < :end
-                """;
+            DELETE FROM batteries
+            WHERE registered_at >= :start AND registered_at < :end
+            """;
 
         jdbcClient.sql(sql)
-                .param("start", date.atStartOfDay())
-                .param("end", date.plusDays(1).atStartOfDay())
-                .update();
+                  .param("start", date.atStartOfDay())
+                  .param("end", date.plusDays(1).atStartOfDay())
+                  .update();
     }
 }

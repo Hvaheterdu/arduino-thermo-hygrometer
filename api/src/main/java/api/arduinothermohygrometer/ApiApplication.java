@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @SpringBootApplication
 @ConfigurationPropertiesScan
 public class ApiApplication {
-    public static void main(final String[] args) {
+    static void main(final String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Oslo"));
         SpringApplication.run(ApiApplication.class, args);
     }

@@ -1,7 +1,5 @@
 package api.arduinothermohygrometer.filter;
 
-import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
-
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -14,17 +12,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.ConsumptionProbe;
-
 import api.arduinothermohygrometer.dto.ProblemDetailsDto;
 import api.arduinothermohygrometer.properties.SecurityProperties;
-
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.ConsumptionProbe;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import tools.jackson.databind.ObjectMapper;
+
+import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
 
 public class RateLimitingFilter extends OncePerRequestFilter {
     private static final Duration DURATION = Duration.ofSeconds(600);
@@ -42,7 +40,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull final HttpServletRequest request, @NonNull final HttpServletResponse response,
-            @NonNull final FilterChain filterChain) throws ServletException, IOException {
+                                    @NonNull final FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
         if (!path.startsWith("/api/")) {
             filterChain.doFilter(request, response);
@@ -61,10 +59,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             return;
         }
 
-        long secondsToReset = LocalDateTime.now()
-                .plusNanos(consumptionProbe.getNanosToWaitForReset())
-                .atZone(ZoneId.systemDefault())
-                .toEpochSecond();
+        long secondsToReset = LocalDateTime.now().plusNanos(consumptionProbe.getNanosToWaitForReset()).atZone(ZoneId.systemDefault()).toEpochSecond();
         response.setHeader("X-RateLimit-Limit", String.valueOf(TOKENS));
         response.setHeader("X-RateLimit-Remaining", String.valueOf(consumptionProbe.getRemainingTokens()));
         response.setHeader("X-RateLimit-Reset", String.valueOf(secondsToReset));
@@ -72,13 +67,21 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    private Bucket computeBuckets(final String apiKey) {
+        return buckets.computeIfAbsent(apiKey, _ ->
+            Bucket.builder()
+                  .addLimit(limit -> limit.capacity(TOKENS).refillGreedy(TOKENS, DURATION))
+                  .build()
+        );
+    }
+
     private void buildRateLimitProblemDetails(final HttpServletRequest request, final HttpServletResponse response,
-            final ConsumptionProbe consumptionProbe) throws IOException {
+                                              final ConsumptionProbe consumptionProbe) throws IOException {
         long retryAfterSeconds = Duration.ofNanos(consumptionProbe.getNanosToWaitForRefill()).toSeconds();
         long resetEpochSeconds = LocalDateTime.now()
-                .plusNanos(consumptionProbe.getNanosToWaitForReset())
-                .atZone(ZoneId.systemDefault())
-                .toEpochSecond();
+                                              .plusNanos(consumptionProbe.getNanosToWaitForReset())
+                                              .atZone(ZoneId.systemDefault())
+                                              .toEpochSecond();
         response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
         response.setHeader("Retry-After", String.valueOf(retryAfterSeconds));
@@ -86,19 +89,8 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         response.setHeader("X-RateLimit-Remaining", "0");
         response.setHeader("X-RateLimit-Reset", String.valueOf(resetEpochSeconds));
 
-        ProblemDetailsDto body = buildProblemDetail(
-                HttpStatus.TOO_MANY_REQUESTS,
-                "rate-limit",
-                "Too Many Requests.",
-                "Rate limit exceeded. Try again later.",
-                request);
+        ProblemDetailsDto body = buildProblemDetail(HttpStatus.TOO_MANY_REQUESTS, "rate-limit", "Too Many Requests.",
+                                                    "Rate limit exceeded. Try again later.", request);
         response.getWriter().write(objectMapper.writeValueAsString(body));
-    }
-
-    private Bucket computeBuckets(final String apiKey) {
-        return buckets.computeIfAbsent(apiKey,
-                id -> Bucket.builder()
-                        .addLimit(limit -> limit.capacity(TOKENS).refillGreedy(TOKENS, DURATION))
-                        .build());
     }
 }

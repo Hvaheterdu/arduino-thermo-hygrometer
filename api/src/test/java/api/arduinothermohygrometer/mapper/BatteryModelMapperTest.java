@@ -1,7 +1,5 @@
 package api.arduinothermohygrometer.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
@@ -9,13 +7,15 @@ import org.junit.jupiter.api.Test;
 import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.model.Battery;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class BatteryModelMapperTest {
     @Test
     void givenValidBatteryDto_whenToModel_thenReturnBatteryModel() {
         BatteryDto batteryDto = BatteryDto.builder()
-                .registeredAt(LocalDateTime.now())
-                .batteryStatus(95)
-                .build();
+                                          .registeredAt(LocalDateTime.now())
+                                          .batteryStatus(95)
+                                          .build();
 
         Battery result = BatteryModelMapper.toModel(batteryDto);
 

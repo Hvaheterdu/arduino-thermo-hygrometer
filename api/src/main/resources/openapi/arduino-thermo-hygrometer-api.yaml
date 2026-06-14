@@ -73,7 +73,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-abc123def456ghi789jkl012mno345pq-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     Forbidden:
       summary: API key authenticated but lacks required role.
@@ -85,7 +85,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-def123ghi456jkl789mno012pqr345st-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     NotFound:
       summary: Resource not found.
@@ -97,7 +97,7 @@ components:
         instance: "/api/v1/batteries/00000000-0000-0000-0000-000000000000"
         traceId: "00-ghi123jkl456mno789pqr012stu345vw-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     TooManyRequests:
       summary: Rate limit exceeded.
@@ -109,7 +109,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-mno123pqr456stu789vwx012yz345abc-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     InternalServerError:
       summary: Internal server error.
@@ -121,7 +121,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-pqr123stu456vwx789yz012abc345def-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
   headers:
     X-RateLimit-Limit:
@@ -427,7 +427,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -601,7 +601,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -711,7 +711,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -885,7 +885,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -995,7 +995,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -1169,7 +1169,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -1202,4 +1202,4 @@ paths:
               $ref: "#/components/examples/InternalServerError"
 
 security:
-  - ApiKeyAuth: []
+  - ApiKeyAuth: [ ]

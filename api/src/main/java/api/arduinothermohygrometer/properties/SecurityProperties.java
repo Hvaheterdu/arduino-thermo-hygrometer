@@ -8,9 +8,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 @ConfigurationProperties(prefix = "security")
-public record SecurityProperties(
-        @NotBlank String apiKey,
-        @NotBlank String apiHeaderName,
-        @NotEmpty List<String> apiRoles,
-        @NotBlank String apiSchemeName) {
+public record SecurityProperties(@NotBlank String apiKey, @NotBlank String apiHeaderName, @NotEmpty List<String> apiRoles,
+                                 @NotBlank String apiSchemeName) {
 }

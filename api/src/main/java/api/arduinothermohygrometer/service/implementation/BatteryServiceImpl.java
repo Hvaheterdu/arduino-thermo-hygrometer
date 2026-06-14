@@ -1,7 +1,5 @@
 package api.arduinothermohygrometer.service.implementation;
 
-import static java.util.Collections.emptyList;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +14,9 @@ import api.arduinothermohygrometer.mapper.BatteryModelMapper;
 import api.arduinothermohygrometer.model.Battery;
 import api.arduinothermohygrometer.repository.BatteryRepository;
 import api.arduinothermohygrometer.service.BatteryService;
-
 import lombok.extern.slf4j.Slf4j;
+
+import static java.util.Collections.emptyList;
 
 @Service
 @Slf4j
@@ -35,8 +34,7 @@ public class BatteryServiceImpl implements BatteryService {
     public BatteryDto getBatteryById(final UUID id) throws ResourceNotFoundException {
         log.info("Retrieving battery with id={}.", id);
 
-        Battery battery = batteryRepository.getBatteryById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
+        Battery battery = batteryRepository.getBatteryById(id).orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
 
         log.info("Battery with id={} retrieved.", id);
         return BatteryModelMapper.toDto(battery);
@@ -46,9 +44,8 @@ public class BatteryServiceImpl implements BatteryService {
     public List<BatteryDto> getBatteriesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
         log.info("Retrieving batteries registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
-        List<Battery> batteries = dateOnly
-                ? batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())
-                : batteryRepository.getBatteryByTimestamp(registeredAt);
+        List<Battery> batteries =
+            dateOnly ? batteryRepository.getBatteriesByDate(registeredAt.toLocalDate()) : batteryRepository.getBatteryByTimestamp(registeredAt);
 
         if (batteries.isEmpty()) {
             log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
@@ -56,9 +53,7 @@ public class BatteryServiceImpl implements BatteryService {
         }
 
         log.info("Batteries registeredAt={} retrieved.", registeredAt);
-        return batteries.stream()
-                .map(BatteryModelMapper::toDto)
-                .toList();
+        return batteries.stream().map(BatteryModelMapper::toDto).toList();
     }
 
     @Override
@@ -66,7 +61,7 @@ public class BatteryServiceImpl implements BatteryService {
         log.info("Creating battery.");
 
         Battery battery = batteryRepository.createBattery(BatteryModelMapper.toModel(batteryDto))
-                .orElseThrow(() -> new ResourceNotCreatedException("Battery cannot be created."));
+                                           .orElseThrow(() -> new ResourceNotCreatedException("Battery cannot be created."));
 
         log.info("Battery with id={} and registered_at={} created.", battery.getId(), battery.getRegisteredAt());
         return BatteryModelMapper.toDto(battery);
@@ -89,9 +84,8 @@ public class BatteryServiceImpl implements BatteryService {
     public void deleteBatteriesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
         log.info("Deleting batteries registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
-        List<Battery> batteries = dateOnly
-                ? batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())
-                : batteryRepository.getBatteryByTimestamp(registeredAt);
+        List<Battery> batteries =
+            dateOnly ? batteryRepository.getBatteriesByDate(registeredAt.toLocalDate()) : batteryRepository.getBatteryByTimestamp(registeredAt);
 
         if (batteries.isEmpty()) {
             log.info(REGISTERED_AT_NOT_FOUND, registeredAt);

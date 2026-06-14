@@ -21,18 +21,6 @@ public class TemperatureController implements TemperatureApi {
     }
 
     @Override
-    public ResponseEntity<TemperatureDto> getTemperatureById(final UUID id) {
-        TemperatureDto temperatureDto = temperatureService.getTemperatureById(id);
-        return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<List<TemperatureDto>> getTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
-        List<TemperatureDto> temperatureDtos = temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
-        return new ResponseEntity<>(temperatureDtos, HttpStatus.OK);
-    }
-
-    @Override
     public ResponseEntity<TemperatureDto> createTemperature(final TemperatureDto temperatureDto) {
         TemperatureDto createdTemperatureDto = temperatureService.createTemperature(temperatureDto);
         return new ResponseEntity<>(createdTemperatureDto, HttpStatus.CREATED);
@@ -48,5 +36,17 @@ public class TemperatureController implements TemperatureApi {
     public ResponseEntity<Void> deleteTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
         temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<TemperatureDto> getTemperatureById(final UUID id) {
+        TemperatureDto temperatureDto = temperatureService.getTemperatureById(id);
+        return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<TemperatureDto>> getTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+        List<TemperatureDto> temperatureDtos = temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
+        return new ResponseEntity<>(temperatureDtos, HttpStatus.OK);
     }
 }
