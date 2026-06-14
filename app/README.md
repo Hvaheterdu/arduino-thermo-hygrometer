@@ -24,7 +24,6 @@ npm run app:dev
 - `npm run app:build:dev`: build in development mode and run TypeScript checks
 - `npm run app:test:run`: run Vitest unit and component tests
 - `npm run app:budget`: enforce bundle size budget for generated `dist/assets` files
-- `npm run app:test:e2e`: run Playwright smoke and accessibility tests
 
 Recommended local validation before pushing:
 
