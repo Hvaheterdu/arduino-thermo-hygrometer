@@ -31,16 +31,6 @@ Recommended local validation before pushing:
 npm run app:format && npm run app:lint && npm run app:build:dev && npm run app:budget && npm run app:test:run && npm run app:test:e2e
 ```
 
-## End-to-End Tests
-
-Install browser binaries once:
-
-```bash
-npx playwright install chromium
-```
-
-E2E tests run against Vite preview and are configured in `playwright.config.ts`.
-
 ## Environment Variables
 
 Set these in `.env.local` as needed:
