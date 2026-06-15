@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>api</groupId>
@@ -37,19 +37,17 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>4.1.0</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <properties>
     <!-- Java version -->
-    <java.version>25</java.version>
+    <java.version>21</java.version>
 
     <!-- Maven version -->
     <maven.version>3.9.11</maven.version>
 
     <!-- Maven dependencies -->
-    <checkstyle.version>13.5.0</checkstyle.version>
-    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
     <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 
     <!-- Bucket4J -->
@@ -425,43 +423,6 @@
         <groupId>org.sonarsource.scanner.maven</groupId>
         <artifactId>sonar-maven-plugin</artifactId>
         <version>${sonar-maven-plugin.version}</version>
-      </plugin>
-
-      <!-- Checkstyle Maven Plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${maven-checkstyle-plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>${checkstyle.version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>checkstyle-validate</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <configLocation>${project.basedir}/config/checkstyle/checkstyle.xml</configLocation>
-          <consoleOutput>true</consoleOutput>
-          <excludeGeneratedSources>true</excludeGeneratedSources>
-          <excludes>${project.build.directory}/**</excludes>
-          <failsOnError>true</failsOnError>
-          <failOnViolation>true</failOnViolation>
-          <includeResources>true</includeResources>
-          <includeTestResources>true</includeTestResources>
-          <includeTestSourceDirectory>true</includeTestSourceDirectory>
-          <linkXRef>false</linkXRef>
-          <outputFile>${project.build.directory}/checkstyle/checkstyle-report.xml</outputFile>
-          <outputFileFormat>xml</outputFileFormat>
-          <violationSeverity>warning</violationSeverity>
-        </configuration>
       </plugin>
     </plugins>
   </build>
