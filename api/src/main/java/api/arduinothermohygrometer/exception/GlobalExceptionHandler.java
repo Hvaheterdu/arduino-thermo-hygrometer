@@ -1,8 +1,9 @@
 package api.arduinothermohygrometer.exception;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
+import api.arduinothermohygrometer.dto.ProblemDetailsDto;
+import api.arduinothermohygrometer.dto.ProblemDetailsValidationErrorDto;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
@@ -16,10 +17,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import api.arduinothermohygrometer.dto.ProblemDetailsDto;
-import api.arduinothermohygrometer.dto.ProblemDetailsValidationErrorDto;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
 
@@ -31,7 +30,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                            @NonNull final HttpHeaders httpHeaders,
                                                                            @NonNull final HttpStatusCode httpStatusCode,
                                                                            @NonNull final WebRequest webRequest) {
-        log.error("Method argument not valid exception with message={}.", methodArgumentNotValidException.getMessage());
+        log.error("Method argument not valid exception with message={}", methodArgumentNotValidException.getMessage());
 
         List<ProblemDetailsValidationErrorDto> errors = methodArgumentNotValidException.getBindingResult()
                                                                                        .getFieldErrors()
@@ -65,7 +64,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ProblemDetailsDto> handleResourceNotFound(final ResourceNotFoundException resourceNotFoundException,
                                                                     final HttpServletRequest request) {
-        log.error("Resource not found exception with message={}.", resourceNotFoundException.getMessage());
+        log.error("Resource not found exception with message={}", resourceNotFoundException.getMessage());
         ProblemDetailsDto body = buildProblemDetail(HttpStatus.NOT_FOUND, "resource-not-found", "Resource not found.",
                                                     resourceNotFoundException.getMessage(), request);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
@@ -74,7 +73,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotCreatedException.class)
     public ResponseEntity<ProblemDetailsDto> handleResourceNotCreated(final ResourceNotCreatedException resourceNotCreatedException,
                                                                       final HttpServletRequest request) {
-        log.error("Resource not created exception with message={}.", resourceNotCreatedException.getMessage());
+        log.error("Resource not created exception with message={}", resourceNotCreatedException.getMessage());
         ProblemDetailsDto body = buildProblemDetail(HttpStatus.BAD_REQUEST, "resource-not-created", "Resource not created.",
                                                     resourceNotCreatedException.getMessage(), request);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
@@ -82,7 +81,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetailsDto> handleGeneralException(final Exception exception, final HttpServletRequest request) {
-        log.error("Internal server error exception with message={}.", exception.getMessage());
+        log.error("Internal server error exception with message={}", exception.getMessage());
         ProblemDetailsDto body = buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, "internal-error", "Internal server error.",
                                                     exception.getMessage(), request);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);

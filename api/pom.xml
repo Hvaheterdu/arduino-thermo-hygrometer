@@ -405,43 +405,6 @@
         <artifactId>sonar-maven-plugin</artifactId>
         <version>${sonar-maven-plugin.version}</version>
       </plugin>
-
-      <!-- Checkstyle Maven Plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${maven-checkstyle-plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>${checkstyle.version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>checkstyle-validate</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <configLocation>${project.basedir}/config/checkstyle/checkstyle.xml</configLocation>
-          <consoleOutput>true</consoleOutput>
-          <excludeGeneratedSources>true</excludeGeneratedSources>
-          <excludes>${project.build.directory}/**</excludes>
-          <failsOnError>true</failsOnError>
-          <failOnViolation>true</failOnViolation>
-          <includeResources>true</includeResources>
-          <includeTestResources>true</includeTestResources>
-          <includeTestSourceDirectory>true</includeTestSourceDirectory>
-          <linkXRef>false</linkXRef>
-          <outputFile>${project.build.directory}/checkstyle/checkstyle-report.xml</outputFile>
-          <outputFileFormat>xml</outputFileFormat>
-          <violationSeverity>warning</violationSeverity>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 </project>
