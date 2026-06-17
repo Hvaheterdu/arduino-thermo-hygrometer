@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>api</groupId>
@@ -37,7 +37,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>4.1.0</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <properties>
@@ -47,7 +47,7 @@
     <!-- Maven version -->
     <maven.version>3.9.11</maven.version>
 
-    <!-- Maven dependencies -->
+    <!-- Maven plugin dependencies -->
     <checkstyle.version>13.5.0</checkstyle.version>
     <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
     <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
@@ -55,23 +55,8 @@
     <!-- Bucket4J -->
     <bucket4j.version>8.19.0</bucket4j.version>
 
-    <!-- Flyway version -->
-    <flyway-database-postgresql.version>12.8.1</flyway-database-postgresql.version>
-
-    <!-- Jakarta persistence version -->
-    <jakarta-persistence.version>3.2.0</jakarta-persistence.version>
-
-    <!-- Logback version -->
-    <logback-classic.version>1.5.34</logback-classic.version>
-
-    <!-- Lombok version -->
-    <lombok.version>1.18.46</lombok.version>
-
     <!-- Postgresql version -->
     <postgresql.version>42.7.11</postgresql.version>
-
-    <!-- SLF4J version -->
-    <slf4j-api.version>2.0.18</slf4j-api.version>
 
     <!-- Springdoc/Swagger version -->
     <springdoc-openapi-starter-webmvc-ui.version>3.0.3</springdoc-openapi-starter-webmvc-ui.version>
@@ -148,7 +133,6 @@
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-database-postgresql</artifactId>
-      <version>${flyway-database-postgresql.version}</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -156,14 +140,12 @@
     <dependency>
       <groupId>jakarta.persistence</groupId>
       <artifactId>jakarta.persistence-api</artifactId>
-      <version>${jakarta-persistence.version}</version>
     </dependency>
 
     <!-- Lombok -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
       <optional>true</optional>
     </dependency>
 
@@ -171,7 +153,6 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>${logback-classic.version}</version>
       <scope>compile</scope>
     </dependency>
 
@@ -179,7 +160,6 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>${postgresql.version}</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -187,7 +167,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${slf4j-api.version}</version>
     </dependency>
 
     <!-- Springdoc/Swagger -->
