@@ -54,9 +54,7 @@
     "app:dev": "vite --mode development",
     "app:preview": "vite preview --mode development",
     "app:test": "vitest",
-    "app:test:run": "vitest run",
-    "version-bump-ps": "pwsh scripts/version_bump_ps.ps1",
-    "version-bump-sh": "sh scripts/version_bump_sh.sh"
+    "app:test:run": "vitest run"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.0",
