@@ -34,18 +34,19 @@ const isProblemDetails = (value: unknown): value is ProblemDetailsDto => {
 export const mapApiError = (error: unknown): ApiError => {
   if (isProblemDetails(error)) {
     const mappedProblemDetailsError =
-      error.status === 401 || error.status === 403 ?
-        new ApiError(
-          "You are not authorized to access this data. Please verify your API key.",
-          error.status,
-          error.traceId
-        )
-      : error.status === 404 ? new ApiError("The requested API resource was not found.", error.status, error.traceId)
-      : error.status === 429 ?
-        new ApiError("Too many requests were sent. Please retry shortly.", error.status, error.traceId)
-      : error.status >= 500 ?
-        new ApiError("The API is currently unavailable. Please try again shortly.", error.status, error.traceId)
-      : new ApiError(error.detail, error.status, error.traceId);
+      error.status === 401 || error.status === 403
+        ? new ApiError(
+            "You are not authorized to access this data. Please verify your API key.",
+            error.status,
+            error.traceId
+          )
+        : error.status === 404
+          ? new ApiError("The requested API resource was not found.", error.status, error.traceId)
+          : error.status === 429
+            ? new ApiError("Too many requests were sent. Please retry shortly.", error.status, error.traceId)
+            : error.status >= 500
+              ? new ApiError("The API is currently unavailable. Please try again shortly.", error.status, error.traceId)
+              : new ApiError(error.detail, error.status, error.traceId);
 
     frontendLogger.warn("Mapped API problem-details response to frontend ApiError.", {
       statusCode: mappedProblemDetailsError.statusCode,

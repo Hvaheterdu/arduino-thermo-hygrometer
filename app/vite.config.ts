@@ -33,9 +33,8 @@ export default defineConfig(() => {
         tsconfigPath: "./tsconfig.json",
         root: import.meta.dirname
       },
-      eslint: {
-        useFlatConfig: true,
-        lintCommand: `eslint ${import.meta.dirname}`
+      oxlint: {
+        lintCommand: "oxlint"
       }
     }),
     viteReact(),

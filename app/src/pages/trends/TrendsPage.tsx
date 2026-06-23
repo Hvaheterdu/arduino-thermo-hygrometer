@@ -20,12 +20,12 @@ export const TrendsPage = (): JSX.Element => {
         </p>
       </section>
 
-      {trendsQuery.isError ?
+      {trendsQuery.isError ? (
         <section className="panel panel-error" role="alert">
           <h2>Unable to load trends</h2>
           <p>{trendsQuery.error.message}</p>
         </section>
-      : null}
+      ) : null}
 
       <TrendSummaryCards
         trendsInsights={trendsQuery.data}

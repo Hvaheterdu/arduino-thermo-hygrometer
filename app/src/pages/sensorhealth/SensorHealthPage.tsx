@@ -21,20 +21,20 @@ export const SensorHealthPage = (): JSX.Element => {
         <p>Sensor health is derived from a rolling seven-day window of historical API readings.</p>
       </section>
 
-      {healthQuery.isError ?
+      {healthQuery.isError ? (
         <section className="panel panel-error" role="alert">
           <h2>Unable to load sensor health</h2>
           <p>{healthQuery.error.message}</p>
         </section>
-      : null}
+      ) : null}
 
       <section className="panel health-grid" aria-label="Sensor health modules" aria-busy={healthQuery.isFetching}>
         <article className="health-card">
           <h2>Data Freshness</h2>
           <p>
-            {healthQuery.data?.latestRegisteredAt ?
-              formatRegisteredAt(healthQuery.data.latestRegisteredAt)
-            : "No timestamp available"}
+            {healthQuery.data?.latestRegisteredAt
+              ? formatRegisteredAt(healthQuery.data.latestRegisteredAt)
+              : "No timestamp available"}
           </p>
           <p className="trend-subtext">
             Age: {valueOrFallback(healthQuery.data?.minutesSinceLatest ?? null, "Unknown")} minutes

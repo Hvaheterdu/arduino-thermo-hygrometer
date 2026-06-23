@@ -27,8 +27,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "npm": ">=11.3.0",
-    "node": ">=24.0.0"
+    "npm": ">=11.15.0",
+    "node": ">=24.17.0"
   },
   "browserslist": {
     "production": [
@@ -44,14 +44,13 @@
     "last 1 edge version"
   ],
   "scripts": {
-    "app:budget": "node scripts/check_bundle_size.mjs",
     "app:build:dev": "vite build --mode development && tsc --noEmit",
     "app:build:production": "vite build --mode production && tsc --noEmit",
     "app:build:staging": "vite build --mode staging && tsc --noEmit",
-    "app:format": "prettier --write . \"*.{ts,tsx,html,css,json,md, yaml, yml}\"",
-    "app:format:check": "prettier --check \"*.{ts,tsx,html,css,json,md, yaml, yml}\"",
-    "app:lint": "eslint \"**/*.{ts,tsx}\"",
-    "app:lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
+    "app:format": "oxfmt",
+    "app:format:check": "oxfmt --check",
+    "app:lint": "oxlint",
+    "app:lint:fix": "oxlint --fix",
     "app:dev": "vite --mode development",
     "app:preview": "vite preview --mode development",
     "app:test": "vitest",
@@ -68,27 +67,18 @@
     "react-router": "7.17.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^25.9.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
-    "@vitest/eslint-plugin": "^1.6.20",
-    "eslint": "^9.39.4",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-check-file": "^3.3.1",
-    "eslint-plugin-prettier": "^5.5.6",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "eslint-plugin-testing-library": "^7.16.2",
     "globals": "^17.6.0",
     "jsdom": "^29.1.1",
-    "prettier": "^3.8.4",
+    "oxfmt": "^0.56.0",
+    "oxlint": "^1.71.0",
+    "oxlint-tsgolint": "^0.23.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.61.0",
     "vite": "^8.0.16",
     "vite-plugin-checker": "^0.14.1",
     "vite-plugin-svgr": "^5.2.0",

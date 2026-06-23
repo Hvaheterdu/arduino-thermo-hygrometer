@@ -42,9 +42,7 @@ export const DashboardPage = (): JSX.Element => {
 
         <DashboardLoadStatus isHistoricalReadingsLoading={readingsQuery.isFetching} />
 
-        {readingsQuery.isError ?
-          <DashboardErrorPanel errorMessage={readingsQuery.error.message} />
-        : null}
+        {readingsQuery.isError ? <DashboardErrorPanel errorMessage={readingsQuery.error.message} /> : null}
 
         <ReadingsTable
           batteryReadings={readingsQuery.data?.battery ?? []}

@@ -18,9 +18,9 @@ npm run app:dev
 
 ## Quality Scripts
 
-- `npm run app:format`: format files with Prettier
+- `npm run app:format`: format files with Oxfmt
 - `npm run app:format:check`: check formatting without writing changes
-- `npm run app:lint`: run ESLint
+- `npm run app:lint`: run Oxlint
 - `npm run app:build:dev`: build in development mode and run TypeScript checks
 - `npm run app:test:run`: run Vitest unit and component tests
 - `npm run app:budget`: enforce bundle size budget for generated `dist/assets` files
