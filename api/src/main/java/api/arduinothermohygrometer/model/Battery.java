@@ -26,7 +26,8 @@ public class Battery {
     @Column(name = "battery_status", nullable = false)
     private int batteryStatus;
 
-    public Battery(final LocalDateTime registeredAt, final int batteryStatus) {
+    public Battery(final LocalDateTime registeredAt,
+                   final int batteryStatus) {
         this.registeredAt = registeredAt;
         this.batteryStatus = batteryStatus;
     }

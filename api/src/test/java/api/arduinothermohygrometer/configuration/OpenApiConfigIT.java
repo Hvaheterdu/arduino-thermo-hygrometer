@@ -41,12 +41,20 @@ class OpenApiConfigIT {
 
     @Test
     void givenSwaggerUiEndpoint_whenAccessed_thenReturn200OK() {
-        mockMvcTester.get().uri("/swagger-ui/index.html").exchange().assertThat().hasStatusOk();
+        mockMvcTester.get()
+                     .uri("/swagger-ui/index.html")
+                     .exchange()
+                     .assertThat()
+                     .hasStatusOk();
     }
 
     @Test
     void givenOpenApiDocsEndpoint_whenAccessed_thenReturn200OK() {
-        mockMvcTester.get().uri("/v3/api-docs").exchange().assertThat().hasStatusOk();
+        mockMvcTester.get()
+                     .uri("/v3/api-docs")
+                     .exchange()
+                     .assertThat()
+                     .hasStatusOk();
     }
 
     @Test

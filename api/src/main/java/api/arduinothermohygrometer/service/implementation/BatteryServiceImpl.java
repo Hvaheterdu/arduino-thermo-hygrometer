@@ -1,5 +1,12 @@
 package api.arduinothermohygrometer.service.implementation;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
@@ -8,12 +15,6 @@ import api.arduinothermohygrometer.model.Battery;
 import api.arduinothermohygrometer.repository.BatteryRepository;
 import api.arduinothermohygrometer.service.BatteryService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import static java.util.Collections.emptyList;
 
@@ -40,7 +41,8 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public List<BatteryDto> getBatteriesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+    public List<BatteryDto> getBatteriesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                          final boolean dateOnly) {
         log.info("Retrieving batteries registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
         List<Battery> batteries =
@@ -80,7 +82,8 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     @Override
-    public void deleteBatteriesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+    public void deleteBatteriesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                 final boolean dateOnly) {
         log.info("Deleting batteries registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
         List<Battery> batteries =

@@ -27,7 +27,8 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper;
     private final SecurityProperties securityProperties;
 
-    public ApiKeyFilter(final AuthenticationManager authenticationManager, final ObjectMapper objectMapper,
+    public ApiKeyFilter(final AuthenticationManager authenticationManager,
+                        final ObjectMapper objectMapper,
                         final SecurityProperties securityProperties) {
         this.authenticationManager = authenticationManager;
         this.objectMapper = objectMapper;
@@ -35,7 +36,8 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(final HttpServletRequest request, @NonNull final HttpServletResponse response,
+    protected void doFilterInternal(final HttpServletRequest request,
+                                    @NonNull final HttpServletResponse response,
                                     @NonNull final FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
         if (!path.startsWith("/api/")) {
@@ -61,8 +63,12 @@ public class ApiKeyFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void writeProblemDetails(final HttpStatus httpStatus, final String type, final String title, final String detail,
-                                     final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+    private void writeProblemDetails(final HttpStatus httpStatus,
+                                     final String type,
+                                     final String title,
+                                     final String detail,
+                                     final HttpServletRequest request,
+                                     final HttpServletResponse response) throws IOException {
         ProblemDetailsDto body = buildProblemDetail(httpStatus, type, title, detail, request);
         response.setStatus(httpStatus.value());
         response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);

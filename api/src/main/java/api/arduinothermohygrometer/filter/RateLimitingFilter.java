@@ -33,13 +33,15 @@ public class RateLimitingFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper;
     private final SecurityProperties securityProperties;
 
-    public RateLimitingFilter(final ObjectMapper objectMapper, final SecurityProperties securityProperties) {
+    public RateLimitingFilter(final ObjectMapper objectMapper,
+                              final SecurityProperties securityProperties) {
         this.objectMapper = objectMapper;
         this.securityProperties = securityProperties;
     }
 
     @Override
-    protected void doFilterInternal(@NonNull final HttpServletRequest request, @NonNull final HttpServletResponse response,
+    protected void doFilterInternal(@NonNull final HttpServletRequest request,
+                                    @NonNull final HttpServletResponse response,
                                     @NonNull final FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
         if (!path.startsWith("/api/")) {
@@ -75,7 +77,8 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         );
     }
 
-    private void buildRateLimitProblemDetails(final HttpServletRequest request, final HttpServletResponse response,
+    private void buildRateLimitProblemDetails(final HttpServletRequest request,
+                                              final HttpServletResponse response,
                                               final ConsumptionProbe consumptionProbe) throws IOException {
         long retryAfterSeconds = Duration.ofNanos(consumptionProbe.getNanosToWaitForRefill()).toSeconds();
         long resetEpochSeconds = LocalDateTime.now()

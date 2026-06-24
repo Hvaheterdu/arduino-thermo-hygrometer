@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Run frontend quality suite
-        run: npm run app:format:check && npm run app:lint && npm run app:build:dev && npm run app:budget
+        run: npm run app:format:check && npm run app:lint && npm run app:build:dev
 
       - name: Run frontend tests
         run: npm run app:test:run

@@ -90,12 +90,20 @@ class SecurityConfigIT {
 
         @Test
         void givenNoApiKey_whenGettingInfo_thenReturn401Unauthorized() {
-            mockMvcTester.get().uri("/actuator/info").exchange().assertThat().hasStatus(HttpStatus.UNAUTHORIZED);
+            mockMvcTester.get()
+                         .uri("/actuator/info")
+                         .exchange()
+                         .assertThat()
+                         .hasStatus(HttpStatus.UNAUTHORIZED);
         }
 
         @Test
         void givenNoApiKey_whenGettingRandomEndpoint_thenReturn401Unauthorized() {
-            mockMvcTester.get().uri("/random-endpoint").exchange().assertThat().hasStatus(HttpStatus.UNAUTHORIZED);
+            mockMvcTester.get()
+                         .uri("/random-endpoint")
+                         .exchange()
+                         .assertThat()
+                         .hasStatus(HttpStatus.UNAUTHORIZED);
         }
 
         @Test

@@ -42,7 +42,8 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public List<TemperatureDto> getTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+    public List<TemperatureDto> getTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                                 final boolean dateOnly) {
         log.info("Retrieving temperatures registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
         List<Temperature> temperatures = dateOnly ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())
@@ -82,7 +83,8 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     @Override
-    public void deleteTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException {
+    public void deleteTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                    final boolean dateOnly) throws ResourceNotFoundException {
         log.info("Deleting temperatures registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
         List<Temperature> temperatures = dateOnly ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())

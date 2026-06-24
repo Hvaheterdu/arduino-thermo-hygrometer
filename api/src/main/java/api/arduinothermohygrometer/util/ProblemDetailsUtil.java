@@ -13,7 +13,10 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProblemDetailsUtil {
-    public static ProblemDetailsDto buildProblemDetail(final HttpStatus httpStatus, final String type, final String title, final String detail,
+    public static ProblemDetailsDto buildProblemDetail(final HttpStatus httpStatus,
+                                                       final String type,
+                                                       final String title,
+                                                       final String detail,
                                                        final HttpServletRequest request) {
         String traceId = MDC.get("traceId");
         return ProblemDetailsDto.builder()

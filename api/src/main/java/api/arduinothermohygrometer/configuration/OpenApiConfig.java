@@ -23,8 +23,10 @@ public class OpenApiConfig {
     private final OpenApiServerProperties openApiServerProperties;
     private final SecurityProperties securityProperties;
 
-    public OpenApiConfig(final BuildProperties buildProperties, final OpenApiProperties openApiProperties,
-                         final OpenApiServerProperties openApiServerProperties, final SecurityProperties securityProperties) {
+    public OpenApiConfig(final BuildProperties buildProperties,
+                         final OpenApiProperties openApiProperties,
+                         final OpenApiServerProperties openApiServerProperties,
+                         final SecurityProperties securityProperties) {
         this.buildProperties = buildProperties;
         this.openApiProperties = openApiProperties;
         this.openApiServerProperties = openApiServerProperties;

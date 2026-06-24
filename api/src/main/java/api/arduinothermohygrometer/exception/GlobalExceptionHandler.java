@@ -1,9 +1,8 @@
 package api.arduinothermohygrometer.exception;
 
-import api.arduinothermohygrometer.dto.ProblemDetailsDto;
-import api.arduinothermohygrometer.dto.ProblemDetailsValidationErrorDto;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.jspecify.annotations.NonNull;
 import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +16,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import api.arduinothermohygrometer.dto.ProblemDetailsDto;
+import api.arduinothermohygrometer.dto.ProblemDetailsValidationErrorDto;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
 
@@ -80,7 +81,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetailsDto> handleGeneralException(final Exception exception, final HttpServletRequest request) {
+    public ResponseEntity<ProblemDetailsDto> handleGeneralException(final Exception exception,
+                                                                    final HttpServletRequest request) {
         log.error("Internal server error exception with message={}", exception.getMessage());
         ProblemDetailsDto body = buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, "internal-error", "Internal server error.",
                                                     exception.getMessage(), request);
