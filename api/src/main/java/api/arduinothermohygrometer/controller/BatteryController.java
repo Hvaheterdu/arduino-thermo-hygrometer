@@ -27,7 +27,8 @@ public class BatteryController implements BatteryApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteBatteriesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+    public ResponseEntity<Void> deleteBatteriesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                                 final boolean dateOnly) {
         batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -39,7 +40,8 @@ public class BatteryController implements BatteryApi {
     }
 
     @Override
-    public ResponseEntity<List<BatteryDto>> getBatteriesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+    public ResponseEntity<List<BatteryDto>> getBatteriesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                                          final boolean dateOnly) {
         List<BatteryDto> batteryDtos = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
         return new ResponseEntity<>(batteryDtos, HttpStatus.OK);
     }

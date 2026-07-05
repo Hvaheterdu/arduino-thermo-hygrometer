@@ -41,7 +41,8 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public List<HumidityDto> getHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+    public List<HumidityDto> getHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                            final boolean dateOnly) {
         log.info("Retrieving humidities registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
         List<Humidity> humidities =
@@ -81,7 +82,8 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     @Override
-    public void deleteHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+    public void deleteHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                  final boolean dateOnly) {
         log.info("Deleting humidities registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
         List<Humidity> humidities =

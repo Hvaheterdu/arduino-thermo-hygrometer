@@ -113,9 +113,9 @@ export const buildSensorHealthInsights = (snapshots: readonly DailySnapshot[]): 
 
   const latestRegisteredAt = getLatestTimestamp(snapshots);
   const minutesSinceLatest =
-    latestRegisteredAt === null ? null : (
-      Math.max(0, Math.round((Date.now() - Date.parse(latestRegisteredAt)) / 60_000))
-    );
+    latestRegisteredAt === null
+      ? null
+      : Math.max(0, Math.round((Date.now() - Date.parse(latestRegisteredAt)) / 60_000));
 
   const coveragePercent = totalDays === 0 ? 0 : Math.round((daysWithReadings / totalDays) * 100);
   const apiReliabilityPercent = totalDays === 0 ? 0 : Math.round((successfulDays / totalDays) * 100);

@@ -33,7 +33,8 @@ public class TemperatureController implements TemperatureApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+    public ResponseEntity<Void> deleteTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                                    final boolean dateOnly) {
         temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -45,7 +46,8 @@ public class TemperatureController implements TemperatureApi {
     }
 
     @Override
-    public ResponseEntity<List<TemperatureDto>> getTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt, final boolean dateOnly) {
+    public ResponseEntity<List<TemperatureDto>> getTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt,
+                                                                                 final boolean dateOnly) {
         List<TemperatureDto> temperatureDtos = temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
         return new ResponseEntity<>(temperatureDtos, HttpStatus.OK);
     }

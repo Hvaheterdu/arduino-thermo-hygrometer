@@ -22,15 +22,9 @@ export const TrendDailyAveragesTable = ({
           <thead>
             <tr>
               <th scope="col">Day</th>
-              {trendMetricVisibility.battery ?
-                <th scope="col">Battery</th>
-              : null}
-              {trendMetricVisibility.temperature ?
-                <th scope="col">Temperature</th>
-              : null}
-              {trendMetricVisibility.humidity ?
-                <th scope="col">Humidity</th>
-              : null}
+              {trendMetricVisibility.battery ? <th scope="col">Battery</th> : null}
+              {trendMetricVisibility.temperature ? <th scope="col">Temperature</th> : null}
+              {trendMetricVisibility.humidity ? <th scope="col">Humidity</th> : null}
               <th scope="col">Samples</th>
             </tr>
           </thead>
@@ -39,15 +33,15 @@ export const TrendDailyAveragesTable = ({
               return (
                 <tr key={dailyTrendPoint.dayLabel}>
                   <td>{dailyTrendPoint.dayLabel}</td>
-                  {trendMetricVisibility.battery ?
+                  {trendMetricVisibility.battery ? (
                     <td>{formatTrendMetricValue(dailyTrendPoint.batteryAverage, "%")}</td>
-                  : null}
-                  {trendMetricVisibility.temperature ?
+                  ) : null}
+                  {trendMetricVisibility.temperature ? (
                     <td>{formatTrendMetricValue(dailyTrendPoint.temperatureAverage, "°C")}</td>
-                  : null}
-                  {trendMetricVisibility.humidity ?
+                  ) : null}
+                  {trendMetricVisibility.humidity ? (
                     <td>{formatTrendMetricValue(dailyTrendPoint.humidityAverage, "%")}</td>
-                  : null}
+                  ) : null}
                   <td>{dailyTrendPoint.sampleCount}</td>
                 </tr>
               );

@@ -39,7 +39,9 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final SecurityProperties securityProperties;
 
-    public SecurityConfig(final CorsProperties corsProperties, final ObjectMapper objectMapper, final SecurityProperties securityProperties) {
+    public SecurityConfig(final CorsProperties corsProperties,
+                          final ObjectMapper objectMapper,
+                          final SecurityProperties securityProperties) {
         this.corsProperties = corsProperties;
         this.objectMapper = objectMapper;
         this.securityProperties = securityProperties;
@@ -61,7 +63,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity, final ApiKeyFilter apiKeyFilter,
+    SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity,
+                                            final ApiKeyFilter apiKeyFilter,
                                             final RateLimitingFilter rateLimitingFilter) {
         return httpSecurity.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                                                       authorizationManagerRequestMatcherRegistry
@@ -128,7 +131,8 @@ public class SecurityConfig {
         return urlBasedCorsConfigurationSource;
     }
 
-    private void writeProblemDetails(final HttpServletResponse response, final ProblemDetailsDto body) throws IOException {
+    private void writeProblemDetails(final HttpServletResponse response,
+                                     final ProblemDetailsDto body) throws IOException {
         response.setStatus(body.getStatus());
         response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(body));

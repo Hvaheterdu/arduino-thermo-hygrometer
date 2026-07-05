@@ -18,9 +18,9 @@ export const TrendChartsSection = ({
 }: TrendChartsSectionProps): JSX.Element => {
   return (
     <section className="panel metric-charts-grid" aria-label="Trend charts" aria-busy={isLoading}>
-      {hasAtLeastOneVisibleMetric ?
+      {hasAtLeastOneVisibleMetric ? (
         <>
-          {trendMetricVisibility.battery ?
+          {trendMetricVisibility.battery ? (
             <MetricTrendChart
               title="Battery"
               unit="%"
@@ -28,8 +28,8 @@ export const TrendChartsSection = ({
               getValue={(dailyTrendPoint) => dailyTrendPoint.batteryAverage}
               lineClassName="metric-chart-battery"
             />
-          : null}
-          {trendMetricVisibility.temperature ?
+          ) : null}
+          {trendMetricVisibility.temperature ? (
             <MetricTrendChart
               title="Temperature"
               unit="°C"
@@ -37,8 +37,8 @@ export const TrendChartsSection = ({
               getValue={(dailyTrendPoint) => dailyTrendPoint.temperatureAverage}
               lineClassName="metric-chart-temperature"
             />
-          : null}
-          {trendMetricVisibility.humidity ?
+          ) : null}
+          {trendMetricVisibility.humidity ? (
             <MetricTrendChart
               title="Humidity"
               unit="%"
@@ -46,9 +46,11 @@ export const TrendChartsSection = ({
               getValue={(dailyTrendPoint) => dailyTrendPoint.humidityAverage}
               lineClassName="metric-chart-humidity"
             />
-          : null}
+          ) : null}
         </>
-      : <p className="field-help">Enable at least one metric to view charts.</p>}
+      ) : (
+        <p className="field-help">Enable at least one metric to view charts.</p>
+      )}
     </section>
   );
 };

@@ -16,7 +16,7 @@ export const TrendSummaryCards = ({
 }: TrendSummaryCardsProps): JSX.Element => {
   return (
     <section className="panel trends-grid" aria-label="Trend modules" aria-busy={isLoading}>
-      {trendMetricVisibility.battery ?
+      {trendMetricVisibility.battery ? (
         <article className="trend-card">
           <h2>Battery Direction</h2>
           <p>{formatTrendMetricValue(trendsInsights?.battery.currentValue, "%")}</p>
@@ -24,9 +24,9 @@ export const TrendSummaryCards = ({
             7-day delta: {formatTrendMetricDeltaValue(trendsInsights?.battery.deltaValue, "%")}
           </p>
         </article>
-      : null}
+      ) : null}
 
-      {trendMetricVisibility.temperature ?
+      {trendMetricVisibility.temperature ? (
         <article className="trend-card">
           <h2>Temperature Direction</h2>
           <p>{formatTrendMetricValue(trendsInsights?.temperature.currentValue, "°C")}</p>
@@ -34,9 +34,9 @@ export const TrendSummaryCards = ({
             7-day delta: {formatTrendMetricDeltaValue(trendsInsights?.temperature.deltaValue, "°C")}
           </p>
         </article>
-      : null}
+      ) : null}
 
-      {trendMetricVisibility.humidity ?
+      {trendMetricVisibility.humidity ? (
         <article className="trend-card">
           <h2>Humidity Direction</h2>
           <p>{formatTrendMetricValue(trendsInsights?.humidity.currentValue, "%")}</p>
@@ -44,7 +44,7 @@ export const TrendSummaryCards = ({
             7-day delta: {formatTrendMetricDeltaValue(trendsInsights?.humidity.deltaValue, "%")}
           </p>
         </article>
-      : null}
+      ) : null}
     </section>
   );
 };
