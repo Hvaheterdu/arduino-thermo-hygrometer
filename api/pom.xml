@@ -64,7 +64,7 @@
     <!-- OpenAPI Generator -->
     <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
     <okhttp3.version>5.4.0</okhttp3.version>
-    <swagger.version>2.2.49</swagger.version>
+    <swagger.version>2.2.52</swagger.version>
     <openapi-generator-maven-plugin.version>7.23.0</openapi-generator-maven-plugin.version>
 
     <!-- Testcontainers version -->
