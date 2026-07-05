@@ -1,37 +1,32 @@
 package api.arduinothermohygrometer.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDateTime;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import api.arduinothermohygrometer.dto.HumidityDto;
 import api.arduinothermohygrometer.model.Humidity;
 
-@DisplayName("HumidityModelMapper unit tests.")
+import static org.assertj.core.api.Assertions.assertThat;
+
 class HumidityModelMapperTest {
     @Test
     void givenValidHumidityDto_whenToModel_thenReturnHumidityModel() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        Double airHumidity = 86.123;
         HumidityDto humidityDto = HumidityDto.builder()
-                .registeredAt(registeredAt)
-                .airHumidity(airHumidity)
-                .build();
+                                             .registeredAt(LocalDateTime.now())
+                                             .airHumidity(86.123)
+                                             .build();
 
         Humidity result = HumidityModelMapper.toModel(humidityDto);
 
+        assertThat(result.getId()).isNull();
         assertThat(result.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
         assertThat(result.getAirHumidity()).isEqualTo(humidityDto.getAirHumidity());
     }
 
     @Test
     void givenValidHumidityModel_whenToDto_thenReturnHumidityDto() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        Double airHumidity = 86.425;
-        Humidity humidity = new Humidity(registeredAt, airHumidity);
+        Humidity humidity = new Humidity(LocalDateTime.now(), 86.425);
 
         HumidityDto result = HumidityModelMapper.toDto(humidity);
 

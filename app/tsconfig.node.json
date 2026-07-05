@@ -16,6 +16,6 @@
     ],
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.node.tsbuildinfo"
   },
-  "exclude": ["../.cert", "../.github", "../.idea", "dist", "node_modules", "../api", "../api/target"],
+  "exclude": ["../.github", "dist", "node_modules", "../api", "../api/target"],
   "include": ["vite.config.ts"]
 }

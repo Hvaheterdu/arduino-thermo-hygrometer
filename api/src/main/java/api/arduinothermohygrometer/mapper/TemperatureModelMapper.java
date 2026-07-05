@@ -13,9 +13,9 @@ public class TemperatureModelMapper {
 
     public static TemperatureDto toDto(final Temperature temperature) {
         return TemperatureDto.builder()
-                .id(temperature.getId())
-                .registeredAt(temperature.getRegisteredAt())
-                .temp(temperature.getTemp())
-                .build();
+                             .id(temperature.getId())
+                             .registeredAt(temperature.getRegisteredAt())
+                             .temp(temperature.getTemp())
+                             .build();
     }
 }

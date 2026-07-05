@@ -1,6 +1,6 @@
 cors:
   allowed-headers: [ Accept, Content-Type, X-API-KEY ]
-  allowed-methods: [ GET, POST, DELETE ]
+  allowed-methods: [ GET, DELETE, POST ]
   allowed-origins: [ http://localhost:3000 ]
 
 info:

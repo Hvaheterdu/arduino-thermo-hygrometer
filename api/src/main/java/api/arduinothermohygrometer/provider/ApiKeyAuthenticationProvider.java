@@ -29,14 +29,11 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
         }
 
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = securityProperties.apiRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                .toList();
+                                                                                  .stream()
+                                                                                  .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                                                                                  .toList();
 
-        return new UsernamePasswordAuthenticationToken(
-                "api-client",
-                apiKey,
-                simpleGrantedAuthorities);
+        return new UsernamePasswordAuthenticationToken("api-client", apiKey, simpleGrantedAuthorities);
     }
 
     @Override

@@ -1,37 +1,32 @@
 package api.arduinothermohygrometer.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDateTime;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.model.Battery;
 
-@DisplayName("BatteryModelMapper unit tests.")
+import static org.assertj.core.api.Assertions.assertThat;
+
 class BatteryModelMapperTest {
     @Test
     void givenValidBatteryDto_whenToModel_thenReturnBatteryModel() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        int batteryStatus = 95;
         BatteryDto batteryDto = BatteryDto.builder()
-                .registeredAt(registeredAt)
-                .batteryStatus(batteryStatus)
-                .build();
+                                          .registeredAt(LocalDateTime.now())
+                                          .batteryStatus(95)
+                                          .build();
 
         Battery result = BatteryModelMapper.toModel(batteryDto);
 
+        assertThat(result.getId()).isNull();
         assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.getRegisteredAt());
         assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.getBatteryStatus());
     }
 
     @Test
     void givenValidBatteryModel_whenToDto_thenReturnBatteryDto() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        int batteryStatus = 95;
-        Battery battery = new Battery(registeredAt, batteryStatus);
+        Battery battery = new Battery(LocalDateTime.now(), 95);
 
         BatteryDto result = BatteryModelMapper.toDto(battery);
 

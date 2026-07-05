@@ -38,9 +38,11 @@ const resolveApiBaseUrlByEnvironment = (configuration: ApiBaseUrlConfiguration):
   const environment = normalizeEnvironment(configuration.environment.toLowerCase());
 
   const environmentUrl =
-    environment === "local" ? configuration.localBaseUrl
-    : environment === "staging" ? configuration.stagingBaseUrl
-    : configuration.productionBaseUrl;
+    environment === "local"
+      ? configuration.localBaseUrl
+      : environment === "staging"
+        ? configuration.stagingBaseUrl
+        : configuration.productionBaseUrl;
 
   return resolveBaseUrl(environmentUrl ?? configuration.fallbackBaseUrl);
 };
@@ -133,13 +135,13 @@ export const apiClient = createClient<ApiPaths>({
     localBaseUrl:
       typeof import.meta.env.VITE_API_BASEURL_LOCAL === "string" ? import.meta.env.VITE_API_BASEURL_LOCAL : undefined,
     stagingBaseUrl:
-      typeof import.meta.env.VITE_API_BASEURL_STAGING === "string" ?
-        import.meta.env.VITE_API_BASEURL_STAGING
-      : undefined,
+      typeof import.meta.env.VITE_API_BASEURL_STAGING === "string"
+        ? import.meta.env.VITE_API_BASEURL_STAGING
+        : undefined,
     productionBaseUrl:
-      typeof import.meta.env.VITE_API_BASEURL_PRODUCTION === "string" ?
-        import.meta.env.VITE_API_BASEURL_PRODUCTION
-      : undefined
+      typeof import.meta.env.VITE_API_BASEURL_PRODUCTION === "string"
+        ? import.meta.env.VITE_API_BASEURL_PRODUCTION
+        : undefined
   })
 });
 

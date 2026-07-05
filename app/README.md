@@ -18,29 +18,18 @@ npm run app:dev
 
 ## Quality Scripts
 
-- `npm run app:format`: format files with Prettier
+- `npm run app:format`: format files with Oxfmt
 - `npm run app:format:check`: check formatting without writing changes
-- `npm run app:lint`: run ESLint
+- `npm run app:lint`: run Oxlint
 - `npm run app:build:dev`: build in development mode and run TypeScript checks
 - `npm run app:test:run`: run Vitest unit and component tests
 - `npm run app:budget`: enforce bundle size budget for generated `dist/assets` files
-- `npm run app:test:e2e`: run Playwright smoke and accessibility tests
 
 Recommended local validation before pushing:
 
 ```bash
 npm run app:format && npm run app:lint && npm run app:build:dev && npm run app:budget && npm run app:test:run && npm run app:test:e2e
 ```
-
-## End-to-End Tests
-
-Install browser binaries once:
-
-```bash
-npx playwright install chromium
-```
-
-E2E tests run against Vite preview and are configured in `playwright.config.ts`.
 
 ## Environment Variables
 

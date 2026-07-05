@@ -1,37 +1,32 @@
 package api.arduinothermohygrometer.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDateTime;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.model.Temperature;
 
-@DisplayName("TemperatureModelMapper unit tests.")
+import static org.assertj.core.api.Assertions.assertThat;
+
 class TemperatureModelMapperTest {
     @Test
     void givenValidTemperatureDto_whenToModel_thenReturnTemperatureModel() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        Double temp = 86.123;
         TemperatureDto temperatureDto = TemperatureDto.builder()
-                .registeredAt(registeredAt)
-                .temp(temp)
-                .build();
+                                                      .registeredAt(LocalDateTime.now())
+                                                      .temp(86.123)
+                                                      .build();
 
         Temperature result = TemperatureModelMapper.toModel(temperatureDto);
 
+        assertThat(result.getId()).isNull();
         assertThat(result.getRegisteredAt()).isEqualTo(temperatureDto.getRegisteredAt());
         assertThat(result.getTemp()).isEqualTo(temperatureDto.getTemp());
     }
 
     @Test
     void givenValidTemperatureModel_whenToDto_thenReturnTemperatureDto() {
-        LocalDateTime registeredAt = LocalDateTime.now();
-        Double temp = 86.425;
-        Temperature temperature = new Temperature(registeredAt, temp);
+        Temperature temperature = new Temperature(LocalDateTime.now(), 86.425);
 
         TemperatureDto result = TemperatureModelMapper.toDto(temperature);
 

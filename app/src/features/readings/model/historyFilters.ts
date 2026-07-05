@@ -61,23 +61,22 @@ const toIsoTimestamp = (value: string): string => {
 };
 
 export const toSubmittedFilters = (draft: FilterDraft): SubmittedFilters => {
-  const selectedMetrics =
-    hasAtLeastOneMetric(draft.selectedMetrics) ?
-      draft.selectedMetrics
+  const selectedMetrics = hasAtLeastOneMetric(draft.selectedMetrics)
+    ? draft.selectedMetrics
     : { battery: true, temperature: true, humidity: true };
 
   const request: HistoricalSearchRequest =
-    draft.timeMode === "day" ?
-      {
-        registeredAt: toIsoTimestamp(`${draft.dayValue}T00:00`),
-        dateOnly: true,
-        selectedMetrics
-      }
-    : {
-        registeredAt: toIsoTimestamp(draft.timestampValue),
-        dateOnly: false,
-        selectedMetrics
-      };
+    draft.timeMode === "day"
+      ? {
+          registeredAt: toIsoTimestamp(`${draft.dayValue}T00:00`),
+          dateOnly: true,
+          selectedMetrics
+        }
+      : {
+          registeredAt: toIsoTimestamp(draft.timestampValue),
+          dateOnly: false,
+          selectedMetrics
+        };
 
   return {
     request,

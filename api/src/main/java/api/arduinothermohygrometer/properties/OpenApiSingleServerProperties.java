@@ -8,16 +8,16 @@ import io.swagger.v3.oas.models.servers.ServerVariables;
 
 import jakarta.validation.constraints.NotEmpty;
 
-public record OpenApiSingleServerProperties(@NotEmpty String url, @NotEmpty String description,
-        @NotEmpty Map<String, OpenApiServerVariableProperties> variables) {
+public record OpenApiSingleServerProperties(@NotEmpty String url,
+                                            @NotEmpty String description,
+                                            @NotEmpty Map<String, OpenApiServerVariableProperties> variables) {
     public Server generateOpenApiServer() {
         ServerVariables serverVariables = new ServerVariables();
-        variables.forEach((key, openApiServerVariableProperties) -> serverVariables.addServerVariable(key, new ServerVariable()
-                ._default(openApiServerVariableProperties.defaultValue())));
+        variables.forEach((key, openApiServerVariableProperties) ->
+                              serverVariables.addServerVariable(key, new ServerVariable()._default(openApiServerVariableProperties.defaultValue())));
 
-        return new Server()
-                .url(url)
-                .description(description)
-                .variables(serverVariables);
+        return new Server().url(url)
+                           .description(description)
+                           .variables(serverVariables);
     }
 }
