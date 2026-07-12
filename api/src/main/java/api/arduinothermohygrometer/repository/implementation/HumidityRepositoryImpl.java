@@ -79,18 +79,6 @@ public class HumidityRepositoryImpl implements HumidityRepository {
     }
 
     @Override
-    public void deleteHumidityById(final UUID id) {
-        String sql = """
-            DELETE FROM humidities
-            WHERE id = :id
-            """;
-
-        jdbcClient.sql(sql)
-                  .param("id", id)
-                  .update();
-    }
-
-    @Override
     public void deleteHumidityByTimestamp(final LocalDateTime timestamp) {
         String sql = """
             DELETE FROM humidities

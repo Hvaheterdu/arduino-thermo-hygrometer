@@ -2,7 +2,6 @@ package api.arduinothermohygrometer.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,21 +33,9 @@ public class BatteryController implements BatteryApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteBatteryById(final UUID id) {
-        batteryService.deleteBatteryById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @Override
     public ResponseEntity<List<BatteryDto>> getBatteriesByDateOrTimestamp(final LocalDateTime registeredAt,
                                                                           final boolean dateOnly) {
         List<BatteryDto> batteryDtos = batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
         return new ResponseEntity<>(batteryDtos, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<BatteryDto> getBatteryById(final UUID id) {
-        BatteryDto batteryDto = batteryService.getBatteryById(id);
-        return new ResponseEntity<>(batteryDto, HttpStatus.OK);
     }
 }

@@ -73,7 +73,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-abc123def456ghi789jkl012mno345pq-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     Forbidden:
       summary: API key authenticated but lacks required role.
@@ -85,7 +85,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-def123ghi456jkl789mno012pqr345st-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     NotFound:
       summary: Resource not found.
@@ -97,7 +97,7 @@ components:
         instance: "/api/v1/batteries/00000000-0000-0000-0000-000000000000"
         traceId: "00-ghi123jkl456mno789pqr012stu345vw-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     TooManyRequests:
       summary: Rate limit exceeded.
@@ -109,7 +109,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-mno123pqr456stu789vwx012yz345abc-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     InternalServerError:
       summary: Internal server error.
@@ -121,7 +121,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-pqr123stu456vwx789yz012abc345def-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
   headers:
     X-RateLimit-Limit:
@@ -141,17 +141,6 @@ components:
         format: int32
 
   parameters:
-    Id:
-      description: Object id.
-      in: path
-      name: id
-      required: true
-      schema:
-        type: string
-        format: uuid
-        minLength: 36
-        maxLength: 36
-
     RegisteredAt:
       description: Date and time of registration.
       in: query
@@ -427,7 +416,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -496,112 +485,6 @@ paths:
           examples:
             badRequest:
               $ref: "#/components/examples/BadRequest"
-        "401":
-          description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            unauthorized:
-              $ref: "#/components/examples/Unauthorized"
-        "403":
-          description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            forbidden:
-              $ref: "#/components/examples/Forbidden"
-        "404":
-          description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            notFound:
-              $ref: "#/components/examples/NotFound"
-        "429":
-          description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
-          examples:
-            tooManyRequests:
-              $ref: "#/components/examples/TooManyRequests"
-        "500":
-          description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            internalServerError:
-              $ref: "#/components/examples/InternalServerError"
-
-  /api/v1/batteries/{id}:
-    get:
-      tags:
-        - Battery
-      summary: Retrieve a battery by id.
-      description: Retrieves the battery status of the Arduino device by id.
-      operationId: getBatteryById
-      parameters:
-        - $ref: "#/components/parameters/Id"
-      responses:
-        "200":
-          description: Battery found.
-          headers:
-            X-RateLimit-Limit:
-              $ref: "#/components/headers/X-RateLimit-Limit"
-            X-RateLimit-Remaining:
-              $ref: "#/components/headers/X-RateLimit-Remaining"
-            X-RateLimit-Reset:
-              $ref: "#/components/headers/X-RateLimit-Reset"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BatteryDto"
-              examples:
-                battery:
-                  $ref: "#/components/examples/Battery"
-        "401":
-          description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            unauthorized:
-              $ref: "#/components/examples/Unauthorized"
-        "403":
-          description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            forbidden:
-              $ref: "#/components/examples/Forbidden"
-        "404":
-          description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            notFound:
-              $ref: "#/components/examples/NotFound"
-        "429":
-          description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
-          examples:
-            tooManyRequests:
-              $ref: "#/components/examples/TooManyRequests"
-        "500":
-          description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            internalServerError:
-              $ref: "#/components/examples/InternalServerError"
-    delete:
-      tags:
-        - Battery
-      summary: Delete battery by id.
-      description: Deletes the battery status of the Arduino device by id.
-      operationId: deleteBatteryById
-      parameters:
-        - $ref: "#/components/parameters/Id"
-      responses:
-        "204":
-          description: Battery deleted.
-          headers:
-            X-RateLimit-Limit:
-              $ref: "#/components/headers/X-RateLimit-Limit"
-            X-RateLimit-Remaining:
-              $ref: "#/components/headers/X-RateLimit-Remaining"
-            X-RateLimit-Reset:
-              $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -711,7 +594,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -780,112 +663,6 @@ paths:
           examples:
             badRequest:
               $ref: "#/components/examples/BadRequest"
-        "401":
-          description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            unauthorized:
-              $ref: "#/components/examples/Unauthorized"
-        "403":
-          description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            forbidden:
-              $ref: "#/components/examples/Forbidden"
-        "404":
-          description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            notFound:
-              $ref: "#/components/examples/NotFound"
-        "429":
-          description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
-          examples:
-            tooManyRequests:
-              $ref: "#/components/examples/TooManyRequests"
-        "500":
-          description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            internalServerError:
-              $ref: "#/components/examples/InternalServerError"
-
-  /api/v1/humidities/{id}:
-    get:
-      tags:
-        - Humidity
-      summary: Retrieve measured humidity by id.
-      description: Retrieves the measured humidity from the Arduino device by id.
-      operationId: getHumidityById
-      parameters:
-        - $ref: "#/components/parameters/Id"
-      responses:
-        "200":
-          description: Humidity found.
-          headers:
-            X-RateLimit-Limit:
-              $ref: "#/components/headers/X-RateLimit-Limit"
-            X-RateLimit-Remaining:
-              $ref: "#/components/headers/X-RateLimit-Remaining"
-            X-RateLimit-Reset:
-              $ref: "#/components/headers/X-RateLimit-Reset"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HumidityDto"
-              examples:
-                humidity:
-                  $ref: "#/components/examples/Humidity"
-        "401":
-          description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            unauthorized:
-              $ref: "#/components/examples/Unauthorized"
-        "403":
-          description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            forbidden:
-              $ref: "#/components/examples/Forbidden"
-        "404":
-          description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            notFound:
-              $ref: "#/components/examples/NotFound"
-        "429":
-          description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
-          examples:
-            tooManyRequests:
-              $ref: "#/components/examples/TooManyRequests"
-        "500":
-          description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            internalServerError:
-              $ref: "#/components/examples/InternalServerError"
-    delete:
-      tags:
-        - Humidity
-      summary: Delete measured humidity by id.
-      description: Deletes the measured humidity from the Arduino device by id.
-      operationId: deleteHumidityById
-      parameters:
-        - $ref: "#/components/parameters/Id"
-      responses:
-        "204":
-          description: Humidity deleted.
-          headers:
-            X-RateLimit-Limit:
-              $ref: "#/components/headers/X-RateLimit-Limit"
-            X-RateLimit-Remaining:
-              $ref: "#/components/headers/X-RateLimit-Remaining"
-            X-RateLimit-Reset:
-              $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -995,7 +772,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -1095,111 +872,5 @@ paths:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
 
-  /api/v1/temperatures/{id}:
-    get:
-      tags:
-        - Temperature
-      summary: Retrieve measured temperature by id.
-      description: Retrieves the measured temperature from the Arduino device by id.
-      operationId: getTemperatureById
-      parameters:
-        - $ref: "#/components/parameters/Id"
-      responses:
-        "200":
-          description: Temperature found.
-          headers:
-            X-RateLimit-Limit:
-              $ref: "#/components/headers/X-RateLimit-Limit"
-            X-RateLimit-Remaining:
-              $ref: "#/components/headers/X-RateLimit-Remaining"
-            X-RateLimit-Reset:
-              $ref: "#/components/headers/X-RateLimit-Reset"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TemperatureDto"
-              examples:
-                temperature:
-                  $ref: "#/components/examples/Temperature"
-        "401":
-          description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            unauthorized:
-              $ref: "#/components/examples/Unauthorized"
-        "403":
-          description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            forbidden:
-              $ref: "#/components/examples/Forbidden"
-        "404":
-          description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            notFound:
-              $ref: "#/components/examples/NotFound"
-        "429":
-          description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
-          examples:
-            tooManyRequests:
-              $ref: "#/components/examples/TooManyRequests"
-        "500":
-          description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            internalServerError:
-              $ref: "#/components/examples/InternalServerError"
-    delete:
-      tags:
-        - Temperature
-      summary: Delete measured temperature by id.
-      description: Deletes the measured temperature from the Arduino device by id.
-      operationId: deleteTemperatureById
-      parameters:
-        - $ref: "#/components/parameters/Id"
-      responses:
-        "204":
-          description: Temperature deleted.
-          headers:
-            X-RateLimit-Limit:
-              $ref: "#/components/headers/X-RateLimit-Limit"
-            X-RateLimit-Remaining:
-              $ref: "#/components/headers/X-RateLimit-Remaining"
-            X-RateLimit-Reset:
-              $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
-        "401":
-          description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            unauthorized:
-              $ref: "#/components/examples/Unauthorized"
-        "403":
-          description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            forbidden:
-              $ref: "#/components/examples/Forbidden"
-        "404":
-          description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            notFound:
-              $ref: "#/components/examples/NotFound"
-        "429":
-          description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
-          examples:
-            tooManyRequests:
-              $ref: "#/components/examples/TooManyRequests"
-        "500":
-          description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
-          examples:
-            internalServerError:
-              $ref: "#/components/examples/InternalServerError"
-
 security:
-  - ApiKeyAuth: []
+  - ApiKeyAuth: [ ]

@@ -3,7 +3,6 @@ package api.arduinothermohygrometer.controller;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -42,43 +41,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Nested
     class GetMethods {
-        @Test
-        void givenValidId_whenGetBatteryById_thenReturn200OK() {
-            UUID id = UUID.randomUUID();
-            BatteryDto batteryDto = BatteryDto.builder()
-                                              .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                                              .batteryStatus(90)
-                                              .build();
-            when(batteryService.getBatteryById(id)).thenReturn(batteryDto);
-
-            MvcTestResult result = mockMvcTester.get()
-                                                .uri("/api/v1/batteries/{id}", id)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatusOk()
-                .bodyJson()
-                .hasPath("$.registeredAt")
-                .hasPathSatisfying("$.batteryStatus", path ->
-                    assertThat(path).asNumber().isEqualTo(90));
-        }
-
-        @Test
-        void givenInvalidId_whenGetBatteryById_thenReturn404NotFound() {
-            UUID invalidId = new UUID(0, 0);
-            when(batteryService.getBatteryById(invalidId)).thenThrow(new ResourceNotFoundException("Battery with id=" + invalidId + " not found."));
-
-            MvcTestResult result = mockMvcTester.get()
-                                                .uri("/api/v1/batteries/{id}", invalidId)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Battery with id=" + invalidId + " not found.");
-        }
-
         @Test
         void givenValidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
             boolean dateOnly = true;
@@ -178,36 +140,6 @@ class BatteryControllerTest extends WebMvcTestBase {
 
     @Nested
     class DeleteMethods {
-        @Test
-        void givenValidId_whenDeleteBatteryById_thenReturn204NoContent() {
-            UUID id = UUID.randomUUID();
-            doNothing().when(batteryService).deleteBatteryById(id);
-
-            MvcTestResult result = mockMvcTester.delete()
-                                                .uri("/api/v1/batteries/{id}", id)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NO_CONTENT);
-        }
-
-        @Test
-        void givenInvalidId_whenDeleteBatteryById_thenReturn404NotFound() {
-            UUID invalidId = new UUID(0, 0);
-            doThrow(new ResourceNotFoundException("Battery with id=" + invalidId + " not found."))
-                .when(batteryService).deleteBatteryById(invalidId);
-
-            MvcTestResult result = mockMvcTester.delete()
-                                                .uri("/api/v1/batteries/{id}", invalidId)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Battery with id=" + invalidId + " not found.");
-        }
-
         @Test
         void givenValidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn204NoContent() {
             boolean dateOnly = false;

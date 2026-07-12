@@ -2,7 +2,6 @@ package api.arduinothermohygrometer.service.implementation;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -67,19 +66,6 @@ public class TemperatureServiceImpl implements TemperatureService {
 
         log.info("Temperature with id={} and registered_at={} created.", temperature.getId(), temperature.getRegisteredAt());
         return TemperatureModelMapper.toDto(temperature);
-    }
-
-    @Override
-    public void deleteTemperatureById(final UUID id) throws ResourceNotFoundException {
-        log.info("Deleting Temperature with id={}.", id);
-
-        Optional<Temperature> temperature = temperatureRepository.getTemperatureById(id);
-        if (temperature.isEmpty()) {
-            throw new ResourceNotFoundException(ID_NOT_FOUND.formatted(id));
-        }
-
-        temperatureRepository.deleteTemperatureById(id);
-        log.info("Temperature with id={} deleted.", id);
     }
 
     @Override

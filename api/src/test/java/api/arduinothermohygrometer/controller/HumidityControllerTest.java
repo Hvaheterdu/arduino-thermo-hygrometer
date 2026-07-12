@@ -3,7 +3,6 @@ package api.arduinothermohygrometer.controller;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -42,44 +41,6 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Nested
     class GetMethods {
-        @Test
-        void givenValidId_whenGetHumidityById_thenReturn200OK() {
-            UUID id = UUID.randomUUID();
-            HumidityDto humidityDto = HumidityDto.builder()
-                                                 .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                                                 .airHumidity(20.01)
-                                                 .build();
-            when(humidityService.getHumidityById(id)).thenReturn(humidityDto);
-
-            MvcTestResult result = mockMvcTester.get()
-                                                .uri("/api/v1/humidities/{id}", id)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatusOk()
-                .bodyJson()
-                .hasPath("$.registeredAt")
-                .hasPathSatisfying("$.airHumidity", path ->
-                    assertThat(path).asNumber().isEqualTo(20.01));
-        }
-
-        @Test
-        void givenInvalidId_whenGetHumidityById_thenReturn404NotFound() {
-            UUID invalidId = new UUID(0, 0);
-            when(humidityService.getHumidityById(invalidId))
-                .thenThrow(new ResourceNotFoundException("Humidity with id=" + invalidId + " not found."));
-
-            MvcTestResult result = mockMvcTester.get()
-                                                .uri("/api/v1/humidities/{id}", invalidId)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Humidity with id=" + invalidId + " not found.");
-        }
-
         @Test
         void givenValidRegisteredAt_whenGetHumiditiesByDateOrTimestamp_thenReturn200OK() {
             boolean dateOnly = true;
@@ -179,36 +140,6 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Nested
     class DeleteMethods {
-        @Test
-        void givenValidId_whenDeleteHumidityById_thenReturn204NoContent() {
-            UUID id = UUID.randomUUID();
-            doNothing().when(humidityService).deleteHumidityById(id);
-
-            MvcTestResult result = mockMvcTester.delete()
-                                                .uri("/api/v1/humidities/{id}", id)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NO_CONTENT);
-        }
-
-        @Test
-        void givenInvalidId_whenDeleteHumidityById_thenReturn404NotFound() {
-            UUID invalidId = new UUID(0, 0);
-            doThrow(new ResourceNotFoundException("Humidity with id=" + invalidId + " not found."))
-                .when(humidityService).deleteHumidityById(invalidId);
-
-            MvcTestResult result = mockMvcTester.delete()
-                                                .uri("/api/v1/humidities/{id}", invalidId)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Humidity with id=" + invalidId + " not found.");
-        }
-
         @Test
         void givenValidRegisteredAt_whenDeleteHumiditiesByDateOrTimestamp_thenReturn204NoContent() {
             boolean dateOnly = false;

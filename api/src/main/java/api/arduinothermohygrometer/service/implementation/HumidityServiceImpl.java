@@ -2,7 +2,6 @@ package api.arduinothermohygrometer.service.implementation;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -66,19 +65,6 @@ public class HumidityServiceImpl implements HumidityService {
 
         log.info("Humidity with id={} and registered_at={} created.", humidity.getId(), humidity.getRegisteredAt());
         return HumidityModelMapper.toDto(humidity);
-    }
-
-    @Override
-    public void deleteHumidityById(final UUID id) throws ResourceNotFoundException {
-        log.info("Deleting Humidity with id={}.", id);
-
-        Optional<Humidity> humidity = humidityRepository.getHumidityById(id);
-        if (humidity.isEmpty()) {
-            throw new ResourceNotFoundException(ID_NOT_FOUND.formatted(id));
-        }
-
-        humidityRepository.deleteHumidityById(id);
-        log.info("Humidity with id={} deleted.", id);
     }
 
     @Override

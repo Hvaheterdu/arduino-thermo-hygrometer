@@ -15,7 +15,5 @@ public interface TemperatureService {
 
     TemperatureDto createTemperature(TemperatureDto temperatureDto) throws ResourceNotCreatedException;
 
-    void deleteTemperatureById(UUID id) throws ResourceNotFoundException;
-
     void deleteTemperaturesByDateOrTimestamp(LocalDateTime registeredAt, boolean dateOnly) throws ResourceNotFoundException;
 }

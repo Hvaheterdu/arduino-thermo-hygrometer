@@ -2,7 +2,6 @@ package api.arduinothermohygrometer.service.implementation;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -66,19 +65,6 @@ public class BatteryServiceImpl implements BatteryService {
 
         log.info("Battery with id={} and registered_at={} created.", battery.getId(), battery.getRegisteredAt());
         return BatteryModelMapper.toDto(battery);
-    }
-
-    @Override
-    public void deleteBatteryById(final UUID id) throws ResourceNotFoundException {
-        log.info("Deleting battery with id={}.", id);
-
-        Optional<Battery> battery = batteryRepository.getBatteryById(id);
-        if (battery.isEmpty()) {
-            throw new ResourceNotFoundException(ID_NOT_FOUND.formatted(id));
-        }
-
-        batteryRepository.deleteBatteryById(id);
-        log.info("Battery with id={} deleted.", id);
     }
 
     @Override

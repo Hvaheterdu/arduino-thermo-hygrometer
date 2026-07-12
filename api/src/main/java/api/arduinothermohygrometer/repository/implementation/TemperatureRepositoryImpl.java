@@ -79,18 +79,6 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public void deleteTemperatureById(final UUID id) {
-        String sql = """
-            DELETE FROM temperatures
-            WHERE id = :id
-            """;
-
-        jdbcClient.sql(sql)
-                  .param("id", id)
-                  .update();
-    }
-
-    @Override
     public void deleteTemperatureByTimestamp(final LocalDateTime timestamp) {
         String sql = """
             DELETE FROM temperatures
