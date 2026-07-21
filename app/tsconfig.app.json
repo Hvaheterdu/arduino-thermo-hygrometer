@@ -16,7 +16,6 @@
       "vitest/globals"
     ],
     "useDefineForClassFields": true,
-
     /* Bundler mode */
     "isolatedModules": true,
     "jsx": "react-jsx",
@@ -25,7 +24,6 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
-
     /* Linting */
     "allowUnreachableCode": false,
     "exactOptionalPropertyTypes": true,
