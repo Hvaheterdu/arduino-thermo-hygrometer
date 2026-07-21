@@ -79,18 +79,6 @@ public class BatteryRepositoryImpl implements BatteryRepository {
     }
 
     @Override
-    public void deleteBatteryById(final UUID id) {
-        String sql = """
-            DELETE FROM batteries
-            WHERE id = :id
-            """;
-
-        jdbcClient.sql(sql)
-                  .param("id", id)
-                  .update();
-    }
-
-    @Override
     public void deleteBatteryByTimestamp(final LocalDateTime timestamp) {
         String sql = """
             DELETE FROM batteries

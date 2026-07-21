@@ -17,8 +17,6 @@ public interface TemperatureRepository {
 
     Optional<Temperature> createTemperature(Temperature temperature);
 
-    void deleteTemperatureById(UUID id);
-
     void deleteTemperatureByTimestamp(LocalDateTime timestamp);
 
     void deleteTemperaturesByDate(LocalDate date);

@@ -17,8 +17,6 @@ public interface BatteryRepository {
 
     Optional<Battery> createBattery(Battery battery);
 
-    void deleteBatteryById(UUID id);
-
     void deleteBatteryByTimestamp(LocalDateTime timestamp);
 
     void deleteBatteriesByDate(LocalDate date);

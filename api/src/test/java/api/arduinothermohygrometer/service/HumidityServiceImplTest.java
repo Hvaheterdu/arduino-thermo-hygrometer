@@ -1,12 +1,11 @@
 package api.arduinothermohygrometer.service;
 
-import api.arduinothermohygrometer.dto.HumidityDto;
-import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
-import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.HumidityModelMapper;
-import api.arduinothermohygrometer.model.Humidity;
-import api.arduinothermohygrometer.repository.HumidityRepository;
-import api.arduinothermohygrometer.service.implementation.HumidityServiceImpl;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,11 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import api.arduinothermohygrometer.dto.HumidityDto;
+import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
+import api.arduinothermohygrometer.exception.ResourceNotFoundException;
+import api.arduinothermohygrometer.mapper.HumidityModelMapper;
+import api.arduinothermohygrometer.model.Humidity;
+import api.arduinothermohygrometer.repository.HumidityRepository;
+import api.arduinothermohygrometer.service.implementation.HumidityServiceImpl;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,6 +38,13 @@ class HumidityServiceImplTest {
 
     @InjectMocks
     private HumidityServiceImpl humidityService;
+
+    private HumidityDto createHumidityDto(LocalDateTime registeredAt, Double airHumidity) {
+        return HumidityDto.builder()
+                          .registeredAt(registeredAt)
+                          .airHumidity(airHumidity)
+                          .build();
+    }
 
     @Nested
     class GetMethods {
@@ -172,30 +180,6 @@ class HumidityServiceImplTest {
     @Nested
     class DeleteMethods {
         @Test
-        void givenValidId_whenDeleteHumidityById_thenDeleteHumidity() {
-            UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            HumidityDto humidityDto = createHumidityDto(registeredAt, 70.00);
-            Humidity humidity = HumidityModelMapper.toModel(humidityDto);
-            when(humidityRepository.getHumidityById(id)).thenReturn(Optional.of(humidity));
-
-            humidityService.deleteHumidityById(id);
-
-            verify(humidityRepository).getHumidityById(id);
-            verify(humidityRepository).deleteHumidityById(id);
-        }
-
-        @Test
-        void givenInvalidId_whenDeleteHumidityById_thenThrowResourceNotFoundException() {
-            UUID invalidId = UUID.randomUUID();
-            when(humidityRepository.getHumidityById(invalidId)).thenReturn(Optional.empty());
-
-            assertThatThrownBy(() -> humidityService.deleteHumidityById(invalidId))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Humidity with id=%s not found.".formatted(invalidId));
-        }
-
-        @Test
         void givenValidTimestamp_whenDeleteHumiditiesByTimestamp_thenDeleteHumidity() {
             boolean dateOnly = false;
             LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
@@ -251,12 +235,5 @@ class HumidityServiceImplTest {
             verify(humidityRepository).getHumiditiesByDate(registeredAt.toLocalDate());
             verify(humidityRepository, times(0)).deleteHumiditiesByDate(registeredAt.toLocalDate());
         }
-    }
-
-    private HumidityDto createHumidityDto(LocalDateTime registeredAt, Double airHumidity) {
-        return HumidityDto.builder()
-                          .registeredAt(registeredAt)
-                          .airHumidity(airHumidity)
-                          .build();
     }
 }

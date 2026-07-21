@@ -15,7 +15,5 @@ public interface BatteryService {
 
     BatteryDto createBattery(BatteryDto batteryDto) throws ResourceNotCreatedException;
 
-    void deleteBatteryById(UUID id) throws ResourceNotFoundException;
-
     void deleteBatteriesByDateOrTimestamp(LocalDateTime registeredAt, boolean dateOnly) throws ResourceNotFoundException;
 }

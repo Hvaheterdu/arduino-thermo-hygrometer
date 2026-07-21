@@ -3,7 +3,6 @@ package api.arduinothermohygrometer.controller;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -42,44 +41,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Nested
     class GetMethods {
-        @Test
-        void givenValidId_whenGetTemperatureById_thenReturn200OK() {
-            UUID id = UUID.randomUUID();
-            TemperatureDto temperatureDto = TemperatureDto.builder()
-                                                          .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                                                          .temp(20.01)
-                                                          .build();
-            when(temperatureService.getTemperatureById(id)).thenReturn(temperatureDto);
-
-            MvcTestResult result = mockMvcTester.get()
-                                                .uri("/api/v1/temperatures/{id}", id)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatusOk()
-                .bodyJson()
-                .hasPath("$.registeredAt")
-                .hasPathSatisfying("$.temp", path ->
-                    assertThat(path).asNumber().isEqualTo(20.01));
-        }
-
-        @Test
-        void givenInvalidId_whenGetTemperatureById_thenReturn404NotFound() {
-            UUID invalidId = new UUID(0, 0);
-            when(temperatureService.getTemperatureById(invalidId))
-                .thenThrow(new ResourceNotFoundException("Temperature with id=" + invalidId + " not found."));
-
-            MvcTestResult result = mockMvcTester.get()
-                                                .uri("/api/v1/temperatures/{id}", invalidId)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Temperature with id=" + invalidId + " not found.");
-        }
-
         @Test
         void givenValidRegisteredAt_whenGetTemperaturesByDateOrTimestamp_thenReturn200OK() {
             boolean dateOnly = true;
@@ -179,36 +140,6 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Nested
     class DeleteMethods {
-        @Test
-        void givenValidId_whenDeleteTemperatureById_thenReturn204NoContent() {
-            UUID id = UUID.randomUUID();
-            doNothing().when(temperatureService).deleteTemperatureById(id);
-
-            MvcTestResult result = mockMvcTester.delete()
-                                                .uri("/api/v1/temperatures/{id}", id)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NO_CONTENT);
-        }
-
-        @Test
-        void givenInvalidId_whenDeleteTemperatureById_thenReturn404NotFound() {
-            UUID invalidId = new UUID(0, 0);
-            doThrow(new ResourceNotFoundException("Temperature with id=" + invalidId + " not found."))
-                .when(temperatureService).deleteTemperatureById(invalidId);
-
-            MvcTestResult result = mockMvcTester.delete()
-                                                .uri("/api/v1/temperatures/{id}", invalidId)
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Temperature with id=" + invalidId + " not found.");
-        }
-
         @Test
         void givenValidRegisteredAt_whenDeleteTemperaturesByDateOrTimestamp_thenReturn204NoContent() {
             boolean dateOnly = false;

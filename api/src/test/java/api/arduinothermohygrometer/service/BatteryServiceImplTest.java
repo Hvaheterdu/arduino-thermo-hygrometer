@@ -1,12 +1,11 @@
 package api.arduinothermohygrometer.service;
 
-import api.arduinothermohygrometer.dto.BatteryDto;
-import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
-import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.BatteryModelMapper;
-import api.arduinothermohygrometer.model.Battery;
-import api.arduinothermohygrometer.repository.BatteryRepository;
-import api.arduinothermohygrometer.service.implementation.BatteryServiceImpl;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,11 +14,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import api.arduinothermohygrometer.dto.BatteryDto;
+import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
+import api.arduinothermohygrometer.exception.ResourceNotFoundException;
+import api.arduinothermohygrometer.mapper.BatteryModelMapper;
+import api.arduinothermohygrometer.model.Battery;
+import api.arduinothermohygrometer.repository.BatteryRepository;
+import api.arduinothermohygrometer.service.implementation.BatteryServiceImpl;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,6 +37,13 @@ class BatteryServiceImplTest {
 
     @InjectMocks
     private BatteryServiceImpl batteryService;
+
+    private BatteryDto createBatteryDto(LocalDateTime registeredAt, int batteryStatus) {
+        return BatteryDto.builder()
+                         .registeredAt(registeredAt)
+                         .batteryStatus(batteryStatus)
+                         .build();
+    }
 
     @Nested
     class GetMethods {
@@ -170,30 +178,6 @@ class BatteryServiceImplTest {
     @Nested
     class DeleteMethods {
         @Test
-        void givenValidId_whenDeleteBatteryById_thenDeleteBattery() {
-            UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            BatteryDto batteryDto = createBatteryDto(registeredAt, 90);
-            Battery battery = BatteryModelMapper.toModel(batteryDto);
-            when(batteryRepository.getBatteryById(id)).thenReturn(Optional.of(battery));
-
-            batteryService.deleteBatteryById(id);
-
-            verify(batteryRepository).getBatteryById(id);
-            verify(batteryRepository).deleteBatteryById(id);
-        }
-
-        @Test
-        void givenInvalidId_whenDeleteBatteryById_thenThrowResourceNotFoundException() {
-            UUID invalidId = UUID.randomUUID();
-            when(batteryRepository.getBatteryById(invalidId)).thenReturn(Optional.empty());
-
-            assertThatThrownBy(() -> batteryService.deleteBatteryById(invalidId))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Battery with id=%s not found.".formatted(invalidId));
-        }
-
-        @Test
         void givenValidTimestamp_whenDeleteBatteryByDateOrTimestamp_thenDeleteBattery() {
             boolean dateOnly = false;
             LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
@@ -249,12 +233,5 @@ class BatteryServiceImplTest {
             verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
             verify(batteryRepository, times(0)).deleteBatteriesByDate(registeredAt.toLocalDate());
         }
-    }
-
-    private BatteryDto createBatteryDto(LocalDateTime registeredAt, int batteryStatus) {
-        return BatteryDto.builder()
-                         .registeredAt(registeredAt)
-                         .batteryStatus(batteryStatus)
-                         .build();
     }
 }

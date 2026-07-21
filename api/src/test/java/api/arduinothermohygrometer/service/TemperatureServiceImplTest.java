@@ -1,12 +1,11 @@
 package api.arduinothermohygrometer.service;
 
-import api.arduinothermohygrometer.dto.TemperatureDto;
-import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
-import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.TemperatureModelMapper;
-import api.arduinothermohygrometer.model.Temperature;
-import api.arduinothermohygrometer.repository.TemperatureRepository;
-import api.arduinothermohygrometer.service.implementation.TemperatureServiceImpl;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,11 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import api.arduinothermohygrometer.dto.TemperatureDto;
+import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
+import api.arduinothermohygrometer.exception.ResourceNotFoundException;
+import api.arduinothermohygrometer.mapper.TemperatureModelMapper;
+import api.arduinothermohygrometer.model.Temperature;
+import api.arduinothermohygrometer.repository.TemperatureRepository;
+import api.arduinothermohygrometer.service.implementation.TemperatureServiceImpl;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,6 +38,13 @@ class TemperatureServiceImplTest {
 
     @InjectMocks
     private TemperatureServiceImpl temperatureService;
+
+    private TemperatureDto createTemperatureDto(LocalDateTime registeredAt, Double temp) {
+        return TemperatureDto.builder()
+                             .registeredAt(registeredAt)
+                             .temp(temp)
+                             .build();
+    }
 
     @Nested
     class GetMethods {
@@ -172,30 +180,6 @@ class TemperatureServiceImplTest {
     @Nested
     class DeleteMethods {
         @Test
-        void givenValidId_whenDeleteTemperatureById_thenDeleteTemperature() {
-            UUID id = UUID.randomUUID();
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            TemperatureDto temperatureDto = createTemperatureDto(registeredAt, 70.00);
-            Temperature temperature = TemperatureModelMapper.toModel(temperatureDto);
-            when(temperatureRepository.getTemperatureById(id)).thenReturn(Optional.of(temperature));
-
-            temperatureService.deleteTemperatureById(id);
-
-            verify(temperatureRepository).getTemperatureById(id);
-            verify(temperatureRepository).deleteTemperatureById(id);
-        }
-
-        @Test
-        void givenInvalidId_whenDeleteTemperatureById_thenThrowResourceNotFoundException() {
-            UUID invalidId = UUID.randomUUID();
-            when(temperatureRepository.getTemperatureById(invalidId)).thenReturn(Optional.empty());
-
-            assertThatThrownBy(() -> temperatureService.deleteTemperatureById(invalidId))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Temperature with id=%s not found.".formatted(invalidId));
-        }
-
-        @Test
         void givenValidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature() {
             boolean dateOnly = false;
             LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
@@ -251,12 +235,5 @@ class TemperatureServiceImplTest {
             verify(temperatureRepository).getTemperaturesByDate(registeredAt.toLocalDate());
             verify(temperatureRepository, times(0)).deleteTemperaturesByDate(registeredAt.toLocalDate());
         }
-    }
-
-    private TemperatureDto createTemperatureDto(LocalDateTime registeredAt, Double temp) {
-        return TemperatureDto.builder()
-                             .registeredAt(registeredAt)
-                             .temp(temp)
-                             .build();
     }
 }

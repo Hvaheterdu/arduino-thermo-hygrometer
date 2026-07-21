@@ -2,7 +2,6 @@ package api.arduinothermohygrometer.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,22 +26,10 @@ public class TemperatureController implements TemperatureApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteTemperatureById(final UUID id) {
-        temperatureService.deleteTemperatureById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @Override
     public ResponseEntity<Void> deleteTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt,
                                                                     final boolean dateOnly) {
         temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @Override
-    public ResponseEntity<TemperatureDto> getTemperatureById(final UUID id) {
-        TemperatureDto temperatureDto = temperatureService.getTemperatureById(id);
-        return new ResponseEntity<>(temperatureDto, HttpStatus.OK);
     }
 
     @Override

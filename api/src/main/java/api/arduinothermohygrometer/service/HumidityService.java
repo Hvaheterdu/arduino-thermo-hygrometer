@@ -15,7 +15,5 @@ public interface HumidityService {
 
     HumidityDto createHumidity(HumidityDto humidityDto) throws ResourceNotCreatedException;
 
-    void deleteHumidityById(UUID id) throws ResourceNotFoundException;
-
     void deleteHumiditiesByDateOrTimestamp(LocalDateTime registeredAt, boolean dateOnly) throws ResourceNotFoundException;
 }
