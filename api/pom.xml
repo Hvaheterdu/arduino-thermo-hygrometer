@@ -48,15 +48,13 @@
     <maven.version>3.9.11</maven.version>
 
     <!-- Maven plugin dependencies -->
-    <checkstyle.version>13.5.0</checkstyle.version>
-    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
     <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 
     <!-- Bucket4J -->
     <bucket4j.version>8.19.0</bucket4j.version>
 
     <!-- Postgresql version -->
-    <postgresql.version>42.7.11</postgresql.version>
+    <postgresql.version>42.7.13</postgresql.version>
 
     <!-- Springdoc/Swagger version -->
     <springdoc-openapi-starter-webmvc-ui.version>3.0.3</springdoc-openapi-starter-webmvc-ui.version>
