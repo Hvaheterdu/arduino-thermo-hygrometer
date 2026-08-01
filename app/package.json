@@ -1,34 +1,69 @@
 {
-  "version": "1.0.0",
   "name": "app",
-  "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@outlook.com>",
+  "version": "1.0.0",
+  "private": true,
   "description": "The frontend application for a Java Web API that measures temperature and air humidity through a Arduino thermo hygrometer IoT device.",
   "keywords": [
-    "Java",
-    "Spring Boot",
-    "Maven",
-    "Postgres",
-    "TypeScript",
-    "React",
+    "Air humidity",
     "Arduino",
     "IoT",
+    "Java",
+    "Maven",
+    "Postgres",
+    "React",
+    "Spring Boot",
     "Temperature",
-    "Air humidity"
+    "TypeScript"
   ],
   "bugs": {
     "url": "https://github.com/Hvaheterdu/arduino-thermo-hygrometer/issues",
     "email": "burhan.mohammad.sarfraz@outlook.com"
   },
   "license": "MIT",
+  "author": "Burhan Mohammad Sarfraz <burhan.mohammad.sarfraz@outlook.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/Hvaheterdu/arduino-thermo-hygrometer"
   },
-  "private": true,
   "type": "module",
-  "engines": {
-    "npm": ">=11.13.0",
-    "node": ">=24.16.0"
+  "scripts": {
+    "build:dev": "vite build --mode development && tsc --noEmit",
+    "build:production": "vite build --mode production && tsc --noEmit",
+    "build:staging": "vite build --mode staging && tsc --noEmit",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "dev": "vite --mode development",
+    "preview": "vite preview --mode development",
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.4",
+    "openapi-fetch": "^0.17.0",
+    "react": "^19.2.8",
+    "react-aria-components": "^1.19.0",
+    "react-dom": "^19.2.8",
+    "react-router": "8.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.5",
+    "globals": "^17.8.0",
+    "jsdom": "^30.0.1",
+    "oxfmt": "^0.61.0",
+    "oxlint": "^1.76.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.0",
+    "vite-plugin-checker": "^0.14.5",
+    "vite-plugin-svgr": "^5.2.0",
+    "vitest": "^4.1.10"
   },
   "browserslist": {
     "production": [
@@ -37,49 +72,14 @@
       "not op_mini all"
     ]
   },
+  "engines": {
+    "node": ">=24.18.0",
+    "npm": ">=11.15.0"
+  },
   "development": [
     "last 1 chrome version",
     "last 1 firefox version",
     "last 1 safari version",
     "last 1 edge version"
-  ],
-  "scripts": {
-    "app:build:dev": "vite build --mode development && tsc --noEmit",
-    "app:build:production": "vite build --mode production && tsc --noEmit",
-    "app:build:staging": "vite build --mode staging && tsc --noEmit",
-    "app:format": "oxfmt",
-    "app:format:check": "oxfmt --check",
-    "app:lint": "oxlint",
-    "app:lint:fix": "oxlint --fix",
-    "app:dev": "vite --mode development",
-    "app:preview": "vite preview --mode development",
-    "app:test": "vitest",
-    "app:test:run": "vitest run"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^5.101.3",
-    "openapi-fetch": "^0.17.0",
-    "react": "^19.2.7",
-    "react-aria-components": "^1.19.0",
-    "react-dom": "^19.2.7",
-    "react-router": "7.18.1"
-  },
-  "devDependencies": {
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/react": "^16.3.2",
-    "@types/node": "^24.13.3",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.3",
-    "globals": "^17.7.0",
-    "jsdom": "^29.1.1",
-    "oxfmt": "^0.59.0",
-    "oxlint": "^1.74.0",
-    "oxlint-tsgolint": "^0.25.0",
-    "typescript": "^6.0.3",
-    "vite": "^8.1.5",
-    "vite-plugin-checker": "^0.14.4",
-    "vite-plugin-svgr": "^5.2.0",
-    "vitest": "^4.1.10"
-  }
+  ]
 }

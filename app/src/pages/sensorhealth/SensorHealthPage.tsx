@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+
 import { useSensorHealthInsights } from "../../features/insights/hooks/useSensorHealthInsights";
 import { formatRegisteredAt } from "../../features/readings/model/formatters";
 

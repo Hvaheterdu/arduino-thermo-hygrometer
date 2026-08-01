@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { useMemo, useState } from "react";
+
 import { HistoryFiltersPanel } from "../../features/readings/components/HistoryFiltersPanel";
 import { ReadingsTable } from "../../features/readings/components/ReadingsTable";
 import { useHistoricalReadings } from "../../features/readings/hooks/useHistoricalReadings";

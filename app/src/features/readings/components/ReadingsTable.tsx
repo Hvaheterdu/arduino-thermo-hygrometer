@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+
 import { formatDecimal, formatRegisteredAt } from "../model/formatters";
 import type { BatteryReading, HumidityReading, TemperatureReading } from "../model/readingTypes";
 

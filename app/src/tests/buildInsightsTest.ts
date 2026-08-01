@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import type { DailySnapshot } from "../features/insights/model/insightTypes";
 import {
   buildSensorHealthInsights,

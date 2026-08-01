@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+
 import type { DailyTrendPoint } from "../../../features/insights/model/insightTypes";
 import { formatTrendMetricValue } from "../model/formatTrendMetric";
 import type { TrendMetricVisibility } from "../model/trendMetricVisibility";

@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+
 import { useTrendsInsights } from "../../features/insights/hooks/useTrendsInsights";
 import { MetricVisibilityToggleGroup } from "./components/MetricVisibilityToggleGroup";
 import { TrendChartsSection } from "./components/TrendChartsSection";

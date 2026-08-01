@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { ToggleButton } from "react-aria-components";
+
 import type { TrendMetricVisibility } from "../model/trendMetricVisibility";
 
 interface MetricVisibilityToggleGroupProps {

@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { Button, Input, Label, Tab, TabList, TabPanel, Tabs, TextField, ToggleButton } from "react-aria-components";
+
 import { type FilterDraft, type TimeMode } from "../model/historyFilters";
 
 interface HistoryFiltersPanelProps {

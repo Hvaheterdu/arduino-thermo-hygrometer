@@ -1,4 +1,5 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
+
 import type { TrendsInsights } from "../model/insightTypes";
 import { buildTrendsInsights } from "../services/buildInsights";
 import { getDailySnapshots } from "../services/getDailySnapshots";

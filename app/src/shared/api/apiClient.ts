@@ -1,4 +1,5 @@
 import createClient, { type Middleware } from "openapi-fetch";
+
 import { frontendLogger } from "../observability/logger";
 import type { ApiPaths } from "./apiSchema";
 

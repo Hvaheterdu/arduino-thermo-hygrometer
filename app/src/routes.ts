@@ -1,5 +1,6 @@
 import { createElement } from "react";
 import { Navigate, createBrowserRouter, type DataRouter, type RouteObject } from "react-router";
+
 import { AppLayout } from "./app/AppLayout";
 import { DashboardPage } from "./pages/dashboard/DashboardPage";
 import { SensorHealthPage } from "./pages/sensorhealth/SensorHealthPage";
