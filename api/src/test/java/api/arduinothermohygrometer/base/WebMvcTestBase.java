@@ -7,12 +7,9 @@ import api.arduinothermohygrometer.properties.CorsProperties;
 import api.arduinothermohygrometer.properties.SecurityProperties;
 
 public abstract class WebMvcTestBase {
-    @MockitoBean
-    protected ApiKeyFilter apiKeyFilter;
+  @MockitoBean protected ApiKeyFilter apiKeyFilter;
 
-    @MockitoBean
-    protected CorsProperties corsProperties;
+  @MockitoBean protected CorsProperties corsProperties;
 
-    @MockitoBean
-    protected SecurityProperties securityProperties;
+  @MockitoBean protected SecurityProperties securityProperties;
 }

@@ -10,28 +10,26 @@ import api.arduinothermohygrometer.model.Battery;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BatteryModelMapperTest {
-    @Test
-    void givenValidBatteryDto_whenToModel_thenReturnBatteryModel() {
-        BatteryDto batteryDto = BatteryDto.builder()
-                                          .registeredAt(LocalDateTime.now())
-                                          .batteryStatus(95)
-                                          .build();
+  @Test
+  void givenValidBatteryDto_whenToModel_thenReturnBatteryModel() {
+    BatteryDto batteryDto =
+        BatteryDto.builder().registeredAt(LocalDateTime.now()).batteryStatus(95).build();
 
-        Battery result = BatteryModelMapper.toModel(batteryDto);
+    Battery result = BatteryModelMapper.toModel(batteryDto);
 
-        assertThat(result.getId()).isNull();
-        assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.getRegisteredAt());
-        assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.getBatteryStatus());
-    }
+    assertThat(result.getId()).isNull();
+    assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.getRegisteredAt());
+    assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.getBatteryStatus());
+  }
 
-    @Test
-    void givenValidBatteryModel_whenToDto_thenReturnBatteryDto() {
-        Battery battery = new Battery(LocalDateTime.now(), 95);
+  @Test
+  void givenValidBatteryModel_whenToDto_thenReturnBatteryDto() {
+    Battery battery = new Battery(LocalDateTime.now(), 95);
 
-        BatteryDto result = BatteryModelMapper.toDto(battery);
+    BatteryDto result = BatteryModelMapper.toDto(battery);
 
-        assertThat(result.getId()).isNull();
-        assertThat(result.getRegisteredAt()).isEqualTo(battery.getRegisteredAt());
-        assertThat(result.getBatteryStatus()).isEqualTo(battery.getBatteryStatus());
-    }
+    assertThat(result.getId()).isNull();
+    assertThat(result.getRegisteredAt()).isEqualTo(battery.getRegisteredAt());
+    assertThat(result.getBatteryStatus()).isEqualTo(battery.getBatteryStatus());
+  }
 }

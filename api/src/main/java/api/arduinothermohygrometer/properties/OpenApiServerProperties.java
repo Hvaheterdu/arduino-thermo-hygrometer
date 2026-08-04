@@ -7,5 +7,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import jakarta.validation.constraints.NotEmpty;
 
 @ConfigurationProperties(prefix = "springdoc")
-public record OpenApiServerProperties(@NotEmpty List<OpenApiSingleServerProperties> servers) {
-}
+public record OpenApiServerProperties(@NotEmpty List<OpenApiSingleServerProperties> servers) {}

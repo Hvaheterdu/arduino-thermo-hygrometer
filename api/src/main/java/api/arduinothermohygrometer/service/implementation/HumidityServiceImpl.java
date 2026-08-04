@@ -20,73 +20,86 @@ import static java.util.Collections.emptyList;
 @Service
 @Slf4j
 public class HumidityServiceImpl implements HumidityService {
-    private static final String ID_NOT_FOUND = "Humidity with id=%s not found.";
-    private static final String REGISTERED_AT_NOT_FOUND = "Humidities registeredAt={} not found.";
+  private static final String ID_NOT_FOUND = "Humidity with id=%s not found.";
+  private static final String REGISTERED_AT_NOT_FOUND = "Humidities registeredAt={} not found.";
 
-    private final HumidityRepository humidityRepository;
+  private final HumidityRepository humidityRepository;
 
-    public HumidityServiceImpl(final HumidityRepository humidityRepository) {
-        this.humidityRepository = humidityRepository;
+  public HumidityServiceImpl(final HumidityRepository humidityRepository) {
+    this.humidityRepository = humidityRepository;
+  }
+
+  @Override
+  public HumidityDto getHumidityById(final UUID id) throws ResourceNotFoundException {
+    log.info("Retrieving Humidity with id={}.", id);
+
+    Humidity humidity =
+        humidityRepository
+            .getHumidityById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
+
+    log.info("Humidity with id={} retrieved.", id);
+    return HumidityModelMapper.toDto(humidity);
+  }
+
+  @Override
+  public List<HumidityDto> getHumiditiesByDateOrTimestamp(
+      final LocalDateTime registeredAt, final boolean dateOnly) {
+    log.info("Retrieving humidities registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
+
+    List<Humidity> humidities =
+        dateOnly
+            ? humidityRepository.getHumiditiesByDate(registeredAt.toLocalDate())
+            : humidityRepository.getHumidityByTimestamp(registeredAt);
+
+    if (humidities.isEmpty()) {
+      log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
+      return emptyList();
     }
 
-    @Override
-    public HumidityDto getHumidityById(final UUID id) throws ResourceNotFoundException {
-        log.info("Retrieving Humidity with id={}.", id);
+    log.info("Humidities registeredAt={} retrieved.", registeredAt);
+    return humidities.stream().map(HumidityModelMapper::toDto).toList();
+  }
 
-        Humidity humidity = humidityRepository.getHumidityById(id).orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
+  @Override
+  public HumidityDto createHumidity(final HumidityDto humidityDto)
+      throws ResourceNotCreatedException {
+    log.info("Creating humidity.");
 
-        log.info("Humidity with id={} retrieved.", id);
-        return HumidityModelMapper.toDto(humidity);
+    Humidity humidity =
+        humidityRepository
+            .createHumidity(HumidityModelMapper.toModel(humidityDto))
+            .orElseThrow(() -> new ResourceNotCreatedException("Humidity cannot be created."));
+
+    log.info(
+        "Humidity with id={} and registered_at={} created.",
+        humidity.getId(),
+        humidity.getRegisteredAt());
+    return HumidityModelMapper.toDto(humidity);
+  }
+
+  @Override
+  public void deleteHumiditiesByDateOrTimestamp(
+      final LocalDateTime registeredAt, final boolean dateOnly) {
+    log.info("Deleting humidities registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
+
+    List<Humidity> humidities =
+        dateOnly
+            ? humidityRepository.getHumiditiesByDate(registeredAt.toLocalDate())
+            : humidityRepository.getHumidityByTimestamp(registeredAt);
+
+    if (humidities.isEmpty()) {
+      log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
+      return;
     }
 
-    @Override
-    public List<HumidityDto> getHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt,
-                                                            final boolean dateOnly) {
-        log.info("Retrieving humidities registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
-
-        List<Humidity> humidities =
-            dateOnly ? humidityRepository.getHumiditiesByDate(registeredAt.toLocalDate()) : humidityRepository.getHumidityByTimestamp(registeredAt);
-
-        if (humidities.isEmpty()) {
-            log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
-            return emptyList();
-        }
-
-        log.info("Humidities registeredAt={} retrieved.", registeredAt);
-        return humidities.stream().map(HumidityModelMapper::toDto).toList();
+    Humidity firstHumidity = humidities.getFirst();
+    if (dateOnly) {
+      humidityRepository.deleteHumiditiesByDate(firstHumidity.getRegisteredAt().toLocalDate());
+      log.info("Deleted humidities with date={}.", firstHumidity.getRegisteredAt().toLocalDate());
+    } else {
+      humidityRepository.deleteHumidityByTimestamp(firstHumidity.getRegisteredAt());
+      log.info("Deleted humidity with timestamp={}.", firstHumidity.getRegisteredAt());
     }
-
-    @Override
-    public HumidityDto createHumidity(final HumidityDto humidityDto) throws ResourceNotCreatedException {
-        log.info("Creating humidity.");
-
-        Humidity humidity = humidityRepository.createHumidity(HumidityModelMapper.toModel(humidityDto))
-                                              .orElseThrow(() -> new ResourceNotCreatedException("Humidity cannot be created."));
-
-        log.info("Humidity with id={} and registered_at={} created.", humidity.getId(), humidity.getRegisteredAt());
-        return HumidityModelMapper.toDto(humidity);
-    }
-
-    @Override
-    public void deleteHumiditiesByDateOrTimestamp(final LocalDateTime registeredAt,
-                                                  final boolean dateOnly) {
-        log.info("Deleting humidities registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
-
-        List<Humidity> humidities =
-            dateOnly ? humidityRepository.getHumiditiesByDate(registeredAt.toLocalDate()) : humidityRepository.getHumidityByTimestamp(registeredAt);
-
-        if (humidities.isEmpty()) {
-            log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
-            return;
-        }
-
-        Humidity firstHumidity = humidities.getFirst();
-        if (dateOnly) {
-            humidityRepository.deleteHumiditiesByDate(firstHumidity.getRegisteredAt().toLocalDate());
-            log.info("Deleted humidities with date={}.", firstHumidity.getRegisteredAt().toLocalDate());
-        } else {
-            humidityRepository.deleteHumidityByTimestamp(firstHumidity.getRegisteredAt());
-            log.info("Deleted humidity with timestamp={}.", firstHumidity.getRegisteredAt());
-        }
-    }
+  }
 }

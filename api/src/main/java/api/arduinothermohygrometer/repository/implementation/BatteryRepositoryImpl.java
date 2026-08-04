@@ -14,92 +14,93 @@ import api.arduinothermohygrometer.repository.BatteryRepository;
 
 @Repository
 public class BatteryRepositoryImpl implements BatteryRepository {
-    private final JdbcClient jdbcClient;
+  private final JdbcClient jdbcClient;
 
-    public BatteryRepositoryImpl(final JdbcClient jdbcClient) {
-        this.jdbcClient = jdbcClient;
-    }
+  public BatteryRepositoryImpl(final JdbcClient jdbcClient) {
+    this.jdbcClient = jdbcClient;
+  }
 
-    @Override
-    public Optional<Battery> getBatteryById(final UUID id) {
-        String sql = """
-            SELECT *
-            FROM batteries
-            WHERE id = :id
-            """;
+  @Override
+  public Optional<Battery> getBatteryById(final UUID id) {
+    String sql =
+        """
+        SELECT *
+        FROM batteries
+        WHERE id = :id
+        """;
 
-        return jdbcClient.sql(sql)
-                         .param("id", id)
-                         .query(Battery.class)
-                         .optional();
-    }
+    return jdbcClient.sql(sql).param("id", id).query(Battery.class).optional();
+  }
 
-    @Override
-    public List<Battery> getBatteryByTimestamp(final LocalDateTime timestamp) {
-        String sql = """
-            SELECT *
-            FROM batteries
-            WHERE registered_at = :timestamp
-            """;
+  @Override
+  public List<Battery> getBatteryByTimestamp(final LocalDateTime timestamp) {
+    String sql =
+        """
+        SELECT *
+        FROM batteries
+        WHERE registered_at = :timestamp
+        """;
 
-        return jdbcClient.sql(sql)
-                         .param("timestamp", timestamp)
-                         .query(Battery.class)
-                         .list();
-    }
+    return jdbcClient.sql(sql).param("timestamp", timestamp).query(Battery.class).list();
+  }
 
-    @Override
-    public List<Battery> getBatteriesByDate(final LocalDate date) {
-        String sql = """
-            SELECT *
-            FROM batteries
-            WHERE registered_at >= :start AND registered_at < :end
-            """;
+  @Override
+  public List<Battery> getBatteriesByDate(final LocalDate date) {
+    String sql =
+        """
+        SELECT *
+        FROM batteries
+        WHERE registered_at >= :start AND registered_at < :end
+        """;
 
-        return jdbcClient.sql(sql)
-                         .param("start", date.atStartOfDay())
-                         .param("end", date.plusDays(1).atStartOfDay())
-                         .query(Battery.class)
-                         .list();
-    }
+    return jdbcClient
+        .sql(sql)
+        .param("start", date.atStartOfDay())
+        .param("end", date.plusDays(1).atStartOfDay())
+        .query(Battery.class)
+        .list();
+  }
 
-    @Override
-    public Optional<Battery> createBattery(final Battery battery) {
-        String sql = """
-            INSERT INTO batteries (registered_at, battery_status)
-            VALUES (:registered_at, :battery_status)
-            RETURNING id, registered_at, battery_status
-            """;
+  @Override
+  public Optional<Battery> createBattery(final Battery battery) {
+    String sql =
+        """
+        INSERT INTO batteries (registered_at, battery_status)
+        VALUES (:registered_at, :battery_status)
+        RETURNING id, registered_at, battery_status
+        """;
 
-        return jdbcClient.sql(sql)
-                         .param("registered_at", battery.getRegisteredAt())
-                         .param("battery_status", battery.getBatteryStatus())
-                         .query(Battery.class)
-                         .optional();
-    }
+    return jdbcClient
+        .sql(sql)
+        .param("registered_at", battery.getRegisteredAt())
+        .param("battery_status", battery.getBatteryStatus())
+        .query(Battery.class)
+        .optional();
+  }
 
-    @Override
-    public void deleteBatteryByTimestamp(final LocalDateTime timestamp) {
-        String sql = """
-            DELETE FROM batteries
-            WHERE registered_at = :timestamp
-            """;
+  @Override
+  public void deleteBatteryByTimestamp(final LocalDateTime timestamp) {
+    String sql =
+        """
+        DELETE FROM batteries
+        WHERE registered_at = :timestamp
+        """;
 
-        jdbcClient.sql(sql)
-                  .param("timestamp", timestamp)
-                  .update();
-    }
+    jdbcClient.sql(sql).param("timestamp", timestamp).update();
+  }
 
-    @Override
-    public void deleteBatteriesByDate(final LocalDate date) {
-        String sql = """
-            DELETE FROM batteries
-            WHERE registered_at >= :start AND registered_at < :end
-            """;
+  @Override
+  public void deleteBatteriesByDate(final LocalDate date) {
+    String sql =
+        """
+        DELETE FROM batteries
+        WHERE registered_at >= :start AND registered_at < :end
+        """;
 
-        jdbcClient.sql(sql)
-                  .param("start", date.atStartOfDay())
-                  .param("end", date.plusDays(1).atStartOfDay())
-                  .update();
-    }
+    jdbcClient
+        .sql(sql)
+        .param("start", date.atStartOfDay())
+        .param("end", date.plusDays(1).atStartOfDay())
+        .update();
+  }
 }
