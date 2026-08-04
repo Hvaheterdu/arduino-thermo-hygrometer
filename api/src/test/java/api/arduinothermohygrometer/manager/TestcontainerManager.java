@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class TestcontainerManager {
   @ServiceConnection
-  @SuppressWarnings("resource")
   static PostgreSQLContainer postgreSQLContainer =
       new PostgreSQLContainer("postgres:18.3")
           .withDatabaseName("postgres-test")
