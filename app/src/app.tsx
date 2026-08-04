@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { RouterProvider } from "react-router";
+
 import { AppProviders } from "./app/AppProviders";
 import { router } from "./routes";
 

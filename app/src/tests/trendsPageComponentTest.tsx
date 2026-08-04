@@ -3,6 +3,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { useTrendsInsights } from "../features/insights/hooks/useTrendsInsights";
 import type { TrendsInsights } from "../features/insights/model/insightTypes";
 import { TrendsPage } from "../pages/trends/TrendsPage";

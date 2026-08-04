@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router";
+
 import {
   buildSearchParamsWithUpdatedTrendMetricVisibility,
   hasAtLeastOneVisibleTrendMetric,
