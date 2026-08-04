@@ -17,19 +17,76 @@ jobs:
     defaults:
       run:
         working-directory: api
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: "temurin"
-          java-version: "25"
-          cache: "maven"
+          distribution: temurin
+          java-version: 25
+          cache: maven
 
       - name: Make Maven wrapper executable
         run: chmod +x mvnw
 
-      - name: Run backend quality suite
-        run: ./mvnw -B verify
+      - name: Run unit + static analysis
+        run: ./mvnw -B verify -DskipITs
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: backend-quality
+    defaults:
+      run:
+        working-directory: api
+
+    services:
+      postgres:
+        image: postgres:18.3
+        env:
+          POSTGRES_DB: postgres-test
+          POSTGRES_USER: postgres-test
+          POSTGRES_PASSWORD: postgres-test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres-test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/postgres-test
+      SPRING_DATASOURCE_USERNAME: postgres-test
+      SPRING_DATASOURCE_PASSWORD: postgres-test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+
+      - name: Make Maven wrapper executable
+        run: chmod +x mvnw
+
+      - name: Wait for Postgres
+        run: |
+          for i in $(seq 1 60); do
+            if pg_isready -h localhost -U postgres-test > /dev/null 2>&1; then
+              echo "Postgres is ready"
+              exit 0
+            fi
+            echo "Waiting for Postgres... ($i/60)"
+            sleep 1
+          done
+          echo "Postgres did not become available" && exit 1
+
+      - name: Run integration tests
+        run: ./mvnw -B verify -DskipUnitTests

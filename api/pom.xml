@@ -48,9 +48,9 @@
         <maven.version>3.9.11</maven.version>
 
         <!-- Maven plugin dependencies -->
-        <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
-        <spotless-maven-plugin.version>3.8.0</spotless-maven-plugin.version>
         <google-java-format.version>1.36.1</google-java-format.version>
+        <spotless-maven-plugin.version>3.8.0</spotless-maven-plugin.version>
+        <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 
         <!-- Bucket4J -->
         <bucket4j.version>8.19.0</bucket4j.version>
@@ -64,18 +64,18 @@
         <!-- OpenAPI Generator -->
         <jackson-databind-nullable.version>0.2.11</jackson-databind-nullable.version>
         <okhttp3.version>5.4.0</okhttp3.version>
-        <swagger.version>2.2.53</swagger.version>
         <openapi-generator-maven-plugin.version>7.24.0</openapi-generator-maven-plugin.version>
+        <swagger.version>2.2.53</swagger.version>
 
         <!-- Testcontainers version -->
         <testcontainers.version>2.0.5</testcontainers.version>
 
         <!-- Maven compiler properties -->
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.proc>full</maven.compiler.proc>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <!-- Maven build properties -->
         <maven.build.timestamp.format>ddMMyyyyHHmmss</maven.build.timestamp.format>
@@ -326,6 +326,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Spotless Maven Plugin -->
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
