@@ -30,150 +30,170 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(BatteryController.class)
 class BatteryControllerTest extends WebMvcTestBase {
-    @MockitoBean
-    private BatteryService batteryService;
+  @MockitoBean private BatteryService batteryService;
 
-    @Autowired
-    private MockMvcTester mockMvcTester;
+  @Autowired private MockMvcTester mockMvcTester;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
-    @Nested
-    class GetMethods {
-        @Test
-        void givenValidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
-            boolean dateOnly = true;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            List<BatteryDto> batteryDtos = List.of(
-                BatteryDto.builder().registeredAt(registeredAt).batteryStatus(95).build(),
-                BatteryDto.builder().registeredAt(registeredAt.minusHours(1)).batteryStatus(90).build()
-            );
-            when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly)).thenReturn(batteryDtos);
+  @Nested
+  class GetMethods {
+    @Test
+    void givenValidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
+      boolean dateOnly = true;
+      LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+      List<BatteryDto> batteryDtos =
+          List.of(
+              BatteryDto.builder().registeredAt(registeredAt).batteryStatus(95).build(),
+              BatteryDto.builder()
+                  .registeredAt(registeredAt.minusHours(1))
+                  .batteryStatus(90)
+                  .build());
+      when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly))
+          .thenReturn(batteryDtos);
 
-            MvcTestResult result = mockMvcTester.get()
-                                                .uri("/api/v1/batteries")
-                                                .param("registeredAt", registeredAt.toString())
-                                                .param("dateOnly", String.valueOf(dateOnly))
-                                                .exchange();
+      MvcTestResult result =
+          mockMvcTester
+              .get()
+              .uri("/api/v1/batteries")
+              .param("registeredAt", registeredAt.toString())
+              .param("dateOnly", String.valueOf(dateOnly))
+              .exchange();
 
-            assertThat(result)
-                .hasStatusOk()
-                .bodyJson()
-                .hasPathSatisfying("$.[0].batteryStatus", path ->
-                    assertThat(path).asNumber().isEqualTo(95))
-                .hasPathSatisfying("$.[1].batteryStatus", path ->
-                    assertThat(path).asNumber().isEqualTo(90));
-        }
-
-        @Test
-        void givenInvalidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn404NotFound() {
-            boolean dateOnly = true;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly))
-                .thenThrow(new ResourceNotFoundException("Batteries registeredAt=" + registeredAt + " not found."));
-
-            MvcTestResult result = mockMvcTester.get()
-                                                .uri("/api/v1/batteries")
-                                                .param("registeredAt", registeredAt.toString())
-                                                .param("dateOnly", String.valueOf(dateOnly))
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Batteries registeredAt=" + registeredAt + " not found.");
-        }
+      assertThat(result)
+          .hasStatusOk()
+          .bodyJson()
+          .hasPathSatisfying(
+              "$.[0].batteryStatus", path -> assertThat(path).asNumber().isEqualTo(95))
+          .hasPathSatisfying(
+              "$.[1].batteryStatus", path -> assertThat(path).asNumber().isEqualTo(90));
     }
 
-    @Nested
-    class CreateMethods {
-        @Test
-        void givenValidBatteryDtoModel_whenCreateBattery_thenReturn201CREATED() {
-            BatteryDto batteryDto = BatteryDto.builder()
-                                              .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                                              .batteryStatus(95)
-                                              .build();
-            when(batteryService.createBattery(any(BatteryDto.class))).thenReturn(batteryDto);
-            String requestJson = objectMapper.writeValueAsString(batteryDto);
+    @Test
+    void givenInvalidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn404NotFound() {
+      boolean dateOnly = true;
+      LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+      when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly))
+          .thenThrow(
+              new ResourceNotFoundException(
+                  "Batteries registeredAt=" + registeredAt + " not found."));
 
-            MvcTestResult result = mockMvcTester.post()
-                                                .uri("/api/v1/batteries")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content(requestJson)
-                                                .exchange();
+      MvcTestResult result =
+          mockMvcTester
+              .get()
+              .uri("/api/v1/batteries")
+              .param("registeredAt", registeredAt.toString())
+              .param("dateOnly", String.valueOf(dateOnly))
+              .exchange();
 
-            assertThat(result)
-                .hasStatus(HttpStatus.CREATED)
-                .bodyJson()
-                .hasPath("$.registeredAt")
-                .hasPathSatisfying("$.batteryStatus", path ->
-                    assertThat(path).asNumber().isEqualTo(95));
-        }
+      assertThat(result)
+          .hasStatus(HttpStatus.NOT_FOUND)
+          .failure()
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Batteries registeredAt=" + registeredAt + " not found.");
+    }
+  }
 
-        @Test
-        void givenInvalidBatteryDto_whenCreateBattery_thenReturn400BadRequest() {
-            BatteryDto invalidBatteryDto = BatteryDto.builder()
-                                                     .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-                                                     .batteryStatus(105)
-                                                     .build();
-            String requestJson = objectMapper.writeValueAsString(invalidBatteryDto);
+  @Nested
+  class CreateMethods {
+    @Test
+    void givenValidBatteryDtoModel_whenCreateBattery_thenReturn201CREATED() {
+      BatteryDto batteryDto =
+          BatteryDto.builder()
+              .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+              .batteryStatus(95)
+              .build();
+      when(batteryService.createBattery(any(BatteryDto.class))).thenReturn(batteryDto);
+      String requestJson = objectMapper.writeValueAsString(batteryDto);
 
-            MvcTestResult result = mockMvcTester.post()
-                                                .uri("/api/v1/batteries")
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                                .content(requestJson)
-                                                .exchange();
+      MvcTestResult result =
+          mockMvcTester
+              .post()
+              .uri("/api/v1/batteries")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(requestJson)
+              .exchange();
 
-            assertThat(result)
-                .hasStatus(HttpStatus.BAD_REQUEST)
-                .bodyJson()
-                .hasPathSatisfying("$.detail", path ->
-                    assertThat(path).asString().isEqualTo("One or more fields are invalid."))
-                .hasPathSatisfying("$.title", path ->
-                    assertThat(path).asString().isEqualTo("Entity validation error."))
-                .hasPathSatisfying("$.errors.[0].parameter", path ->
-                    assertThat(path).asString().isEqualTo("batteryStatus"));
-        }
+      assertThat(result)
+          .hasStatus(HttpStatus.CREATED)
+          .bodyJson()
+          .hasPath("$.registeredAt")
+          .hasPathSatisfying("$.batteryStatus", path -> assertThat(path).asNumber().isEqualTo(95));
     }
 
-    @Nested
-    class DeleteMethods {
-        @Test
-        void givenValidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn204NoContent() {
-            boolean dateOnly = false;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            doNothing().when(batteryService).deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
+    @Test
+    void givenInvalidBatteryDto_whenCreateBattery_thenReturn400BadRequest() {
+      BatteryDto invalidBatteryDto =
+          BatteryDto.builder()
+              .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+              .batteryStatus(105)
+              .build();
+      String requestJson = objectMapper.writeValueAsString(invalidBatteryDto);
 
-            MvcTestResult result = mockMvcTester.delete()
-                                                .uri("/api/v1/batteries")
-                                                .param("registeredAt", registeredAt.toString())
-                                                .param("dateOnly", String.valueOf(dateOnly))
-                                                .exchange();
+      MvcTestResult result =
+          mockMvcTester
+              .post()
+              .uri("/api/v1/batteries")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(requestJson)
+              .exchange();
 
-            assertThat(result)
-                .hasStatus(HttpStatus.NO_CONTENT);
-        }
-
-        @Test
-        void givenInvalidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn404NotFound() {
-            boolean dateOnly = false;
-            LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-            doThrow(new ResourceNotFoundException("Batteries registeredAt=" + registeredAt + " not found."))
-                .when(batteryService).deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
-
-            MvcTestResult result = mockMvcTester.delete()
-                                                .uri("/api/v1/batteries")
-                                                .param("registeredAt", registeredAt.toString())
-                                                .param("dateOnly", String.valueOf(dateOnly))
-                                                .exchange();
-
-            assertThat(result)
-                .hasStatus(HttpStatus.NOT_FOUND)
-                .failure()
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Batteries registeredAt=" + registeredAt + " not found.");
-        }
+      assertThat(result)
+          .hasStatus(HttpStatus.BAD_REQUEST)
+          .bodyJson()
+          .hasPathSatisfying(
+              "$.detail",
+              path -> assertThat(path).asString().isEqualTo("One or more fields are invalid."))
+          .hasPathSatisfying(
+              "$.title", path -> assertThat(path).asString().isEqualTo("Entity validation error."))
+          .hasPathSatisfying(
+              "$.errors.[0].parameter",
+              path -> assertThat(path).asString().isEqualTo("batteryStatus"));
     }
+  }
+
+  @Nested
+  class DeleteMethods {
+    @Test
+    void givenValidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn204NoContent() {
+      boolean dateOnly = false;
+      LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+      doNothing().when(batteryService).deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
+
+      MvcTestResult result =
+          mockMvcTester
+              .delete()
+              .uri("/api/v1/batteries")
+              .param("registeredAt", registeredAt.toString())
+              .param("dateOnly", String.valueOf(dateOnly))
+              .exchange();
+
+      assertThat(result).hasStatus(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    void givenInvalidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn404NotFound() {
+      boolean dateOnly = false;
+      LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+      doThrow(
+              new ResourceNotFoundException(
+                  "Batteries registeredAt=" + registeredAt + " not found."))
+          .when(batteryService)
+          .deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
+
+      MvcTestResult result =
+          mockMvcTester
+              .delete()
+              .uri("/api/v1/batteries")
+              .param("registeredAt", registeredAt.toString())
+              .param("dateOnly", String.valueOf(dateOnly))
+              .exchange();
+
+      assertThat(result)
+          .hasStatus(HttpStatus.NOT_FOUND)
+          .failure()
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Batteries registeredAt=" + registeredAt + " not found.");
+    }
+  }
 }

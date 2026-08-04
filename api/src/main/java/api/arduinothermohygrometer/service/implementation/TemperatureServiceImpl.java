@@ -20,74 +20,88 @@ import static java.util.Collections.emptyList;
 @Service
 @Slf4j
 public class TemperatureServiceImpl implements TemperatureService {
-    private static final String ID_NOT_FOUND = "Temperature with id=%s not found.";
-    private static final String REGISTERED_AT_NOT_FOUND = "Temperatures registeredAt={} not found.";
+  private static final String ID_NOT_FOUND = "Temperature with id=%s not found.";
+  private static final String REGISTERED_AT_NOT_FOUND = "Temperatures registeredAt={} not found.";
 
-    private final TemperatureRepository temperatureRepository;
+  private final TemperatureRepository temperatureRepository;
 
-    public TemperatureServiceImpl(final TemperatureRepository temperatureRepository) {
-        this.temperatureRepository = temperatureRepository;
+  public TemperatureServiceImpl(final TemperatureRepository temperatureRepository) {
+    this.temperatureRepository = temperatureRepository;
+  }
+
+  @Override
+  public TemperatureDto getTemperatureById(final UUID id) throws ResourceNotFoundException {
+    log.info("Retrieving Temperature with id={}.", id);
+
+    Temperature temperature =
+        temperatureRepository
+            .getTemperatureById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
+
+    log.info("Temperature with id={} retrieved.", id);
+    return TemperatureModelMapper.toDto(temperature);
+  }
+
+  @Override
+  public List<TemperatureDto> getTemperaturesByDateOrTimestamp(
+      final LocalDateTime registeredAt, final boolean dateOnly) {
+    log.info("Retrieving temperatures registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
+
+    List<Temperature> temperatures =
+        dateOnly
+            ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())
+            : temperatureRepository.getTemperatureByTimestamp(registeredAt);
+
+    if (temperatures.isEmpty()) {
+      log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
+      return emptyList();
     }
 
-    @Override
-    public TemperatureDto getTemperatureById(final UUID id) throws ResourceNotFoundException {
-        log.info("Retrieving Temperature with id={}.", id);
+    log.info("Temperatures registeredAt={} retrieved.", registeredAt);
+    return temperatures.stream().map(TemperatureModelMapper::toDto).toList();
+  }
 
-        Temperature temperature = temperatureRepository.getTemperatureById(id)
-                                                       .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
+  @Override
+  public TemperatureDto createTemperature(final TemperatureDto temperatureDto)
+      throws ResourceNotCreatedException {
+    log.info("Creating Temperature.");
 
-        log.info("Temperature with id={} retrieved.", id);
-        return TemperatureModelMapper.toDto(temperature);
+    Temperature temperature =
+        temperatureRepository
+            .createTemperature(TemperatureModelMapper.toModel(temperatureDto))
+            .orElseThrow(() -> new ResourceNotCreatedException("Temperature cannot be created."));
+
+    log.info(
+        "Temperature with id={} and registered_at={} created.",
+        temperature.getId(),
+        temperature.getRegisteredAt());
+    return TemperatureModelMapper.toDto(temperature);
+  }
+
+  @Override
+  public void deleteTemperaturesByDateOrTimestamp(
+      final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException {
+    log.info("Deleting temperatures registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
+
+    List<Temperature> temperatures =
+        dateOnly
+            ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())
+            : temperatureRepository.getTemperatureByTimestamp(registeredAt);
+
+    if (temperatures.isEmpty()) {
+      log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
+      return;
     }
 
-    @Override
-    public List<TemperatureDto> getTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt,
-                                                                 final boolean dateOnly) {
-        log.info("Retrieving temperatures registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
-
-        List<Temperature> temperatures = dateOnly ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())
-                                                  : temperatureRepository.getTemperatureByTimestamp(registeredAt);
-
-        if (temperatures.isEmpty()) {
-            log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
-            return emptyList();
-        }
-
-        log.info("Temperatures registeredAt={} retrieved.", registeredAt);
-        return temperatures.stream().map(TemperatureModelMapper::toDto).toList();
+    Temperature firstTemperature = temperatures.getFirst();
+    if (dateOnly) {
+      temperatureRepository.deleteTemperaturesByDate(
+          firstTemperature.getRegisteredAt().toLocalDate());
+      log.info(
+          "Deleted temperatures with date={}.", firstTemperature.getRegisteredAt().toLocalDate());
+    } else {
+      temperatureRepository.deleteTemperatureByTimestamp(firstTemperature.getRegisteredAt());
+      log.info("Deleted temperature with timestamp={}.", firstTemperature.getRegisteredAt());
     }
-
-    @Override
-    public TemperatureDto createTemperature(final TemperatureDto temperatureDto) throws ResourceNotCreatedException {
-        log.info("Creating Temperature.");
-
-        Temperature temperature = temperatureRepository.createTemperature(TemperatureModelMapper.toModel(temperatureDto))
-                                                       .orElseThrow(() -> new ResourceNotCreatedException("Temperature cannot be created."));
-
-        log.info("Temperature with id={} and registered_at={} created.", temperature.getId(), temperature.getRegisteredAt());
-        return TemperatureModelMapper.toDto(temperature);
-    }
-
-    @Override
-    public void deleteTemperaturesByDateOrTimestamp(final LocalDateTime registeredAt,
-                                                    final boolean dateOnly) throws ResourceNotFoundException {
-        log.info("Deleting temperatures registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
-
-        List<Temperature> temperatures = dateOnly ? temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate())
-                                                  : temperatureRepository.getTemperatureByTimestamp(registeredAt);
-
-        if (temperatures.isEmpty()) {
-            log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
-            return;
-        }
-
-        Temperature firstTemperature = temperatures.getFirst();
-        if (dateOnly) {
-            temperatureRepository.deleteTemperaturesByDate(firstTemperature.getRegisteredAt().toLocalDate());
-            log.info("Deleted temperatures with date={}.", firstTemperature.getRegisteredAt().toLocalDate());
-        } else {
-            temperatureRepository.deleteTemperatureByTimestamp(firstTemperature.getRegisteredAt());
-            log.info("Deleted temperature with timestamp={}.", firstTemperature.getRegisteredAt());
-        }
-    }
+  }
 }

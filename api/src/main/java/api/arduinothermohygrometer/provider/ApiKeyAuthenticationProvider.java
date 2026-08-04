@@ -15,29 +15,29 @@ import api.arduinothermohygrometer.properties.SecurityProperties;
 
 @Component
 public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
-    private final SecurityProperties securityProperties;
+  private final SecurityProperties securityProperties;
 
-    public ApiKeyAuthenticationProvider(final SecurityProperties securityProperties) {
-        this.securityProperties = securityProperties;
+  public ApiKeyAuthenticationProvider(final SecurityProperties securityProperties) {
+    this.securityProperties = securityProperties;
+  }
+
+  @Override
+  public Authentication authenticate(final Authentication authentication) {
+    String apiKey = Objects.requireNonNull(authentication.getCredentials()).toString();
+    if (!securityProperties.apiKey().equals(apiKey)) {
+      throw new BadCredentialsException("Invalid API key");
     }
 
-    @Override
-    public Authentication authenticate(final Authentication authentication) {
-        String apiKey = Objects.requireNonNull(authentication.getCredentials()).toString();
-        if (!securityProperties.apiKey().equals(apiKey)) {
-            throw new BadCredentialsException("Invalid API key");
-        }
+    List<SimpleGrantedAuthority> simpleGrantedAuthorities =
+        securityProperties.apiRoles().stream()
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+            .toList();
 
-        List<SimpleGrantedAuthority> simpleGrantedAuthorities = securityProperties.apiRoles()
-                                                                                  .stream()
-                                                                                  .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                                                                                  .toList();
+    return new UsernamePasswordAuthenticationToken("api-client", apiKey, simpleGrantedAuthorities);
+  }
 
-        return new UsernamePasswordAuthenticationToken("api-client", apiKey, simpleGrantedAuthorities);
-    }
-
-    @Override
-    public boolean supports(@NonNull final Class<?> authentication) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
-    }
+  @Override
+  public boolean supports(@NonNull final Class<?> authentication) {
+    return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+  }
 }

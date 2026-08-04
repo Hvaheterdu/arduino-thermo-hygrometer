@@ -13,9 +13,7 @@ import api.arduinothermohygrometer.manager.TestcontainerManager;
 @Sql("classpath:sql/insert_humidities.sql")
 @Transactional
 class HumidityRepositoryImplIT extends TestcontainerManager {
-    @MockitoBean
-    protected BuildProperties buildProperties;
+  @MockitoBean protected BuildProperties buildProperties;
 
-    @Autowired
-    private HumidityRepository humidityRepository;
+  @Autowired private HumidityRepository humidityRepository;
 }

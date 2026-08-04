@@ -13,9 +13,7 @@ import api.arduinothermohygrometer.manager.TestcontainerManager;
 @Sql("classpath:sql/insert_batteries.sql")
 @Transactional
 class BatteryRepositoryImplIT extends TestcontainerManager {
-    @MockitoBean
-    protected BuildProperties buildProperties;
+  @MockitoBean protected BuildProperties buildProperties;
 
-    @Autowired
-    private BatteryRepository batteryRepository;
+  @Autowired private BatteryRepository batteryRepository;
 }

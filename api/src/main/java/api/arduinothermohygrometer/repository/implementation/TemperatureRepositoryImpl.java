@@ -14,92 +14,93 @@ import api.arduinothermohygrometer.repository.TemperatureRepository;
 
 @Repository
 public class TemperatureRepositoryImpl implements TemperatureRepository {
-    private final JdbcClient jdbcClient;
+  private final JdbcClient jdbcClient;
 
-    public TemperatureRepositoryImpl(final JdbcClient jdbcClient) {
-        this.jdbcClient = jdbcClient;
-    }
+  public TemperatureRepositoryImpl(final JdbcClient jdbcClient) {
+    this.jdbcClient = jdbcClient;
+  }
 
-    @Override
-    public Optional<Temperature> getTemperatureById(final UUID id) {
-        String sql = """
-            SELECT *
-            FROM temperatures
-            WHERE id = :id
-            """;
+  @Override
+  public Optional<Temperature> getTemperatureById(final UUID id) {
+    String sql =
+        """
+        SELECT *
+        FROM temperatures
+        WHERE id = :id
+        """;
 
-        return jdbcClient.sql(sql)
-                         .param("id", id)
-                         .query(Temperature.class)
-                         .optional();
-    }
+    return jdbcClient.sql(sql).param("id", id).query(Temperature.class).optional();
+  }
 
-    @Override
-    public List<Temperature> getTemperatureByTimestamp(final LocalDateTime timestamp) {
-        String sql = """
-            SELECT *
-            FROM temperatures
-            WHERE registered_at = :timestamp
-            """;
+  @Override
+  public List<Temperature> getTemperatureByTimestamp(final LocalDateTime timestamp) {
+    String sql =
+        """
+        SELECT *
+        FROM temperatures
+        WHERE registered_at = :timestamp
+        """;
 
-        return jdbcClient.sql(sql)
-                         .param("timestamp", timestamp)
-                         .query(Temperature.class)
-                         .list();
-    }
+    return jdbcClient.sql(sql).param("timestamp", timestamp).query(Temperature.class).list();
+  }
 
-    @Override
-    public List<Temperature> getTemperaturesByDate(final LocalDate date) {
-        String sql = """
-            SELECT *
-            FROM temperatures
-            WHERE registered_at >= :start AND registered_at < :end
-            """;
+  @Override
+  public List<Temperature> getTemperaturesByDate(final LocalDate date) {
+    String sql =
+        """
+        SELECT *
+        FROM temperatures
+        WHERE registered_at >= :start AND registered_at < :end
+        """;
 
-        return jdbcClient.sql(sql)
-                         .param("start", date.atStartOfDay())
-                         .param("end", date.plusDays(1).atStartOfDay())
-                         .query(Temperature.class)
-                         .list();
-    }
+    return jdbcClient
+        .sql(sql)
+        .param("start", date.atStartOfDay())
+        .param("end", date.plusDays(1).atStartOfDay())
+        .query(Temperature.class)
+        .list();
+  }
 
-    @Override
-    public Optional<Temperature> createTemperature(final Temperature temperature) {
-        String sql = """
-            INSERT INTO temperatures (registered_at, temp)
-            VALUES (:registered_at, :temp)
-            RETURNING id, registered_at, temp
-            """;
+  @Override
+  public Optional<Temperature> createTemperature(final Temperature temperature) {
+    String sql =
+        """
+        INSERT INTO temperatures (registered_at, temp)
+        VALUES (:registered_at, :temp)
+        RETURNING id, registered_at, temp
+        """;
 
-        return jdbcClient.sql(sql)
-                         .param("registered_at", temperature.getRegisteredAt())
-                         .param("temp", temperature.getTemp())
-                         .query(Temperature.class)
-                         .optional();
-    }
+    return jdbcClient
+        .sql(sql)
+        .param("registered_at", temperature.getRegisteredAt())
+        .param("temp", temperature.getTemp())
+        .query(Temperature.class)
+        .optional();
+  }
 
-    @Override
-    public void deleteTemperatureByTimestamp(final LocalDateTime timestamp) {
-        String sql = """
-            DELETE FROM temperatures
-            WHERE registered_at = :timestamp
-            """;
+  @Override
+  public void deleteTemperatureByTimestamp(final LocalDateTime timestamp) {
+    String sql =
+        """
+        DELETE FROM temperatures
+        WHERE registered_at = :timestamp
+        """;
 
-        jdbcClient.sql(sql)
-                  .param("timestamp", timestamp)
-                  .update();
-    }
+    jdbcClient.sql(sql).param("timestamp", timestamp).update();
+  }
 
-    @Override
-    public void deleteTemperaturesByDate(final LocalDate date) {
-        String sql = """
-            DELETE FROM batteries
-            WHERE registered_at >= :start AND registered_at < :end
-            """;
+  @Override
+  public void deleteTemperaturesByDate(final LocalDate date) {
+    String sql =
+        """
+        DELETE FROM batteries
+        WHERE registered_at >= :start AND registered_at < :end
+        """;
 
-        jdbcClient.sql(sql)
-                  .param("start", date.atStartOfDay())
-                  .param("end", date.plusDays(1).atStartOfDay())
-                  .update();
-    }
+    jdbcClient
+        .sql(sql)
+        .param("start", date.atStartOfDay())
+        .param("end", date.plusDays(1).atStartOfDay())
+        .update();
+  }
 }

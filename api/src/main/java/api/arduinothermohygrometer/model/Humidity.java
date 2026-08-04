@@ -16,19 +16,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Humidity {
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    @Column(name = "registered_at", nullable = false)
-    private LocalDateTime registeredAt;
+  @Column(name = "registered_at", nullable = false)
+  private LocalDateTime registeredAt;
 
-    @Column(name = "air_humidity", nullable = false, precision = 5, scale = 2)
-    private Double airHumidity;
+  @Column(name = "air_humidity", nullable = false, precision = 5, scale = 2)
+  private Double airHumidity;
 
-    public Humidity(final LocalDateTime registeredAt,
-                    final Double airHumidity) {
-        this.registeredAt = registeredAt;
-        this.airHumidity = airHumidity;
-    }
+  public Humidity(final LocalDateTime registeredAt, final Double airHumidity) {
+    this.registeredAt = registeredAt;
+    this.airHumidity = airHumidity;
+  }
 }

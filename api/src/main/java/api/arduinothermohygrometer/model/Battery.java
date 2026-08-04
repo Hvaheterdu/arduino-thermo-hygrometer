@@ -16,19 +16,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Battery {
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    @Column(name = "registered_at", nullable = false)
-    private LocalDateTime registeredAt;
+  @Column(name = "registered_at", nullable = false)
+  private LocalDateTime registeredAt;
 
-    @Column(name = "battery_status", nullable = false)
-    private int batteryStatus;
+  @Column(name = "battery_status", nullable = false)
+  private int batteryStatus;
 
-    public Battery(final LocalDateTime registeredAt,
-                   final int batteryStatus) {
-        this.registeredAt = registeredAt;
-        this.batteryStatus = batteryStatus;
-    }
+  public Battery(final LocalDateTime registeredAt, final int batteryStatus) {
+    this.registeredAt = registeredAt;
+    this.batteryStatus = batteryStatus;
+  }
 }

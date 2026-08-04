@@ -16,19 +16,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Temperature {
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-    @Column(name = "registered_at", nullable = false)
-    private LocalDateTime registeredAt;
+  @Column(name = "registered_at", nullable = false)
+  private LocalDateTime registeredAt;
 
-    @Column(name = "temp", nullable = false, precision = 6, scale = 2)
-    private Double temp;
+  @Column(name = "temp", nullable = false, precision = 6, scale = 2)
+  private Double temp;
 
-    public Temperature(final LocalDateTime registeredAt,
-                       final Double temp) {
-        this.registeredAt = registeredAt;
-        this.temp = temp;
-    }
+  public Temperature(final LocalDateTime registeredAt, final Double temp) {
+    this.registeredAt = registeredAt;
+    this.temp = temp;
+  }
 }
