@@ -344,6 +344,10 @@
                             <reflowLongStrings>true</reflowLongStrings>
                             <groupArtifact>com.google.googlejavaformat:google-java-format</groupArtifact>
                         </googleJavaFormat>
+                        <endWithNewline/>
+                        <forbidModuleImports/>
+                        <forbidWildcardImports/>
+                        <formatAnnotations/>
                         <importOrder>
                             <order>java,javax,org,com,io,,\#</order>
                             <semanticSort>true</semanticSort>
@@ -354,18 +358,18 @@
                                 <class>com.example.myClass</class>
                             </treatAsClass>
                         </importOrder>
+                        <lineEndings>UNIX</lineEndings>
                         <removeUnusedImports/>
-                        <forbidWildcardImports/>
-                        <forbidModuleImports/>
-                        <formatAnnotations/>
+                        <trimTrailingWhitespace/>
                     </java>
                 </configuration>
                 <executions>
                     <execution>
+                        <id>spotless-check</id>
+                        <phase>validate</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
-                        <phase>compile</phase>
                     </execution>
                 </executions>
             </plugin>
