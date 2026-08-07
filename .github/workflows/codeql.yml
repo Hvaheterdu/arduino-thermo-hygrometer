@@ -40,7 +40,7 @@ jobs:
       contents: read
 
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
         - language: java-kotlin
@@ -96,6 +96,6 @@ jobs:
         exit 1
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v4.37.5
+      uses: github/codeql-action/analyze@v4.37.6
       with:
         category: "/language:${{matrix.language}}"
