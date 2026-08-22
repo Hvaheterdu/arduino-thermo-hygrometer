@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class BatteryModelMapperTest {
   @Test
-  void givenValidBatteryDto_whenToModel_thenReturnBatteryModel() {
+  void givenValidBatteryDto_thenReturnBatteryModel() {
     BatteryDto batteryDto =
         BatteryDto.builder().registeredAt(LocalDateTime.now()).batteryStatus(95).build();
 
@@ -23,7 +23,7 @@ class BatteryModelMapperTest {
   }
 
   @Test
-  void givenValidBatteryModel_whenToDto_thenReturnBatteryDto() {
+  void givenValidBatteryModel_thenReturnBatteryDto() {
     Battery battery = new Battery(LocalDateTime.now(), 95);
 
     BatteryDto result = BatteryModelMapper.toDto(battery);

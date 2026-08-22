@@ -44,7 +44,7 @@ class TemperatureServiceImplTest {
   @Nested
   class GetMethods {
     @Test
-    void givenValidId_whenGetTemperatureById_thenReturnTemperature() {
+    void givenValidId_thenReturnTemperature() {
       UUID id = UUID.randomUUID();
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       TemperatureDto temperatureDto = createTemperatureDto(registeredAt, 70.00);
@@ -59,7 +59,7 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidId_whenGetTemperatureById_thenThrowResourceNotFoundException() {
+    void givenInvalidId_thenReturnResourceNotFoundException() {
       UUID invalidId = UUID.randomUUID();
       when(temperatureRepository.getTemperatureById(invalidId)).thenReturn(Optional.empty());
 
@@ -69,7 +69,7 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenValidTimestamp_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperature() {
+    void givenValidTimestamp_thenReturnTemperature() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       TemperatureDto temperatureDto = createTemperatureDto(registeredAt, 70.00);
@@ -93,7 +93,7 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidTimestamp_whenGetTemperaturesByDateOrTimestamp_thenReturnEmptyList() {
+    void givenInvalidTimestamp_thenReturnEmptyList() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(emptyList());
@@ -106,7 +106,7 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenValidDate_whenGetTemperaturesByDateOrTimestamp_thenReturnTemperatures() {
+    void givenValidDate_thenReturnTemperatures() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<TemperatureDto> temperatureDtos =
@@ -134,7 +134,7 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidDate_whenGetTemperaturesByDate_thenReturnEmptyList() {
+    void givenInvalidDate_thenReturnEmptyList() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate()))
@@ -151,7 +151,7 @@ class TemperatureServiceImplTest {
   @Nested
   class CreateMethods {
     @Test
-    void givenValidTemperatureModel_whenCreateTemperature_thenReturnCreatedTemperature() {
+    void givenValidTemperatureModel_thenReturnCreatedTemperature() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       TemperatureDto temperatureDto = createTemperatureDto(registeredAt, 70.00);
       Temperature temperature = new Temperature(registeredAt, 70.00);
@@ -168,7 +168,7 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidTemperatureModel_whenCreateTemperature_thenThrowResourceNotCreatedException() {
+    void givenInvalidTemperatureModel_thenThrowResourceNotCreatedException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       TemperatureDto temperatureDto = createTemperatureDto(registeredAt, 70.00);
       when(temperatureRepository.createTemperature(any(Temperature.class)))
@@ -183,7 +183,7 @@ class TemperatureServiceImplTest {
   @Nested
   class DeleteMethods {
     @Test
-    void givenValidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature() {
+    void givenValidTimestamp_thenDeleteTemperature() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       TemperatureDto temperatureDto = createTemperatureDto(registeredAt, 70.00);
@@ -197,7 +197,7 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidTimestamp_whenDeleteTemperaturesByDateOrTimestamp_thenReturn() {
+    void givenInvalidTimestamp_thenReturn() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(emptyList());
@@ -209,7 +209,7 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenValidDate_whenDeleteTemperaturesByDateOrTimestamp_thenDeleteTemperature() {
+    void givenValidDate_thenDeleteTemperature() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now();
       List<TemperatureDto> temperatureDtos =
@@ -227,7 +227,7 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidDate_whenDeleteTemperaturesByDateOrTimestamp_thenReturn() {
+    void givenInvalidDate_thenReturn() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now();
       when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate()))

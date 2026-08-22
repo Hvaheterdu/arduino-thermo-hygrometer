@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HumidityModelMapperTest {
   @Test
-  void givenValidHumidityDto_whenToModel_thenReturnHumidityModel() {
+  void givenValidHumidityDto_thenReturnHumidityModel() {
     HumidityDto humidityDto =
         HumidityDto.builder().registeredAt(LocalDateTime.now()).airHumidity(86.123).build();
 
@@ -23,7 +23,7 @@ class HumidityModelMapperTest {
   }
 
   @Test
-  void givenValidHumidityModel_whenToDto_thenReturnHumidityDto() {
+  void givenValidHumidityModel_thenReturnHumidityDto() {
     Humidity humidity = new Humidity(LocalDateTime.now(), 86.425);
 
     HumidityDto result = HumidityModelMapper.toDto(humidity);

@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TemperatureModelMapperTest {
   @Test
-  void givenValidTemperatureDto_whenToModel_thenReturnTemperatureModel() {
+  void givenValidTemperatureDto_thenReturnTemperatureModel() {
     TemperatureDto temperatureDto =
         TemperatureDto.builder().registeredAt(LocalDateTime.now()).temp(86.123).build();
 
@@ -23,7 +23,7 @@ class TemperatureModelMapperTest {
   }
 
   @Test
-  void givenValidTemperatureModel_whenToDto_thenReturnTemperatureDto() {
+  void givenValidTemperatureModel_thenReturnTemperatureDto() {
     Temperature temperature = new Temperature(LocalDateTime.now(), 86.425);
 
     TemperatureDto result = TemperatureModelMapper.toDto(temperature);

@@ -39,7 +39,7 @@ class BatteryControllerTest extends WebMvcTestBase {
   @Nested
   class GetMethods {
     @Test
-    void givenValidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn200OK() {
+    void givenValidRegisteredAt_thenReturn200OK() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<BatteryDto> batteryDtos =
@@ -70,7 +70,7 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    void givenInvalidRegisteredAt_whenGetBatteriesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidRegisteredAt_thenReturn404NotFound() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly))
@@ -97,7 +97,7 @@ class BatteryControllerTest extends WebMvcTestBase {
   @Nested
   class CreateMethods {
     @Test
-    void givenValidBatteryDtoModel_whenCreateBattery_thenReturn201CREATED() {
+    void givenValidBatteryDtoModel_thenReturn201CREATED() {
       BatteryDto batteryDto =
           BatteryDto.builder()
               .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
@@ -122,7 +122,7 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    void givenInvalidBatteryDto_whenCreateBattery_thenReturn400BadRequest() {
+    void givenInvalidBatteryDto_thenReturn400BadRequest() {
       BatteryDto invalidBatteryDto =
           BatteryDto.builder()
               .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
@@ -155,7 +155,7 @@ class BatteryControllerTest extends WebMvcTestBase {
   @Nested
   class DeleteMethods {
     @Test
-    void givenValidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn204NoContent() {
+    void givenValidRegisteredAt_thenReturn204NoContent() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       doNothing().when(batteryService).deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
@@ -172,7 +172,7 @@ class BatteryControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    void givenInvalidRegisteredAt_whenDeleteBatteriesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidRegisteredAt_thenReturn404NotFound() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       doThrow(

@@ -43,7 +43,7 @@ class BatteryServiceImplTest {
   @Nested
   class GetMethods {
     @Test
-    void givenValidId_whenGetBatteryById_thenReturnBattery() {
+    void givenValidId_thenReturnBattery() {
       UUID id = UUID.randomUUID();
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       BatteryDto batteryDto = createBatteryDto(registeredAt, 90);
@@ -58,7 +58,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenInvalidId_whenGetBatteryById_thenThrowResourceNotFoundException() {
+    void givenInvalidId_thenThrowResourceNotFoundException() {
       UUID invalidId = UUID.randomUUID();
       when(batteryRepository.getBatteryById(invalidId)).thenReturn(Optional.empty());
 
@@ -68,7 +68,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenValidTimestamp_whenGetBatteriesByDateOrTimestamp_thenReturnBattery() {
+    void givenValidTimestamp_thenReturnBatteries() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       BatteryDto batteryDto = createBatteryDto(registeredAt, 90);
@@ -91,7 +91,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenInvalidTimestamp_whenGetBatteriesByDateOrTimestamp_thenReturnEmptyList() {
+    void givenInvalidTimestamp_thenReturnEmptyList() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(emptyList());
@@ -104,7 +104,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenValidDate_whenGetBatteriesByDateOrTimestamp_thenReturnBatteries() {
+    void givenValidDate_thenReturnBatteries() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<BatteryDto> batteryDtos =
@@ -131,7 +131,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenInvalidDate_whenGetBatteriesByDateOrTimestamp_thenReturnEmptyList() {
+    void givenInvalidDate_thenReturnEmptyList() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate()))
@@ -148,7 +148,7 @@ class BatteryServiceImplTest {
   @Nested
   class CreateMethods {
     @Test
-    void givenValidBatteryModel_whenCreateBattery_thenReturnCreatedBattery() {
+    void givenValidBatteryModel_thenReturnCreatedBattery() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       BatteryDto batteryDto = createBatteryDto(registeredAt, 90);
       Battery battery = new Battery(registeredAt, 90);
@@ -164,7 +164,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenEmptyBatteryModel_whenCreateBattery_thenThrowResourceNotCreatedException() {
+    void givenEmptyBatteryModel_thenReturnEmptyList() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       BatteryDto batteryDto = createBatteryDto(registeredAt, 90);
       when(batteryRepository.createBattery(any(Battery.class))).thenReturn(Optional.empty());
@@ -178,7 +178,7 @@ class BatteryServiceImplTest {
   @Nested
   class DeleteMethods {
     @Test
-    void givenValidTimestamp_whenDeleteBatteryByDateOrTimestamp_thenDeleteBattery() {
+    void givenValidTimestamp_thenDeleteBattery() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       BatteryDto batteryDto = createBatteryDto(registeredAt, 90);
@@ -192,7 +192,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenInvalidTimestamp_whenDeleteBatteryByDateOrTimestamp_thenReturn() {
+    void givenInvalidTimestamp_thenThrowResourceNotFoundException() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(emptyList());
@@ -204,7 +204,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenValidDate_whenDeleteBatteryByDateOrTimestamp_thenDeleteBattery() {
+    void givenValidDate_thenDeleteBattery() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<BatteryDto> batteryDtos =
@@ -220,7 +220,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenInvalidDate_whenDeleteBatteryByDateOrTimestamp_thenReturn() {
+    void givenInvalidDate_thenThrowResourceNotFoundException() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate()))

@@ -39,7 +39,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
   @Nested
   class GetMethods {
     @Test
-    void givenValidRegisteredAt_whenGetTemperaturesByDateOrTimestamp_thenReturn200OK() {
+    void givenValidRegisteredAt_thenReturn200OK() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<TemperatureDto> temperatureDtos =
@@ -68,7 +68,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    void givenInvalidRegisteredAt_whenGetTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidRegisteredAt_thenReturn404NotFound() {
       boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly))
@@ -95,7 +95,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
   @Nested
   class CreateMethods {
     @Test
-    void givenValidTemperatureDtoModel_whenCreateTemperature_thenReturn201CREATED() {
+    void givenValidTemperatureDtoModel_thenReturn201CREATED() {
       TemperatureDto temperatureDto =
           TemperatureDto.builder()
               .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
@@ -121,7 +121,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    void givenInvalidTemperatureDto_whenCreateTemperature_thenReturn400BadRequest() {
+    void givenInvalidTemperatureDto_thenReturn400BadRequest() {
       TemperatureDto invalidTemperatureDto =
           TemperatureDto.builder()
               .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
@@ -153,7 +153,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
   @Nested
   class DeleteMethods {
     @Test
-    void givenValidRegisteredAt_whenDeleteTemperaturesByDateOrTimestamp_thenReturn204NoContent() {
+    void givenValidRegisteredAt_thenReturn204NoContent() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       doNothing()
@@ -172,7 +172,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
     }
 
     @Test
-    void givenInvalidRegisteredAt_whenDeleteTemperaturesByDateOrTimestamp_thenReturn404NotFound() {
+    void givenInvalidRegisteredAt_thenReturn404NotFound() {
       boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       doThrow(
