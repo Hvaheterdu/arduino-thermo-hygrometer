@@ -11,10 +11,6 @@ public class HumidityModelMapper {
   }
 
   public static HumidityDto toDto(final Humidity humidity) {
-    return HumidityDto.builder()
-        .id(humidity.getId())
-        .registeredAt(humidity.getRegisteredAt())
-        .airHumidity(humidity.getAirHumidity())
-        .build();
+    return new HumidityDto(humidity.getRegisteredAt(), humidity.getAirHumidity());
   }
 }

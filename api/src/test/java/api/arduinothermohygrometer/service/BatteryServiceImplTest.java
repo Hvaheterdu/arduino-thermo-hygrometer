@@ -52,7 +52,6 @@ class BatteryServiceImplTest {
 
       BatteryDto result = batteryService.getBatteryById(id);
 
-      assertThat(result.getId()).isEqualTo(batteryDto.getId());
       assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.getRegisteredAt());
       assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.getBatteryStatus());
     }
@@ -84,7 +83,6 @@ class BatteryServiceImplTest {
           .first()
           .satisfies(
               battery -> {
-                assertThat(battery.getId()).isEqualTo(batteryDto.getId());
                 assertThat(battery.getRegisteredAt()).isEqualTo(batteryDto.getRegisteredAt());
                 assertThat(battery.getBatteryStatus()).isEqualTo(batteryDto.getBatteryStatus());
               });
@@ -122,7 +120,6 @@ class BatteryServiceImplTest {
           .first()
           .satisfies(
               battery -> {
-                assertThat(battery.getId()).isEqualTo(batteryDtos.getFirst().getId());
                 assertThat(battery.getRegisteredAt())
                     .isEqualTo(batteryDtos.getFirst().getRegisteredAt());
                 assertThat(battery.getBatteryStatus())
@@ -158,7 +155,6 @@ class BatteryServiceImplTest {
       BatteryDto result = batteryService.createBattery(batteryDto);
 
       verify(batteryRepository).createBattery(any(Battery.class));
-      assertThat(result.getId()).isNotNull();
       assertThat(result.getRegisteredAt()).isEqualTo(batteryDto.getRegisteredAt());
       assertThat(result.getBatteryStatus()).isEqualTo(batteryDto.getBatteryStatus());
     }

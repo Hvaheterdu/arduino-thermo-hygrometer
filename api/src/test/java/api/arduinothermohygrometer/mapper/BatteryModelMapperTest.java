@@ -28,7 +28,6 @@ class BatteryModelMapperTest {
 
     BatteryDto result = BatteryModelMapper.toDto(battery);
 
-    assertThat(result.getId()).isNull();
     assertThat(result.getRegisteredAt()).isEqualTo(battery.getRegisteredAt());
     assertThat(result.getBatteryStatus()).isEqualTo(battery.getBatteryStatus());
   }

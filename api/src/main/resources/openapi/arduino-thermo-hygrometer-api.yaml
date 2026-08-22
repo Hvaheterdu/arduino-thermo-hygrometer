@@ -30,19 +30,19 @@ tags:
 components:
   examples:
     Battery:
-      description: Example of Battery object.
+      description: Battery object.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         batteryStatus: 50
 
     Humidity:
-      description: Example of Humidity object.
+      description: Humidity object.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         airHumidity: 70.00
 
     Temperature:
-      description: Example of Temperature object.
+      description: Temperature object.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         temp: 70.00
@@ -162,7 +162,7 @@ components:
 
   responses:
     ProblemDetails:
-      description: Problem details error response.
+      description: Problem details error.
       content:
         application/problem+json:
           schema:
@@ -257,15 +257,9 @@ components:
         - description
 
     BatteryDto:
+      description: Battery object.
       type: object
       properties:
-        id:
-          description: Id of object with remaining battery percentage of the Arduino device.
-          type: string
-          format: uuid
-          minLength: 36
-          maxLength: 36
-          readOnly: true
         registeredAt:
           description: Registration time of the remaining battery percentage of the Arduino device.
           type: string
@@ -282,15 +276,9 @@ components:
         - batteryStatus
 
     HumidityDto:
+      description: Humidity object.
       type: object
       properties:
-        id:
-          description: Id of object with measured air humidity by the Arduino device.
-          type: string
-          format: uuid
-          minLength: 36
-          maxLength: 36
-          readOnly: true
         registeredAt:
           description: Registration time of measured air humidity by the Arduino device.
           type: string
@@ -307,15 +295,9 @@ components:
         - airHumidity
 
     TemperatureDto:
+      description: Temperature object.
       type: object
       properties:
-        id:
-          description: Id of object with measured temperature by the Arduino device.
-          type: string
-          format: uuid
-          minLength: 36
-          maxLength: 36
-          readOnly: true
         registeredAt:
           description: Registration time of measured temperature by the Arduino device.
           type: string

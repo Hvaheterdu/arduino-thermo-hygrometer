@@ -53,7 +53,6 @@ class TemperatureServiceImplTest {
 
       TemperatureDto result = temperatureService.getTemperatureById(id);
 
-      assertThat(result.getId()).isEqualTo(temperatureDto.getId());
       assertThat(result.getRegisteredAt()).isEqualTo(temperatureDto.getRegisteredAt());
       assertThat(result.getTemp()).isEqualTo(temperatureDto.getTemp());
     }
@@ -85,7 +84,6 @@ class TemperatureServiceImplTest {
           .first()
           .satisfies(
               temperature -> {
-                assertThat(temperature.getId()).isEqualTo(temperatureDto.getId());
                 assertThat(temperature.getRegisteredAt())
                     .isEqualTo(temperatureDto.getRegisteredAt());
                 assertThat(temperature.getTemp()).isEqualTo(temperatureDto.getTemp());
@@ -126,7 +124,6 @@ class TemperatureServiceImplTest {
           .first()
           .satisfies(
               temperature -> {
-                assertThat(temperature.getId()).isEqualTo(temperatureDtos.getFirst().getId());
                 assertThat(temperature.getRegisteredAt())
                     .isEqualTo(temperatureDtos.getFirst().getRegisteredAt());
                 assertThat(temperature.getTemp()).isEqualTo(temperatureDtos.getFirst().getTemp());
@@ -162,7 +159,6 @@ class TemperatureServiceImplTest {
       TemperatureDto result = temperatureService.createTemperature(temperatureDto);
 
       verify(temperatureRepository).createTemperature(any(Temperature.class));
-      assertThat(result.getId()).isNotNull();
       assertThat(result.getRegisteredAt()).isEqualTo(temperatureDto.getRegisteredAt());
       assertThat(result.getTemp()).isEqualTo(temperatureDto.getTemp());
     }

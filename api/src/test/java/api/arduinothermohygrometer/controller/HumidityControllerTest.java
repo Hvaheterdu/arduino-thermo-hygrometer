@@ -40,7 +40,6 @@ class HumidityControllerTest extends WebMvcTestBase {
   class GetMethods {
     @Test
     void givenValidRegisteredAt_thenReturn200OK() {
-      boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<HumidityDto> humidityDtos =
           List.of(
@@ -49,7 +48,7 @@ class HumidityControllerTest extends WebMvcTestBase {
                   .registeredAt(registeredAt.minusHours(1))
                   .airHumidity(90.01)
                   .build());
-      when(humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly))
+      when(humidityService.getHumiditiesByDateOrTimestamp(registeredAt, true))
           .thenReturn(humidityDtos);
 
       MvcTestResult result =
@@ -57,7 +56,7 @@ class HumidityControllerTest extends WebMvcTestBase {
               .get()
               .uri("/api/v1/humidities")
               .param("registeredAt", registeredAt.toString())
-              .param("dateOnly", String.valueOf(dateOnly))
+              .param("dateOnly", String.valueOf(true))
               .exchange();
 
       assertThat(result)
@@ -71,9 +70,8 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     void givenInvalidRegisteredAt_thenReturn404NotFound() {
-      boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-      when(humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly))
+      when(humidityService.getHumiditiesByDateOrTimestamp(registeredAt, true))
           .thenThrow(
               new ResourceNotFoundException(
                   "Humidities registeredAt=" + registeredAt + " not found."));
@@ -83,7 +81,7 @@ class HumidityControllerTest extends WebMvcTestBase {
               .get()
               .uri("/api/v1/humidities")
               .param("registeredAt", registeredAt.toString())
-              .param("dateOnly", String.valueOf(dateOnly))
+              .param("dateOnly", String.valueOf(true))
               .exchange();
 
       assertThat(result)
@@ -156,16 +154,15 @@ class HumidityControllerTest extends WebMvcTestBase {
   class DeleteMethods {
     @Test
     void givenValidRegisteredAt_thenReturn204NoContent() {
-      boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-      doNothing().when(humidityService).deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
+      doNothing().when(humidityService).deleteHumiditiesByDateOrTimestamp(registeredAt, false);
 
       MvcTestResult result =
           mockMvcTester
               .delete()
               .uri("/api/v1/humidities")
               .param("registeredAt", registeredAt.toString())
-              .param("dateOnly", String.valueOf(dateOnly))
+              .param("dateOnly", String.valueOf(false))
               .exchange();
 
       assertThat(result).hasStatus(HttpStatus.NO_CONTENT);
@@ -173,20 +170,19 @@ class HumidityControllerTest extends WebMvcTestBase {
 
     @Test
     void givenInvalidRegisteredAt_thenReturn404NotFound() {
-      boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       doThrow(
               new ResourceNotFoundException(
                   "Humidities registeredAt=" + registeredAt + " not found."))
           .when(humidityService)
-          .deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
+          .deleteHumiditiesByDateOrTimestamp(registeredAt, false);
 
       MvcTestResult result =
           mockMvcTester
               .delete()
               .uri("/api/v1/humidities")
               .param("registeredAt", registeredAt.toString())
-              .param("dateOnly", String.valueOf(dateOnly))
+              .param("dateOnly", String.valueOf(false))
               .exchange();
 
       assertThat(result)

@@ -53,7 +53,6 @@ class HumidityServiceImplTest {
 
       HumidityDto result = humidityService.getHumidityById(id);
 
-      assertThat(result.getId()).isEqualTo(humidityDto.getId());
       assertThat(result.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
       assertThat(result.getAirHumidity()).isEqualTo(humidityDto.getAirHumidity());
     }
@@ -85,7 +84,6 @@ class HumidityServiceImplTest {
           .first()
           .satisfies(
               humidity -> {
-                assertThat(humidity.getId()).isEqualTo(humidityDto.getId());
                 assertThat(humidity.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
                 assertThat(humidity.getAirHumidity()).isEqualTo(humidityDto.getAirHumidity());
               });
@@ -125,7 +123,6 @@ class HumidityServiceImplTest {
           .first()
           .satisfies(
               humidity -> {
-                assertThat(humidity.getId()).isEqualTo(humidityDtos.getFirst().getId());
                 assertThat(humidity.getRegisteredAt())
                     .isEqualTo(humidityDtos.getFirst().getRegisteredAt());
                 assertThat(humidity.getAirHumidity())
@@ -162,7 +159,6 @@ class HumidityServiceImplTest {
       HumidityDto result = humidityService.createHumidity(humidityDto);
 
       verify(humidityRepository).createHumidity(any(Humidity.class));
-      assertThat(result.getId()).isNotNull();
       assertThat(result.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
       assertThat(result.getAirHumidity()).isEqualTo(humidityDto.getAirHumidity());
     }
