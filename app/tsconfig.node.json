@@ -11,11 +11,15 @@
       "@testing-library/dom",
       "node",
       "vite/client",
-      "vite-plugin-svgr/client",
       "vitest/globals"
     ],
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.node.tsbuildinfo"
   },
-  "exclude": ["../.github", "dist", "node_modules", "../api", "../api/target"],
-  "include": ["vite.config.ts"]
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "include": [
+    "vite.config.ts"
+  ]
 }

@@ -1,6 +1,9 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "react"],
+  "plugins": [
+    "typescript",
+    "react"
+  ],
   "env": {
     "builtin": true,
     "browser": true,
@@ -15,16 +18,11 @@
     "suspicious": "warn"
   },
   "ignorePatterns": [
-    "api",
     "build",
     "coverage",
     "dist",
     "node_modules",
-    "eslint.config.js",
-    "tsconfig.json",
-    "tsconfig.app.json",
-    "tsconfig.node.json",
-    "app/vite.config.ts",
+    "vite.config.ts",
     "**/*.d.ts",
     "**/*.generated.ts",
     "**/.git",

@@ -28,13 +28,14 @@
   "type": "module",
   "scripts": {
     "build:dev": "vite build --mode development && tsc --noEmit",
-    "build:production": "vite build --mode production && tsc --noEmit",
     "build:staging": "vite build --mode staging && tsc --noEmit",
+    "build:production": "vite build --mode production && tsc --noEmit",
+    "dev": "vite --mode development",
+    "generate-types": "npx openapi-typescript openapi-specification/arduino-thermo-hygrometer-api.yaml --output ./src/types/api/arduino-thermo-hygrometer-api.d.ts",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
-    "dev": "vite --mode development",
     "preview": "vite preview --mode development",
     "test": "vitest",
     "test:run": "vitest run"
@@ -44,7 +45,6 @@
     "@emotion/react": "^11.14.0",
     "openapi-fetch": "^0.17.0",
     "react": "^19.2.8",
-    "react-aria-components": "^1.20.0",
     "react-dom": "^19.2.8",
     "react-router": "8.3.0",
     "swr": "^2.5.1"
@@ -64,7 +64,6 @@
     "typescript": "^7.0.2",
     "vite": "^8.2.2",
     "vite-plugin-checker": "^0.14.5",
-    "vite-plugin-svgr": "^5.2.0",
     "vitest": "^4.1.11"
   },
   "browserslist": {

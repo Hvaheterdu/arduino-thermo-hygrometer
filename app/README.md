@@ -1,55 +1,46 @@
-# Web UI
+# Arduino Thermo Hygrometer Web UI
 
-Frontend application built with React, TypeScript, and Vite.
+A small React + TypeScript dashboard for the Arduino Thermo Hygrometer REST API. The UI uses Chakra UI for accessible
+presentation, SWR for client-side caching/revalidation, openapi-fetch for type-safe HTTP requests, openapi-typescript
+for generated API types, React Router for navigation, and Vite/Vitest for development and testing.
 
 ## Prerequisites
 
 - Node.js 24+
 - npm 11+
+- The API running locally on `http://localhost:5000` for development data
 
-## Local Development
+## Run the frontend
 
-Run from this folder:
-
-```bash
-npm ci
-npm run app:dev
-```
-
-## Quality Scripts
-
-- `npm run app:format`: format files with Oxfmt
-- `npm run app:format:check`: check formatting without writing changes
-- `npm run app:lint`: run Oxlint
-- `npm run app:build:dev`: build in development mode and run TypeScript checks
-- `npm run app:test:run`: run Vitest unit and component tests
-- `npm run app:budget`: enforce bundle size budget for generated `dist/assets` files
-
-Recommended local validation before pushing:
+From the `app` folder:
 
 ```bash
-npm run app:format && npm run app:lint && npm run app:build:dev && npm run app:budget && npm run app:test:run && npm run app:test:e2e
+npm install
+npm run generate-types
+npm run dev
 ```
 
-## Environment Variables
+The development server runs at `http://localhost:3000/arduinothermohygrometer/` with the current local base path
+configuration.
 
-Set these in `.env.local` as needed:
+The API key and API base URL are read from Vite environment variables. Keep secrets in `.env.local` and do not commit
+them. The frontend expects `VITE_API_KEY`, `VITE_API_HEADER_NAME`, and an environment-specific API URL such as
+`VITE_API_BASEURL_DEVELOPMENT`.
 
-- `VITE_API_KEY`: API key sent as `X-API-KEY`. Required, store in a `.env.local` file.
-- `VITE_ENVIRONMENT`: active API environment (`local`, `staging`, `production`)
-- `VITE_API_BASEURL`, `VITE_API_BASEURL_LOCAL`, `VITE_API_BASEURL_STAGING`, `VITE_API_BASEURL_PRODUCTION`: API base URLs
-- `VITE_API_TIMEOUT_MS`: API request timeout in milliseconds (clamped to 1000-30000, default 10000)
-- `VITE_API_RETRY_ATTEMPTS`: retry attempts for idempotent API GET failures (clamped to 0-3, default 2)
+## Available scripts
 
-## CI Expectations
+```bash
+npm run dev
+npm run test:run
+npm run lint
+npm run format:check
+npm run build:dev
+```
 
-Frontend CI is defined in `.github/workflows/frontend-ci.yml` and runs on frontend-related changes.
+`generate-types` regenerates `src/types/api/arduino-thermo-hygrometer-api.d.ts` from the OpenAPI document.
 
-It executes these checks:
+## Application structure
 
-1. `npm run app:format:check`
-2. `npm run app:lint`
-3. `npm run app:build:dev`
-4. `npm run app:budget`
-5. `npm run app:test:run`
-6. `npm run app:test:e2e`
+The source is organised by feature. `features/dashboard` contains the dashboard page and its UI, `features/history`
+contains historical reading queries and presentation, `shared` contains API infrastructure and reusable UI, and `types`
+contains generated API types plus feature/domain types.

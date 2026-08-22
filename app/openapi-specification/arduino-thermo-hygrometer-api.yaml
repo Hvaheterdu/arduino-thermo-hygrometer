@@ -30,19 +30,19 @@ tags:
 components:
   examples:
     Battery:
-      description: Example of Battery object.
+      description: Battery object.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         batteryStatus: 50
 
     Humidity:
-      description: Example of Humidity object.
+      description: Humidity object.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         airHumidity: 70.00
 
     Temperature:
-      description: Example of Temperature object.
+      description: Temperature object.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         temp: 70.00
@@ -73,7 +73,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-abc123def456ghi789jkl012mno345pq-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     Forbidden:
       summary: API key authenticated but lacks required role.
@@ -85,7 +85,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-def123ghi456jkl789mno012pqr345st-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     NotFound:
       summary: Resource not found.
@@ -97,7 +97,7 @@ components:
         instance: "/api/v1/batteries/00000000-0000-0000-0000-000000000000"
         traceId: "00-ghi123jkl456mno789pqr012stu345vw-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     TooManyRequests:
       summary: Rate limit exceeded.
@@ -109,7 +109,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-mno123pqr456stu789vwx012yz345abc-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     InternalServerError:
       summary: Internal server error.
@@ -121,7 +121,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-pqr123stu456vwx789yz012abc345def-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
   headers:
     X-RateLimit-Limit:
@@ -162,7 +162,7 @@ components:
 
   responses:
     ProblemDetails:
-      description: Problem details error response.
+      description: Problem details error.
       content:
         application/problem+json:
           schema:
@@ -257,15 +257,9 @@ components:
         - description
 
     BatteryDto:
+      description: Battery object.
       type: object
       properties:
-        id:
-          description: Id of object with remaining battery percentage of the Arduino device.
-          type: string
-          format: uuid
-          minLength: 36
-          maxLength: 36
-          readOnly: true
         registeredAt:
           description: Registration time of the remaining battery percentage of the Arduino device.
           type: string
@@ -282,15 +276,9 @@ components:
         - batteryStatus
 
     HumidityDto:
+      description: Humidity object.
       type: object
       properties:
-        id:
-          description: Id of object with measured air humidity by the Arduino device.
-          type: string
-          format: uuid
-          minLength: 36
-          maxLength: 36
-          readOnly: true
         registeredAt:
           description: Registration time of measured air humidity by the Arduino device.
           type: string
@@ -307,15 +295,9 @@ components:
         - airHumidity
 
     TemperatureDto:
+      description: Temperature object.
       type: object
       properties:
-        id:
-          description: Id of object with measured temperature by the Arduino device.
-          type: string
-          format: uuid
-          minLength: 36
-          maxLength: 36
-          readOnly: true
         registeredAt:
           description: Registration time of measured temperature by the Arduino device.
           type: string
@@ -416,7 +398,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -594,7 +576,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -772,7 +754,7 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -873,4 +855,4 @@ paths:
               $ref: "#/components/examples/InternalServerError"
 
 security:
-  - ApiKeyAuth: []
+  - ApiKeyAuth: [ ]

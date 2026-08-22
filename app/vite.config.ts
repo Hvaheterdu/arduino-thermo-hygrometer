@@ -1,6 +1,5 @@
 import viteReact from "@vitejs/plugin-react";
 import { checker } from "vite-plugin-checker";
-import vitePluginSvgr from "vite-plugin-svgr";
 import { defineConfig } from "vitest/config";
 
 const buildSecurityHeaders = (): Record<string, string> => {
@@ -37,10 +36,7 @@ export default defineConfig(() => {
         lintCommand: "oxlint"
       }
     }),
-    viteReact(),
-    vitePluginSvgr({
-      include: "**/*.svg"
-    })
+    viteReact()
   ];
 
   return {
@@ -52,8 +48,8 @@ export default defineConfig(() => {
       reportCompressedSize: true
     },
     test: {
-      include: ["src/tests/**/*Test.{ts,tsx}"],
-      environment: "node",
+      include: ["src/**/*.test.{ts,tsx}"],
+      environment: "jsdom",
       globals: true,
       clearMocks: true
     },
