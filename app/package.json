@@ -31,7 +31,7 @@
     "build:staging": "vite build --mode staging && tsc --noEmit",
     "build:production": "vite build --mode production && tsc --noEmit",
     "dev": "vite --mode development",
-    "generate-types": "npx openapi-typescript openapi-specification/arduino-thermo-hygrometer-api.yaml --output ./src/types/api/arduino-thermo-hygrometer-api.d.ts",
+    "generate-types": "npx openapi-typescript openapi-specification/arduino-thermo-hygrometer-api.yaml --output ./src/arduino-thermo-hygrometer-api.d.ts",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "lint": "oxlint",
