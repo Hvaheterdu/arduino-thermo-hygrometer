@@ -1,16 +1,28 @@
 {
   "compilerOptions": {
     "composite": true,
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "target": "esnext",
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.app.tsbuildinfo",
-    "types": ["@testing-library/react", "@testing-library/dom", "node", "vite/client", "vitest/globals"],
+    "types": [
+      "@testing-library/react",
+      "@testing-library/dom",
+      "node",
+      "vite/client",
+      "vitest/globals"
+    ],
     "useDefineForClassFields": true,
     /* Bundler mode */
     "isolatedModules": true,
@@ -32,6 +44,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "exclude": ["dist", "node_modules"],
-  "include": ["src", "src/**/*.js", "src/**/*.ts", "src/**/*.tsx"]
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "include": [
+    "src",
+    "src/**/*.js",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ]
 }
