@@ -1,3 +1,5 @@
+import path from "path";
+
 import viteReact from "@vitejs/plugin-react";
 import { checker } from "vite-plugin-checker";
 import { defineConfig } from "vitest/config";
@@ -42,6 +44,9 @@ export default defineConfig(() => {
   return {
     root: import.meta.dirname,
     plugins,
+    alias: {
+      "@": path.resolve(__dirname, "./src")
+    },
     build: {
       outDir: "dist",
       sourcemap: true,

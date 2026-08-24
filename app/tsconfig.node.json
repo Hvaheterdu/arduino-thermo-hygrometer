@@ -4,22 +4,14 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "moduleDetection": "force",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "types": [
-      "@testing-library/react",
-      "@testing-library/dom",
-      "node",
-      "vite/client",
-      "vitest/globals"
-    ],
+    "types": ["@testing-library/react", "@testing-library/dom", "node", "vite/client", "vitest/globals"],
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.node.tsbuildinfo"
   },
-  "exclude": [
-    "dist",
-    "node_modules"
-  ],
-  "include": [
-    "vite.config.ts"
-  ]
+  "exclude": ["dist", "node_modules"],
+  "include": ["vite.config.ts"]
 }
