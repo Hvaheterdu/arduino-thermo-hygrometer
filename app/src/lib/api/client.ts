@@ -12,12 +12,6 @@ const environmentKey = (mode: string): string => `VITE_API_BASEURL_${mode.toUppe
   },
   apiKey: string | undefined = import.meta.env.VITE_API_KEY,
   apiHeaderName: string = import.meta.env.VITE_API_HEADER_NAME || "X-API-KEY";
-console.log({
-  mode: import.meta.env.MODE,
-  apiKey,
-  apiHeaderName,
-  baseUrl: getApiBaseUrl()
-});
 
 export const apiClient = createClient<paths>({
   baseUrl: getApiBaseUrl(),
