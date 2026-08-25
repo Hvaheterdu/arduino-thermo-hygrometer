@@ -27,7 +27,6 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -64,19 +63,18 @@ class HumidityServiceImplTest {
 
       assertThatThrownBy(() -> humidityService.getHumidityById(invalidId))
           .isInstanceOf(ResourceNotFoundException.class)
-          .hasMessage("Humidity with id=%s not found.".formatted(invalidId));
+          .hasMessage("Humidity not found.");
     }
 
     @Test
     void givenValidTimestamp_thenReturnHumidity() {
-      boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       HumidityDto humidityDto = createHumidityDto(registeredAt, 70.00);
       List<Humidity> humidities = List.of(HumidityModelMapper.toModel(humidityDto));
       when(humidityRepository.getHumidityByTimestamp(registeredAt)).thenReturn(humidities);
 
       List<HumidityDto> result =
-          humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
+          humidityService.getHumiditiesByDateOrTimestamp(registeredAt, false);
 
       verify(humidityRepository).getHumidityByTimestamp(registeredAt);
       assertThat(result)
@@ -90,21 +88,17 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    void givenInvalidTimestamp_thenReturnEmptyList() {
-      boolean dateOnly = false;
+    void givenInvalidTimestamp_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(humidityRepository.getHumidityByTimestamp(registeredAt)).thenReturn(emptyList());
 
-      List<HumidityDto> result =
-          humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(humidityRepository).getHumidityByTimestamp(registeredAt);
-      assertThat(result).isEmpty();
+      assertThatThrownBy(() -> humidityService.getHumiditiesByDateOrTimestamp(registeredAt, false))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Humidities not found for timestamp " + registeredAt + ".");
     }
 
     @Test
     void givenValidDate_thenReturnHumidities() {
-      boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<HumidityDto> humidityDtos =
           List.of(
@@ -114,8 +108,7 @@ class HumidityServiceImplTest {
       when(humidityRepository.getHumiditiesByDate(registeredAt.toLocalDate()))
           .thenReturn(humidities);
 
-      List<HumidityDto> result =
-          humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
+      List<HumidityDto> result = humidityService.getHumiditiesByDateOrTimestamp(registeredAt, true);
 
       verify(humidityRepository).getHumiditiesByDate(registeredAt.toLocalDate());
       assertThat(result)
@@ -131,17 +124,14 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    void givenInvalidDate_thenReturnEmptyList() {
-      boolean dateOnly = true;
+    void givenInvalidDate_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(humidityRepository.getHumiditiesByDate(registeredAt.toLocalDate()))
           .thenReturn(emptyList());
 
-      List<HumidityDto> result =
-          humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(humidityRepository).getHumiditiesByDate(registeredAt.toLocalDate());
-      assertThat(result).isEmpty();
+      assertThatThrownBy(() -> humidityService.getHumiditiesByDateOrTimestamp(registeredAt, true))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Humidities not found for date " + registeredAt.toLocalDate() + ".");
     }
   }
 
@@ -164,7 +154,7 @@ class HumidityServiceImplTest {
     }
 
     @Test
-    void givenInvalidHumidityModel_thenReturnResourceNotCreatedException() {
+    void givenInvalidHumidityModel_thenThrowResourceNotCreatedException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       HumidityDto humidityDto = createHumidityDto(registeredAt, 70.00);
       when(humidityRepository.createHumidity(any(Humidity.class))).thenReturn(Optional.empty());
@@ -179,33 +169,29 @@ class HumidityServiceImplTest {
   class DeleteMethods {
     @Test
     void givenValidTimestamp_thenDeleteHumidity() {
-      boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       HumidityDto humidityDto = createHumidityDto(registeredAt, 70.00);
       List<Humidity> humidities = List.of(HumidityModelMapper.toModel(humidityDto));
       when(humidityRepository.getHumidityByTimestamp(registeredAt)).thenReturn(humidities);
 
-      humidityService.deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
+      humidityService.deleteHumiditiesByDateOrTimestamp(registeredAt, false);
 
       verify(humidityRepository).getHumidityByTimestamp(registeredAt);
       verify(humidityRepository).deleteHumidityByTimestamp(registeredAt);
     }
 
     @Test
-    void givenInvalidTimestamp_thenReturn() {
-      boolean dateOnly = false;
+    void givenInvalidTimestamp_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(humidityRepository.getHumidityByTimestamp(registeredAt)).thenReturn(emptyList());
 
-      humidityService.deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(humidityRepository).getHumidityByTimestamp(registeredAt);
-      verify(humidityRepository, times(0)).deleteHumidityByTimestamp(registeredAt);
+      assertThatThrownBy(() -> humidityService.getHumiditiesByDateOrTimestamp(registeredAt, false))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Humidities not found for timestamp " + registeredAt + ".");
     }
 
     @Test
     void givenValidDate_thenDeleteHumidity() {
-      boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<HumidityDto> humidityDtos =
           List.of(
@@ -215,23 +201,21 @@ class HumidityServiceImplTest {
       when(humidityRepository.getHumiditiesByDate(registeredAt.toLocalDate()))
           .thenReturn(humidities);
 
-      humidityService.deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
+      humidityService.deleteHumiditiesByDateOrTimestamp(registeredAt, true);
 
       verify(humidityRepository).getHumiditiesByDate(registeredAt.toLocalDate());
       verify(humidityRepository).deleteHumiditiesByDate(registeredAt.toLocalDate());
     }
 
     @Test
-    void givenInvalidDate_thenReturn() {
-      boolean dateOnly = true;
+    void givenInvalidDate_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(humidityRepository.getHumiditiesByDate(registeredAt.toLocalDate()))
           .thenReturn(emptyList());
 
-      humidityService.deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(humidityRepository).getHumiditiesByDate(registeredAt.toLocalDate());
-      verify(humidityRepository, times(0)).deleteHumiditiesByDate(registeredAt.toLocalDate());
+      assertThatThrownBy(() -> humidityService.getHumiditiesByDateOrTimestamp(registeredAt, true))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Humidities not found for date " + registeredAt.toLocalDate() + ".");
     }
   }
 }

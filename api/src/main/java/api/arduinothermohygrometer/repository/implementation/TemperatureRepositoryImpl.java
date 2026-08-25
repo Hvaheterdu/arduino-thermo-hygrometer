@@ -93,7 +93,7 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
   public void deleteTemperaturesByDate(final LocalDate date) {
     String sql =
         """
-        DELETE FROM batteries
+        DELETE FROM temperatures
         WHERE registered_at >= :start AND registered_at < :end
         """;
 

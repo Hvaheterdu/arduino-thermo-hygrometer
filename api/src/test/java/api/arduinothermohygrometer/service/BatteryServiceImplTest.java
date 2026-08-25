@@ -26,7 +26,6 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -63,19 +62,17 @@ class BatteryServiceImplTest {
 
       assertThatThrownBy(() -> batteryService.getBatteryById(invalidId))
           .isInstanceOf(ResourceNotFoundException.class)
-          .hasMessage("Battery with id=%s not found.".formatted(invalidId));
+          .hasMessage("Battery not found.");
     }
 
     @Test
     void givenValidTimestamp_thenReturnBatteries() {
-      boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       BatteryDto batteryDto = createBatteryDto(registeredAt, 90);
       List<Battery> batteries = List.of(BatteryModelMapper.toModel(batteryDto));
       when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(batteries);
 
-      List<BatteryDto> result =
-          batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
+      List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, false);
 
       verify(batteryRepository).getBatteryByTimestamp(registeredAt);
       assertThat(result)
@@ -89,21 +86,17 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenInvalidTimestamp_thenReturnEmptyList() {
-      boolean dateOnly = false;
+    void givenInvalidTimestamp_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(emptyList());
 
-      List<BatteryDto> result =
-          batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(batteryRepository).getBatteryByTimestamp(registeredAt);
-      assertThat(result).isEmpty();
+      assertThatThrownBy(() -> batteryService.getBatteriesByDateOrTimestamp(registeredAt, false))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Batteries not found for timestamp " + registeredAt + ".");
     }
 
     @Test
     void givenValidDate_thenReturnBatteries() {
-      boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<BatteryDto> batteryDtos =
           List.of(
@@ -111,8 +104,7 @@ class BatteryServiceImplTest {
       List<Battery> batteries = batteryDtos.stream().map(BatteryModelMapper::toModel).toList();
       when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())).thenReturn(batteries);
 
-      List<BatteryDto> result =
-          batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
+      List<BatteryDto> result = batteryService.getBatteriesByDateOrTimestamp(registeredAt, true);
 
       verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
       assertThat(result)
@@ -128,17 +120,14 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenInvalidDate_thenReturnEmptyList() {
-      boolean dateOnly = true;
+    void givenInvalidDate_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate()))
           .thenReturn(emptyList());
 
-      List<BatteryDto> result =
-          batteryService.getBatteriesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
-      assertThat(result).isEmpty();
+      assertThatThrownBy(() -> batteryService.getBatteriesByDateOrTimestamp(registeredAt, true))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Batteries not found for date " + registeredAt.toLocalDate() + ".");
     }
   }
 
@@ -160,7 +149,7 @@ class BatteryServiceImplTest {
     }
 
     @Test
-    void givenEmptyBatteryModel_thenReturnEmptyList() {
+    void givenEmptyBatteryModel_thenThrowResourceNotCreatedException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       BatteryDto batteryDto = createBatteryDto(registeredAt, 90);
       when(batteryRepository.createBattery(any(Battery.class))).thenReturn(Optional.empty());
@@ -175,13 +164,12 @@ class BatteryServiceImplTest {
   class DeleteMethods {
     @Test
     void givenValidTimestamp_thenDeleteBattery() {
-      boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       BatteryDto batteryDto = createBatteryDto(registeredAt, 90);
       List<Battery> batteries = List.of(BatteryModelMapper.toModel(batteryDto));
       when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(batteries);
 
-      batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
+      batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, false);
 
       verify(batteryRepository).getBatteryByTimestamp(registeredAt);
       verify(batteryRepository).deleteBatteryByTimestamp(registeredAt);
@@ -189,19 +177,16 @@ class BatteryServiceImplTest {
 
     @Test
     void givenInvalidTimestamp_thenThrowResourceNotFoundException() {
-      boolean dateOnly = false;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(batteryRepository.getBatteryByTimestamp(registeredAt)).thenReturn(emptyList());
 
-      batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(batteryRepository).getBatteryByTimestamp(registeredAt);
-      verify(batteryRepository, times(0)).deleteBatteryByTimestamp(registeredAt);
+      assertThatThrownBy(() -> batteryService.getBatteriesByDateOrTimestamp(registeredAt, false))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Batteries not found for timestamp " + registeredAt + ".");
     }
 
     @Test
     void givenValidDate_thenDeleteBattery() {
-      boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       List<BatteryDto> batteryDtos =
           List.of(
@@ -209,7 +194,7 @@ class BatteryServiceImplTest {
       List<Battery> batteries = batteryDtos.stream().map(BatteryModelMapper::toModel).toList();
       when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate())).thenReturn(batteries);
 
-      batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
+      batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, true);
 
       verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
       verify(batteryRepository).deleteBatteriesByDate(registeredAt.toLocalDate());
@@ -217,15 +202,13 @@ class BatteryServiceImplTest {
 
     @Test
     void givenInvalidDate_thenThrowResourceNotFoundException() {
-      boolean dateOnly = true;
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(batteryRepository.getBatteriesByDate(registeredAt.toLocalDate()))
           .thenReturn(emptyList());
 
-      batteryService.deleteBatteriesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(batteryRepository).getBatteriesByDate(registeredAt.toLocalDate());
-      verify(batteryRepository, times(0)).deleteBatteriesByDate(registeredAt.toLocalDate());
+      assertThatThrownBy(() -> batteryService.getBatteriesByDateOrTimestamp(registeredAt, true))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Batteries not found for date " + registeredAt.toLocalDate() + ".");
     }
   }
 }

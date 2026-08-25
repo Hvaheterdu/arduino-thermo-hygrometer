@@ -15,12 +15,9 @@ import api.arduinothermohygrometer.repository.HumidityRepository;
 import api.arduinothermohygrometer.service.HumidityService;
 import lombok.extern.slf4j.Slf4j;
 
-import static java.util.Collections.emptyList;
-
 @Service
 @Slf4j
 public class HumidityServiceImpl implements HumidityService {
-  private static final String ID_NOT_FOUND = "Humidity with id=%s not found.";
   private static final String REGISTERED_AT_NOT_FOUND = "Humidities registeredAt={} not found.";
 
   private final HumidityRepository humidityRepository;
@@ -31,12 +28,16 @@ public class HumidityServiceImpl implements HumidityService {
 
   @Override
   public HumidityDto getHumidityById(final UUID id) throws ResourceNotFoundException {
-    log.info("Retrieving Humidity with id={}.", id);
+    log.info("Retrieving humidity with id={}.", id);
 
     Humidity humidity =
         humidityRepository
             .getHumidityById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(ID_NOT_FOUND.formatted(id)));
+            .orElseThrow(
+                () -> {
+                  log.error("Humidity with id={} not found.", id);
+                  return new ResourceNotFoundException("Humidity not found.");
+                });
 
     log.info("Humidity with id={} retrieved.", id);
     return HumidityModelMapper.toDto(humidity);
@@ -44,7 +45,7 @@ public class HumidityServiceImpl implements HumidityService {
 
   @Override
   public List<HumidityDto> getHumiditiesByDateOrTimestamp(
-      final LocalDateTime registeredAt, final boolean dateOnly) {
+      final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException {
     log.info("Retrieving humidities registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
     List<Humidity> humidities =
@@ -54,7 +55,11 @@ public class HumidityServiceImpl implements HumidityService {
 
     if (humidities.isEmpty()) {
       log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
-      return emptyList();
+      throw new ResourceNotFoundException(
+          "Humidities not found for "
+              + (dateOnly
+                  ? "date " + registeredAt.toLocalDate() + "."
+                  : "timestamp " + registeredAt + "."));
     }
 
     log.info("Humidities registeredAt={} retrieved.", registeredAt);
@@ -69,7 +74,11 @@ public class HumidityServiceImpl implements HumidityService {
     Humidity humidity =
         humidityRepository
             .createHumidity(HumidityModelMapper.toModel(humidityDto))
-            .orElseThrow(() -> new ResourceNotCreatedException("Humidity cannot be created."));
+            .orElseThrow(
+                () -> {
+                  log.error("Humidity cannot be created.");
+                  return new ResourceNotCreatedException("Humidity cannot be created.");
+                });
 
     log.info(
         "Humidity with id={} and registered_at={} created.",
@@ -80,7 +89,7 @@ public class HumidityServiceImpl implements HumidityService {
 
   @Override
   public void deleteHumiditiesByDateOrTimestamp(
-      final LocalDateTime registeredAt, final boolean dateOnly) {
+      final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException {
     log.info("Deleting humidities registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
     List<Humidity> humidities =
@@ -90,7 +99,11 @@ public class HumidityServiceImpl implements HumidityService {
 
     if (humidities.isEmpty()) {
       log.info(REGISTERED_AT_NOT_FOUND, registeredAt);
-      return;
+      throw new ResourceNotFoundException(
+          "Humidities not found for "
+              + (dateOnly
+                  ? "date " + registeredAt.toLocalDate() + "."
+                  : "timestamp " + registeredAt + "."));
     }
 
     Humidity firstHumidity = humidities.getFirst();

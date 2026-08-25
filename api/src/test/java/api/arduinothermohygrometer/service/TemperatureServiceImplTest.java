@@ -27,7 +27,6 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -64,7 +63,7 @@ class TemperatureServiceImplTest {
 
       assertThatThrownBy(() -> temperatureService.getTemperatureById(invalidId))
           .isInstanceOf(ResourceNotFoundException.class)
-          .hasMessage("Temperature with id=%s not found.".formatted(invalidId));
+          .hasMessage("Temperature not found.");
     }
 
     @Test
@@ -91,16 +90,14 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidTimestamp_thenReturnEmptyList() {
-      boolean dateOnly = false;
+    void givenInvalidTimestamp_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(emptyList());
 
-      List<TemperatureDto> result =
-          temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(temperatureRepository).getTemperatureByTimestamp(registeredAt);
-      assertThat(result).isEmpty();
+      assertThatThrownBy(
+              () -> temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, false))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Temperatures not found for timestamp " + registeredAt + ".");
     }
 
     @Test
@@ -131,17 +128,15 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidDate_thenReturnEmptyList() {
-      boolean dateOnly = true;
+    void givenInvalidDate_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate()))
           .thenReturn(emptyList());
 
-      List<TemperatureDto> result =
-          temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(temperatureRepository).getTemperaturesByDate(registeredAt.toLocalDate());
-      assertThat(result).isEmpty();
+      assertThatThrownBy(
+              () -> temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, true))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Temperatures not found for date " + registeredAt.toLocalDate() + ".");
     }
   }
 
@@ -193,15 +188,14 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidTimestamp_thenReturn() {
-      boolean dateOnly = false;
+    void givenInvalidTimestamp_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
       when(temperatureRepository.getTemperatureByTimestamp(registeredAt)).thenReturn(emptyList());
 
-      temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(temperatureRepository).getTemperatureByTimestamp(registeredAt);
-      verify(temperatureRepository, times(0)).deleteTemperatureByTimestamp(registeredAt);
+      assertThatThrownBy(
+              () -> temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, false))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Temperatures not found for timestamp " + registeredAt + ".");
     }
 
     @Test
@@ -223,16 +217,15 @@ class TemperatureServiceImplTest {
     }
 
     @Test
-    void givenInvalidDate_thenReturn() {
-      boolean dateOnly = true;
+    void givenInvalidDate_thenThrowResourceNotFoundException() {
       LocalDateTime registeredAt = LocalDateTime.now();
       when(temperatureRepository.getTemperaturesByDate(registeredAt.toLocalDate()))
           .thenReturn(emptyList());
 
-      temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
-
-      verify(temperatureRepository).getTemperaturesByDate(registeredAt.toLocalDate());
-      verify(temperatureRepository, times(0)).deleteTemperaturesByDate(registeredAt.toLocalDate());
+      assertThatThrownBy(
+              () -> temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, true))
+          .isInstanceOf(ResourceNotFoundException.class)
+          .hasMessage("Temperatures not found for date " + registeredAt.toLocalDate() + ".");
     }
   }
 }

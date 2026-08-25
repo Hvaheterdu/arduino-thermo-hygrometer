@@ -93,7 +93,7 @@ public class HumidityRepositoryImpl implements HumidityRepository {
   public void deleteHumiditiesByDate(final LocalDate date) {
     String sql =
         """
-        DELETE FROM batteries
+        DELETE FROM humidities
         WHERE registered_at >= :start AND registered_at < :end
         """;
 
