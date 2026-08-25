@@ -32,12 +32,12 @@ type HistoryLoaderData =
     };
 
 const historyLoader = async ({ request }: LoaderFunctionArgs): Promise<HistoryLoaderData> => {
-  const url = new URL(request.url),
-    resourceParam = url.searchParams.get("resource"),
-    resource: SensorResource = isSensorResource(resourceParam) ? resourceParam : "temperature",
-    requestedDate = url.searchParams.get("date") ?? getToday(),
-    date = isValidDate(requestedDate) ? requestedDate : getToday(),
-    registeredAt = dateToRegisteredAt(date);
+  const url = new URL(request.url);
+  const resourceParam = url.searchParams.get("resource");
+  const resource: SensorResource = isSensorResource(resourceParam) ? resourceParam : "temperature";
+  const requestedDate = url.searchParams.get("date") ?? getToday();
+  const date = isValidDate(requestedDate) ? requestedDate : getToday();
+  const registeredAt = dateToRegisteredAt(date);
 
   if (resource === "battery") {
     const readings = await getBatteriesByDateOrTimestamp({

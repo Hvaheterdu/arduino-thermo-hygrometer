@@ -4,27 +4,31 @@ import type { ProblemDetailsDto } from "../../types";
 import { apiClient } from "./client";
 import { createApiRequestError, getNetworkErrorMessage } from "./error";
 
-const isProblemDetails = (value: unknown): value is ProblemDetailsDto => {
-    if (!value || typeof value !== "object") {
-      return false;
-    }
-    const problem: Record<string, unknown> = value as Record<string, unknown>;
+const errorMiddleware: Middleware = {
+  onError: ({
+    error
+  }: MiddlewareCallbackParams & {
+    error: unknown;
+  }) => new Error(getNetworkErrorMessage(error), { cause: error })
+};
 
-    return (
-      typeof problem["type"] === "string" &&
-      typeof problem["title"] === "string" &&
-      typeof problem["detail"] === "string" &&
-      typeof problem["status"] === "number"
-    );
-  },
-  getProblemDetails = (value: unknown): ProblemDetailsDto | undefined => (isProblemDetails(value) ? value : undefined),
-  errorMiddleware: Middleware = {
-    onError: async ({
-      error
-    }: MiddlewareCallbackParams & {
-      error: unknown;
-    }) => new Error(getNetworkErrorMessage(error), { cause: error })
-  };
+const isProblemDetails = (value: unknown): value is ProblemDetailsDto => {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const problem: Record<string, unknown> = value as Record<string, unknown>;
+
+  return (
+    typeof problem["type"] === "string" &&
+    typeof problem["title"] === "string" &&
+    typeof problem["detail"] === "string" &&
+    typeof problem["status"] === "number"
+  );
+};
+
+const getProblemDetails = (value: unknown): ProblemDetailsDto | undefined =>
+  isProblemDetails(value) ? value : undefined;
 
 apiClient.use(errorMiddleware);
 

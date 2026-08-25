@@ -22,12 +22,13 @@ vi.mock("../../lib", async (importOriginal) => {
   };
 });
 
-const loaderArgs = (url: string): LoaderFunctionArgs =>
-  ({
+const loaderArgs = (url: string): LoaderFunctionArgs => {
+  return {
     context: {},
     params: {},
     request: new Request(url)
-  }) as unknown as LoaderFunctionArgs;
+  } as unknown as LoaderFunctionArgs;
+};
 
 describe("historyLoader", () => {
   it("loads battery readings", async () => {

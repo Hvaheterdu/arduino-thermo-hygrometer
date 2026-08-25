@@ -1,4 +1,4 @@
-import { Button, Grid, HStack, Heading, Input, Stack, Text, chakra } from "@chakra-ui/react";
+import { Button, chakra, Grid, Heading, HStack, Input, Stack, Text } from "@chakra-ui/react";
 import type { ReactElement } from "react";
 import { Form, useLoaderData, useNavigation } from "react-router";
 
@@ -10,17 +10,17 @@ const formatValue = (value: number | undefined, suffix: string, fractionDigits =
   value === undefined ? "—" : `${value.toFixed(fractionDigits)}${suffix}`;
 
 export const DashboardPage = (): ReactElement => {
-  const loaderData = useLoaderData<typeof dashboardLoader>(),
-    navigation = useNavigation(),
-    latestBattery = latestByRegisteredAt(loaderData.battery),
-    latestHumidity = latestByRegisteredAt(loaderData.humidity),
-    latestTemperature = latestByRegisteredAt(loaderData.temperature),
-    latestTimestamp = [latestBattery?.registeredAt, latestHumidity?.registeredAt, latestTemperature?.registeredAt]
-      .filter((value): value is string => Boolean(value))
-      .sort()
-      .at(-1),
-    hasMeasurements =
-      loaderData.battery.length > 0 || loaderData.humidity.length > 0 || loaderData.temperature.length > 0;
+  const loaderData = useLoaderData<typeof dashboardLoader>();
+  const navigation = useNavigation();
+  const latestBattery = latestByRegisteredAt(loaderData.battery);
+  const latestHumidity = latestByRegisteredAt(loaderData.humidity);
+  const latestTemperature = latestByRegisteredAt(loaderData.temperature);
+  const latestTimestamp = [latestBattery?.registeredAt, latestHumidity?.registeredAt, latestTemperature?.registeredAt]
+    .filter((value): value is string => Boolean(value))
+    .sort()
+    .at(-1);
+  const hasMeasurements =
+    loaderData.battery.length > 0 || loaderData.humidity.length > 0 || loaderData.temperature.length > 0;
 
   if (navigation.state === "loading") {
     return <LoadingState label="Loading the selected day..." />;

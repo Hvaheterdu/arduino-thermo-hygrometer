@@ -13,36 +13,36 @@ vi.mock("../../hooks", () => ({
 }));
 
 const renderCreate = () =>
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <CreatePage />
-      </ChakraProvider>
-    ),
-  fill = async (fields: { date?: string; value?: string }) => {
-    const user = userEvent.setup();
+  render(
+    <ChakraProvider value={defaultSystem}>
+      <CreatePage />
+    </ChakraProvider>
+  );
+const fill = async (fields: { date?: string; value?: string }) => {
+  const user = userEvent.setup();
 
-    if (fields.date !== undefined) {
-      const input = screen.getByLabelText("Registered at");
+  if (fields.date !== undefined) {
+    const input = screen.getByLabelText("Registered at");
 
-      await user.clear(input);
+    await user.clear(input);
 
-      if (fields.date) {
-        await user.type(input, fields.date);
-      }
+    if (fields.date) {
+      await user.type(input, fields.date);
     }
+  }
 
-    if (fields.value !== undefined) {
-      const input = screen.getByLabelText("Value");
+  if (fields.value !== undefined) {
+    const input = screen.getByLabelText("Value");
 
-      await user.clear(input);
+    await user.clear(input);
 
-      if (fields.value) {
-        await user.type(input, fields.value);
-      }
+    if (fields.value) {
+      await user.type(input, fields.value);
     }
+  }
 
-    await user.click(screen.getByRole("button", { name: "Save reading" }));
-  };
+  await user.click(screen.getByRole("button", { name: "Save reading" }));
+};
 
 describe("CreatePage", () => {
   beforeEach(() => {

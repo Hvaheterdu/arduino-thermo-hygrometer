@@ -9,10 +9,7 @@
   "categories": {
     "correctness": "warn",
     "nursery": "warn",
-    "pedantic": "warn",
-    "perf": "warn",
-    "style": "warn",
-    "suspicious": "warn"
+    "perf": "warn"
   },
   "ignorePatterns": [
     "build",

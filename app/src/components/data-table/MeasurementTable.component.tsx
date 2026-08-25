@@ -1,7 +1,7 @@
 import { Table, Text } from "@chakra-ui/react";
 import type { ReactElement } from "react";
 
-import { SENSOR_CONFIG, formatRegisteredAt } from "../../lib";
+import { formatRegisteredAt, SENSOR_CONFIG } from "../../lib";
 import type { SensorResource } from "../../types";
 
 interface MeasurementTableRow {
@@ -27,8 +27,8 @@ export const MeasurementTable = ({ resource, rows }: MeasurementTableProps): Rea
       </Table.Header>
 
       <Table.Body>
-        {rows.map((row, index) => (
-          <Table.Row key={`${row.registeredAt}-${row.value}-${index}`}>
+        {rows.map((row) => (
+          <Table.Row key={`${row.registeredAt}-${row.value}`}>
             <Table.Cell>{formatRegisteredAt(row.registeredAt)}</Table.Cell>
 
             <Table.Cell>

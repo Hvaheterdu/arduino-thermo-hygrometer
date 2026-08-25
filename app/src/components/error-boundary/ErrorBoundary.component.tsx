@@ -1,6 +1,6 @@
 import { Alert, Button, Center, Container, Heading, Stack, Text } from "@chakra-ui/react";
 import type { ReactElement } from "react";
-import { Link, isRouteErrorResponse, useRouteError } from "react-router";
+import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 
 import { getUserFacingErrorMessage, isApiRequestError } from "../../lib";
 
@@ -30,8 +30,8 @@ const getRouteErrorMessage = (error: unknown): string => {
   };
 
 export const ErrorBoundary = (): ReactElement => {
-  const error: unknown = useRouteError(),
-    status: number | undefined = getRouteErrorStatus(error);
+  const error: unknown = useRouteError();
+  const status: number | undefined = getRouteErrorStatus(error);
 
   return (
     <Center minH="100dvh" px="4">

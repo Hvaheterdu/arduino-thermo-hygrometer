@@ -17,29 +17,31 @@ vi.mock("../../lib", () => ({
   isValidDate: vi.fn((date: string) => date === "2026-08-24")
 }));
 
-const args = (url: string) =>
-    ({
-      context: {},
-      params: {},
-      request: new Request(url)
-    }) as LoaderFunctionArgs,
-  mockReadings = () => {
-    vi.mocked(getBatteriesByDateOrTimestamp).mockResolvedValue([]);
-    vi.mocked(getHumiditiesByDateOrTimestamp).mockResolvedValue([]);
-    vi.mocked(getTemperaturesByDateOrTimestamp).mockResolvedValue([]);
-  };
+const loaderArgs = (url: string) => {
+  return {
+    context: {},
+    params: {},
+    request: new Request(url)
+  } as LoaderFunctionArgs;
+};
+
+const mockReadings = () => {
+  vi.mocked(getBatteriesByDateOrTimestamp).mockResolvedValue([]);
+  vi.mocked(getHumiditiesByDateOrTimestamp).mockResolvedValue([]);
+  vi.mocked(getTemperaturesByDateOrTimestamp).mockResolvedValue([]);
+};
 
 describe("dashboardLoader", () => {
   it("loads all sensors for the requested date", async () => {
-    const battery = [{ batteryStatus: 80, registeredAt: "2026-08-24T12:00:00" }],
-      humidity = [{ airHumidity: 54, registeredAt: "2026-08-24T12:00:00" }],
-      temperature = [{ registeredAt: "2026-08-24T12:00:00", temp: 21.5 }];
+    const battery = [{ batteryStatus: 80, registeredAt: "2026-08-24T12:00:00" }];
+    const humidity = [{ airHumidity: 54, registeredAt: "2026-08-24T12:00:00" }];
+    const temperature = [{ registeredAt: "2026-08-24T12:00:00", temp: 21.5 }];
 
     vi.mocked(getBatteriesByDateOrTimestamp).mockResolvedValue(battery);
     vi.mocked(getHumiditiesByDateOrTimestamp).mockResolvedValue(humidity);
     vi.mocked(getTemperaturesByDateOrTimestamp).mockResolvedValue(temperature);
 
-    await expect(dashboardLoader(args("http://localhost/?date=2026-08-24"))).resolves.toEqual({
+    await expect(dashboardLoader(loaderArgs("http://localhost/?date=2026-08-24"))).resolves.toEqual({
       battery,
       date: "2026-08-24",
       humidity,
@@ -57,7 +59,7 @@ describe("dashboardLoader", () => {
   it("falls back to today for an invalid date", async () => {
     mockReadings();
 
-    await expect(dashboardLoader(args("http://localhost/?date=invalid"))).resolves.toMatchObject({
+    await expect(dashboardLoader(loaderArgs("http://localhost/?date=invalid"))).resolves.toMatchObject({
       date: "2026-08-25",
       registeredAt: "2026-08-25T00:00:00"
     });

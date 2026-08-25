@@ -1,2 +1,2 @@
-// Src/test/setup.ts
+// src/test/setup.ts
 import "@testing-library/jest-dom/vitest";

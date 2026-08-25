@@ -19,27 +19,28 @@ interface DashboardLoaderData {
 }
 
 const dashboardLoader = async ({ request }: LoaderFunctionArgs): Promise<DashboardLoaderData> => {
-  const url = new URL(request.url),
-    requestedDate = url.searchParams.get("date") ?? getToday(),
-    date = isValidDate(requestedDate) ? requestedDate : getToday(),
-    registeredAt = dateToRegisteredAt(date),
-    [battery, humidity, temperature] = await Promise.all([
-      getBatteriesByDateOrTimestamp({
-        dateOnly: true,
-        registeredAt,
-        signal: request.signal
-      }),
-      getHumiditiesByDateOrTimestamp({
-        dateOnly: true,
-        registeredAt,
-        signal: request.signal
-      }),
-      getTemperaturesByDateOrTimestamp({
-        dateOnly: true,
-        registeredAt,
-        signal: request.signal
-      })
-    ]);
+  const url = new URL(request.url);
+  const requestedDate = url.searchParams.get("date") ?? getToday();
+  const date = isValidDate(requestedDate) ? requestedDate : getToday();
+  const registeredAt = dateToRegisteredAt(date);
+
+  const [battery, humidity, temperature] = await Promise.all([
+    getBatteriesByDateOrTimestamp({
+      dateOnly: true,
+      registeredAt,
+      signal: request.signal
+    }),
+    getHumiditiesByDateOrTimestamp({
+      dateOnly: true,
+      registeredAt,
+      signal: request.signal
+    }),
+    getTemperaturesByDateOrTimestamp({
+      dateOnly: true,
+      registeredAt,
+      signal: request.signal
+    })
+  ]);
 
   return {
     battery,

@@ -10,11 +10,11 @@ interface ApiErrorMessageProps {
 
 export const ApiErrorMessage = ({ error, title = "Request failed" }: ApiErrorMessageProps): ReactElement => {
   const message = isApiRequestError(error)
-      ? getUserFacingErrorMessage(error.status, error.problem)
-      : error instanceof Error
-        ? getNetworkErrorMessage(error)
-        : "Something went wrong while contacting the API.",
-    details = isApiRequestError(error) ? (error.problem?.errors ?? []) : [];
+    ? getUserFacingErrorMessage(error.status, error.problem)
+    : error instanceof Error
+      ? getNetworkErrorMessage(error)
+      : "Something went wrong while contacting the API.";
+  const details = isApiRequestError(error) ? (error.problem?.errors ?? []) : [];
 
   return (
     <Alert.Root status="error" variant="subtle" role="alert">
@@ -25,8 +25,8 @@ export const ApiErrorMessage = ({ error, title = "Request failed" }: ApiErrorMes
 
         {details.length > 0 ? (
           <List.Root ps="5" mt="2">
-            {details.map((detail, index) => (
-              <List.Item key={`${detail.parameter ?? detail.pointer ?? "error"}-${index}`}>
+            {details.map((detail) => (
+              <List.Item key={`${detail.parameter ?? detail.pointer ?? detail.description}`}>
                 <Text>{detail.description}</Text>
               </List.Item>
             ))}

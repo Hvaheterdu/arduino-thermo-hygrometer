@@ -1,6 +1,6 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen } from "@testing-library/react";
-import { RouterProvider, createMemoryRouter } from "react-router";
+import { createMemoryRouter, RouterProvider } from "react-router";
 import { describe, expect, it } from "vitest";
 
 import { DashboardPage } from "./Dashboard.page";
@@ -63,7 +63,7 @@ describe("DashboardPage", () => {
     expect(await screen.findByText("21.7 °C")).toBeInTheDocument();
     expect(await screen.findByText("54.2 %")).toBeInTheDocument();
     expect(await screen.findByText("75 %")).toBeInTheDocument();
-    expect(await screen.findByText(/Most recent device reading/)).toBeInTheDocument();
+    expect(await screen.findByText(/Most recent device reading/u)).toBeInTheDocument();
   });
 
   it("shows an empty state when there are no readings", async () => {

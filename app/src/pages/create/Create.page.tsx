@@ -1,11 +1,11 @@
 import { Alert, Button, Field, Heading, Input, NativeSelect, Stack, Text } from "@chakra-ui/react";
 import type { ReactElement } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { type SubmitHandler, useForm, useWatch } from "react-hook-form";
 
 import { ApiErrorMessage } from "../../components";
 import { useCreateBattery, useCreateHumidity, useCreateTemperature } from "../../hooks";
-import { SENSOR_CONFIG, SENSOR_OPTIONS, getToday, isValidDateTime } from "../../lib";
+import { getToday, isValidDateTime, SENSOR_CONFIG, SENSOR_OPTIONS } from "../../lib";
 import type { BatteryDto, HumidityDto, SensorConfig, SensorResource, TemperatureDto } from "../../types";
 
 interface CreateReadingFormValues {
@@ -17,46 +17,46 @@ interface CreateReadingFormValues {
 const getDefaultDateTime = (): string => `${getToday()}T12:00`;
 
 export const CreatePage = (): ReactElement => {
-  const createBattery = useCreateBattery(),
-    createHumidity = useCreateHumidity(),
-    createTemperature = useCreateTemperature(),
-    [success, setSuccess] = useState(false),
-    {
-      control,
-      register,
-      handleSubmit,
-      reset,
-      formState: { errors }
-    } = useForm<CreateReadingFormValues>({
-      defaultValues: {
-        registeredAt: getDefaultDateTime(),
-        resource: "temperature",
-        value: ""
-      }
-    }),
-    resource: SensorResource = useWatch({ control, name: "resource" }),
-    config: SensorConfig = SENSOR_CONFIG[resource],
-    isMutating = createBattery.isMutating || createHumidity.isMutating || createTemperature.isMutating,
-    error: Error | undefined =
-      resource === "battery"
-        ? createBattery.error
-        : resource === "humidity"
-          ? createHumidity.error
-          : createTemperature.error;
+  const createBattery = useCreateBattery();
+  const createHumidity = useCreateHumidity();
+  const createTemperature = useCreateTemperature();
+  const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<CreateReadingFormValues>({
+    defaultValues: {
+      registeredAt: getDefaultDateTime(),
+      resource: "temperature",
+      value: ""
+    }
+  });
+
+  const resource: SensorResource = useWatch({
+    control,
+    name: "resource"
+  });
+
+  const config: SensorConfig = SENSOR_CONFIG[resource];
+
+  const isMutating = createBattery.isMutating || createHumidity.isMutating || createTemperature.isMutating;
+
+  const error: Error | undefined =
+    resource === "battery"
+      ? createBattery.error
+      : resource === "humidity"
+        ? createHumidity.error
+        : createTemperature.error;
+
+  const onSubmit: SubmitHandler<CreateReadingFormValues> = async ({ resource, registeredAt, value }): Promise<void> => {
     setSuccess(false);
-  }, [resource]);
 
-  const onSubmit: SubmitHandler<CreateReadingFormValues> = async ({
-    resource,
-    registeredAt,
-    value
-  }: CreateReadingFormValues): Promise<void> => {
-    setSuccess(false);
-
-    const dateTime = registeredAt.length === 16 ? `${registeredAt}:00` : registeredAt,
-      numericValue = Number(value);
+    const dateTime = registeredAt.length === 16 ? `${registeredAt}:00` : registeredAt;
+    const numericValue = Number(value);
 
     try {
       if (resource === "battery") {
@@ -76,7 +76,12 @@ export const CreatePage = (): ReactElement => {
         } satisfies TemperatureDto);
       }
 
-      reset({ registeredAt, resource, value: "" });
+      reset({
+        registeredAt,
+        resource,
+        value: ""
+      });
+
       setSuccess(true);
     } catch {
       // Mutation errors are exposed through the mutation hook.
@@ -98,7 +103,8 @@ export const CreatePage = (): ReactElement => {
             <NativeSelect.Root>
               <NativeSelect.Field
                 {...register("resource", {
-                  required: "Select a sensor."
+                  required: "Select a sensor.",
+                  onChange: () => setSuccess(false)
                 })}
               >
                 {SENSOR_OPTIONS.map((option) => (
@@ -107,6 +113,7 @@ export const CreatePage = (): ReactElement => {
                   </option>
                 ))}
               </NativeSelect.Field>
+
               <NativeSelect.Indicator />
             </NativeSelect.Root>
 

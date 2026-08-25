@@ -1,7 +1,7 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { RouterProvider, createMemoryRouter } from "react-router";
+import { createMemoryRouter, RouterProvider } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useDeleteReading } from "../../hooks";
@@ -88,8 +88,7 @@ describe("HistoryPage", () => {
   });
 
   it("deletes all readings for the selected day", async () => {
-    const user = userEvent.setup(),
-      trigger = vi.fn().mockResolvedValue(undefined);
+    const trigger = vi.fn().mockResolvedValue(undefined);
     vi.mocked(useDeleteReading).mockReturnValue({
       data: undefined,
       error: undefined,
@@ -110,11 +109,13 @@ describe("HistoryPage", () => {
       resource: "temperature"
     });
 
+    const user = userEvent.setup();
     await user.click(
       await screen.findByRole("button", {
         name: "Delete all for this day"
       })
     );
+
     await waitFor(() => {
       expect(trigger).toHaveBeenCalledWith({
         dateOnly: true,

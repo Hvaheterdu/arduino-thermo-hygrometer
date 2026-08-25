@@ -38,6 +38,6 @@ describe("date helpers", () => {
   });
 
   it("returns a local calendar date", () => {
-    expect(getToday()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(getToday()).toMatch(/^\d{4}-\d{2}-\d{2}$/u);
   });
 });

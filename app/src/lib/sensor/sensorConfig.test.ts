@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { SENSOR_CONFIG, SENSOR_OPTIONS, isSensorResource } from "./sensorConfig";
+import { isSensorResource, SENSOR_CONFIG, SENSOR_OPTIONS } from "./sensorConfig";
 
 describe("sensor configuration", () => {
   it("defines every supported sensor", () => {
@@ -15,7 +15,6 @@ describe("sensor configuration", () => {
       step: "0.1",
       unit: "°C"
     });
-
     expect(SENSOR_CONFIG.humidity.unit).toBe("% RH");
     expect(SENSOR_CONFIG.battery.unit).toBe("%");
   });
