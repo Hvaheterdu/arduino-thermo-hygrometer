@@ -89,7 +89,7 @@ describe("HistoryPage", () => {
 
   it("deletes all readings for the selected day", async () => {
     const user = userEvent.setup(),
-     trigger = vi.fn().mockResolvedValue(undefined);
+      trigger = vi.fn().mockResolvedValue(undefined);
     vi.mocked(useDeleteReading).mockReturnValue({
       data: undefined,
       error: undefined,

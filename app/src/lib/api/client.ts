@@ -19,14 +19,13 @@ console.log({
   baseUrl: getApiBaseUrl()
 });
 
-
 export const apiClient = createClient<paths>({
   baseUrl: getApiBaseUrl(),
   ...(apiKey === undefined
     ? {}
     : {
-      headers: {
-        [apiHeaderName]: apiKey
-      }
-    })
+        headers: {
+          [apiHeaderName]: apiKey
+        }
+      })
 });
