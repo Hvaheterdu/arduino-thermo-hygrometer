@@ -1,12 +1,13 @@
-import type { BatteryDto } from "../../types";
-import { apiClient } from "./client";
-import { assertNoContent, assertResponse } from "./request";
+import { apiClient } from "@/lib/api/client";
+import type { BatteryDto } from "@/types/domain";
 
-interface BatteryQuery {
+import { assertNoContent, assertResponse, assertResponseOrEmpty } from "./request";
+
+type BatteryQuery = {
   registeredAt: string;
   dateOnly: boolean;
   signal?: AbortSignal;
-}
+};
 
 export const getBatteriesByDateOrTimestamp = async ({
   registeredAt,
@@ -18,7 +19,7 @@ export const getBatteriesByDateOrTimestamp = async ({
     ...(signal === undefined ? {} : { signal })
   });
 
-  return assertResponse(result);
+  return assertResponseOrEmpty(result);
 };
 
 export const createBattery = async (body: BatteryDto, signal?: AbortSignal): Promise<BatteryDto> => {

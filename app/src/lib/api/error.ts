@@ -1,4 +1,4 @@
-import type { ProblemDetailsDto } from "../../types";
+import type { ProblemDetailsDto } from "@/types/domain";
 
 type ApiRequestError = Error & {
   status: number;

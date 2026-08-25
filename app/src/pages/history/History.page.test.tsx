@@ -4,10 +4,10 @@ import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useDeleteReading } from "../../hooks";
-import { HistoryPage } from "./History.page";
+import { useDeleteReading } from "@/hooks/useDeleteReading";
+import { HistoryPage } from "@/pages/history/History.page";
 
-vi.mock("../../hooks", () => ({
+vi.mock("@/hooks/useDeleteReading", () => ({
   useDeleteReading: vi.fn()
 }));
 
@@ -43,7 +43,7 @@ describe("HistoryPage", () => {
       isMutating: false,
       reset: vi.fn(),
       trigger: vi.fn()
-    } as any);
+    });
   });
 
   it.each([
@@ -95,7 +95,7 @@ describe("HistoryPage", () => {
       isMutating: false,
       reset: vi.fn(),
       trigger
-    } as any);
+    });
 
     renderHistory({
       date: "2026-08-24",

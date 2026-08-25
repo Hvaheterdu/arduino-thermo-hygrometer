@@ -3,53 +3,54 @@ import { render, screen } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { describe, expect, it } from "vitest";
 
-import { DashboardPage } from "./Dashboard.page";
+import { DashboardPage } from "@/pages/dashboard/Dashboard.page";
 
 const data = {
-    battery: [
+  battery: [
+    {
+      batteryStatus: 75,
+      registeredAt: "2026-08-24T11:00:00"
+    }
+  ],
+  date: "2026-08-24",
+  humidity: [
+    {
+      airHumidity: 54.2,
+      registeredAt: "2026-08-24T11:00:00"
+    }
+  ],
+  registeredAt: "2026-08-24T00:00:00",
+  temperature: [
+    {
+      registeredAt: "2026-08-24T12:00:00",
+      temp: 21.7
+    }
+  ]
+};
+
+const renderDashboard = (loaderData = data) => {
+  const router = createMemoryRouter(
+    [
       {
-        batteryStatus: 75,
-        registeredAt: "2026-08-24T11:00:00"
+        Component: DashboardPage,
+        HydrateFallback: () => null,
+        loader: () => loaderData,
+        path: "/"
       }
     ],
-    date: "2026-08-24",
-    humidity: [
-      {
-        airHumidity: 54.2,
-        registeredAt: "2026-08-24T11:00:00"
-      }
-    ],
-    registeredAt: "2026-08-24T00:00:00",
-    temperature: [
-      {
-        registeredAt: "2026-08-24T12:00:00",
-        temp: 21.7
-      }
-    ]
-  },
-  renderDashboard = (loaderData = data) => {
-    const router = createMemoryRouter(
-      [
-        {
-          Component: DashboardPage,
-          HydrateFallback: () => null,
-          loader: () => loaderData,
-          path: "/"
-        }
-      ],
-      {
-        initialEntries: ["/"]
-      }
-    );
+    {
+      initialEntries: ["/"]
+    }
+  );
 
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <RouterProvider router={router} />
-      </ChakraProvider>
-    );
+  render(
+    <ChakraProvider value={defaultSystem}>
+      <RouterProvider router={router} />
+    </ChakraProvider>
+  );
 
-    return router;
-  };
+  return router;
+};
 
 describe("DashboardPage", () => {
   it("shows the latest reading for each sensor", async () => {

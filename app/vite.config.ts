@@ -31,6 +31,11 @@ export default defineConfig(() => {
       sourcemap: true,
       reportCompressedSize: true
     },
+    resolve: {
+      alias: {
+        "@": import.meta.dirname + "/src"
+      }
+    },
     test: {
       clearMocks: true,
       environment: "jsdom",

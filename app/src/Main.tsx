@@ -2,8 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router/dom";
 
-import { AppProvider } from "./AppProvider";
-import { router } from "./routes";
+import { AppProvider } from "@/AppProvider";
+import { router } from "@/routes";
 
 const root: HTMLElement | null = document.getElementById("root");
 

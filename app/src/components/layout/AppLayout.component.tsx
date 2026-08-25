@@ -1,12 +1,12 @@
-import { Link as ChakraLink, Container, Flex, HStack, Heading, Stack } from "@chakra-ui/react";
+import { Container, Flex, Heading, HStack, Link as ChakraLink, Stack } from "@chakra-ui/react";
 import type { ReactElement } from "react";
 import { NavLink, Outlet, ScrollRestoration } from "react-router";
 
-interface NavigationItem {
+type NavigationItem = {
   to: string;
   label: string;
   end: boolean;
-}
+};
 
 const navigation: readonly NavigationItem[] = [
   { end: true, label: "Dashboard", to: "/" },

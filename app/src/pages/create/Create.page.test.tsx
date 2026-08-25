@@ -3,12 +3,20 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useCreateBattery, useCreateHumidity, useCreateTemperature } from "../../hooks";
-import { CreatePage } from "./Create.page";
+import { useCreateBattery } from "@/hooks/useCreateBattery";
+import { useCreateHumidity } from "@/hooks/useCreateHumidity";
+import { useCreateTemperature } from "@/hooks/useCreateTemperature";
+import { CreatePage } from "@/pages/create/Create.page";
 
-vi.mock("../../hooks", () => ({
-  useCreateBattery: vi.fn(),
-  useCreateHumidity: vi.fn(),
+vi.mock("@/hooks/useCreateBattery", () => ({
+  useCreateBattery: vi.fn()
+}));
+
+vi.mock("@/hooks/useCreateHumidity", () => ({
+  useCreateHumidity: vi.fn()
+}));
+
+vi.mock("@/hooks/useCreateTemperature", () => ({
   useCreateTemperature: vi.fn()
 }));
 
@@ -18,6 +26,7 @@ const renderCreate = () =>
       <CreatePage />
     </ChakraProvider>
   );
+
 const fill = async (fields: { date?: string; value?: string }) => {
   const user = userEvent.setup();
 
@@ -110,6 +119,7 @@ describe("CreatePage", () => {
       registeredAt: "2026-08-24T12:00:00",
       temp: 21.5
     });
+
     vi.mocked(useCreateTemperature).mockReturnValue({
       data: undefined,
       error: undefined,

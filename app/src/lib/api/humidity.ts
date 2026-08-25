@@ -1,12 +1,13 @@
-import type { HumidityDto } from "../../types";
-import { apiClient } from "./client";
-import { assertNoContent, assertResponse } from "./request";
+import { apiClient } from "@/lib/api/client";
+import type { HumidityDto } from "@/types/domain";
 
-interface HumidityQuery {
+import { assertNoContent, assertResponse, assertResponseOrEmpty } from "./request";
+
+type HumidityQuery = {
   registeredAt: string;
   dateOnly: boolean;
   signal?: AbortSignal;
-}
+};
 
 export const getHumiditiesByDateOrTimestamp = async ({
   registeredAt,
@@ -18,7 +19,7 @@ export const getHumiditiesByDateOrTimestamp = async ({
     ...(signal === undefined ? {} : { signal })
   });
 
-  return assertResponse(result);
+  return assertResponseOrEmpty(result);
 };
 
 export const createHumidity = async (body: HumidityDto, signal?: AbortSignal): Promise<HumidityDto> => {

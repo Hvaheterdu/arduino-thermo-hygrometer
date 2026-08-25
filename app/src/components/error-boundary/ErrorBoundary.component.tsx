@@ -2,7 +2,7 @@ import { Alert, Button, Center, Container, Heading, Stack, Text } from "@chakra-
 import type { ReactElement } from "react";
 import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 
-import { getUserFacingErrorMessage, isApiRequestError } from "../../lib";
+import { getUserFacingErrorMessage, isApiRequestError } from "@/lib/api/error";
 
 const getRouteErrorMessage = (error: unknown): string => {
     if (isApiRequestError(error)) {

@@ -1,7 +1,8 @@
 import { createBrowserRouter, type DataRouter } from "react-router";
 
-import { AppLayout, ErrorBoundary } from "./components";
-import { NotFoundPage } from "./pages";
+import { ErrorBoundary } from "@/components/error-boundary/ErrorBoundary.component";
+import { AppLayout } from "@/components/layout/AppLayout.component";
+import { NotFoundPage } from "@/pages/not-found/NotFound.page";
 
 export const router: DataRouter = createBrowserRouter(
   [
@@ -13,10 +14,10 @@ export const router: DataRouter = createBrowserRouter(
           index: true,
           lazy: async () => {
             const loader = await import("./pages/dashboard/dashboard.loader");
-            const page = await import("./pages/dashboard/Dashboard.page");
+            const { DashboardPage } = await import("@/pages/dashboard/Dashboard.page");
 
             return {
-              Component: page.DashboardPage,
+              Component: DashboardPage,
               loader: loader.dashboardLoader
             };
           }
@@ -24,10 +25,10 @@ export const router: DataRouter = createBrowserRouter(
         {
           lazy: async () => {
             const loader = await import("./pages/history/history.loader");
-            const page = await import("./pages/history/History.page");
+            const { HistoryPage } = await import("@/pages/history/History.page");
 
             return {
-              Component: page.HistoryPage,
+              Component: HistoryPage,
               loader: loader.historyLoader
             };
           },
@@ -35,8 +36,8 @@ export const router: DataRouter = createBrowserRouter(
         },
         {
           lazy: async () => {
-            const page = await import("./pages/create/Create.page");
-            return { Component: page.CreatePage };
+            const { CreatePage } = await import("@/pages/create/Create.page");
+            return { Component: CreatePage };
           },
           path: "create"
         },

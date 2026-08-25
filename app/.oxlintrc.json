@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "react"],
+  "plugins": ["react", "typescript"],
   "env": {
     "builtin": true,
     "browser": true,
@@ -12,15 +12,14 @@
     "perf": "warn"
   },
   "ignorePatterns": [
+    ".idea",
     "build",
     "coverage",
     "dist",
     "node_modules",
-    "vite.config.ts",
     "**/*.d.ts",
     "**/*.generated.ts",
-    "**/.git",
-    "**/.svn",
-    "**/.hg"
+    "package-lock.json",
+    "vite.config.ts"
   ]
 }

@@ -3,16 +3,20 @@ import type { ReactElement } from "react";
 import { useState } from "react";
 import { type SubmitHandler, useForm, useWatch } from "react-hook-form";
 
-import { ApiErrorMessage } from "../../components";
-import { useCreateBattery, useCreateHumidity, useCreateTemperature } from "../../hooks";
-import { getToday, isValidDateTime, SENSOR_CONFIG, SENSOR_OPTIONS } from "../../lib";
-import type { BatteryDto, HumidityDto, SensorConfig, SensorResource, TemperatureDto } from "../../types";
+import { ApiErrorMessage } from "@/components/feedback/ApiErrorMessage.component";
+import { useCreateBattery } from "@/hooks/useCreateBattery";
+import { useCreateHumidity } from "@/hooks/useCreateHumidity";
+import { useCreateTemperature } from "@/hooks/useCreateTemperature";
+import { getToday, isValidDateTime } from "@/lib/date/date";
+import { SENSOR_CONFIG, SENSOR_OPTIONS } from "@/lib/sensor/sensorConfig";
+import type { BatteryDto, HumidityDto, TemperatureDto } from "@/types/domain";
+import type { SensorConfig, SensorResource } from "@/types/sensor";
 
-interface CreateReadingFormValues {
+type CreateReadingFormValues = {
   resource: SensorResource;
   registeredAt: string;
   value: string;
-}
+};
 
 const getDefaultDateTime = (): string => `${getToday()}T12:00`;
 
@@ -52,7 +56,11 @@ export const CreatePage = (): ReactElement => {
         ? createHumidity.error
         : createTemperature.error;
 
-  const onSubmit: SubmitHandler<CreateReadingFormValues> = async ({ resource, registeredAt, value }): Promise<void> => {
+  const onSubmit: SubmitHandler<CreateReadingFormValues> = async ({
+    resource,
+    registeredAt,
+    value
+  }: CreateReadingFormValues): Promise<void> => {
     setSuccess(false);
 
     const dateTime = registeredAt.length === 16 ? `${registeredAt}:00` : registeredAt;

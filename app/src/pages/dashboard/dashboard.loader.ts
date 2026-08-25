@@ -1,22 +1,18 @@
 import type { LoaderFunctionArgs } from "react-router";
 
-import {
-  dateToRegisteredAt,
-  getBatteriesByDateOrTimestamp,
-  getHumiditiesByDateOrTimestamp,
-  getTemperaturesByDateOrTimestamp,
-  getToday,
-  isValidDate
-} from "../../lib";
-import type { BatteryDto, HumidityDto, TemperatureDto } from "../../types";
+import { getBatteriesByDateOrTimestamp } from "@/lib/api/battery";
+import { getHumiditiesByDateOrTimestamp } from "@/lib/api/humidity";
+import { getTemperaturesByDateOrTimestamp } from "@/lib/api/temperature";
+import { dateToRegisteredAt, getToday, isValidDate } from "@/lib/date/date";
+import type { BatteryDto, HumidityDto, TemperatureDto } from "@/types/domain";
 
-interface DashboardLoaderData {
+type DashboardLoaderData = {
   date: string;
   registeredAt: string;
   battery: BatteryDto[];
   humidity: HumidityDto[];
   temperature: TemperatureDto[];
-}
+};
 
 const dashboardLoader = async ({ request }: LoaderFunctionArgs): Promise<DashboardLoaderData> => {
   const url = new URL(request.url);

@@ -1,9 +1,9 @@
 import { Center, Spinner, Stack, Text } from "@chakra-ui/react";
 import type { ReactElement } from "react";
 
-interface LoadingStateProps {
+type LoadingStateProps = {
   label?: string;
-}
+};
 
 export const LoadingState = ({ label = "Loading measurements..." }: LoadingStateProps): ReactElement => (
   <Center py="12">

@@ -1,9 +1,9 @@
 const DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/u;
 const LOCAL_DATE_TIME_PATTERN = /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})$/u;
 
-interface RegisteredAtItem {
+type RegisteredAtItem = {
   registeredAt: string;
-}
+};
 
 export const getToday = (): string => {
   const date = new Date();

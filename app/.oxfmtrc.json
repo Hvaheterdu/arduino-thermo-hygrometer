@@ -6,15 +6,13 @@
   "sortPackageJson": true,
   "sortImports": true,
   "ignorePatterns": [
-    "**/.git",
-    "**/.svn",
-    "**/.hg",
-    "node_modules",
+    ".idea",
     "build",
     "coverage",
     "dist",
-    "**/*.generated.ts",
+    "node_modules",
     "**/*.d.ts",
+    "**/*.generated.ts",
     "package-lock.json"
   ]
 }

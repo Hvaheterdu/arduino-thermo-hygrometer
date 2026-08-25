@@ -1,17 +1,15 @@
 import useSWRMutation from "swr/mutation";
 
-import {
-  deleteBatteriesByDateOrTimestamp,
-  deleteHumiditiesByDateOrTimestamp,
-  deleteTemperaturesByDateOrTimestamp
-} from "../lib";
-import type { SensorResource } from "../types";
+import { deleteBatteriesByDateOrTimestamp } from "@/lib/api/battery";
+import { deleteHumiditiesByDateOrTimestamp } from "@/lib/api/humidity";
+import { deleteTemperaturesByDateOrTimestamp } from "@/lib/api/temperature";
+import type { SensorResource } from "@/types/sensor";
 
-interface DeleteReadingArgs {
+type DeleteReadingArgs = {
   resource: SensorResource;
   registeredAt: string;
   dateOnly: boolean;
-}
+};
 
 export const useDeleteReading = () =>
   useSWRMutation<void, Error, "delete-reading", DeleteReadingArgs>("delete-reading", async (_key, { arg }) => {

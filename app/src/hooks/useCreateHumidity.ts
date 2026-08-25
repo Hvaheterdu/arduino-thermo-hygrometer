@@ -1,7 +1,7 @@
 import useSWRMutation from "swr/mutation";
 
-import { createHumidity } from "../lib";
-import type { HumidityDto } from "../types";
+import { createHumidity } from "@/lib/api/humidity";
+import type { HumidityDto } from "@/types/domain";
 
 export const useCreateHumidity = () =>
   useSWRMutation<HumidityDto, Error, "create-humidity", HumidityDto>("create-humidity", (_key, { arg }) =>

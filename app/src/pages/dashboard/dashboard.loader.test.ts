@@ -1,18 +1,26 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  getBatteriesByDateOrTimestamp,
-  getHumiditiesByDateOrTimestamp,
-  getTemperaturesByDateOrTimestamp
-} from "../../lib";
+import { getBatteriesByDateOrTimestamp } from "@/lib/api/battery";
+import { getHumiditiesByDateOrTimestamp } from "@/lib/api/humidity";
+import { getTemperaturesByDateOrTimestamp } from "@/lib/api/temperature";
+
 import { dashboardLoader } from "./dashboard.loader";
 
-vi.mock("../../lib", () => ({
+vi.mock("@/lib/api/battery", () => ({
+  getBatteriesByDateOrTimestamp: vi.fn()
+}));
+
+vi.mock("@/lib/api/humidity", () => ({
+  getHumiditiesByDateOrTimestamp: vi.fn()
+}));
+
+vi.mock("@/lib/api/temperature", () => ({
+  getTemperaturesByDateOrTimestamp: vi.fn()
+}));
+
+vi.mock("@/lib/date/date", () => ({
   dateToRegisteredAt: vi.fn((date: string) => `${date}T00:00:00`),
-  getBatteriesByDateOrTimestamp: vi.fn(),
-  getHumiditiesByDateOrTimestamp: vi.fn(),
-  getTemperaturesByDateOrTimestamp: vi.fn(),
   getToday: vi.fn(() => "2026-08-25"),
   isValidDate: vi.fn((date: string) => date === "2026-08-24")
 }));
@@ -25,7 +33,7 @@ const loaderArgs = (url: string) => {
   } as LoaderFunctionArgs;
 };
 
-const mockReadings = () => {
+const mockEmptyReadings = () => {
   vi.mocked(getBatteriesByDateOrTimestamp).mockResolvedValue([]);
   vi.mocked(getHumiditiesByDateOrTimestamp).mockResolvedValue([]);
   vi.mocked(getTemperaturesByDateOrTimestamp).mockResolvedValue([]);
@@ -57,7 +65,7 @@ describe("dashboardLoader", () => {
   });
 
   it("falls back to today for an invalid date", async () => {
-    mockReadings();
+    mockEmptyReadings();
 
     await expect(dashboardLoader(loaderArgs("http://localhost/?date=invalid"))).resolves.toMatchObject({
       date: "2026-08-25",

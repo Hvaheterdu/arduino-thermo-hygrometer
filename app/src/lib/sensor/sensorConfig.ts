@@ -1,4 +1,4 @@
-import type { SensorConfig, SensorResource } from "../../types/sensor";
+import type { SensorConfig, SensorResource } from "@/types/sensor";
 
 export const SENSOR_CONFIG: Record<SensorResource, SensorConfig> = {
   battery: {

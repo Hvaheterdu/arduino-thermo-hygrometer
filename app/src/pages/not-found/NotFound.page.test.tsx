@@ -1,9 +1,9 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen } from "@testing-library/react";
-import { RouterProvider, createMemoryRouter } from "react-router";
+import { createMemoryRouter, RouterProvider } from "react-router";
 import { describe, expect, it } from "vitest";
 
-import { NotFoundPage } from "./NotFound.page";
+import { NotFoundPage } from "@/pages/not-found/NotFound.page";
 
 describe("NotFoundPage", () => {
   it("offers a path back to the dashboard", () => {

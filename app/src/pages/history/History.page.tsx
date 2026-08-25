@@ -3,9 +3,13 @@ import type { ReactElement } from "react";
 import { useState } from "react";
 import { Form, useLoaderData, useNavigation, useRevalidator } from "react-router";
 
-import { ApiErrorMessage, EmptyState, LoadingState, MeasurementTable } from "../../components";
-import { useDeleteReading } from "../../hooks";
-import { formatRegisteredAt } from "../../lib";
+import { MeasurementTable } from "@/components/data-table/MeasurementTable.component";
+import { ApiErrorMessage } from "@/components/feedback/ApiErrorMessage.component";
+import { EmptyState } from "@/components/feedback/EmptyState.component";
+import { LoadingState } from "@/components/feedback/LoadingState.component";
+import { useDeleteReading } from "@/hooks/useDeleteReading";
+import { formatRegisteredAt } from "@/lib/date/date";
+
 import type { historyLoader } from "./history.loader";
 
 type HistoryRow = {

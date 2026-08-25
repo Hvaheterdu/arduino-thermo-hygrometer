@@ -58,8 +58,8 @@ src/
 └── Routes.tsx           # React Router data-router definition
 ```
 
-Every top-level source folder has an `index.ts` barrel. React components and pages use PascalCase `.tsx` names;
-TypeScript modules use lowercase `.ts` names. Tests live beside the implementation using `Xxxx.component.test.tsx` and
+React components and pages use PascalCase `.tsx` names; TypeScript modules use lowercase `.ts` names. Tests live beside
+the implementation using `Xxxx.component.test.tsx` and
 `Xxxx.page.test.tsx` naming.
 
 ## Data flow

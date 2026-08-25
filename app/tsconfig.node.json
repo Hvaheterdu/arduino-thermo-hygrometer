@@ -10,9 +10,9 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "types": [
-      "@testing-library/react",
-      "@testing-library/jest-dom",
       "@testing-library/dom",
+      "@testing-library/jest-dom",
+      "@testing-library/react",
       "node",
       "vite/client",
       "vitest/globals"

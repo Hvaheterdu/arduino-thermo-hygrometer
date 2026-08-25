@@ -1,15 +1,12 @@
 import type { LoaderFunctionArgs } from "react-router";
 
-import {
-  dateToRegisteredAt,
-  getBatteriesByDateOrTimestamp,
-  getHumiditiesByDateOrTimestamp,
-  getTemperaturesByDateOrTimestamp,
-  getToday,
-  isSensorResource,
-  isValidDate
-} from "../../lib";
-import type { BatteryDto, HumidityDto, SensorResource, TemperatureDto } from "../../types";
+import { getBatteriesByDateOrTimestamp } from "@/lib/api/battery";
+import { getHumiditiesByDateOrTimestamp } from "@/lib/api/humidity";
+import { getTemperaturesByDateOrTimestamp } from "@/lib/api/temperature";
+import { dateToRegisteredAt, getToday, isValidDate } from "@/lib/date/date";
+import { isSensorResource } from "@/lib/sensor/sensorConfig";
+import type { BatteryDto, HumidityDto, TemperatureDto } from "@/types/domain";
+import type { SensorResource } from "@/types/sensor";
 
 type HistoryLoaderData =
   | {
@@ -33,8 +30,10 @@ type HistoryLoaderData =
 
 const historyLoader = async ({ request }: LoaderFunctionArgs): Promise<HistoryLoaderData> => {
   const url = new URL(request.url);
+
   const resourceParam = url.searchParams.get("resource");
   const resource: SensorResource = isSensorResource(resourceParam) ? resourceParam : "temperature";
+
   const requestedDate = url.searchParams.get("date") ?? getToday();
   const date = isValidDate(requestedDate) ? requestedDate : getToday();
   const registeredAt = dateToRegisteredAt(date);
@@ -46,7 +45,7 @@ const historyLoader = async ({ request }: LoaderFunctionArgs): Promise<HistoryLo
       signal: request.signal
     });
 
-    return { date, readings, registeredAt, resource };
+    return { resource, date, registeredAt, readings };
   }
 
   if (resource === "humidity") {
@@ -56,7 +55,7 @@ const historyLoader = async ({ request }: LoaderFunctionArgs): Promise<HistoryLo
       signal: request.signal
     });
 
-    return { date, readings, registeredAt, resource };
+    return { resource, date, registeredAt, readings };
   }
 
   const readings = await getTemperaturesByDateOrTimestamp({
@@ -65,7 +64,7 @@ const historyLoader = async ({ request }: LoaderFunctionArgs): Promise<HistoryLo
     signal: request.signal
   });
 
-  return { date, readings, registeredAt, resource };
+  return { resource, date, registeredAt, readings };
 };
 
 export { historyLoader };

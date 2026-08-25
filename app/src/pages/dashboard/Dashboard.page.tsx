@@ -2,8 +2,11 @@ import { Button, chakra, Grid, Heading, HStack, Input, Stack, Text } from "@chak
 import type { ReactElement } from "react";
 import { Form, useLoaderData, useNavigation } from "react-router";
 
-import { EmptyState, LoadingState, MetricCard } from "../../components";
-import { formatRegisteredAt, latestByRegisteredAt } from "../../lib";
+import { EmptyState } from "@/components/feedback/EmptyState.component";
+import { LoadingState } from "@/components/feedback/LoadingState.component";
+import { MetricCard } from "@/components/metric-card/MetricCard.component";
+import { formatRegisteredAt, latestByRegisteredAt } from "@/lib/date/date";
+
 import type { dashboardLoader } from "./dashboard.loader";
 
 const formatValue = (value: number | undefined, suffix: string, fractionDigits = 0): string =>
@@ -12,13 +15,16 @@ const formatValue = (value: number | undefined, suffix: string, fractionDigits =
 export const DashboardPage = (): ReactElement => {
   const loaderData = useLoaderData<typeof dashboardLoader>();
   const navigation = useNavigation();
+
   const latestBattery = latestByRegisteredAt(loaderData.battery);
   const latestHumidity = latestByRegisteredAt(loaderData.humidity);
   const latestTemperature = latestByRegisteredAt(loaderData.temperature);
+
   const latestTimestamp = [latestBattery?.registeredAt, latestHumidity?.registeredAt, latestTemperature?.registeredAt]
     .filter((value): value is string => Boolean(value))
     .sort()
     .at(-1);
+
   const hasMeasurements =
     loaderData.battery.length > 0 || loaderData.humidity.length > 0 || loaderData.temperature.length > 0;
 
@@ -77,9 +83,9 @@ export const DashboardPage = (): ReactElement => {
         <Text color="fg.muted">Most recent device reading: {formatRegisteredAt(latestTimestamp)}.</Text>
       ) : null}
 
-      {hasMeasurements ? null : (
+      {!hasMeasurements ? (
         <EmptyState title="No measurements yet" description="There are no measurements recorded for this date." />
-      )}
+      ) : null}
     </Stack>
   );
 };

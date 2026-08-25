@@ -1,12 +1,13 @@
-import type { TemperatureDto } from "../../types";
-import { apiClient } from "./client";
-import { assertNoContent, assertResponse } from "./request";
+import { apiClient } from "@/lib/api/client";
+import type { TemperatureDto } from "@/types/domain";
 
-interface TemperatureQuery {
+import { assertNoContent, assertResponse, assertResponseOrEmpty } from "./request";
+
+type TemperatureQuery = {
   registeredAt: string;
   dateOnly: boolean;
   signal?: AbortSignal;
-}
+};
 
 export const getTemperaturesByDateOrTimestamp = async ({
   registeredAt,
@@ -18,7 +19,7 @@ export const getTemperaturesByDateOrTimestamp = async ({
     ...(signal === undefined ? {} : { signal })
   });
 
-  return assertResponse(result);
+  return assertResponseOrEmpty(result);
 };
 
 export const createTemperature = async (body: TemperatureDto, signal?: AbortSignal): Promise<TemperatureDto> => {

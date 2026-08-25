@@ -1,6 +1,6 @@
 import createClient from "openapi-fetch";
 
-import type { paths } from "../../arduino-thermo-hygrometer-api";
+import type { paths } from "@/arduino-thermo-hygrometer-api";
 
 const apiKey: string | undefined = import.meta.env.VITE_API_KEY;
 const apiHeaderName: string = import.meta.env.VITE_API_HEADER_NAME || "X-API-KEY";

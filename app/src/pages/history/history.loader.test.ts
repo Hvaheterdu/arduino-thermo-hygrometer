@@ -1,26 +1,29 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  getBatteriesByDateOrTimestamp,
-  getHumiditiesByDateOrTimestamp,
-  getTemperaturesByDateOrTimestamp
-} from "../../lib";
+import { getBatteriesByDateOrTimestamp } from "@/lib/api/battery";
+import { getHumiditiesByDateOrTimestamp } from "@/lib/api/humidity";
+import { getTemperaturesByDateOrTimestamp } from "@/lib/api/temperature";
+
 import { historyLoader } from "./history.loader";
 
-vi.mock("../../lib", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("../../lib")>();
+vi.mock("@/lib/api/battery", () => ({
+  getBatteriesByDateOrTimestamp: vi.fn()
+}));
 
-  return {
-    ...actual,
-    dateToRegisteredAt: vi.fn((date: string) => `${date}T00:00:00`),
-    getBatteriesByDateOrTimestamp: vi.fn(),
-    getHumiditiesByDateOrTimestamp: vi.fn(),
-    getTemperaturesByDateOrTimestamp: vi.fn(),
-    getToday: vi.fn(() => "2026-08-25"),
-    isValidDate: vi.fn((value: string) => value === "2026-08-24")
-  };
-});
+vi.mock("@/lib/api/humidity", () => ({
+  getHumiditiesByDateOrTimestamp: vi.fn()
+}));
+
+vi.mock("@/lib/api/temperature", () => ({
+  getTemperaturesByDateOrTimestamp: vi.fn()
+}));
+
+vi.mock("@/lib/date/date", () => ({
+  dateToRegisteredAt: vi.fn((date: string) => `${date}T00:00:00`),
+  getToday: vi.fn(() => "2026-08-26"),
+  isValidDate: vi.fn((date: string) => date === "2026-08-24")
+}));
 
 const loaderArgs = (url: string): LoaderFunctionArgs => {
   return {

@@ -1,18 +1,19 @@
 import { Table, Text } from "@chakra-ui/react";
 import type { ReactElement } from "react";
 
-import { formatRegisteredAt, SENSOR_CONFIG } from "../../lib";
-import type { SensorResource } from "../../types";
+import { formatRegisteredAt } from "@/lib/date/date";
+import { SENSOR_CONFIG } from "@/lib/sensor/sensorConfig";
+import type { SensorResource } from "@/types/sensor";
 
-interface MeasurementTableRow {
+type MeasurementTableRow = {
   registeredAt: string;
   value: string;
-}
+};
 
-interface MeasurementTableProps {
+type MeasurementTableProps = {
   resource: SensorResource;
   rows: MeasurementTableRow[];
-}
+};
 
 export const MeasurementTable = ({ resource, rows }: MeasurementTableProps): ReactElement => {
   const { label, unit } = SENSOR_CONFIG[resource];

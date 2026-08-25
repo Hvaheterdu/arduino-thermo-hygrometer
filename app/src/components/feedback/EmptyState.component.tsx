@@ -1,10 +1,10 @@
 import { Alert } from "@chakra-ui/react";
 import type { ReactElement } from "react";
 
-interface EmptyStateProps {
+type EmptyStateProps = {
   title: string;
   description: string;
-}
+};
 
 export const EmptyState = ({ title, description }: EmptyStateProps): ReactElement => (
   <Alert.Root status="info" variant="subtle">

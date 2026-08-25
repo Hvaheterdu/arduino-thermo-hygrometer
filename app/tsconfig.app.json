@@ -3,14 +3,17 @@
     "composite": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "target": "esnext",
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.app.tsbuildinfo",
     "types": [
-      "@testing-library/react",
-      "@testing-library/jest-dom",
       "@testing-library/dom",
+      "@testing-library/jest-dom",
+      "@testing-library/react",
       "node",
       "vite/client",
       "vitest/globals"

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isSensorResource, SENSOR_CONFIG, SENSOR_OPTIONS } from "./sensorConfig";
+import { isSensorResource, SENSOR_CONFIG, SENSOR_OPTIONS } from "@/lib/sensor/sensorConfig";
 
 describe("sensor configuration", () => {
   it("defines every supported sensor", () => {

@@ -1,7 +1,8 @@
 import type { Middleware, MiddlewareCallbackParams } from "openapi-fetch";
 
-import type { ProblemDetailsDto } from "../../types";
-import { apiClient } from "./client";
+import { apiClient } from "@/lib/api/client";
+import type { ProblemDetailsDto } from "@/types/domain";
+
 import { createApiRequestError, getNetworkErrorMessage } from "./error";
 
 const errorMiddleware: Middleware = {
@@ -17,7 +18,7 @@ const isProblemDetails = (value: unknown): value is ProblemDetailsDto => {
     return false;
   }
 
-  const problem: Record<string, unknown> = value as Record<string, unknown>;
+  const problem = value as Record<string, unknown>;
 
   return (
     typeof problem["type"] === "string" &&
@@ -32,21 +33,34 @@ const getProblemDetails = (value: unknown): ProblemDetailsDto | undefined =>
 
 apiClient.use(errorMiddleware);
 
-interface ResponseResult<T> {
+type ResponseResult<T> = {
   data?: T;
   error?: unknown;
   response: Response;
-}
+};
 
-interface NoContentResult {
+type NoContentResult = {
   error?: unknown;
   response: Response;
-}
+};
 
 export const assertResponse = <T>(result: ResponseResult<T>): T => {
   if (result.data !== undefined) {
     return result.data;
   }
+
+  throw createApiRequestError(result.response.status, getProblemDetails(result.error));
+};
+
+export const assertResponseOrEmpty = <T>(result: ResponseResult<T[]>): T[] => {
+  if (result.data !== undefined) {
+    return result.data;
+  }
+
+  if (result.response.status === 404) {
+    return [];
+  }
+
   throw createApiRequestError(result.response.status, getProblemDetails(result.error));
 };
 
@@ -54,5 +68,6 @@ export const assertNoContent = (result: NoContentResult): void => {
   if (result.response.ok) {
     return;
   }
+
   throw createApiRequestError(result.response.status, getProblemDetails(result.error));
 };
