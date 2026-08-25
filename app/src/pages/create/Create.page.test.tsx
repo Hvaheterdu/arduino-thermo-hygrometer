@@ -1,37 +1,134 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { CreatePage } from "@/pages";
+import { useCreateBattery, useCreateHumidity, useCreateTemperature } from "../../hooks";
+import { CreatePage } from "./Create.page";
+
+vi.mock("../../hooks", () => ({
+  useCreateBattery: vi.fn(),
+  useCreateHumidity: vi.fn(),
+  useCreateTemperature: vi.fn()
+}));
+
+const renderCreate = () =>
+    render(
+      <ChakraProvider value={defaultSystem}>
+        <CreatePage />
+      </ChakraProvider>
+    ),
+  fill = async (fields: { date?: string; value?: string }) => {
+    const user = userEvent.setup();
+
+    if (fields.date !== undefined) {
+      const input = screen.getByLabelText("Registered at");
+
+      await user.clear(input);
+
+      if (fields.date) {
+        await user.type(input, fields.date);
+      }
+    }
+
+    if (fields.value !== undefined) {
+      const input = screen.getByLabelText("Value");
+
+      await user.clear(input);
+
+      if (fields.value) {
+        await user.type(input, fields.value);
+      }
+    }
+
+    await user.click(screen.getByRole("button", { name: "Save reading" }));
+  };
 
 describe("CreatePage", () => {
-  it("validates required fields through React Hook Form before submitting", () => {
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <CreatePage />
-      </ChakraProvider>
-    );
+  beforeEach(() => {
+    vi.mocked(useCreateBattery).mockReturnValue({
+      data: undefined,
+      error: undefined,
+      isMutating: false,
+      reset: vi.fn(),
+      trigger: vi.fn()
+    });
 
-    fireEvent.click(screen.getByRole("button", { name: "Save reading" }));
+    vi.mocked(useCreateHumidity).mockReturnValue({
+      data: undefined,
+      error: undefined,
+      isMutating: false,
+      reset: vi.fn(),
+      trigger: vi.fn()
+    });
 
-    expect(screen.getByText("Enter the date and time.")).toBeDefined();
-    expect(screen.getByText("Enter a value.")).toBeDefined();
+    vi.mocked(useCreateTemperature).mockReturnValue({
+      data: undefined,
+      error: undefined,
+      isMutating: false,
+      reset: vi.fn(),
+      trigger: vi.fn()
+    });
   });
 
-  it("validates sensor-specific value ranges", () => {
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <CreatePage />
-      </ChakraProvider>
-    );
+  it("validates required fields before submitting", async () => {
+    renderCreate();
 
-    const dateTime = screen.getByLabelText("Registered at");
-    const value = screen.getByLabelText("Value");
+    await fill({
+      date: "",
+      value: ""
+    });
 
-    fireEvent.change(dateTime, { target: { value: "2026-08-24T12:00" } });
-    fireEvent.change(value, { target: { value: "999" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save reading" }));
+    expect(await screen.findByText("Enter the date and time.")).toBeInTheDocument();
+    expect(screen.getByText("Enter a value.")).toBeInTheDocument();
+  });
 
-    expect(screen.getByText("Value must be between -55 and 125 °C.")).toBeDefined();
+  it("validates sensor-specific value ranges", async () => {
+    renderCreate();
+
+    await fill({
+      value: "999"
+    });
+
+    expect(await screen.findByText("Value must be between -55 and 125 °C.")).toBeInTheDocument();
+  });
+
+  it("updates validation when the sensor changes", async () => {
+    renderCreate();
+
+    const user = userEvent.setup();
+    await user.selectOptions(screen.getByLabelText("Sensor"), "humidity");
+    await fill({
+      value: "10"
+    });
+
+    expect(await screen.findByText("Value must be between 20 and 90 % RH.")).toBeInTheDocument();
+  });
+
+  it("creates a temperature reading", async () => {
+    const trigger = vi.fn().mockResolvedValue({
+      registeredAt: "2026-08-24T12:00:00",
+      temp: 21.5
+    });
+    vi.mocked(useCreateTemperature).mockReturnValue({
+      data: undefined,
+      error: undefined,
+      isMutating: false,
+      reset: vi.fn(),
+      trigger
+    });
+
+    renderCreate();
+
+    await fill({
+      date: "2026-08-24T12:00",
+      value: "21.5"
+    });
+
+    expect(trigger).toHaveBeenCalledWith({
+      registeredAt: "2026-08-24T12:00:00",
+      temp: 21.5
+    });
+    expect(await screen.findByText("Reading created")).toBeInTheDocument();
   });
 });

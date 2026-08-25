@@ -1,7 +1,4 @@
-import path from "path";
-
 import viteReact from "@vitejs/plugin-react";
-import { checker } from "vite-plugin-checker";
 import { defineConfig } from "vitest/config";
 
 const buildSecurityHeaders = (): Record<string, string> => {
@@ -24,39 +21,22 @@ const buildSecurityHeaders = (): Record<string, string> => {
 };
 
 export default defineConfig(() => {
-  const plugins = [
-    checker({
-      overlay: {
-        initialIsOpen: true,
-        position: "br"
-      },
-      typescript: {
-        tsconfigPath: "./tsconfig.json",
-        root: import.meta.dirname
-      },
-      oxlint: {
-        lintCommand: "oxlint"
-      }
-    }),
-    viteReact()
-  ];
+  const plugins = [viteReact()];
 
   return {
     root: import.meta.dirname,
     plugins,
-    alias: {
-      "@": path.resolve(__dirname, "./src")
-    },
     build: {
       outDir: "dist",
       sourcemap: true,
       reportCompressedSize: true
     },
     test: {
-      include: ["src/**/*.test.{ts,tsx}"],
+      clearMocks: true,
       environment: "jsdom",
       globals: true,
-      clearMocks: true
+      include: ["src/**/*.test.{ts,tsx}"],
+      setupFiles: ["./src/test/setup.ts"]
     },
     cacheDir: "node_modules/.vite/app",
     server: {

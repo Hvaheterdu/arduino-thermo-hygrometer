@@ -1,11 +1,21 @@
 import { describe, expect, it } from "vitest";
 
-import { isSensorResource, SENSOR_CONFIG } from "@/types/sensors";
+import { SENSOR_CONFIG, SENSOR_OPTIONS, isSensorResource } from "./sensorConfig";
 
 describe("sensor configuration", () => {
-  it("defines a display and validation configuration for every sensor", () => {
-    expect(Object.keys(SENSOR_CONFIG)).toHaveLength(3);
-    expect(SENSOR_CONFIG.temperature.unit).toBe("°C");
+  it("defines every supported sensor", () => {
+    expect(SENSOR_OPTIONS.map((option) => option.value)).toEqual(["battery", "humidity", "temperature"]);
+  });
+
+  it("defines display and validation values", () => {
+    expect(SENSOR_CONFIG.temperature).toEqual({
+      label: "Temperature",
+      max: 125,
+      min: -55,
+      step: "0.1",
+      unit: "°C"
+    });
+
     expect(SENSOR_CONFIG.humidity.unit).toBe("% RH");
     expect(SENSOR_CONFIG.battery.unit).toBe("%");
   });
@@ -15,6 +25,7 @@ describe("sensor configuration", () => {
     expect(isSensorResource("humidity")).toBe(true);
     expect(isSensorResource("battery")).toBe(true);
     expect(isSensorResource("unknown")).toBe(false);
+    expect(isSensorResource("toString")).toBe(false);
     expect(isSensorResource(null)).toBe(false);
   });
 });

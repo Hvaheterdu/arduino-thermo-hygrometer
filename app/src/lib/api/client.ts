@@ -1,31 +1,32 @@
 import createClient from "openapi-fetch";
 
-import type { paths } from "@/arduino-thermo-hygrometer-api";
+import type { paths } from "../../arduino-thermo-hygrometer-api";
 
-const environmentKey = (mode: string): string =>
-  `VITE_API_BASEURL_${mode.toUpperCase()}`;
+const environmentKey = (mode: string): string => `VITE_API_BASEURL_${mode.toUpperCase()}`,
+  getApiBaseUrl = (): string => {
+    const modeKey: keyof ImportMetaEnv = environmentKey(import.meta.env.MODE) as keyof ImportMetaEnv,
+      modeSpecific: string | undefined = import.meta.env[modeKey],
+      development: string = import.meta.env.VITE_API_BASEURL_DEVELOPMENT;
 
-const getApiBaseUrl = (): string => {
-  const modeKey: keyof ImportMetaEnv =
-    environmentKey(import.meta.env.MODE) as keyof ImportMetaEnv;
+    return modeSpecific || development;
+  },
+  apiKey: string | undefined = import.meta.env.VITE_API_KEY,
+  apiHeaderName: string = import.meta.env.VITE_API_HEADER_NAME || "X-API-KEY";
+console.log({
+  mode: import.meta.env.MODE,
+  apiKey,
+  apiHeaderName,
+  baseUrl: getApiBaseUrl()
+});
 
-  const modeSpecific: string | undefined = import.meta.env[modeKey];
-  const development: string = import.meta.env.VITE_API_BASEURL_DEVELOPMENT;
-
-  return modeSpecific || development;
-};
-
-const apiKey: string | undefined = import.meta.env.VITE_API_KEY;
-const apiHeaderName: string =
-  import.meta.env.VITE_API_HEADER_NAME || "X-API-KEY";
 
 export const apiClient = createClient<paths>({
   baseUrl: getApiBaseUrl(),
-  ...(apiKey !== undefined
-    ? {
+  ...(apiKey === undefined
+    ? {}
+    : {
       headers: {
         [apiHeaderName]: apiKey
       }
-    }
-    : {})
+    })
 });

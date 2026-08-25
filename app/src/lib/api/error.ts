@@ -1,4 +1,4 @@
-import type { ProblemDetailsDto } from "@/types";
+import type { ProblemDetailsDto } from "../../types";
 
 type ApiRequestError = Error & {
   status: number;
@@ -9,8 +9,8 @@ export const isApiRequestError = (error: unknown): error is ApiRequestError =>
   error instanceof Error && "status" in error && typeof error.status === "number";
 
 const createApiRequestError = (status: number, problem?: ProblemDetailsDto): ApiRequestError => {
-  const message: string = getUserFacingErrorMessage(status, problem);
-  const error: ApiRequestError = new Error(message) as ApiRequestError;
+  const message: string = getUserFacingErrorMessage(status, problem),
+    error: ApiRequestError = new Error(message) as ApiRequestError;
   error.name = "ApiRequestError";
   error.status = status;
   error.problem = problem;

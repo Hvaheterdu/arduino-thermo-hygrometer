@@ -9,7 +9,14 @@
     },
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "types": ["@testing-library/react", "@testing-library/dom", "node", "vite/client", "vitest/globals"],
+    "types": [
+      "@testing-library/react",
+      "@testing-library/jest-dom",
+      "@testing-library/dom",
+      "node",
+      "vite/client",
+      "vitest/globals"
+    ],
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.node.tsbuildinfo"
   },
   "exclude": ["dist", "node_modules"],

@@ -1,5 +1,5 @@
-import type { ReactElement } from "react";
 import { Button, Center, Heading, Stack, Text } from "@chakra-ui/react";
+import type { ReactElement } from "react";
 import { Link } from "react-router";
 
 export const NotFoundPage = (): ReactElement => (

@@ -1,42 +1,21 @@
-import type { ReactElement } from "react";
 import { Table, Text } from "@chakra-ui/react";
+import type { ReactElement } from "react";
 
-import { formatRegisteredAt } from "@/lib";
-import type { SensorResource } from "@/types";
+import { SENSOR_CONFIG, formatRegisteredAt } from "../../lib";
+import type { SensorResource } from "../../types";
 
-type MeasurementTableRow = {
+interface MeasurementTableRow {
   registeredAt: string;
   value: string;
-};
+}
 
-type MeasurementTableProps = {
+interface MeasurementTableProps {
   resource: SensorResource;
   rows: MeasurementTableRow[];
-};
-
-const getSensorLabel = (resource: SensorResource): string => {
-  if (resource === "battery") {
-    return "Battery";
-  }
-  if (resource === "humidity") {
-    return "Humidity";
-  }
-  return "Temperature";
-};
-
-const getSensorUnit = (resource: SensorResource): string => {
-  if (resource === "battery") {
-    return "%";
-  }
-  if (resource === "humidity") {
-    return "% RH";
-  }
-  return "°C";
-};
+}
 
 export const MeasurementTable = ({ resource, rows }: MeasurementTableProps): ReactElement => {
-  const label: string = getSensorLabel(resource);
-  const unit: string = getSensorUnit(resource);
+  const { label, unit } = SENSOR_CONFIG[resource];
 
   return (
     <Table.Root size="sm" variant="outline">
@@ -46,10 +25,12 @@ export const MeasurementTable = ({ resource, rows }: MeasurementTableProps): Rea
           <Table.ColumnHeader>{label}</Table.ColumnHeader>
         </Table.Row>
       </Table.Header>
+
       <Table.Body>
         {rows.map((row, index) => (
           <Table.Row key={`${row.registeredAt}-${row.value}-${index}`}>
             <Table.Cell>{formatRegisteredAt(row.registeredAt)}</Table.Cell>
+
             <Table.Cell>
               <Text fontWeight="semibold">
                 {row.value} {unit}

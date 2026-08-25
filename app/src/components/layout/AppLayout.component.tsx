@@ -1,17 +1,17 @@
+import { Link as ChakraLink, Container, Flex, HStack, Heading, Stack } from "@chakra-ui/react";
 import type { ReactElement } from "react";
-import { Container, Flex, Heading, HStack, Link as ChakraLink, Stack } from "@chakra-ui/react";
 import { NavLink, Outlet, ScrollRestoration } from "react-router";
 
-type NavigationItem = {
+interface NavigationItem {
   to: string;
   label: string;
   end: boolean;
-};
+}
 
 const navigation: readonly NavigationItem[] = [
-  { to: "/", label: "Dashboard", end: true },
-  { to: "/history", label: "History", end: false },
-  { to: "/create", label: "Add reading", end: false }
+  { end: true, label: "Dashboard", to: "/" },
+  { end: false, label: "History", to: "/history" },
+  { end: false, label: "Add reading", to: "/create" }
 ];
 
 export const AppLayout = (): ReactElement => (
@@ -22,8 +22,9 @@ export const AppLayout = (): ReactElement => (
           <Heading size="lg" flex="1">
             Arduino Thermo Hygrometer
           </Heading>
+
           <HStack gap="4" wrap="wrap">
-            {navigation.map((item: NavigationItem) => (
+            {navigation.map((item) => (
               <ChakraLink key={item.to} asChild _currentPage={{ fontWeight: "bold" }}>
                 <NavLink to={item.to} end={item.end}>
                   {item.label}
@@ -34,6 +35,7 @@ export const AppLayout = (): ReactElement => (
         </Flex>
       </Container>
     </Flex>
+
     <Container as="main" maxW="7xl" flex="1" py={{ base: "6", md: "10" }}>
       <Outlet />
       <ScrollRestoration />

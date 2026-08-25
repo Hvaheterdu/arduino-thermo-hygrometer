@@ -2,7 +2,7 @@ import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { MetricCard } from "@/components";
+import { MetricCard } from "./MetricCard.component";
 
 describe("MetricCard", () => {
   it("renders the metric and supporting information", () => {

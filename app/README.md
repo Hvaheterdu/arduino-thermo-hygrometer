@@ -24,8 +24,8 @@ npm run dev
 ```
 
 The development server runs at `http://localhost:3000/arduinothermohygrometer/` using the existing Vite base-path
-configuration. API base URLs, the API header name, and the local API key are read from Vite environment variables.
-Keep local secrets in `.env.local` and never commit production credentials.
+configuration. API base URLs, the API header name, and the local API key are read from Vite environment variables. Keep
+local secrets in `.env.local` and never commit production credentials.
 
 ## Useful scripts
 
@@ -58,20 +58,20 @@ src/
 └── Routes.tsx           # React Router data-router definition
 ```
 
-Every top-level source folder has an `index.ts` barrel. React components and pages use PascalCase `.tsx` names; TypeScript
-modules use lowercase `.ts` names. Tests live beside the implementation using `Xxxx.component.test.tsx` and
+Every top-level source folder has an `index.ts` barrel. React components and pages use PascalCase `.tsx` names;
+TypeScript modules use lowercase `.ts` names. Tests live beside the implementation using `Xxxx.component.test.tsx` and
 `Xxxx.page.test.tsx` naming.
 
 ## Data flow
 
 The OpenAPI document is the source of truth for request and response types. `openapi-typescript` generates the `paths`
-and `components` types, `openapi-fetch` provides the typed HTTP boundary, and specialized resource modules wrap each
+and `component` types, `openapi-fetch` provides the typed HTTP boundary, and specialized resource modules wrap each
 endpoint. SWR hooks then own cache keys, revalidation, and mutations at the React boundary.
 
 React Router is created once outside the React tree with `createBrowserRouter` and rendered with `RouterProvider`.
-Dashboard and history routes use `loader()` to parse URL state and load their initial data before rendering. SWR receives
-that loader data as fallback data and takes over cache-based revalidation after navigation. This keeps navigation state
-and server state separate while avoiding duplicate initial requests.
+Dashboard and history routes use `loader()` to parse URL state and load their initial data before rendering. SWR
+receives that loader data as fallback data and takes over cache-based revalidation after navigation. This keeps
+navigation state and server state separate while avoiding duplicate initial requests.
 
 The history page enables only the selected resource's SWR hook, so a temperature history request does not also fetch
 battery and humidity data. Creation uses one specialized SWR mutation hook per resource, and deletion uses a dedicated
@@ -86,13 +86,20 @@ an unhelpful blank screen.
 
 ## Styling
 
-The application uses Chakra UI primitives and recipes throughout. There is no custom stylesheet; native HTML is used only
-where Chakra intentionally wraps a browser control, such as date/time and numeric inputs.
+The application uses Chakra UI primitives and recipes throughout. There is no custom stylesheet; native HTML is used
+only where Chakra intentionally wraps a browser control, such as date/time and numeric inputs.
 
 ## Frontend architecture
 
-The application uses React Router Data Mode for URL-driven data loading and route-level error handling. Route definitions live in `src/routes.ts`; page implementations are lazy-loaded with `route.lazy`, while the root layout and fallback page remain eagerly available.
+The application uses React Router Data Mode for URL-driven data loading and route-level error handling. Route
+definitions live in `src/routes.ts`; page implementations are lazy-loaded with `route.lazy`, while the root layout and
+fallback page remain eagerly available.
 
-Route loaders fetch initial measurement data with the typed `openapi-fetch` client and seed the matching SWR cache. The page hooks consume those cache keys and own subsequent revalidation. Mutations invalidate the affected sensor/date key so the next view receives fresh data. This keeps initial navigation owned by the router while keeping reusable server state owned by SWR.
+Route loaders fetch initial measurement data with the typed `openapi-fetch` client and seed the matching SWR cache. The
+page hooks consume those cache keys and own subsequent revalidation. Mutations invalidate the affected sensor/date key
+so the next view receives fresh data. This keeps initial navigation owned by the router while keeping reusable server
+state owned by SWR.
 
-API access is separated into specialized endpoint modules, then consumed through specialized hooks. Generated OpenAPI types remain the source of truth for API DTOs. React components use Chakra UI primitives, with browser elements used only where they provide a native control such as date and number inputs.
+API access is separated into specialized endpoint modules, then consumed through specialized hooks. Generated OpenAPI
+types remain the source of truth for API DTOs. React components use Chakra UI primitives, with browser elements used
+only where they provide a native control such as date and number inputs.
