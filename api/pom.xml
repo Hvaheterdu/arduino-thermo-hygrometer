@@ -36,7 +36,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1</version>
         <relativePath/>
     </parent>
 
@@ -45,7 +45,7 @@
         <java.version>25</java.version>
 
         <!-- Maven version -->
-        <maven.version>3.9.11</maven.version>
+        <maven.version>3.9.16</maven.version>
 
         <!-- Maven plugin dependencies -->
         <google-java-format.version>1.36.1</google-java-format.version>
@@ -63,9 +63,9 @@
 
         <!-- OpenAPI Generator -->
         <jackson-databind-nullable.version>0.2.11</jackson-databind-nullable.version>
-        <okhttp3.version>5.4.0</okhttp3.version>
-        <openapi-generator-maven-plugin.version>7.24.0</openapi-generator-maven-plugin.version>
-        <swagger.version>2.2.53</swagger.version>
+        <okhttp3.version>5.5.0</okhttp3.version>
+        <openapi-generator-maven-plugin.version>7.25.0</openapi-generator-maven-plugin.version>
+        <swagger.version>2.2.54</swagger.version>
 
         <!-- Testcontainers version -->
         <testcontainers.version>2.0.5</testcontainers.version>
