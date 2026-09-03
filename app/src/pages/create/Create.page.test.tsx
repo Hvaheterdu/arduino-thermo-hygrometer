@@ -1,12 +1,11 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { useCreateBattery } from "@hooks/useCreateBattery";
+import { useCreateHumidity } from "@hooks/useCreateHumidity";
+import { useCreateTemperature } from "@hooks/useCreateTemperature";
+import { CreatePage } from "@pages/create/Create.page";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
-import { useCreateBattery } from "@/hooks/useCreateBattery";
-import { useCreateHumidity } from "@/hooks/useCreateHumidity";
-import { useCreateTemperature } from "@/hooks/useCreateTemperature";
-import { CreatePage } from "@/pages/create/Create.page";
 
 vi.mock("@/hooks/useCreateBattery", () => ({
   useCreateBattery: vi.fn()

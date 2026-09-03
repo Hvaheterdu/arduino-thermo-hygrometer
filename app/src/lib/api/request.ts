@@ -1,6 +1,6 @@
+import { apiClient } from "@lib/api/client";
 import type { Middleware, MiddlewareCallbackParams } from "openapi-fetch";
 
-import { apiClient } from "@/lib/api/client";
 import type { ProblemDetailsDto } from "@/types/domain";
 
 import { createApiRequestError, getNetworkErrorMessage } from "./error";
@@ -17,7 +17,6 @@ const isProblemDetails = (value: unknown): value is ProblemDetailsDto => {
   if (!value || typeof value !== "object") {
     return false;
   }
-
   const problem = value as Record<string, unknown>;
 
   return (

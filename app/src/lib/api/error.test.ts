@@ -1,6 +1,10 @@
+import {
+  createApiRequestError,
+  getNetworkErrorMessage,
+  getUserFacingErrorMessage,
+  isApiRequestError
+} from "@lib/api/error";
 import { describe, expect, it } from "vitest";
-
-import { createApiRequestError, getNetworkErrorMessage, getUserFacingErrorMessage, isApiRequestError } from "./error";
 
 describe("API errors", () => {
   it("identifies API request errors", () => {
@@ -39,7 +43,6 @@ describe("API errors", () => {
     expect(getNetworkErrorMessage(new TypeError("Failed to fetch"))).toBe(
       "The API could not be reached. Check that the backend is running."
     );
-
     expect(getNetworkErrorMessage(new DOMException("cancelled", "AbortError"))).toBe("The request was cancelled.");
   });
 });

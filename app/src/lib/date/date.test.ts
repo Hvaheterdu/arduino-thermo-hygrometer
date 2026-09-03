@@ -1,6 +1,5 @@
+import { dateToRegisteredAt, getToday, isValidDate, isValidDateTime, latestByRegisteredAt } from "@lib/date/date";
 import { describe, expect, it } from "vitest";
-
-import { dateToRegisteredAt, getToday, isValidDate, isValidDateTime, latestByRegisteredAt } from "@/lib/date/date";
 
 describe("date helpers", () => {
   it("converts a date to the backend timestamp format", () => {

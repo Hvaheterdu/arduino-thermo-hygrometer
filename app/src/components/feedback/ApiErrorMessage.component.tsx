@@ -1,7 +1,6 @@
 import { Alert, List, Text } from "@chakra-ui/react";
+import { getNetworkErrorMessage, getUserFacingErrorMessage, isApiRequestError } from "@lib/api/error";
 import type { ReactElement } from "react";
-
-import { getNetworkErrorMessage, getUserFacingErrorMessage, isApiRequestError } from "@/lib/api/error";
 
 type ApiErrorMessageProps = {
   error: unknown;

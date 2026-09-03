@@ -14,7 +14,7 @@ type DashboardLoaderData = {
   temperature: TemperatureDto[];
 };
 
-const dashboardLoader = async ({ request }: LoaderFunctionArgs): Promise<DashboardLoaderData> => {
+export const dashboardLoader = async ({ request }: LoaderFunctionArgs): Promise<DashboardLoaderData> => {
   const url = new URL(request.url);
   const requestedDate = url.searchParams.get("date") ?? getToday();
   const date = isValidDate(requestedDate) ? requestedDate : getToday();
@@ -46,5 +46,3 @@ const dashboardLoader = async ({ request }: LoaderFunctionArgs): Promise<Dashboa
     temperature
   };
 };
-
-export { dashboardLoader };

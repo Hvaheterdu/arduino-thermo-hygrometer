@@ -1,11 +1,10 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { useDeleteReading } from "@hooks/useDeleteReading";
+import { HistoryPage } from "@pages/history/History.page";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
-import { useDeleteReading } from "@/hooks/useDeleteReading";
-import { HistoryPage } from "@/pages/history/History.page";
 
 vi.mock("@/hooks/useDeleteReading", () => ({
   useDeleteReading: vi.fn()
@@ -122,6 +121,44 @@ describe("HistoryPage", () => {
         registeredAt: "2026-08-24T00:00:00",
         resource: "temperature"
       });
+    });
+    expect(await screen.findByText("Readings deleted.")).toBeInTheDocument();
+  });
+
+  it("renders date range inputs and deletes for the selection", async () => {
+    const trigger = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(useDeleteReading).mockReturnValue({
+      data: undefined,
+      error: undefined,
+      isMutating: false,
+      reset: vi.fn(),
+      trigger
+    });
+
+    renderHistory({
+      date: "2026-08-22..2026-08-24",
+      readings: [
+        { registeredAt: "2026-08-22T10:00:00", temp: 20.1 },
+        { registeredAt: "2026-08-23T11:00:00", temp: 20.5 },
+        { registeredAt: "2026-08-24T12:00:00", temp: 21.0 }
+      ],
+      registeredAt: "2026-08-24T00:00:00",
+      resource: "temperature"
+    });
+
+    await screen.findByText("Measurement history");
+    const startInput = screen.getByLabelText("Start date") as HTMLInputElement;
+    const endInput = screen.getByLabelText("End date") as HTMLInputElement;
+    expect(startInput.value).toBe("2026-08-22");
+    expect(endInput.value).toBe("2026-08-24");
+    expect(screen.getByRole("button", { name: "Delete all for this selection" })).toBeInTheDocument();
+
+    const user = userEvent.setup();
+    window.history.replaceState({}, "", "/history?startDate=2026-08-22&endDate=2026-08-24");
+    await user.click(screen.getByRole("button", { name: "Delete all for this selection" }));
+
+    await waitFor(() => {
+      expect(trigger).toHaveBeenCalledTimes(3);
     });
     expect(await screen.findByText("Readings deleted.")).toBeInTheDocument();
   });

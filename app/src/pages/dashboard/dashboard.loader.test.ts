@@ -1,11 +1,9 @@
+import { getBatteriesByDateOrTimestamp } from "@lib/api/battery";
+import { getHumiditiesByDateOrTimestamp } from "@lib/api/humidity";
+import { getTemperaturesByDateOrTimestamp } from "@lib/api/temperature";
+import { dashboardLoader } from "@pages/dashboard/dashboard.loader";
 import type { LoaderFunctionArgs } from "react-router";
 import { describe, expect, it, vi } from "vitest";
-
-import { getBatteriesByDateOrTimestamp } from "@/lib/api/battery";
-import { getHumiditiesByDateOrTimestamp } from "@/lib/api/humidity";
-import { getTemperaturesByDateOrTimestamp } from "@/lib/api/temperature";
-
-import { dashboardLoader } from "./dashboard.loader";
 
 vi.mock("@/lib/api/battery", () => ({
   getBatteriesByDateOrTimestamp: vi.fn()

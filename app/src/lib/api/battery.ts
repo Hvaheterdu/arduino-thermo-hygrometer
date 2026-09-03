@@ -1,4 +1,5 @@
-import { apiClient } from "@/lib/api/client";
+import { apiClient } from "@lib/api/client";
+
 import type { BatteryDto } from "@/types/domain";
 
 import { assertNoContent, assertResponse, assertResponseOrEmpty } from "./request";

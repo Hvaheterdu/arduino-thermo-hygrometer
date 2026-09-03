@@ -1,8 +1,7 @@
+import { ErrorBoundary } from "@components/error-boundary/ErrorBoundary.component";
+import { AppLayout } from "@components/layout/AppLayout.component";
+import { NotFoundPage } from "@pages/not-found/NotFound.page";
 import { createBrowserRouter, type DataRouter } from "react-router";
-
-import { ErrorBoundary } from "@/components/error-boundary/ErrorBoundary.component";
-import { AppLayout } from "@/components/layout/AppLayout.component";
-import { NotFoundPage } from "@/pages/not-found/NotFound.page";
 
 export const router: DataRouter = createBrowserRouter(
   [

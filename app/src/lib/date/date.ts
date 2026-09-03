@@ -17,13 +17,11 @@ export const getToday = (): string => {
 
 export const isValidDate = (value: string): boolean => {
   const match: RegExpMatchArray | null = DATE_PATTERN.exec(value);
-
   if (!match) {
     return false;
   }
 
   const [, yearString, monthString, dayString] = match;
-
   if (!yearString || !monthString || !dayString) {
     return false;
   }
@@ -38,13 +36,11 @@ export const isValidDate = (value: string): boolean => {
 
 export const isValidDateTime = (value: string): boolean => {
   const match: RegExpMatchArray | null = LOCAL_DATE_TIME_PATTERN.exec(value);
-
   if (!match) {
     return false;
   }
 
   const [, datePart, hoursString, minutesString] = match;
-
   if (!datePart || !hoursString || !minutesString) {
     return false;
   }
@@ -64,7 +60,6 @@ export const dateToRegisteredAt = (date: string): string => `${date}T00:00:00`;
 
 export const formatRegisteredAt = (value: string): string => {
   const date = new Date(value);
-
   if (Number.isNaN(date.getTime())) {
     return value;
   }
