@@ -1,14 +1,14 @@
 import { Alert, Button, Field, Heading, Input, NativeSelect, Stack, Text } from "@chakra-ui/react";
+import { ApiErrorMessage } from "@components/feedback/ApiErrorMessage.component";
+import { useCreateBattery } from "@hooks/useCreateBattery";
+import { useCreateHumidity } from "@hooks/useCreateHumidity";
+import { useCreateTemperature } from "@hooks/useCreateTemperature";
+import { getToday, isValidDateTime } from "@lib/date/date";
+import { SENSOR_CONFIG, SENSOR_OPTIONS } from "@lib/sensor/sensorConfig";
 import type { ReactElement } from "react";
 import { useState } from "react";
 import { type SubmitHandler, useForm, useWatch } from "react-hook-form";
 
-import { ApiErrorMessage } from "@/components/feedback/ApiErrorMessage.component";
-import { useCreateBattery } from "@/hooks/useCreateBattery";
-import { useCreateHumidity } from "@/hooks/useCreateHumidity";
-import { useCreateTemperature } from "@/hooks/useCreateTemperature";
-import { getToday, isValidDateTime } from "@/lib/date/date";
-import { SENSOR_CONFIG, SENSOR_OPTIONS } from "@/lib/sensor/sensorConfig";
 import type { BatteryDto, HumidityDto, TemperatureDto } from "@/types/domain";
 import type { SensorConfig, SensorResource } from "@/types/sensor";
 
@@ -44,7 +44,6 @@ export const CreatePage = (): ReactElement => {
     control,
     name: "resource"
   });
-
   const config: SensorConfig = SENSOR_CONFIG[resource];
 
   const isMutating = createBattery.isMutating || createHumidity.isMutating || createTemperature.isMutating;

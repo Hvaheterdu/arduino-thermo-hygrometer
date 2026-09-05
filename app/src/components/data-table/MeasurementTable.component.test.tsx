@@ -1,8 +1,7 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { MeasurementTable } from "@components/data-table/MeasurementTable.component";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-
-import { MeasurementTable } from "@/components/data-table/MeasurementTable.component";
 
 describe("MeasurementTable", () => {
   it("renders the correct sensor label and unit", () => {

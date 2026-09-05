@@ -1,11 +1,9 @@
+import { getBatteriesByDateOrTimestamp } from "@lib/api/battery";
+import { getHumiditiesByDateOrTimestamp } from "@lib/api/humidity";
+import { getTemperaturesByDateOrTimestamp } from "@lib/api/temperature";
+import { historyLoader } from "@pages/history/history.loader";
 import type { LoaderFunctionArgs } from "react-router";
 import { describe, expect, it, vi } from "vitest";
-
-import { getBatteriesByDateOrTimestamp } from "@/lib/api/battery";
-import { getHumiditiesByDateOrTimestamp } from "@/lib/api/humidity";
-import { getTemperaturesByDateOrTimestamp } from "@/lib/api/temperature";
-
-import { historyLoader } from "./history.loader";
 
 vi.mock("@/lib/api/battery", () => ({
   getBatteriesByDateOrTimestamp: vi.fn()
@@ -22,7 +20,7 @@ vi.mock("@/lib/api/temperature", () => ({
 vi.mock("@/lib/date/date", () => ({
   dateToRegisteredAt: vi.fn((date: string) => `${date}T00:00:00`),
   getToday: vi.fn(() => "2026-08-26"),
-  isValidDate: vi.fn((date: string) => date === "2026-08-24")
+  isValidDate: vi.fn((date: string) => /^2026-08-2[2-4]$/.test(date))
 }));
 
 const loaderArgs = (url: string): LoaderFunctionArgs => {
@@ -108,5 +106,23 @@ describe("historyLoader", () => {
       readings,
       resource: "temperature"
     });
+  });
+
+  it("loads readings for an inclusive date range", async () => {
+    vi.mocked(getTemperaturesByDateOrTimestamp)
+      .mockResolvedValueOnce([{ registeredAt: "2026-08-22T10:00:00", temp: 20.1 }])
+      .mockResolvedValueOnce([{ registeredAt: "2026-08-23T11:00:00", temp: 20.5 }])
+      .mockResolvedValueOnce([{ registeredAt: "2026-08-24T12:00:00", temp: 21.0 }]);
+
+    const result = await historyLoader(
+      loaderArgs("http://localhost/history?resource=temperature&startDate=2026-08-22&endDate=2026-08-24")
+    );
+
+    expect(result.date).toBe("2026-08-22..2026-08-24");
+    expect(result.registeredAt).toBe("2026-08-24T00:00:00");
+    expect(result.resource).toBe("temperature");
+    expect(result.readings).toHaveLength(3);
+    expect((result.readings as any)[0].registeredAt).toBe("2026-08-22T10:00:00");
+    expect((result.readings as any)[2].registeredAt).toBe("2026-08-24T12:00:00");
   });
 });

@@ -8,12 +8,13 @@ type ApiRequestError = Error & {
 export const isApiRequestError = (error: unknown): error is ApiRequestError =>
   error instanceof Error && "status" in error && typeof error.status === "number";
 
-const createApiRequestError = (status: number, problem?: ProblemDetailsDto): ApiRequestError => {
+export const createApiRequestError = (status: number, problem?: ProblemDetailsDto): ApiRequestError => {
   const message: string = getUserFacingErrorMessage(status, problem);
   const error: ApiRequestError = new Error(message) as ApiRequestError;
   error.name = "ApiRequestError";
   error.status = status;
   error.problem = problem;
+
   return error;
 };
 
@@ -45,5 +46,3 @@ export const getNetworkErrorMessage = (error: unknown): string => {
   }
   return "Something went wrong while contacting the API.";
 };
-
-export { createApiRequestError };

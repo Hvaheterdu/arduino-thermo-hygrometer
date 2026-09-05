@@ -1,6 +1,6 @@
+import { createBattery } from "@lib/api/battery";
 import useSWRMutation from "swr/mutation";
 
-import { createBattery } from "@/lib/api/battery";
 import type { BatteryDto } from "@/types/domain";
 
 export const useCreateBattery = () =>

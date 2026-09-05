@@ -1,6 +1,5 @@
+import { assertNoContent, assertResponse } from "@lib/api/request";
 import { describe, expect, it } from "vitest";
-
-import { assertNoContent, assertResponse } from "./request";
 
 const response = (status: number): Response => new Response(null, { status });
 

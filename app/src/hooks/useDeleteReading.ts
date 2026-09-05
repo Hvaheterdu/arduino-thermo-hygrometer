@@ -1,8 +1,8 @@
+import { deleteBatteriesByDateOrTimestamp } from "@lib/api/battery";
+import { deleteHumiditiesByDateOrTimestamp } from "@lib/api/humidity";
+import { deleteTemperaturesByDateOrTimestamp } from "@lib/api/temperature";
 import useSWRMutation from "swr/mutation";
 
-import { deleteBatteriesByDateOrTimestamp } from "@/lib/api/battery";
-import { deleteHumiditiesByDateOrTimestamp } from "@/lib/api/humidity";
-import { deleteTemperaturesByDateOrTimestamp } from "@/lib/api/temperature";
 import type { SensorResource } from "@/types/sensor";
 
 type DeleteReadingArgs = {

@@ -1,6 +1,6 @@
+import { createTemperature } from "@lib/api/temperature";
 import useSWRMutation from "swr/mutation";
 
-import { createTemperature } from "@/lib/api/temperature";
 import type { TemperatureDto } from "@/types/domain";
 
 export const useCreateTemperature = () =>
