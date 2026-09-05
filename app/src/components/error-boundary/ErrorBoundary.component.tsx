@@ -1,33 +1,33 @@
 import { Alert, Button, Center, Container, Heading, Stack, Text } from "@chakra-ui/react";
+import { getUserFacingErrorMessage, isApiRequestError } from "@lib/api/error";
 import type { ReactElement } from "react";
 import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 
-import { getUserFacingErrorMessage, isApiRequestError } from "@/lib/api/error";
-
 const getRouteErrorMessage = (error: unknown): string => {
-    if (isApiRequestError(error)) {
-      return getUserFacingErrorMessage(error.status, error.problem);
+  if (isApiRequestError(error)) {
+    return getUserFacingErrorMessage(error.status, error.problem);
+  }
+  if (isRouteErrorResponse(error)) {
+    if (error.status === 404) {
+      return "The requested page could not be found.";
     }
-    if (isRouteErrorResponse(error)) {
-      if (error.status === 404) {
-        return "The requested page could not be found.";
-      }
-      if (error.status === 429) {
-        return "Too many requests. Please try again shortly.";
-      }
-      if (error.status >= 500) {
-        return "The server could not complete the request.";
-      }
-      return error.statusText || "The page could not be loaded.";
+    if (error.status === 429) {
+      return "Too many requests. Please try again shortly.";
     }
-    return "The page could not be loaded. Please try again.";
-  },
-  getRouteErrorStatus = (error: unknown): number | undefined => {
-    if (isApiRequestError(error)) {
-      return error.status;
+    if (error.status >= 500) {
+      return "The server could not complete the request.";
     }
-    return isRouteErrorResponse(error) ? error.status : undefined;
-  };
+    return error.statusText || "The page could not be loaded.";
+  }
+  return "The page could not be loaded. Please try again.";
+};
+
+const getRouteErrorStatus = (error: unknown): number | undefined => {
+  if (isApiRequestError(error)) {
+    return error.status;
+  }
+  return isRouteErrorResponse(error) ? error.status : undefined;
+};
 
 export const ErrorBoundary = (): ReactElement => {
   const error: unknown = useRouteError();

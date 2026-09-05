@@ -1,7 +1,7 @@
-import { apiClient } from "@/lib/api/client";
-import type { HumidityDto } from "@/types/domain";
+import { apiClient } from "@lib/api/client";
+import { assertNoContent, assertResponse, assertResponseOrEmpty } from "@lib/api/request";
 
-import { assertNoContent, assertResponse, assertResponseOrEmpty } from "./request";
+import type { HumidityDto } from "@/types/domain";
 
 type HumidityQuery = {
   registeredAt: string;

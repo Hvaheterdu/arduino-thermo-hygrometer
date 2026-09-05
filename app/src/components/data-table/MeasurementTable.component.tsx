@@ -1,8 +1,8 @@
 import { Table, Text } from "@chakra-ui/react";
+import { formatRegisteredAt } from "@lib/date/date";
+import { SENSOR_CONFIG } from "@lib/sensor/sensorConfig";
 import type { ReactElement } from "react";
 
-import { formatRegisteredAt } from "@/lib/date/date";
-import { SENSOR_CONFIG } from "@/lib/sensor/sensorConfig";
 import type { SensorResource } from "@/types/sensor";
 
 type MeasurementTableRow = {

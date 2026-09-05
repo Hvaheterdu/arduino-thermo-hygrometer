@@ -1,16 +1,14 @@
 import { Button, chakra, Heading, HStack, Input, NativeSelect, Stack, Text } from "@chakra-ui/react";
+import { MeasurementTable } from "@components/data-table/MeasurementTable.component";
+import { ApiErrorMessage } from "@components/feedback/ApiErrorMessage.component";
+import { EmptyState } from "@components/feedback/EmptyState.component";
+import { LoadingState } from "@components/feedback/LoadingState.component";
+import { useDeleteReading } from "@hooks/useDeleteReading";
+import { formatRegisteredAt } from "@lib/date/date";
+import type { historyLoader } from "@pages/history/history.loader";
 import type { ReactElement } from "react";
 import { useState } from "react";
 import { Form, useLoaderData, useNavigation, useRevalidator } from "react-router";
-
-import { MeasurementTable } from "@/components/data-table/MeasurementTable.component";
-import { ApiErrorMessage } from "@/components/feedback/ApiErrorMessage.component";
-import { EmptyState } from "@/components/feedback/EmptyState.component";
-import { LoadingState } from "@/components/feedback/LoadingState.component";
-import { useDeleteReading } from "@/hooks/useDeleteReading";
-import { formatRegisteredAt } from "@/lib/date/date";
-
-import type { historyLoader } from "./history.loader";
 
 type HistoryRow = {
   registeredAt: string;
@@ -23,6 +21,11 @@ export const HistoryPage = (): ReactElement => {
   const revalidator = useRevalidator();
   const { trigger, error, isMutating } = useDeleteReading();
   const [deleted, setDeleted] = useState(false);
+
+  const [defaultStart, defaultEnd] =
+    loaderData.date && loaderData.date.includes("..")
+      ? loaderData.date.split("..")
+      : [loaderData.date, loaderData.date];
 
   const rows: HistoryRow[] =
     loaderData.resource === "battery"
@@ -43,11 +46,29 @@ export const HistoryPage = (): ReactElement => {
   const handleDelete = async (): Promise<void> => {
     setDeleted(false);
 
-    await trigger({
-      dateOnly: true,
-      registeredAt: loaderData.registeredAt,
-      resource: loaderData.resource
-    });
+    const url = new URL(window.location.href);
+    const start = url.searchParams.get("startDate");
+    const end = url.searchParams.get("endDate");
+
+    if (start && end && start !== end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      const deletions: Promise<unknown>[] = [];
+
+      for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        const dateStr = [
+          date.getFullYear(),
+          String(date.getMonth() + 1).padStart(2, "0"),
+          String(date.getDate()).padStart(2, "0")
+        ].join("-");
+
+        deletions.push(trigger({ dateOnly: true, registeredAt: `${dateStr}T00:00:00`, resource: loaderData.resource }));
+      }
+
+      await Promise.all(deletions);
+    } else {
+      await trigger({ dateOnly: true, registeredAt: loaderData.registeredAt, resource: loaderData.resource });
+    }
 
     setDeleted(true);
     await revalidator.revalidate();
@@ -61,7 +82,7 @@ export const HistoryPage = (): ReactElement => {
     <Stack gap="7">
       <Stack gap="2">
         <Heading size="2xl">Measurement history</Heading>
-        <Text color="fg.muted">Review and remove readings for a selected day.</Text>
+        <Text color="fg.muted">Review and remove readings for a selected day or date range.</Text>
       </Stack>
 
       <Form method="get">
@@ -82,11 +103,19 @@ export const HistoryPage = (): ReactElement => {
           </Stack>
 
           <Stack gap="1">
-            <chakra.label htmlFor="date" fontSize="sm" fontWeight="medium">
-              Date
+            <chakra.label htmlFor="startDate" fontSize="sm" fontWeight="medium">
+              Start date
             </chakra.label>
 
-            <Input id="date" name="date" type="date" defaultValue={loaderData.date} />
+            <Input id="startDate" name="startDate" type="date" defaultValue={defaultStart} />
+          </Stack>
+
+          <Stack gap="1">
+            <chakra.label htmlFor="endDate" fontSize="sm" fontWeight="medium">
+              End date
+            </chakra.label>
+
+            <Input id="endDate" name="endDate" type="date" defaultValue={defaultEnd} />
           </Stack>
 
           <Button type="submit">Load history</Button>
@@ -112,7 +141,7 @@ export const HistoryPage = (): ReactElement => {
             disabled={isMutating}
             onClick={handleDelete}
           >
-            Delete all for this day
+            {defaultStart === defaultEnd ? "Delete all for this day" : "Delete all for this selection"}
           </Button>
 
           {error ? <ApiErrorMessage error={error} /> : null}
