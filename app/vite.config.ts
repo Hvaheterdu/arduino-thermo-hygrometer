@@ -24,22 +24,22 @@ export default defineConfig(() => {
   const plugins = [viteReact()];
 
   return {
-    root: import.meta.dirname,
-    plugins,
     build: {
       outDir: "dist",
       sourcemap: true,
       reportCompressedSize: true
     },
-    resolve: {
-      alias: {
-        "@": import.meta.dirname + "/src",
-        "@components": import.meta.dirname + "/src/components",
-        "@hooks": import.meta.dirname + "/src/hooks",
-        "@lib": import.meta.dirname + "/src/lib",
-        "@pages": import.meta.dirname + "/src/pages"
-      }
+    cacheDir: "node_modules/.vite/app",
+    plugins,
+    preview: {
+      host: "localhost",
+      port: 4173,
+      strictPort: true
     },
+    resolve: {
+      tsconfigPaths: true
+    },
+    root: import.meta.dirname,
     test: {
       clearMocks: true,
       environment: "jsdom",
@@ -47,17 +47,11 @@ export default defineConfig(() => {
       include: ["src/**/*.test.{ts,tsx}"],
       setupFiles: ["./src/test/setup.ts"]
     },
-    cacheDir: "node_modules/.vite/app",
     server: {
       host: "localhost",
       port: 3000,
       strictPort: true,
       headers: buildSecurityHeaders()
-    },
-    preview: {
-      host: "localhost",
-      port: 4173,
-      strictPort: true
     }
   };
 });
