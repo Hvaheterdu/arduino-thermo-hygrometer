@@ -1,105 +1,195 @@
 # Arduino Thermo Hygrometer Web UI
 
-A React 19 + TypeScript dashboard for the Arduino Thermo Hygrometer REST API. The UI uses Chakra UI for presentation,
-SWR for client-side caching and revalidation, openapi-fetch for type-safe HTTP requests, openapi-typescript for
-contract-generated types, React Router data routers for route loaders, and Vite/Vitest for development and testing.
+This document covers everything needed to run, build, test, and extend the `app/` frontend for the Arduino Thermo
+Hygrometer API. See the top-level `README.md` for the project overview.
 
 ## Prerequisites
 
-- Node.js 24.18+
-- npm 11.15+
-- The API running locally on `http://localhost:5000` for development data
+- Node.js 24.18+ and npm 11.15+ (matches the `engines` field in `package.json`; do not downgrade).
+- The Java API (see `../api`) running locally, by default on `http://localhost:5000`.
 
-The Node/npm requirements match the engines already declared by this repository. Do not downgrade them when running the
-frontend.
+## Running, building, and testing
 
-## Run the frontend
-
-From the `app` folder:
+All commands are existing `npm` scripts, run from the `app/` folder. No new packages were added.
 
 ```bash
-npm install
-npm run generate-types
-npm run dev
+npm install                 # install dependencies from the existing package-lock.json
+npm run generate-types      # regenerate src/arduino-thermo-hygrometer-api.d.ts from the OpenAPI spec
 ```
 
-The development server runs at `http://localhost:3000/arduinothermohygrometer/` using the existing Vite base-path
-configuration. API base URLs, the API header name, and the local API key are read from Vite environment variables. Keep
-local secrets in `.env.local` and never commit production credentials.
+## Environment variables
 
-## Useful scripts
+Vite mode-specific env files are committed (`.env.development`, `.env.staging`, `.env.production`); `.env.example`
+documents every variable. **Never commit `.env.local`** (already git-ignored) — that's where a real, local-only
+`VITE_API_KEY` belongs.
 
-```bash
-npm run dev
-npm run generate-types
-npm run test:run
-npm run lint
-npm run format:check
-npm run build:dev
-```
+| Variable                          | Used by                                                     | Notes                                                                      |
+| --------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `VITE_BASE_PATH`                  | `vite.config.ts` (`base`) and the router `basename`         | Keeps Vite's dev/build base path and React Router's basename in sync.      |
+| `VITE_API_BASEURL_LOCAL`          | `npm run dev` (Vite dev server only, `import.meta.env.DEV`) | Points at a locally running API instance.                                  |
+| `VITE_API_BASEURL_DEVELOPMENT`    | `build:dev` bundles                                         | Selected when `import.meta.env.MODE === "development"` and not `DEV`.      |
+| `VITE_API_BASEURL_STAGING`        | `build:staging` bundles                                     | Selected when `MODE === "staging"`.                                        |
+| `VITE_API_BASEURL_PRODUCTION`     | `build:production` bundles                                  | Selected when `MODE === "production"`.                                     |
+| `VITE_API_HEADER_NAME` (optional) | `api-client/httpClient.ts`                                  | Header name for the `ApiKeyAuth` security scheme. Defaults to `X-API-KEY`. |
+| `VITE_API_KEY` (optional)         | `api-client/httpClient.ts`                                  | Public browser configuration; only use a disposable local-development key. |
 
-`generate-types` regenerates `src/arduino-thermo-hygrometer-api.d.ts` from the OpenAPI document. The generated file is
-kept in source control so the frontend has a usable contract immediately after checkout; regenerate it whenever the
-specification changes.
+See `src/utils/env.util.tsx` for the resolution logic.
 
-## Structure
+The committed deployment modes use an empty API base URL, which expects the hosting platform to reverse-proxy
+`/api/*` to the backend. Set the appropriate mode-specific base URL when the API is hosted on a separate origin. Because
+Vite embeds every `VITE_*` value into the browser bundle, production API credentials must not be supplied through these
+variables.
+
+## Folder structure
 
 ```text
 src/
-├── components/          # Chakra UI presentation components and route error UI
-├── hooks/               # Specialized SWR hooks by resource and mutation
-├── lib/
-│   ├── api/             # openapi-fetch client and one module per API resource
-│   └── date/            # Backend-compatible date/time helpers
-├── pages/               # Route-level pages with colocated loaders and tests
-├── types/               # Domain aliases and form types
-├── AppProvider.tsx      # Chakra + SWR application providers
-├── Main.tsx             # React entry point
-└── Routes.tsx           # React Router data-router definition
+├── api-client/            # openapi-fetch client + one typed module per API resource (battery/humidity/temperature)
+├── arduino-thermo-hygrometer-api.d.ts   # generated by `npm run generate-types`; do not edit by hand
+├── components/
+│   ├── primitives/          # Button, Input, Card, Modal, Icon, Avatar — the app's base UI primitives
+│   ├── layout/               # AppShell (header/nav + <Outlet />)
+│   ├── errorBoundary/        # RootErrorBoundary, used as React Router's route-level ErrorBoundary
+│   ├── measurementCard/      # Dashboard summary card for one resource
+│   ├── measurementForm/      # Shared "add a reading" form
+│   └── measurementTable/     # Shared history table
+├── hooks/
+│   ├── useMeasurements.ts    # SWR query
+│   ├── useCreateMeasurement.ts  # SWR mutation
+│   └── useDeleteMeasurement.ts  # SWR mutation
+├── pages/
+│   ├── dashboard/            # "/" — today's readings + quick-add actions
+│   ├── history/              # "/history/:resource" — date-filterable history, add/delete
+│   └── notFound/             # unmatched routes and unknown :resource values
+├── styles/                 # Chakra UI theme (brand accent color) + a minimal global CSS reset
+├── test/                   # renderWithProviders test helper + vitest setup
+├── types/                  # Measurement/problem-details domain types, derived from the generated OpenAPI types
+├── utils/
+│   ├── date.util.tsx
+│   ├── env.util.tsx
+│   ├── problemDetails.util.tsx
+│   ├── resourceConfig.util.tsx
+│   └── routes.util.tsx
+├── AppProvider.tsx         # Chakra + SWR providers
+├── Main.tsx                # React entry point (referenced by index.html)
+└── Routes.tsx              # React Router data-router definition (lazy-loaded pages)
 ```
 
-React components and pages use PascalCase `.tsx` names; TypeScript modules use lowercase `.ts` names. Tests live beside
-the implementation using `Xxxx.component.test.tsx` and
-`Xxxx.page.test.tsx` naming.
+Naming conventions used throughout `src/`:
+
+- Components: `*.component.tsx`
+- Pages: `*.page.tsx`
+- Utilities: `*.util.tsx`
+- Tests: colocated `*.test.tsx`, next to the file under test
+
+### Barrel files and aliases
+
+`components/`, `pages/`, `utils/`, and `hooks/` each have an `index.ts` barrel that re-exports everything a consumer
+outside that folder needs. `tsconfig.app.json` maps the src folder to the alias `@/*`:
+
+```json
+"paths": {
+  "@/*": [
+    "./src/*"
+  ]
+}
+```
+
+Vite resolves the same aliases at dev/build time via `resolve.tsconfigPaths` in `vite.config.ts` — no separate Vite
+alias configuration is needed. The convention:
+
+- **Crossing a folder boundary** (e.g. a page using a component, a component using a util) imports from the bare alias:
+  `import { Button, Modal } from "@components";`.
+- **Within the same folder** (e.g. one primitive using another, `History.page.tsx` rendering `NotFoundPage`) imports the
+  concrete file directly via `@/...`, to avoid the file importing its own barrel.
+- **`Routes.tsx`'s lazy route imports stay as deep, dynamic `import("@/pages/.../X.page")` calls**, not the `@pages`
+  barrel — importing the barrel there would pull all three pages into a single chunk and defeat the per-route code
+  splitting.
+
+## API client and OpenAPI contract
+
+`openapi-specification/arduino-thermo-hygrometer-api.yaml` is the source of truth. `npm run generate-types` runs
+`openapi-typescript` against it and writes `src/arduino-thermo-hygrometer-api.d.ts`. The generated file is committed so
+a fresh checkout has usable types immediately; regenerate it whenever the spec changes (and re-run
+`npm run build:dev`/`test:run` to confirm nothing broke).
+
+`src/api-client/httpClient.ts` wraps `openapi-fetch`'s `createClient<paths>()` with a middleware that attaches the
+`ApiKeyAuth` header when a disposable local-development `VITE_API_KEY` is set. `battery.api-client.ts`,
+`humidity.api-client.ts`, and
+`temperature.api-client.ts` each expose `list`/`create`/`remove` functions for their endpoint, typed directly against
+the generated `paths` types — there is no untyped `fetch` call anywhere in the app.
 
 ## Data flow
 
-The OpenAPI document is the source of truth for request and response types. `openapi-typescript` generates the `paths`
-and `component` types, `openapi-fetch` provides the typed HTTP boundary, and specialized resource modules wrap each
-endpoint. SWR hooks then own cache keys, revalidation, and mutations at the React boundary.
-
-React Router is created once outside the React tree with `createBrowserRouter` and rendered with `RouterProvider`.
-Dashboard and history routes use `loader()` to parse URL state and load their initial data before rendering. SWR
-receives that loader data as fallback data and takes over cache-based revalidation after navigation. This keeps
-navigation state and server state separate while avoiding duplicate initial requests.
-
-The history page enables only the selected resource's SWR hook, so a temperature history request does not also fetch
-battery and humidity data. Creation uses one specialized SWR mutation hook per resource, and deletion uses a dedicated
-mutation boundary that delegates to the resource-specific API modules.
+- `useMeasurements(resource, query)` (SWR) fetches and caches `GET /api/v1/{resource}` results, keyed by
+  `["measurements", resource, registeredAt, dateOnly]`. Only the resource currently being viewed is fetched — the
+  history page never triggers requests for the other two sensors.
+- `useCreateMeasurement`/`useDeleteMeasurement` (`swr/mutation`) wrap `POST`/`DELETE` and invalidate every cached
+  `useMeasurements` entry for that resource on success, so the dashboard and history page immediately reflect mutations
+  without a manual refetch.
+- `src/utils/resourceConfig.util.tsx` centralizes the small amount of per-resource metadata (field name, label, unit,
+  valid range, value formatting) so the dashboard cards, the creation form, and the history table all stay in sync with
+  the OpenAPI schema's `minimum`/`maximum` constraints.
 
 ## Error handling
 
-The backend follows RFC 9457-style problem details with concise status-specific messages. Transport errors from
-`openapi-fetch` are converted into user-oriented messages, while validation errors can display the backend's field-level
-messages. React Router's `ErrorBoundary` is also a dedicated component so route loader failures do not fall through to
-an unhelpful blank screen.
+The API returns RFC 9457 problem-details documents. `src/utils/problemDetails.util.tsx` normalizes those (and
+`openapi-fetch`'s transport failures) into a small `ApiError` shape, and `toErrorMessage` turns that into a single
+readable sentence, including field-level validation messages when present. `RootErrorBoundary` is registered as React
+Router's route-level `ErrorBoundary`, so a failed navigation renders a helpful page instead of a blank screen. Exception
+stack traces and production source maps are disabled in production builds.
+
+The generated HTML includes a Content Security Policy for directives supported by `<meta http-equiv>`. The Vite
+development and preview servers additionally send CSP, `X-Content-Type-Options`, `Referrer-Policy`, and
+`Permissions-Policy` headers. The production host must send equivalent headers, especially
+`frame-ancestors 'none'`, because static assets cannot configure their serving server.
 
 ## Styling
 
-The application uses Chakra UI primitives and recipes throughout. There is no custom stylesheet; native HTML is used
-only where Chakra intentionally wraps a browser control, such as date/time and numeric inputs.
+Chakra UI (already a dependency) is used throughout; `src/styles/theme.ts` adds one custom "brand" accent color palette
+on top of Chakra's defaults. `src/styles/globals.css` is a small, framework-agnostic reset (box-sizing, body margin) —
+there is no bespoke component styling outside of Chakra's theme tokens.
 
-## Frontend architecture
+## Accessibility
 
-The application uses React Router Data Mode for URL-driven data loading and route-level error handling. Route
-definitions live in `src/routes.ts`; page implementations are lazy-loaded with `route.lazy`, while the root layout and
-fallback page remain eagerly available.
+The app targets **WCAG 2.1 AA**. Notable conventions and fixes:
 
-Route loaders fetch initial measurement data with the typed `openapi-fetch` client and seed the matching SWR cache. The
-page hooks consume those cache keys and own subsequent revalidation. Mutations invalidate the affected sensor/date key
-so the next view receives fresh data. This keeps initial navigation owned by the router while keeping reusable server
-state owned by SWR.
+- **Theme contrast.** The `solid` and `focusRing` semantic tokens in `src/styles/theme.ts` were measured against white
+  using the WCAG relative-luminance formula. The original values (`brand.600` for `solid`, `brand.500` for
+  `focusRing`) failed the 4.5:1 (normal text) and 3:1 (non-text UI) minimums respectively (4.01:1 and 2.50:1). Both now
+  reuse `brand.700` (6.88:1 against white), which also matches the existing `fg` token used for headings/links. The
+  warning icon (`orange.500`, 2.80:1) was likewise bumped to `orange.600` (3.56:1) to clear the 3:1 graphical- object
+  threshold.
+- **Status messages (WCAG 4.1.3).** Chakra's `Alert.Root` renders a plain `<div>` with no built-in live-region wiring,
+  so every error alert in the app (`MeasurementCard`, `MeasurementTable`, `MeasurementForm`, the delete confirmation on
+  `History.page`) is given an explicit `role="alert"`, which is implicitly an assertive live region and announces itself
+  as soon as it mounts. Loading `Skeleton`s get `role="status"` plus an `aria-label` describing what is loading, since a
+  skeleton has no inherent semantic meaning. `MeasurementCard`'s value/empty-state text and
+  `MeasurementTable`'s populated table are wrapped in an `aria-live="polite"` region, so a successful create/delete
+  (which revalidates the underlying SWR cache) is announced without needing a separate toast component.
+- **Skip link.** `AppShell` renders an offscreen "Skip to main content" link (visible on keyboard focus) that jumps to
+  `#main-content` (WCAG 2.4.1 Bypass Blocks), so keyboard and screen-reader users don't have to tab through the header
+  navigation on every route change.
+- **`data-testid` attributes.** Interactive and dynamic elements (cards, tables, alerts, buttons, form fields,
+  skeletons) carry stable `data-testid`s, independent of visible text or ARIA roles, so tests can target them without
+  being coupled to copy changes.
+- **Existing baseline.** Semantic landmarks (`header`/`nav`/`main`), a labelled primary navigation, native `<label>`/
+  `aria-invalid`/`aria-describedby` wiring on every form field (via Chakra's `Field.*` primitives), and visible focus
+  indicators were already in place from the initial build and are unaffected by this pass.
 
-API access is separated into specialized endpoint modules, then consumed through specialized hooks. Generated OpenAPI
-types remain the source of truth for API DTOs. React components use Chakra UI primitives, with browser elements used
-only where they provide a native control such as date and number inputs.
+## Key architectural decisions
+
+- **Chakra UI over the design system in the sibling `vadis-*` repositories.** Those repos use Vegvesen's internal
+  `@komponentkassen/*` packages, which are not available to this open-source project. `@chakra-ui/react` was already
+  declared in `package.json`, so it was used as-is rather than adding a new UI dependency.
+- **Non-generic shared components (`MeasurementCard`, `MeasurementForm`, `MeasurementTable`).** An earlier draft made
+  these generic over the specific resource DTO type, but that fought TypeScript's contravariant function-parameter
+  checking once resources were selected at runtime (route params, `.map()` over `RESOURCE_KINDS`). They now operate on
+  the shared `MeasurementDto` union instead, with `resourceConfig.util.tsx` centralizing the small amount of
+  per-resource type-narrowing needed for formatting.
+- **Deletion is query-based, not per-row.** The OpenAPI spec deletes by `registeredAt`/`dateOnly`, not by a resource ID
+  (there is no ID in any DTO). The history page's delete action therefore deletes everything matching the currently
+  selected date/checkbox, with a confirmation dialog.
+- **`base`/`basename` driven by `VITE_BASE_PATH`.** `vite.config.ts` now reads it via `loadEnv` for the dev server/build
+  `base`, and `Routes.tsx` reads the same variable (via `getBasePath()`) for React Router's `basename`, so both stay in
+  sync without duplicating the value.

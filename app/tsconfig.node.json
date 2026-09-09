@@ -5,11 +5,7 @@
     "moduleResolution": "bundler",
     "moduleDetection": "force",
     "paths": {
-      "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@pages/*": ["./src/pages/*"]
+      "@/*": ["./src/*"]
     },
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
