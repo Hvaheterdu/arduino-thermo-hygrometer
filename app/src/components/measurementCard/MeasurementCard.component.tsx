@@ -21,10 +21,11 @@ type MeasurementCardProps = {
 
 export const MeasurementCard = ({ resource, query, title, icon, formatValue }: MeasurementCardProps): ReactElement => {
   const { data: measurements, error, isLoading } = useMeasurements(resource, query);
-  const latestReading = measurements?.reduce<MeasurementDto | undefined>((latest, measurement) => {
+  const latestReading = measurements?.reduce<MeasurementDto | undefined>((latest, measurement): MeasurementDto => {
     if (!latest) {
       return measurement;
     }
+
     return Date.parse(measurement.registeredAt) > Date.parse(latest.registeredAt) ? measurement : latest;
   }, undefined);
 

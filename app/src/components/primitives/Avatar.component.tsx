@@ -8,8 +8,13 @@ type AvatarProps = Omit<AvatarRootProps, "children"> & {
 };
 
 const colorPaletteForBatteryStatus = (batteryStatus: number): string => {
-  if (batteryStatus <= 20) return "red";
-  if (batteryStatus <= 50) return "orange";
+  if (batteryStatus <= 20) {
+    return "red";
+  }
+  if (batteryStatus <= 50) {
+    return "orange";
+  }
+
   return "brand";
 };
 

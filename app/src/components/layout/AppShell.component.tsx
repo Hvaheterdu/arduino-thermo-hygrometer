@@ -12,6 +12,15 @@ const navIconByResource = {
   temperature: faTemperatureHalf
 } as const;
 
+const navLinkStyle = ({ isActive }: { isActive: boolean }): CSSProperties => ({
+  backgroundColor: isActive ? "var(--chakra-colors-brand-subtle)" : "transparent",
+  borderRadius: "0.375rem",
+  color: isActive ? "var(--chakra-colors-brand-fg)" : "inherit",
+  fontWeight: isActive ? 700 : 500,
+  padding: "0.5rem 0.75rem",
+  textDecoration: "none"
+});
+
 export const AppShell = (): ReactElement => {
   return (
     <Flex direction="column" minH="100vh">
@@ -65,12 +74,3 @@ export const AppShell = (): ReactElement => {
     </Flex>
   );
 };
-
-const navLinkStyle = ({ isActive }: { isActive: boolean }): CSSProperties => ({
-  backgroundColor: isActive ? "var(--chakra-colors-brand-subtle)" : "transparent",
-  borderRadius: "0.375rem",
-  color: isActive ? "var(--chakra-colors-brand-fg)" : "inherit",
-  fontWeight: isActive ? 700 : 500,
-  padding: "0.5rem 0.75rem",
-  textDecoration: "none"
-});

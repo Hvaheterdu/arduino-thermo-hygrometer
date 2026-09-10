@@ -9,6 +9,7 @@ const apiKeyMiddleware: Middleware = {
     if (apiKey) {
       request.headers.set(getApiKeyHeaderName(), apiKey);
     }
+
     return request;
   }
 };

@@ -53,7 +53,9 @@ const contentSecurityPolicyPlugin = (apiBaseUrl: string, allowInlineScripts: boo
 export default defineConfig(({ command, mode }: ConfigEnv) => {
   const env = loadEnv(mode, import.meta.dirname, "");
   const isLocal = command === "serve";
-  let apiBaseUrl = "";
+  const allowInlineScripts = isLocal || mode === "development";
+
+  let apiBaseUrl: string;
   if (isLocal) {
     apiBaseUrl = env.VITE_API_BASEURL_LOCAL;
   } else {
@@ -70,8 +72,8 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
         break;
     }
   }
-  const allowInlineScripts = isLocal || mode === "development";
-  const securityHeaders = buildSecurityHeaders(apiBaseUrl, allowInlineScripts);
+
+  const securityHeaders: Record<string, string> = buildSecurityHeaders(apiBaseUrl, allowInlineScripts);
   const plugins = [viteReact(), contentSecurityPolicyPlugin(apiBaseUrl, allowInlineScripts)];
 
   return {
