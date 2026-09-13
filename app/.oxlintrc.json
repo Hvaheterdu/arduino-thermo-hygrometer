@@ -20,28 +20,19 @@
     "suspicious": "error",
     "pedantic": "warn",
     "perf": "warn",
-    "restriction": "warn",
-    "style": "warn"
+    "restriction": "warn"
   },
   "rules": {
     "react/jsx-filename-extension": [
       "allow",
       {
-        "extensions": [
-          ".tsx"
-        ]
+        "extensions": [".tsx"]
       }
     ],
     "react/only-export-components": "allow",
     "react/react-in-jsx-scope": "allow"
   },
-  "plugins": [
-    "eslint",
-    "import",
-    "oxc",
-    "react",
-    "typescript"
-  ],
+  "plugins": ["eslint", "import", "oxc", "react", "typescript"],
   "settings": {
     "react": {
       "version": "19.2.8"
