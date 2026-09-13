@@ -1,11 +1,8 @@
-import { StrictMode, type ReactElement } from "react";
+import { type ReactElement, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
 
-import { AppProvider } from "@/AppProvider";
-import { router } from "@/routes";
-
-import "@/styles/globals.css";
+import { router } from "@/router";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
@@ -14,9 +11,7 @@ if (!rootElement) {
 
 const App = (): ReactElement => (
   <StrictMode>
-    <AppProvider>
-      <RouterProvider router={router} />
-    </AppProvider>
+    <RouterProvider router={router} />
   </StrictMode>
 );
 

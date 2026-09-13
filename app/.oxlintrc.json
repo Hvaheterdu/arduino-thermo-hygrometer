@@ -1,16 +1,5 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript"],
-  "env": {
-    "builtin": true,
-    "browser": true,
-    "node": true
-  },
-  "categories": {
-    "correctness": "warn",
-    "nursery": "warn",
-    "perf": "warn"
-  },
   "ignorePatterns": [
     ".idea",
     "build",
@@ -19,7 +8,43 @@
     "node_modules",
     "**/*.d.ts",
     "**/*.generated.ts",
-    "package-lock.json",
-    "vite.config.ts"
-  ]
+    "package-lock.json"
+  ],
+  "env": {
+    "builtin": true,
+    "browser": true,
+    "node": true
+  },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "pedantic": "warn",
+    "perf": "warn",
+    "restriction": "warn",
+    "style": "warn"
+  },
+  "rules": {
+    "react/jsx-filename-extension": [
+      "allow",
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
+    "react/only-export-components": "allow",
+    "react/react-in-jsx-scope": "allow"
+  },
+  "plugins": [
+    "eslint",
+    "import",
+    "oxc",
+    "react",
+    "typescript"
+  ],
+  "settings": {
+    "react": {
+      "version": "19.2.8"
+    }
+  }
 }

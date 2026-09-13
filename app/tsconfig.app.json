@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "composite": true,
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "lib": ["ESNext", "DOM"],
     "module": "ESNext",
     "paths": {
       "@/*": ["./src/*"]
@@ -30,6 +30,7 @@
     /* Linting */
     "allowUnreachableCode": false,
     "exactOptionalPropertyTypes": true,
+    "erasableSyntaxOnly": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,

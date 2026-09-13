@@ -1,5 +1,9 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "experimentalOperatorPosition": "start",
+  "insertFinalNewline": true,
   "trailingComma": "none",
   "printWidth": 120,
   "semi": true,

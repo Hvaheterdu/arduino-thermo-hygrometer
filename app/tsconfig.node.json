@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "composite": true,
+    "lib": ["ESNext"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "moduleDetection": "force",
@@ -9,6 +10,7 @@
     },
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
+    "target": "ESNext",
     "types": [
       "@testing-library/dom",
       "@testing-library/jest-dom",
