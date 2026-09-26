@@ -9,34 +9,44 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.api.TemperatureApi;
 import api.arduinothermohygrometer.dto.TemperatureDto;
+import api.arduinothermohygrometer.mapper.TemperatureDtoMapper;
+import api.arduinothermohygrometer.model.Temperature;
 import api.arduinothermohygrometer.service.TemperatureService;
 
 @RestController
 public class TemperatureController implements TemperatureApi {
   private final TemperatureService temperatureService;
+  private final TemperatureDtoMapper temperatureDtoMapper;
 
-  public TemperatureController(final TemperatureService temperatureService) {
+  public TemperatureController(
+      final TemperatureService temperatureService,
+      final TemperatureDtoMapper temperatureDtoMapper) {
     this.temperatureService = temperatureService;
+    this.temperatureDtoMapper = temperatureDtoMapper;
+  }
+
+  @Override
+  public ResponseEntity<List<TemperatureDto>> getTemperaturesByDateOrTimestamp(
+      final LocalDateTime registeredAt, final boolean dateOnly) {
+    List<Temperature> temperatures =
+        temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
+    List<TemperatureDto> temperatureDtos =
+        temperatures.stream().map(temperatureDtoMapper::toDto).toList();
+    return ResponseEntity.ok(temperatureDtos);
   }
 
   @Override
   public ResponseEntity<TemperatureDto> createTemperature(final TemperatureDto temperatureDto) {
-    TemperatureDto createdTemperatureDto = temperatureService.createTemperature(temperatureDto);
-    return new ResponseEntity<>(createdTemperatureDto, HttpStatus.CREATED);
+    Temperature temperature = temperatureDtoMapper.toModel(temperatureDto);
+    Temperature createdTemperature = temperatureService.createTemperature(temperature);
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(temperatureDtoMapper.toDto(createdTemperature));
   }
 
   @Override
   public ResponseEntity<Void> deleteTemperaturesByDateOrTimestamp(
       final LocalDateTime registeredAt, final boolean dateOnly) {
     temperatureService.deleteTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  }
-
-  @Override
-  public ResponseEntity<List<TemperatureDto>> getTemperaturesByDateOrTimestamp(
-      final LocalDateTime registeredAt, final boolean dateOnly) {
-    List<TemperatureDto> temperatureDtos =
-        temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, dateOnly);
-    return new ResponseEntity<>(temperatureDtos, HttpStatus.OK);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

@@ -9,13 +9,15 @@ import api.arduinothermohygrometer.model.Humidity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class HumidityModelMapperTest {
+class HumidityDtoMapperTest {
+  private final HumidityDtoMapper humidityDtoMapper = new HumidityDtoMapper();
+
   @Test
-  void givenValidHumidityDto_thenReturnHumidityModel() {
+  void givenValidHumidityDto_thenReturnHumidity() {
     HumidityDto humidityDto =
         HumidityDto.builder().registeredAt(LocalDateTime.now()).airHumidity(86.123).build();
 
-    Humidity result = HumidityModelMapper.toModel(humidityDto);
+    Humidity result = humidityDtoMapper.toModel(humidityDto);
 
     assertThat(result.getId()).isNull();
     assertThat(result.getRegisteredAt()).isEqualTo(humidityDto.getRegisteredAt());
@@ -23,10 +25,10 @@ class HumidityModelMapperTest {
   }
 
   @Test
-  void givenValidHumidityModel_thenReturnHumidityDto() {
+  void givenValidHumidity_thenReturnHumidityDto() {
     Humidity humidity = new Humidity(LocalDateTime.now(), 86.425);
 
-    HumidityDto result = HumidityModelMapper.toDto(humidity);
+    HumidityDto result = humidityDtoMapper.toDto(humidity);
 
     assertThat(result.getRegisteredAt()).isEqualTo(humidity.getRegisteredAt());
     assertThat(result.getAirHumidity()).isEqualTo(humidity.getAirHumidity());

@@ -9,34 +9,41 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.arduinothermohygrometer.api.HumidityApi;
 import api.arduinothermohygrometer.dto.HumidityDto;
+import api.arduinothermohygrometer.mapper.HumidityDtoMapper;
+import api.arduinothermohygrometer.model.Humidity;
 import api.arduinothermohygrometer.service.HumidityService;
 
 @RestController
 public class HumidityController implements HumidityApi {
   private final HumidityService humidityService;
+  private final HumidityDtoMapper humidityDtoMapper;
 
-  public HumidityController(final HumidityService humidityService) {
+  public HumidityController(
+      final HumidityService humidityService, final HumidityDtoMapper humidityDtoMapper) {
     this.humidityService = humidityService;
+    this.humidityDtoMapper = humidityDtoMapper;
+  }
+
+  @Override
+  public ResponseEntity<List<HumidityDto>> getHumiditiesByDateOrTimestamp(
+      final LocalDateTime registeredAt, final boolean dateOnly) {
+    List<Humidity> humidities =
+        humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
+    List<HumidityDto> humidityDtos = humidities.stream().map(humidityDtoMapper::toDto).toList();
+    return ResponseEntity.ok(humidityDtos);
   }
 
   @Override
   public ResponseEntity<HumidityDto> createHumidity(final HumidityDto humidityDto) {
-    HumidityDto createdHumidityDto = humidityService.createHumidity(humidityDto);
-    return new ResponseEntity<>(createdHumidityDto, HttpStatus.CREATED);
+    Humidity humidity = humidityDtoMapper.toModel(humidityDto);
+    Humidity createdHumidity = humidityService.createHumidity(humidity);
+    return ResponseEntity.status(HttpStatus.CREATED).body(humidityDtoMapper.toDto(createdHumidity));
   }
 
   @Override
   public ResponseEntity<Void> deleteHumiditiesByDateOrTimestamp(
       final LocalDateTime registeredAt, final boolean dateOnly) {
     humidityService.deleteHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  }
-
-  @Override
-  public ResponseEntity<List<HumidityDto>> getHumiditiesByDateOrTimestamp(
-      final LocalDateTime registeredAt, final boolean dateOnly) {
-    List<HumidityDto> humidityDtos =
-        humidityService.getHumiditiesByDateOrTimestamp(registeredAt, dateOnly);
-    return new ResponseEntity<>(humidityDtos, HttpStatus.OK);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

@@ -6,10 +6,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import api.arduinothermohygrometer.dto.HumidityDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.HumidityModelMapper;
 import api.arduinothermohygrometer.model.Humidity;
 import api.arduinothermohygrometer.repository.HumidityRepository;
 import api.arduinothermohygrometer.service.HumidityService;
@@ -27,7 +25,7 @@ public class HumidityServiceImpl implements HumidityService {
   }
 
   @Override
-  public HumidityDto getHumidityById(final UUID id) throws ResourceNotFoundException {
+  public Humidity getHumidityById(final UUID id) throws ResourceNotFoundException {
     log.info("Retrieving humidity with id={}.", id);
 
     Humidity humidity =
@@ -40,11 +38,11 @@ public class HumidityServiceImpl implements HumidityService {
                 });
 
     log.info("Humidity with id={} retrieved.", id);
-    return HumidityModelMapper.toDto(humidity);
+    return humidity;
   }
 
   @Override
-  public List<HumidityDto> getHumiditiesByDateOrTimestamp(
+  public List<Humidity> getHumiditiesByDateOrTimestamp(
       final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException {
     log.info("Retrieving humidities registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
@@ -63,17 +61,16 @@ public class HumidityServiceImpl implements HumidityService {
     }
 
     log.info("Humidities registeredAt={} retrieved.", registeredAt);
-    return humidities.stream().map(HumidityModelMapper::toDto).toList();
+    return humidities;
   }
 
   @Override
-  public HumidityDto createHumidity(final HumidityDto humidityDto)
-      throws ResourceNotCreatedException {
+  public Humidity createHumidity(final Humidity humidity) throws ResourceNotCreatedException {
     log.info("Creating humidity.");
 
-    Humidity humidity =
+    Humidity createdHumidity =
         humidityRepository
-            .createHumidity(HumidityModelMapper.toModel(humidityDto))
+            .createHumidity(humidity)
             .orElseThrow(
                 () -> {
                   log.error("Humidity cannot be created.");
@@ -82,9 +79,9 @@ public class HumidityServiceImpl implements HumidityService {
 
     log.info(
         "Humidity with id={} and registered_at={} created.",
-        humidity.getId(),
-        humidity.getRegisteredAt());
-    return HumidityModelMapper.toDto(humidity);
+        createdHumidity.getId(),
+        createdHumidity.getRegisteredAt());
+    return createdHumidity;
   }
 
   @Override

@@ -6,10 +6,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import api.arduinothermohygrometer.dto.BatteryDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.BatteryModelMapper;
 import api.arduinothermohygrometer.model.Battery;
 import api.arduinothermohygrometer.repository.BatteryRepository;
 import api.arduinothermohygrometer.service.BatteryService;
@@ -27,7 +25,7 @@ public class BatteryServiceImpl implements BatteryService {
   }
 
   @Override
-  public BatteryDto getBatteryById(final UUID id) throws ResourceNotFoundException {
+  public Battery getBatteryById(final UUID id) throws ResourceNotFoundException {
     log.info("Retrieving battery with id={}.", id);
 
     Battery battery =
@@ -40,11 +38,11 @@ public class BatteryServiceImpl implements BatteryService {
                 });
 
     log.info("Battery with id={} retrieved.", id);
-    return BatteryModelMapper.toDto(battery);
+    return battery;
   }
 
   @Override
-  public List<BatteryDto> getBatteriesByDateOrTimestamp(
+  public List<Battery> getBatteriesByDateOrTimestamp(
       final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException {
     log.info("Retrieving batteries registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
@@ -63,16 +61,16 @@ public class BatteryServiceImpl implements BatteryService {
     }
 
     log.info("Batteries registeredAt={} retrieved.", registeredAt);
-    return batteries.stream().map(BatteryModelMapper::toDto).toList();
+    return batteries;
   }
 
   @Override
-  public BatteryDto createBattery(final BatteryDto batteryDto) throws ResourceNotCreatedException {
+  public Battery createBattery(final Battery battery) throws ResourceNotCreatedException {
     log.info("Creating battery.");
 
-    Battery battery =
+    Battery createdBattery =
         batteryRepository
-            .createBattery(BatteryModelMapper.toModel(batteryDto))
+            .createBattery(battery)
             .orElseThrow(
                 () -> {
                   log.error("Battery cannot be created.");
@@ -81,9 +79,9 @@ public class BatteryServiceImpl implements BatteryService {
 
     log.info(
         "Battery with id={} and registered_at={} created.",
-        battery.getId(),
-        battery.getRegisteredAt());
-    return BatteryModelMapper.toDto(battery);
+        createdBattery.getId(),
+        createdBattery.getRegisteredAt());
+    return createdBattery;
   }
 
   @Override

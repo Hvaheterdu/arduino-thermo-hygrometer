@@ -4,18 +4,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
+import api.arduinothermohygrometer.model.Temperature;
 
 public interface TemperatureService {
-  TemperatureDto getTemperatureById(UUID id) throws ResourceNotFoundException;
+  Temperature getTemperatureById(UUID id) throws ResourceNotFoundException;
 
-  List<TemperatureDto> getTemperaturesByDateOrTimestamp(
-      LocalDateTime registeredAt, boolean dateOnly) throws ResourceNotFoundException;
+  List<Temperature> getTemperaturesByDateOrTimestamp(LocalDateTime registeredAt, boolean dateOnly)
+      throws ResourceNotFoundException;
 
-  TemperatureDto createTemperature(TemperatureDto temperatureDto)
-      throws ResourceNotCreatedException;
+  Temperature createTemperature(Temperature temperature) throws ResourceNotCreatedException;
 
   void deleteTemperaturesByDateOrTimestamp(LocalDateTime registeredAt, boolean dateOnly)
       throws ResourceNotFoundException;

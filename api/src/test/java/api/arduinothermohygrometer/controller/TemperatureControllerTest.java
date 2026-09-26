@@ -1,7 +1,6 @@
 package api.arduinothermohygrometer.controller;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.junit.jupiter.api.Nested;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.assertj.MvcTestResult;
 import api.arduinothermohygrometer.base.WebMvcTestBase;
 import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
+import api.arduinothermohygrometer.mapper.TemperatureDtoMapper;
+import api.arduinothermohygrometer.model.Temperature;
 import api.arduinothermohygrometer.service.TemperatureService;
 import tools.jackson.databind.ObjectMapper;
 
@@ -32,24 +34,29 @@ import static org.mockito.Mockito.when;
 class TemperatureControllerTest extends WebMvcTestBase {
   @MockitoBean private TemperatureService temperatureService;
 
+  @MockitoBean private TemperatureDtoMapper temperatureDtoMapper;
+
   @Autowired private MockMvcTester mockMvcTester;
 
   @Autowired private ObjectMapper objectMapper;
+
+  ClassPathResource getTemperaturesResponseJson =
+      new ClassPathResource("testfiles/get_temperatures_response.json");
+  ClassPathResource createTemperatureResponseJson =
+      new ClassPathResource("testfiles/create_temperature_response.json");
 
   @Nested
   class GetMethods {
     @Test
     void givenValidRegisteredAt_thenReturn200OK() {
-      LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-      List<TemperatureDto> temperatureDtos =
+      LocalDateTime registeredAt = LocalDateTime.parse("2026-06-01T12:00:00");
+      List<Temperature> temperatures =
           List.of(
-              TemperatureDto.builder().registeredAt(registeredAt).temp(20.01).build(),
-              TemperatureDto.builder()
-                  .registeredAt(registeredAt.minusHours(1))
-                  .temp(90.01)
-                  .build());
+              new Temperature(registeredAt, 20.01),
+              new Temperature(registeredAt.plusHours(1), 90.01));
+      when(temperatureDtoMapper.toDto(any(Temperature.class))).thenCallRealMethod();
       when(temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, true))
-          .thenReturn(temperatureDtos);
+          .thenReturn(temperatures);
 
       MvcTestResult result =
           mockMvcTester
@@ -59,16 +66,12 @@ class TemperatureControllerTest extends WebMvcTestBase {
               .param("dateOnly", String.valueOf(true))
               .exchange();
 
-      assertThat(result)
-          .hasStatusOk()
-          .bodyJson()
-          .hasPathSatisfying("$.[0].temp", path -> assertThat(path).asNumber().isEqualTo(20.01))
-          .hasPathSatisfying("$.[1].temp", path -> assertThat(path).asNumber().isEqualTo(90.01));
+      assertThat(result).hasStatusOk().bodyJson().isStrictlyEqualTo(getTemperaturesResponseJson);
     }
 
     @Test
     void givenInvalidRegisteredAt_thenReturn404NotFound() {
-      LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+      LocalDateTime registeredAt = LocalDateTime.parse("2026-06-01T12:00:00");
       when(temperatureService.getTemperaturesByDateOrTimestamp(registeredAt, true))
           .thenThrow(
               new ResourceNotFoundException(
@@ -93,15 +96,17 @@ class TemperatureControllerTest extends WebMvcTestBase {
   @Nested
   class CreateMethods {
     @Test
-    void givenValidTemperatureDtoModel_thenReturn201CREATED() {
+    void givenValidTemperatureDto_thenReturn201CREATED() {
+      Temperature temperature = new Temperature(LocalDateTime.parse("2026-06-01T12:00:00"), 21.01);
       TemperatureDto temperatureDto =
           TemperatureDto.builder()
-              .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
-              .temp(21.01)
+              .registeredAt(temperature.getRegisteredAt())
+              .temp(temperature.getTemp())
               .build();
-      when(temperatureService.createTemperature(any(TemperatureDto.class)))
-          .thenReturn(temperatureDto);
-      String requestJson = objectMapper.writeValueAsString(temperatureDto);
+      when(temperatureDtoMapper.toModel(any(TemperatureDto.class))).thenReturn(temperature);
+      when(temperatureService.createTemperature(any(Temperature.class))).thenReturn(temperature);
+      when(temperatureDtoMapper.toDto(any(Temperature.class))).thenReturn(temperatureDto);
+      String requestJson = objectMapper.writeValueAsString(temperature);
 
       MvcTestResult result =
           mockMvcTester
@@ -114,15 +119,14 @@ class TemperatureControllerTest extends WebMvcTestBase {
       assertThat(result)
           .hasStatus(HttpStatus.CREATED)
           .bodyJson()
-          .hasPath("$.registeredAt")
-          .hasPathSatisfying("$.temp", path -> assertThat(path).asNumber().isEqualTo(21.01));
+          .isStrictlyEqualTo(createTemperatureResponseJson);
     }
 
     @Test
     void givenInvalidTemperatureDto_thenReturn400BadRequest() {
       TemperatureDto invalidTemperatureDto =
           TemperatureDto.builder()
-              .registeredAt(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+              .registeredAt(LocalDateTime.parse("2026-06-01T12:00:00"))
               .temp(150.03)
               .build();
       String requestJson = objectMapper.writeValueAsString(invalidTemperatureDto);
@@ -152,7 +156,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
   class DeleteMethods {
     @Test
     void givenValidRegisteredAt_thenReturn204NoContent() {
-      LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+      LocalDateTime registeredAt = LocalDateTime.parse("2026-06-01T12:00:00");
       doNothing().when(temperatureService).deleteTemperaturesByDateOrTimestamp(registeredAt, false);
 
       MvcTestResult result =
@@ -168,7 +172,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
 
     @Test
     void givenInvalidRegisteredAt_thenReturn404NotFound() {
-      LocalDateTime registeredAt = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+      LocalDateTime registeredAt = LocalDateTime.parse("2026-06-01T12:00:00");
       doThrow(
               new ResourceNotFoundException(
                   "Temperatures registeredAt=" + registeredAt + " not found."))

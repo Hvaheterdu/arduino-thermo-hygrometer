@@ -6,10 +6,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import api.arduinothermohygrometer.dto.TemperatureDto;
 import api.arduinothermohygrometer.exception.ResourceNotCreatedException;
 import api.arduinothermohygrometer.exception.ResourceNotFoundException;
-import api.arduinothermohygrometer.mapper.TemperatureModelMapper;
 import api.arduinothermohygrometer.model.Temperature;
 import api.arduinothermohygrometer.repository.TemperatureRepository;
 import api.arduinothermohygrometer.service.TemperatureService;
@@ -27,7 +25,7 @@ public class TemperatureServiceImpl implements TemperatureService {
   }
 
   @Override
-  public TemperatureDto getTemperatureById(final UUID id) throws ResourceNotFoundException {
+  public Temperature getTemperatureById(final UUID id) throws ResourceNotFoundException {
     log.info("Retrieving temperature with id={}.", id);
 
     Temperature temperature =
@@ -40,11 +38,11 @@ public class TemperatureServiceImpl implements TemperatureService {
                 });
 
     log.info("Temperature with id={} retrieved.", id);
-    return TemperatureModelMapper.toDto(temperature);
+    return temperature;
   }
 
   @Override
-  public List<TemperatureDto> getTemperaturesByDateOrTimestamp(
+  public List<Temperature> getTemperaturesByDateOrTimestamp(
       final LocalDateTime registeredAt, final boolean dateOnly) throws ResourceNotFoundException {
     log.info("Retrieving temperatures registeredAt={}, dateOnly={}.", registeredAt, dateOnly);
 
@@ -63,17 +61,17 @@ public class TemperatureServiceImpl implements TemperatureService {
     }
 
     log.info("Temperatures registeredAt={} retrieved.", registeredAt);
-    return temperatures.stream().map(TemperatureModelMapper::toDto).toList();
+    return temperatures;
   }
 
   @Override
-  public TemperatureDto createTemperature(final TemperatureDto temperatureDto)
+  public Temperature createTemperature(final Temperature temperature)
       throws ResourceNotCreatedException {
     log.info("Creating temperature.");
 
-    Temperature temperature =
+    Temperature createdTemperature =
         temperatureRepository
-            .createTemperature(TemperatureModelMapper.toModel(temperatureDto))
+            .createTemperature(temperature)
             .orElseThrow(
                 () -> {
                   log.error("Temperature cannot be created.");
@@ -82,9 +80,9 @@ public class TemperatureServiceImpl implements TemperatureService {
 
     log.info(
         "Temperature with id={} and registered_at={} created.",
-        temperature.getId(),
-        temperature.getRegisteredAt());
-    return TemperatureModelMapper.toDto(temperature);
+        createdTemperature.getId(),
+        createdTemperature.getRegisteredAt());
+    return createdTemperature;
   }
 
   @Override
