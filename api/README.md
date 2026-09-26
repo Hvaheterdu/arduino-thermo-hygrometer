@@ -73,7 +73,6 @@ api/
 ├── mvnw
 ├── mvnw.cmd
 ├── pom.xml
-└── sonar-project.properties
 ```
 
 ## Local database
@@ -217,9 +216,6 @@ Run the Maven lifecycle normally to execute the configured checks:
 ```bash
 ./mvnw verify
 ```
-
-SonarQube configuration is provided through `sonar-project.properties`, and the Sonar Maven plugin is configured in the
-Maven build.
 
 ## OpenAPI
 
