@@ -8,13 +8,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -24,7 +26,9 @@ import api.arduinothermohygrometer.dto.ProblemDetailsDto;
 import api.arduinothermohygrometer.filter.ApiKeyFilter;
 import api.arduinothermohygrometer.filter.RateLimitingFilter;
 import api.arduinothermohygrometer.properties.CorsProperties;
+import api.arduinothermohygrometer.properties.RateLimitProperties;
 import api.arduinothermohygrometer.properties.SecurityProperties;
+import api.arduinothermohygrometer.provider.ApiKeyAuthenticationProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import tools.jackson.databind.ObjectMapper;
 
@@ -37,38 +41,71 @@ public class SecurityConfig {
 
   private final CorsProperties corsProperties;
   private final ObjectMapper objectMapper;
+  private final RateLimitProperties rateLimitProperties;
   private final SecurityProperties securityProperties;
 
   public SecurityConfig(
       final CorsProperties corsProperties,
       final ObjectMapper objectMapper,
+      final RateLimitProperties rateLimitProperties,
       final SecurityProperties securityProperties) {
     this.corsProperties = corsProperties;
     this.objectMapper = objectMapper;
+    this.rateLimitProperties = rateLimitProperties;
     this.securityProperties = securityProperties;
   }
 
   @Bean
-  ApiKeyFilter apiKeyFilter(final AuthenticationManager authenticationManager) {
-    return new ApiKeyFilter(authenticationManager, objectMapper, securityProperties);
+  ApiKeyFilter apiKeyFilter(
+      final AuthenticationManager authenticationManager,
+      final AuthenticationEntryPoint authenticationEntryPoint) {
+    return new ApiKeyFilter(authenticationManager, securityProperties, authenticationEntryPoint);
   }
 
   @Bean
   AuthenticationManager authenticationManager(
-      final AuthenticationConfiguration authenticationConfiguration) {
-    return authenticationConfiguration.getAuthenticationManager();
+      final ApiKeyAuthenticationProvider apiKeyAuthenticationProvider) {
+    return new ProviderManager(apiKeyAuthenticationProvider);
+  }
+
+  @Bean
+  AuthenticationEntryPoint authenticationEntryPoint() {
+    return (request, response, authenticationException) ->
+        writeProblemDetails(
+            response,
+            buildProblemDetail(
+                HttpStatus.UNAUTHORIZED,
+                "unauthorized",
+                "Unauthorized.",
+                authenticationException.getMessage(),
+                request));
+  }
+
+  @Bean
+  AccessDeniedHandler accessDeniedHandler() {
+    return (request, response, accessDeniedException) ->
+        writeProblemDetails(
+            response,
+            buildProblemDetail(
+                HttpStatus.FORBIDDEN,
+                "forbidden",
+                "Forbidden.",
+                accessDeniedException.getMessage(),
+                request));
   }
 
   @Bean
   RateLimitingFilter rateLimitingFilter() {
-    return new RateLimitingFilter(objectMapper, securityProperties);
+    return new RateLimitingFilter(objectMapper, rateLimitProperties, securityProperties);
   }
 
   @Bean
   SecurityFilterChain securityFilterChain(
       final HttpSecurity httpSecurity,
       final ApiKeyFilter apiKeyFilter,
-      final RateLimitingFilter rateLimitingFilter) {
+      final RateLimitingFilter rateLimitingFilter,
+      final AuthenticationEntryPoint authenticationEntryPoint,
+      final AccessDeniedHandler accessDeniedHandler) {
     return httpSecurity
         .authorizeHttpRequests(
             authorizationManagerRequestMatcherRegistry ->
@@ -81,7 +118,7 @@ public class SecurityConfig {
                     .requestMatchers(
                         "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**")
                     .permitAll()
-                    .requestMatchers("/actuator" + "/**")
+                    .requestMatchers("/actuator/**")
                     .hasRole("ACTUATOR")
                     .requestMatchers("/api/**")
                     .hasRole("API_ADMIN")
@@ -110,30 +147,10 @@ public class SecurityConfig {
         .exceptionHandling(
             httpSecurityExceptionHandlingConfigurer ->
                 httpSecurityExceptionHandlingConfigurer
-                    .authenticationEntryPoint(
-                        (request, response, authenticationException) -> {
-                          final ProblemDetailsDto body =
-                              buildProblemDetail(
-                                  HttpStatus.UNAUTHORIZED,
-                                  "unauthorized",
-                                  "Unauthorized.",
-                                  authenticationException.getMessage(),
-                                  request);
-                          writeProblemDetails(response, body);
-                        })
-                    .accessDeniedHandler(
-                        (request, response, accessDeniedException) -> {
-                          final ProblemDetailsDto body =
-                              buildProblemDetail(
-                                  HttpStatus.FORBIDDEN,
-                                  "forbidden",
-                                  "Forbidden.",
-                                  accessDeniedException.getMessage(),
-                                  request);
-                          writeProblemDetails(response, body);
-                        }))
-        .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                    .accessDeniedHandler(accessDeniedHandler))
         .addFilterBefore(rateLimitingFilter, ApiKeyFilter.class)
+        .addFilterAfter(apiKeyFilter, LogoutFilter.class)
         .build();
   }
 

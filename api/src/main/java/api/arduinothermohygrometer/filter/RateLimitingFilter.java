@@ -16,6 +16,7 @@ import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
 
 import api.arduinothermohygrometer.dto.ProblemDetailsDto;
+import api.arduinothermohygrometer.properties.RateLimitProperties;
 import api.arduinothermohygrometer.properties.SecurityProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,17 +27,18 @@ import tools.jackson.databind.ObjectMapper;
 import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
 
 public class RateLimitingFilter extends OncePerRequestFilter {
-  private static final Duration DURATION = Duration.ofSeconds(600);
-  private static final long TOKENS = 100;
-
   private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
   private final ObjectMapper objectMapper;
+  private final RateLimitProperties rateLimitProperties;
   private final SecurityProperties securityProperties;
 
   public RateLimitingFilter(
-      final ObjectMapper objectMapper, final SecurityProperties securityProperties) {
+      final ObjectMapper objectMapper,
+      final RateLimitProperties rateLimitProperties,
+      final SecurityProperties securityProperties) {
     this.objectMapper = objectMapper;
+    this.rateLimitProperties = rateLimitProperties;
     this.securityProperties = securityProperties;
   }
 
@@ -69,7 +71,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             .plusNanos(consumptionProbe.getNanosToWaitForReset())
             .atZone(ZoneId.systemDefault())
             .toEpochSecond();
-    response.setHeader("X-RateLimit-Limit", String.valueOf(TOKENS));
+    response.setHeader("X-RateLimit-Limit", String.valueOf(rateLimitProperties.capacity()));
     response.setHeader(
         "X-RateLimit-Remaining", String.valueOf(consumptionProbe.getRemainingTokens()));
     response.setHeader("X-RateLimit-Reset", String.valueOf(secondsToReset));
@@ -82,7 +84,12 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         apiKey,
         _ ->
             Bucket.builder()
-                .addLimit(limit -> limit.capacity(TOKENS).refillGreedy(TOKENS, DURATION))
+                .addLimit(
+                    limit ->
+                        limit
+                            .capacity(rateLimitProperties.capacity())
+                            .refillGreedy(
+                                rateLimitProperties.capacity(), rateLimitProperties.refillPeriod()))
                 .build());
   }
 
@@ -101,7 +108,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
     response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
     response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
     response.setHeader("Retry-After", String.valueOf(retryAfterSeconds));
-    response.setHeader("X-RateLimit-Limit", String.valueOf(TOKENS));
+    response.setHeader("X-RateLimit-Limit", String.valueOf(rateLimitProperties.capacity()));
     response.setHeader("X-RateLimit-Remaining", "0");
     response.setHeader("X-RateLimit-Reset", String.valueOf(resetEpochSeconds));
 

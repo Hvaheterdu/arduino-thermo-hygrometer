@@ -26,6 +26,10 @@ management:
       exposure:
         include: health, info, metrics
 
+rate-limit:
+  capacity: 5
+  refill-period: 10m
+
 security:
   api-key: "api-secret-key"
   api-header-name: X-API-KEY

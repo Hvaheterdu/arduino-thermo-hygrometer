@@ -1,6 +1,6 @@
 package api.arduinothermohygrometer.configuration;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -100,26 +100,59 @@ class SecurityConfigIT {
           .assertThat()
           .hasStatus(HttpStatus.UNAUTHORIZED);
     }
+  }
 
+  @Nested
+  class ApiKeyAuthentication {
     @Test
-    void givenNoApiKey_whenGettingRandomEndpoint_thenReturn401Unauthorized() {
+    void givenApiKey_whenGettingApiEndpoint_thenReturn404NotFound() {
       mockMvcTester
           .get()
-          .uri("/random-endpoint")
-          .exchange()
-          .assertThat()
-          .hasStatus(HttpStatus.UNAUTHORIZED);
-    }
-
-    @Test
-    void givenApiKey_whenGettingRandomEndpoint_thenReturn403Forbidden() {
-      mockMvcTester
-          .get()
-          .uri("/random-endpoint")
+          .uri("/api/v1/batteries")
+          .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
+          .param("dateOnly", String.valueOf(true))
           .header("X-API-KEY", "api-secret-key")
           .exchange()
           .assertThat()
-          .hasStatus(HttpStatus.UNAUTHORIZED);
+          .hasStatus(HttpStatus.NOT_FOUND)
+          .bodyJson()
+          .hasPathSatisfying(
+              "$.detail",
+              path ->
+                  assertThat(path)
+                      .asString()
+                      .isEqualTo("Batteries not found for date 2026-01-04."));
+    }
+
+    @Test
+    void givenInvalidApiKey_whenGettingApiEndpoint_thenReturn401Unauthorized() {
+      mockMvcTester
+          .get()
+          .uri("/api/v1/batteries")
+          .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
+          .param("dateOnly", String.valueOf(true))
+          .header("X-API-KEY", "invalid-api-key")
+          .exchange()
+          .assertThat()
+          .hasStatus(HttpStatus.UNAUTHORIZED)
+          .bodyJson()
+          .hasPathSatisfying(
+              "$.detail", path -> assertThat(path).asString().isEqualTo("Invalid API key"));
+    }
+
+    @Test
+    void givenNoApiKey_whenGettingApiEndpoint_thenReturn401Unauthorized() {
+      mockMvcTester
+          .get()
+          .uri("/api/v1/batteries")
+          .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
+          .param("dateOnly", String.valueOf(true))
+          .exchange()
+          .assertThat()
+          .hasStatus(HttpStatus.UNAUTHORIZED)
+          .bodyJson()
+          .hasPathSatisfying(
+              "$.detail", path -> assertThat(path).asString().isEqualTo("Missing API key."));
     }
   }
 
@@ -127,11 +160,12 @@ class SecurityConfigIT {
   class RateLimitingFilter {
     @Test
     void givenValidApiKey_whenNotExceedingRateLimit_thenReturn404NotFound() {
-      UUID id = UUID.randomUUID();
-      for (int i = 0; i < 95; i++) {
+      for (int i = 0; i < 4; i++) {
         mockMvcTester
             .get()
-            .uri("/api/v1/batteries/{id}", id)
+            .uri("/api/v1/humidities")
+            .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
+            .param("dateOnly", String.valueOf(true))
             .header("X-API-KEY", "api-secret-key")
             .exchange()
             .assertThat()
@@ -141,21 +175,12 @@ class SecurityConfigIT {
 
     @Test
     void givenValidApiKey_whenExceedingRateLimit_thenReturn429TooManyRequests() {
-      UUID id = UUID.randomUUID();
-      for (int i = 0; i < 5; i++) {
-        mockMvcTester
-            .get()
-            .uri("/api/v1/batteries/{id}", id)
-            .header("X-API-KEY", "api-secret-key")
-            .exchange()
-            .assertThat()
-            .hasStatus(HttpStatus.NOT_FOUND);
-      }
-
       MvcTestResult result =
           mockMvcTester
               .get()
-              .uri("/api/v1/batteries/{id}", id)
+              .uri("/api/v1/humidities")
+              .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
+              .param("dateOnly", String.valueOf(true))
               .header("X-API-KEY", "api-secret-key")
               .exchange();
 

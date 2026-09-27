@@ -1,17 +1,17 @@
 package api.arduinothermohygrometer.provider;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import api.arduinothermohygrometer.exception.MissingApiKeyException;
 import api.arduinothermohygrometer.properties.SecurityProperties;
+import api.arduinothermohygrometer.token.ApiKeyAuthenticationToken;
 
 @Component
 public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
@@ -23,21 +23,25 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public Authentication authenticate(final Authentication authentication) {
-    String apiKey = Objects.requireNonNull(authentication.getCredentials()).toString();
+    String apiKey = (String) authentication.getCredentials();
+    if (apiKey == null || apiKey.isBlank()) {
+      throw new MissingApiKeyException();
+    }
+
     if (!securityProperties.apiKey().equals(apiKey)) {
       throw new BadCredentialsException("Invalid API key");
     }
 
-    List<SimpleGrantedAuthority> simpleGrantedAuthorities =
+    List<SimpleGrantedAuthority> authorities =
         securityProperties.apiRoles().stream()
             .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
             .toList();
 
-    return new UsernamePasswordAuthenticationToken("api-client", apiKey, simpleGrantedAuthorities);
+    return ApiKeyAuthenticationToken.authenticated(authorities);
   }
 
   @Override
   public boolean supports(@NonNull final Class<?> authentication) {
-    return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+    return ApiKeyAuthenticationToken.class.isAssignableFrom(authentication);
   }
 }
