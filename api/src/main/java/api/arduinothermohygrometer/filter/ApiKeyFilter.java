@@ -40,8 +40,7 @@ public class ApiKeyFilter extends AuthenticationFilter {
     public void onAuthenticationSuccess(
         final @NonNull HttpServletRequest request,
         final @NonNull HttpServletResponse response,
-        final @NonNull Authentication authentication)
-        throws IOException, ServletException {}
+        final @NonNull Authentication authentication) {}
 
     @Override
     public void onAuthenticationSuccess(
