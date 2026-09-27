@@ -1,6 +1,7 @@
 package api.arduinothermohygrometer.configuration;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -152,7 +153,13 @@ class SecurityConfigIT {
           .hasStatus(HttpStatus.UNAUTHORIZED)
           .bodyJson()
           .hasPathSatisfying(
-              "$.detail", path -> assertThat(path).asString().isEqualTo("Missing API key."));
+              "$.detail",
+              path ->
+                  assertThat(path)
+                      .asString()
+                      .isEqualTo(
+                          "No AuthenticationProvider found for"
+                              + " api.arduinothermohygrometer.token.ApiKeyAuthenticationToken"));
     }
   }
 
@@ -160,12 +167,10 @@ class SecurityConfigIT {
   class RateLimitingFilter {
     @Test
     void givenValidApiKey_whenNotExceedingRateLimit_thenReturn404NotFound() {
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 5; i++) {
         mockMvcTester
             .get()
-            .uri("/api/v1/humidities")
-            .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
-            .param("dateOnly", String.valueOf(true))
+            .uri("/api/v1/batteries/{id}", UUID.randomUUID())
             .header("X-API-KEY", "api-secret-key")
             .exchange()
             .assertThat()
@@ -175,12 +180,20 @@ class SecurityConfigIT {
 
     @Test
     void givenValidApiKey_whenExceedingRateLimit_thenReturn429TooManyRequests() {
+      for (int i = 0; i < 4; i++) {
+        mockMvcTester
+            .get()
+            .uri("/api/v1/batteries/{id}", UUID.randomUUID())
+            .header("X-API-KEY", "api-secret-key")
+            .exchange()
+            .assertThat()
+            .hasStatus(HttpStatus.NOT_FOUND);
+      }
+
       MvcTestResult result =
           mockMvcTester
               .get()
-              .uri("/api/v1/humidities")
-              .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
-              .param("dateOnly", String.valueOf(true))
+              .uri("/api/v1/batteries/{id}", UUID.randomUUID())
               .header("X-API-KEY", "api-secret-key")
               .exchange();
 

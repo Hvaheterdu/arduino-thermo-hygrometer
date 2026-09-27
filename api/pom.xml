@@ -129,6 +129,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- Caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
         <!-- Flyway Postgresql -->
         <dependency>
             <groupId>org.flywaydb</groupId>

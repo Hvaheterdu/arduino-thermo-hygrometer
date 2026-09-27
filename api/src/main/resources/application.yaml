@@ -29,6 +29,8 @@ management:
 rate-limit:
   capacity: 100
   refill-period: 10m
+  maximum-buckets: 100
+  bucket-expiration: 30m
 
 security:
   api-key: ${API_KEY}

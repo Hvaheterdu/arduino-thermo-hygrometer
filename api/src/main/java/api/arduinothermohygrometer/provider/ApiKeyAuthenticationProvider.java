@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import api.arduinothermohygrometer.exception.MissingApiKeyException;
 import api.arduinothermohygrometer.properties.SecurityProperties;
 import api.arduinothermohygrometer.token.ApiKeyAuthenticationToken;
 
@@ -25,7 +24,7 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
   public Authentication authenticate(final Authentication authentication) {
     String apiKey = (String) authentication.getCredentials();
     if (apiKey == null || apiKey.isBlank()) {
-      throw new MissingApiKeyException();
+      return null;
     }
 
     if (!securityProperties.apiKey().equals(apiKey)) {

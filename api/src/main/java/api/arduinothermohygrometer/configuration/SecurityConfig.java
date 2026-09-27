@@ -41,17 +41,14 @@ public class SecurityConfig {
 
   private final CorsProperties corsProperties;
   private final ObjectMapper objectMapper;
-  private final RateLimitProperties rateLimitProperties;
   private final SecurityProperties securityProperties;
 
   public SecurityConfig(
       final CorsProperties corsProperties,
       final ObjectMapper objectMapper,
-      final RateLimitProperties rateLimitProperties,
       final SecurityProperties securityProperties) {
     this.corsProperties = corsProperties;
     this.objectMapper = objectMapper;
-    this.rateLimitProperties = rateLimitProperties;
     this.securityProperties = securityProperties;
   }
 
@@ -95,8 +92,23 @@ public class SecurityConfig {
   }
 
   @Bean
-  RateLimitingFilter rateLimitingFilter() {
-    return new RateLimitingFilter(objectMapper, rateLimitProperties, securityProperties);
+  CorsConfigurationSource corsConfigurationSource() {
+    var corsConfiguration = new CorsConfiguration();
+    corsConfiguration.setAllowCredentials(false);
+    corsConfiguration.setAllowedHeaders(corsProperties.allowedHeaders());
+    corsConfiguration.setAllowedMethods(corsProperties.allowedMethods());
+    corsConfiguration.setAllowedOrigins(corsProperties.allowedOrigins());
+    corsConfiguration.setMaxAge(Duration.ofSeconds(3600L));
+
+    var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+    urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+
+    return urlBasedCorsConfigurationSource;
+  }
+
+  @Bean
+  RateLimitingFilter rateLimitingFilter(final RateLimitProperties rateLimitProperties) {
+    return new RateLimitingFilter(objectMapper, securityProperties, rateLimitProperties);
   }
 
   @Bean
@@ -152,21 +164,6 @@ public class SecurityConfig {
         .addFilterBefore(rateLimitingFilter, ApiKeyFilter.class)
         .addFilterAfter(apiKeyFilter, LogoutFilter.class)
         .build();
-  }
-
-  @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    var corsConfiguration = new CorsConfiguration();
-    corsConfiguration.setAllowCredentials(false);
-    corsConfiguration.setAllowedHeaders(corsProperties.allowedHeaders());
-    corsConfiguration.setAllowedMethods(corsProperties.allowedMethods());
-    corsConfiguration.setAllowedOrigins(corsProperties.allowedOrigins());
-    corsConfiguration.setMaxAge(Duration.ofSeconds(3600L));
-
-    var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-    urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-
-    return urlBasedCorsConfigurationSource;
   }
 
   private void writeProblemDetails(final HttpServletResponse response, final ProblemDetailsDto body)

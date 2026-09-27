@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
@@ -27,19 +28,24 @@ import tools.jackson.databind.ObjectMapper;
 import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
 
 public class RateLimitingFilter extends OncePerRequestFilter {
-  private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
-
   private final ObjectMapper objectMapper;
-  private final RateLimitProperties rateLimitProperties;
   private final SecurityProperties securityProperties;
+  private final RateLimitProperties rateLimitProperties;
+
+  private final Cache<String, Bucket> buckets;
 
   public RateLimitingFilter(
       final ObjectMapper objectMapper,
-      final RateLimitProperties rateLimitProperties,
-      final SecurityProperties securityProperties) {
+      final SecurityProperties securityProperties,
+      final RateLimitProperties rateLimitProperties) {
     this.objectMapper = objectMapper;
-    this.rateLimitProperties = rateLimitProperties;
     this.securityProperties = securityProperties;
+    this.rateLimitProperties = rateLimitProperties;
+    this.buckets =
+        Caffeine.newBuilder()
+            .maximumSize(rateLimitProperties.maximumBuckets())
+            .expireAfterAccess(rateLimitProperties.bucketExpiration())
+            .build();
   }
 
   @Override
@@ -59,7 +65,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
       apiKey = request.getRemoteAddr();
     }
 
-    Bucket bucket = computeBuckets(apiKey);
+    Bucket bucket = computeBucket(apiKey);
     ConsumptionProbe consumptionProbe = bucket.tryConsumeAndReturnRemaining(1);
     if (!consumptionProbe.isConsumed()) {
       buildRateLimitProblemDetails(request, response, consumptionProbe);
@@ -71,6 +77,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             .plusNanos(consumptionProbe.getNanosToWaitForReset())
             .atZone(ZoneId.systemDefault())
             .toEpochSecond();
+
     response.setHeader("X-RateLimit-Limit", String.valueOf(rateLimitProperties.capacity()));
     response.setHeader(
         "X-RateLimit-Remaining", String.valueOf(consumptionProbe.getRemainingTokens()));
@@ -79,9 +86,9 @@ public class RateLimitingFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
-  private Bucket computeBuckets(final String apiKey) {
-    return buckets.computeIfAbsent(
-        apiKey,
+  private Bucket computeBucket(final String key) {
+    return buckets.get(
+        key,
         _ ->
             Bucket.builder()
                 .addLimit(
@@ -100,11 +107,13 @@ public class RateLimitingFilter extends OncePerRequestFilter {
       throws IOException {
     long retryAfterSeconds =
         Duration.ofNanos(consumptionProbe.getNanosToWaitForRefill()).toSeconds();
+
     long resetEpochSeconds =
         LocalDateTime.now(ZoneId.systemDefault())
             .plusNanos(consumptionProbe.getNanosToWaitForReset())
             .atZone(ZoneId.systemDefault())
             .toEpochSecond();
+
     response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
     response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
     response.setHeader("Retry-After", String.valueOf(retryAfterSeconds));
@@ -119,6 +128,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             "Too Many Requests.",
             "Rate limit exceeded. Try again later.",
             request);
+
     response.getWriter().write(objectMapper.writeValueAsString(body));
   }
 }
