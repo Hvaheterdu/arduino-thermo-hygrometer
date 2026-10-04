@@ -48,7 +48,7 @@ components:
         temp: 70.00
 
     BadRequest:
-      summary: One or more fields are invalid.
+      summary: An example of a Bad Request error.
       value:
         type: "https://api.arduinothermohygrometer/errors/validation-error"
         title: "Entity validation error."
@@ -64,7 +64,7 @@ components:
             pointer: "/batteryStatus"
 
     Unauthorized:
-      summary: Missing or invalid API key.
+      summary: An example of an Unauthorized error.
       value:
         type: "https://api.arduinothermohygrometer/errors/unauthorized"
         title: "Unauthorized."
@@ -76,7 +76,7 @@ components:
         errors: []
 
     Forbidden:
-      summary: API key authenticated but lacks required role.
+      summary: An example of a Forbidden error.
       value:
         type: "https://api.arduinothermohygrometer/errors/forbidden"
         title: "Forbidden."
@@ -88,7 +88,7 @@ components:
         errors: []
 
     NotFound:
-      summary: Resource not found.
+      summary: An example of a Not Found error.
       value:
         type: "https://api.arduinothermohygrometer/errors/resource-not-found"
         title: "Resource not found."
@@ -100,7 +100,7 @@ components:
         errors: []
 
     TooManyRequests:
-      summary: Rate limit exceeded.
+      summary: An example of a Too Many Requests error.
       value:
         type: "https://api.arduinothermohygrometer/errors/rate-limit"
         title: "Too Many Requests"
@@ -112,7 +112,7 @@ components:
         errors: []
 
     InternalServerError:
-      summary: Internal server error.
+      summary: An example of an Internal Server Error.
       value:
         type: "https://api.arduinothermohygrometer/errors/internal-server-error"
         title: "Internal server error."
@@ -129,20 +129,23 @@ components:
       schema:
         type: integer
         format: int32
+        example: 100
     X-RateLimit-Remaining:
       description: Remaining requests.
       schema:
         type: integer
         format: int32
+        example: 10
     X-RateLimit-Reset:
       description: Unix timestamp when the number of request resets.
       schema:
         type: integer
         format: int32
+        example: 1632436800
 
   parameters:
     RegisteredAt:
-      description: Date and time of registration.
+      description: Date and time of registrated humidity and temperature readings from the Arduino device.
       in: query
       name: registeredAt
       required: true
@@ -152,7 +155,7 @@ components:
         example: "2017-07-21T17:00:00Z"
 
     DateOnly:
-      description: Only use date section of registration time (registeredAt parameter).
+      description: Only use the date section of registrated humidity and temperature readings from the Arduino device (registeredAt parameter).
       in: query
       name: dateOnly
       required: true
@@ -169,7 +172,7 @@ components:
             $ref: "#/components/schemas/ProblemDetailsDto"
 
     TooManyRequests:
-      description: Too Many Requests error response.
+      description: Error response for a Too Many Requests error.
       headers:
         X-RateLimit-Limit:
           $ref: "#/components/headers/X-RateLimit-Limit"
@@ -266,7 +269,9 @@ components:
           format: date-time
           example: "2017-07-21T17:00:00Z"
         batteryStatus:
-          description: Remaining battery percentage of the Arduino device.
+          description: >
+            Remaining battery percentage of the Arduino device.
+            The battery status can be between 0 and 100, where 0 means the battery is empty and 100 means the battery is full.
           type: integer
           format: int32
           minimum: 0
@@ -285,7 +290,9 @@ components:
           format: date-time
           example: "2017-07-21T17:00:00Z"
         airHumidity:
-          description: Measured air humidity by the Arduino device.
+          description: >
+            Measured air humidity by the Arduino device.
+            The air humidity can be between 20.00 and 90.00, where 20.00 means the air is very dry and 90.00 means the air is very humid.
           type: number
           format: double
           minimum: 20.00
@@ -304,7 +311,10 @@ components:
           format: date-time
           example: "2017-07-21T17:00:00Z"
         temp:
-          description: Measured temperature by the Arduino device.
+          description: >
+            Measured temperature by the Arduino device.
+            The temperature can be between -55.00 and 125.00, where -55.00 means the temperature is extremely cold and
+            125.00 means the temperature is extremely hot.
           type: number
           format: double
           minimum: -55.00
@@ -325,7 +335,10 @@ paths:
       tags:
         - Battery
       summary: Retrieve a battery by date or timestamp.
-      description: Retrieves the battery status of the Arduino device by date or timestamp.
+      description: >
+        Retrieves the battery status of the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to retrieve the battery status for a specific date,
+        ignoring the time section of the registeredAt parameter.
       operationId: getBatteriesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -383,7 +396,10 @@ paths:
       tags:
         - Battery
       summary: Delete battery by date or timestamp.
-      description: Deletes the battery status of the Arduino device by date or timestamp.
+      description: >
+        Deletes the battery status of the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to delete all the battery statuses for a specific date,
+        or delete the battery status for a specific timestamp.
       operationId: deleteBatteriesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -503,7 +519,10 @@ paths:
       tags:
         - Humidity
       summary: Retrieve measured humidity by date or timestamp.
-      description: Retrieves the measured humidity from the Arduino device by date or timestamp.
+      description: >
+        Retrieves the measured humidity from the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to retrieve the measured humidity for a specific date,
+        ignoring the time section of the registeredAt parameter.
       operationId: getHumiditiesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -561,7 +580,10 @@ paths:
       tags:
         - Humidity
       summary: Delete measured humidity by date or timestamp.
-      description: Deletes the measured humidity from the Arduino device by date or timestamp.
+      description: >
+        Deletes the measured humidity from the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to delete all the measured humidities for a specific date,
+        or delete the measured humidity for a specific timestamp.
       operationId: deleteHumiditiesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -681,7 +703,10 @@ paths:
       tags:
         - Temperature
       summary: Retrieve measured temperature by date or timestamp.
-      description: Retrieves the measured temperature from the Arduino device by date or timestamp.
+      description: >
+        Retrieves the measured temperature from the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to retrieve the measured temperature for a specific date,
+        ignoring the time section of the registeredAt parameter.
       operationId: getTemperaturesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -739,7 +764,10 @@ paths:
       tags:
         - Temperature
       summary: Delete measured temperature by date or timestamp.
-      description: Deletes the measured temperature from the Arduino device by date or timestamp.
+      description: >
+        Deletes the measured temperature from the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to delete all the measured temperatures for a specific date,
+        or delete the measured temperature for a specific timestamp.
       operationId: deleteTemperaturesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"

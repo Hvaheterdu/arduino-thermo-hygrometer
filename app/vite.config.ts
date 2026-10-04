@@ -28,7 +28,11 @@ const buildSecurityHeaders = (apiBaseUrl: string, allowInlineScripts: boolean): 
     "x-content-type-options": "nosniff",
     "referrer-policy": "no-referrer",
     "permissions-policy":
-      "accelerometer=(), autoplay=(), bluetooth=(), camera=(), compute-pressure=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), hid=(), identity-credentials-get=(), idle-detection=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-create=(), publickey-credentials-get=(), screen-wake-lock=(), storage-access=(), sync-xhr=(), usb=(), web-share=(), window-management=(), xr-spatial-tracking=()",
+          "accelerometer=(), autoplay=(), bluetooth=(), camera=(), compute-pressure=(), cross-origin-isolated=(), display-capture=(), " +
+          "encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), hid=(), identity-credentials-get=(), idle-detection=(), " +
+          "magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-create=(), " +
+          "publickey-credentials-get=(), screen-wake-lock=(), storage-access=(), sync-xhr=(), usb=(), web-share=(), " +
+          "window-management=(), xr-spatial-tracking=()",
     "content-security-policy": buildContentSecurityPolicy(apiBaseUrl, allowInlineScripts)
   };
 };

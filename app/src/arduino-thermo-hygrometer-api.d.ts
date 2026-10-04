@@ -13,7 +13,7 @@ export interface paths {
         };
         /**
          * Retrieve a battery by date or timestamp.
-         * @description Retrieves the battery status of the Arduino device by date or timestamp.
+         * @description Retrieves the battery status of the Arduino device by date or timestamp. The dateOnly parameter can be used to retrieve the battery status for a specific date, ignoring the time section of the registeredAt parameter.
          */
         get: operations["getBatteriesByDateOrTimestamp"];
         put?: never;
@@ -24,7 +24,7 @@ export interface paths {
         post: operations["createBattery"];
         /**
          * Delete battery by date or timestamp.
-         * @description Deletes the battery status of the Arduino device by date or timestamp.
+         * @description Deletes the battery status of the Arduino device by date or timestamp. The dateOnly parameter can be used to delete all the battery statuses for a specific date, or delete the battery status for a specific timestamp.
          */
         delete: operations["deleteBatteriesByDateOrTimestamp"];
         options?: never;
@@ -41,7 +41,7 @@ export interface paths {
         };
         /**
          * Retrieve measured humidity by date or timestamp.
-         * @description Retrieves the measured humidity from the Arduino device by date or timestamp.
+         * @description Retrieves the measured humidity from the Arduino device by date or timestamp. The dateOnly parameter can be used to retrieve the measured humidity for a specific date, ignoring the time section of the registeredAt parameter.
          */
         get: operations["getHumiditiesByDateOrTimestamp"];
         put?: never;
@@ -52,7 +52,7 @@ export interface paths {
         post: operations["createHumidity"];
         /**
          * Delete measured humidity by date or timestamp.
-         * @description Deletes the measured humidity from the Arduino device by date or timestamp.
+         * @description Deletes the measured humidity from the Arduino device by date or timestamp. The dateOnly parameter can be used to delete all the measured humidities for a specific date, or delete the measured humidity for a specific timestamp.
          */
         delete: operations["deleteHumiditiesByDateOrTimestamp"];
         options?: never;
@@ -69,7 +69,7 @@ export interface paths {
         };
         /**
          * Retrieve measured temperature by date or timestamp.
-         * @description Retrieves the measured temperature from the Arduino device by date or timestamp.
+         * @description Retrieves the measured temperature from the Arduino device by date or timestamp. The dateOnly parameter can be used to retrieve the measured temperature for a specific date, ignoring the time section of the registeredAt parameter.
          */
         get: operations["getTemperaturesByDateOrTimestamp"];
         put?: never;
@@ -80,7 +80,7 @@ export interface paths {
         post: operations["createTemperature"];
         /**
          * Delete measured temperature by date or timestamp.
-         * @description Deletes the measured temperature from the Arduino device by date or timestamp.
+         * @description Deletes the measured temperature from the Arduino device by date or timestamp. The dateOnly parameter can be used to delete all the measured temperatures for a specific date, or delete the measured temperature for a specific timestamp.
          */
         delete: operations["deleteTemperaturesByDateOrTimestamp"];
         options?: never;
@@ -166,7 +166,7 @@ export interface components {
             registeredAt: string;
             /**
              * Format: int32
-             * @description Remaining battery percentage of the Arduino device.
+             * @description Remaining battery percentage of the Arduino device. The battery status can be between 0 and 100, where 0 means the battery is empty and 100 means the battery is full.
              */
             batteryStatus: number;
         };
@@ -180,7 +180,7 @@ export interface components {
             registeredAt: string;
             /**
              * Format: double
-             * @description Measured air humidity by the Arduino device.
+             * @description Measured air humidity by the Arduino device. The air humidity can be between 20.00 and 90.00, where 20.00 means the air is very dry and 90.00 means the air is very humid.
              */
             airHumidity: number;
         };
@@ -194,7 +194,7 @@ export interface components {
             registeredAt: string;
             /**
              * Format: double
-             * @description Measured temperature by the Arduino device.
+             * @description Measured temperature by the Arduino device. The temperature can be between -55.00 and 125.00, where -55.00 means the temperature is extremely cold and 125.00 means the temperature is extremely hot.
              */
             temp: number;
         };
@@ -209,7 +209,7 @@ export interface components {
                 "application/problem+json": components["schemas"]["ProblemDetailsDto"];
             };
         };
-        /** @description Too Many Requests error response. */
+        /** @description Error response for a Too Many Requests error. */
         TooManyRequests: {
             headers: {
                 "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
@@ -223,9 +223,9 @@ export interface components {
         };
     };
     parameters: {
-        /** @description Date and time of registration. */
+        /** @description Date and time of registrated humidity and temperature readings from the Arduino device. */
         RegisteredAt: string;
-        /** @description Only use date section of registration time (registeredAt parameter). */
+        /** @description Only use the date section of registrated humidity and temperature readings from the Arduino device (registeredAt parameter). */
         DateOnly: boolean;
     };
     requestBodies: never;
@@ -244,9 +244,9 @@ export interface operations {
     getBatteriesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registrated humidity and temperature readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date section of registration time (registeredAt parameter). */
+                /** @description Only use the date section of registrated humidity and temperature readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -321,9 +321,9 @@ export interface operations {
     deleteBatteriesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registrated humidity and temperature readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date section of registration time (registeredAt parameter). */
+                /** @description Only use the date section of registrated humidity and temperature readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -357,9 +357,9 @@ export interface operations {
     getHumiditiesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registrated humidity and temperature readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date section of registration time (registeredAt parameter). */
+                /** @description Only use the date section of registrated humidity and temperature readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -434,9 +434,9 @@ export interface operations {
     deleteHumiditiesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registrated humidity and temperature readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date section of registration time (registeredAt parameter). */
+                /** @description Only use the date section of registrated humidity and temperature readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -470,9 +470,9 @@ export interface operations {
     getTemperaturesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registrated humidity and temperature readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date section of registration time (registeredAt parameter). */
+                /** @description Only use the date section of registrated humidity and temperature readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -547,9 +547,9 @@ export interface operations {
     deleteTemperaturesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registrated humidity and temperature readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date section of registration time (registeredAt parameter). */
+                /** @description Only use the date section of registrated humidity and temperature readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
