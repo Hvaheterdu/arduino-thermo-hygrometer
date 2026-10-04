@@ -20,6 +20,8 @@ servers:
         default: "5000"
 
 tags:
+  - name: Authentication
+    description: JWT authentication.
   - name: Battery
     description: Battery status of Arduino device.
   - name: Temperature
@@ -68,12 +70,12 @@ components:
       value:
         type: "https://api.arduinothermohygrometer/errors/unauthorized"
         title: "Unauthorized."
-        detail: "Missing or invalid API key."
+        detail: "Missing or invalid JWT bearer token."
         status: 401
         instance: "/api/v1/batteries"
         traceId: "00-abc123def456ghi789jkl012mno345pq-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     Forbidden:
       summary: An example of a Forbidden error.
@@ -85,7 +87,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-def123ghi456jkl789mno012pqr345st-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     NotFound:
       summary: An example of a Not Found error.
@@ -97,7 +99,7 @@ components:
         instance: "/api/v1/batteries/00000000-0000-0000-0000-000000000000"
         traceId: "00-ghi123jkl456mno789pqr012stu345vw-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     TooManyRequests:
       summary: An example of a Too Many Requests error.
@@ -109,7 +111,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-mno123pqr456stu789vwx012yz345abc-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
     InternalServerError:
       summary: An example of an Internal Server Error.
@@ -121,7 +123,7 @@ components:
         instance: "/api/v1/batteries"
         traceId: "00-pqr123stu456vwx789yz012abc345def-00"
         timestamp: "2017-07-21T17:00:00Z"
-        errors: []
+        errors: [ ]
 
   headers:
     X-RateLimit-Limit:
@@ -129,23 +131,20 @@ components:
       schema:
         type: integer
         format: int32
-        example: 100
     X-RateLimit-Remaining:
       description: Remaining requests.
       schema:
         type: integer
         format: int32
-        example: 10
     X-RateLimit-Reset:
       description: Unix timestamp when the number of request resets.
       schema:
         type: integer
         format: int32
-        example: 1632436800
 
   parameters:
     RegisteredAt:
-      description: Date and time of registrated humidity and temperature readings from the Arduino device.
+      description: Date and time of registered sensor readings from the Arduino device.
       in: query
       name: registeredAt
       required: true
@@ -155,7 +154,8 @@ components:
         example: "2017-07-21T17:00:00Z"
 
     DateOnly:
-      description: Only use the date section of registrated humidity and temperature readings from the Arduino device (registeredAt parameter).
+      description: >
+        Only use the date section of registered sensor readings from the Arduino device (registeredAt parameter).
       in: query
       name: dateOnly
       required: true
@@ -164,14 +164,14 @@ components:
         default: false
 
   responses:
-    ProblemDetails:
+    ProblemDetailsResponse:
       description: Error response in the shape of a Problem details object.
       content:
         application/problem+json:
           schema:
             $ref: "#/components/schemas/ProblemDetailsDto"
 
-    TooManyRequests:
+    TooManyRequestsResponse:
       description: Error response for a Too Many Requests error.
       headers:
         X-RateLimit-Limit:
@@ -250,7 +250,7 @@ components:
           description: Included to identify a header parameter that is invalid.
           type: string
           nullable: true
-          example: "X-API-KEY"
+          example: "Authorization"
         pointer:
           description: Identifies a JSON property that is invalid, RFC `https://www.rfc-editor.org/rfc/rfc6901`.
           type: string
@@ -260,7 +260,7 @@ components:
         - description
 
     BatteryDto:
-      description: Battery metadata.
+      description: Metadata about a battery object.
       type: object
       properties:
         registeredAt:
@@ -269,9 +269,7 @@ components:
           format: date-time
           example: "2017-07-21T17:00:00Z"
         batteryStatus:
-          description: >
-            Remaining battery percentage of the Arduino device.
-            The battery status can be between 0 and 100, where 0 means the battery is empty and 100 means the battery is full.
+          description: Remaining battery percentage of the Arduino device.
           type: integer
           format: int32
           minimum: 0
@@ -281,7 +279,7 @@ components:
         - batteryStatus
 
     HumidityDto:
-      description: Humidity metadata.
+      description: Metadata about a humidity object.
       type: object
       properties:
         registeredAt:
@@ -302,7 +300,7 @@ components:
         - airHumidity
 
     TemperatureDto:
-      description: Temperature metadata.
+      description: Metadata about a temperature object.
       type: object
       properties:
         registeredAt:
@@ -323,13 +321,84 @@ components:
         - registeredAt
         - temp
 
+    JwtTokenDto:
+      description: Credentials used to obtain a JWT access token.
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+      required:
+        - username
+        - password
+
+    JwtTokenResponse:
+      description: JWT access token response.
+      type: object
+      properties:
+        accessToken:
+          type: string
+        tokenType:
+          type: string
+          example: Bearer
+        expiresIn:
+          description: Lifetime of the access token in seconds.
+          type: integer
+          format: int64
+      required:
+        - accessToken
+        - tokenType
+        - expiresIn
+
   securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-KEY
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
 paths:
+  /auth/token:
+    post:
+      tags:
+        - Authentication
+      summary: Issue a JWT access token.
+      description: Exchanges configured client credentials for a short-lived JWT access token.
+      operationId: issueToken
+      security: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JwtTokenDto"
+      responses:
+        "200":
+          description: JWT access token issued.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JwtTokenResponse"
+        "400":
+          description: Bad Request.
+          $ref: "#/components/responses/ProblemDetailsResponse"
+          examples:
+            badRequest:
+              $ref: "#/components/examples/BadRequest"
+        "401":
+          description: Unauthorized.
+          $ref: "#/components/responses/ProblemDetailsResponse"
+          examples:
+            unauthorized:
+              $ref: "#/components/examples/Unauthorized"
+        "429":
+          description: To Many Requests.
+          $ref: "#/components/responses/TooManyRequestsResponse"
+          examples:
+            tooManyRequests:
+              $ref: "#/components/examples/TooManyRequests"
+
   /api/v1/batteries:
     get:
       tags:
@@ -364,31 +433,31 @@ paths:
                   $ref: "#/components/examples/BatteryDto"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -414,34 +483,34 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -479,37 +548,37 @@ paths:
                   $ref: "#/components/examples/BatteryDto"
         "400":
           description: Bad Request.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             badRequest:
               $ref: "#/components/examples/BadRequest"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -548,31 +617,31 @@ paths:
                   $ref: "#/components/examples/HumidityDto"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -598,34 +667,34 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -663,37 +732,37 @@ paths:
                   $ref: "#/components/examples/HumidityDto"
         "400":
           description: Bad Request.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             badRequest:
               $ref: "#/components/examples/BadRequest"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -732,31 +801,31 @@ paths:
                   $ref: "#/components/examples/TemperatureDto"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -782,34 +851,34 @@ paths:
               $ref: "#/components/headers/X-RateLimit-Remaining"
             X-RateLimit-Reset:
               $ref: "#/components/headers/X-RateLimit-Reset"
-          content: {}
+          content: { }
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -847,40 +916,40 @@ paths:
                   $ref: "#/components/examples/TemperatureDto"
         "400":
           description: Bad Request.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             badRequest:
               $ref: "#/components/examples/BadRequest"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
 
 security:
-  - ApiKeyAuth: []
+  - BearerAuth: [ ]

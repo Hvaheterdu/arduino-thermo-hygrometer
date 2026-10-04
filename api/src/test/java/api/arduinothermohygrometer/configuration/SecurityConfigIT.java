@@ -1,7 +1,6 @@
 package api.arduinothermohygrometer.configuration;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -9,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
+
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,10 +27,12 @@ class SecurityConfigIT {
 
   @Autowired private MockMvcTester mockMvcTester;
 
+  @Autowired private ObjectMapper objectMapper;
+
   @Nested
   class HealthEndpoint {
     @Test
-    void givenNoApiKey_whenGettingHealth_thenReturn200OkAndUpBody() {
+    void givenNoJwt_whenGettingHealth_thenReturn200OkAndUpBody() {
       mockMvcTester
           .get()
           .uri("/actuator/health")
@@ -40,7 +45,7 @@ class SecurityConfigIT {
     }
 
     @Test
-    void givenNoApiKey_whenGettingLivenessProbe_thenReturn200OkAndUpBody() {
+    void givenNoJwt_whenGettingLivenessProbe_thenReturn200OkAndUpBody() {
       mockMvcTester
           .get()
           .uri("/actuator/health/liveness")
@@ -52,7 +57,7 @@ class SecurityConfigIT {
     }
 
     @Test
-    void givenNoApiKey_whenGettingReadinessProbe_thenReturn200OkAndUpBody() {
+    void givenNoJwt_whenGettingReadinessProbe_thenReturn200OkAndUpBody() {
       mockMvcTester
           .get()
           .uri("/actuator/health/readiness")
@@ -67,7 +72,7 @@ class SecurityConfigIT {
   @Nested
   class SecurityHeaders {
     @Test
-    void givenNoApiKey_whenGettingHealth_thenApplySecurityHeadersToResponse() {
+    void givenNoJwt_whenGettingHealth_thenApplySecurityHeadersToResponse() {
       mockMvcTester
           .get()
           .uri("/actuator/health")
@@ -81,7 +86,7 @@ class SecurityConfigIT {
     }
 
     @Test
-    void givenNoApiKey_whenGettingHealth_thenApplyHstsHeaderToResponse() {
+    void givenNoJwt_whenGettingHealth_thenApplyHstsHeaderToResponse() {
       mockMvcTester
           .get()
           .uri("/actuator/health")
@@ -93,7 +98,7 @@ class SecurityConfigIT {
     }
 
     @Test
-    void givenNoApiKey_whenGettingInfo_thenReturn401Unauthorized() {
+    void givenNoJwt_whenGettingInfo_thenReturn401Unauthorized() {
       mockMvcTester
           .get()
           .uri("/actuator/info")
@@ -104,117 +109,84 @@ class SecurityConfigIT {
   }
 
   @Nested
-  class ApiKeyAuthentication {
+  class JwtAuthentication {
     @Test
-    void givenApiKey_whenGettingApiEndpoint_thenReturn404NotFound() {
-      mockMvcTester
-          .get()
-          .uri("/api/v1/batteries")
-          .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
-          .param("dateOnly", String.valueOf(true))
-          .header("X-API-KEY", "api-secret-key")
-          .exchange()
-          .assertThat()
-          .hasStatus(HttpStatus.NOT_FOUND)
-          .bodyJson()
-          .hasPathSatisfying(
-              "$.detail",
-              path ->
-                  assertThat(path)
-                      .asString()
-                      .isEqualTo("Batteries not found for date 2026-01-04."));
-    }
-
-    @Test
-    void givenInvalidApiKey_whenGettingApiEndpoint_thenReturn401Unauthorized() {
-      mockMvcTester
-          .get()
-          .uri("/api/v1/batteries")
-          .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
-          .param("dateOnly", String.valueOf(true))
-          .header("X-API-KEY", "invalid-api-key")
-          .exchange()
-          .assertThat()
-          .hasStatus(HttpStatus.UNAUTHORIZED)
-          .bodyJson()
-          .hasPathSatisfying(
-              "$.detail", path -> assertThat(path).asString().isEqualTo("Invalid API key"));
-    }
-
-    @Test
-    void givenNoApiKey_whenGettingApiEndpoint_thenReturn401Unauthorized() {
-      mockMvcTester
-          .get()
-          .uri("/api/v1/batteries")
-          .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
-          .param("dateOnly", String.valueOf(true))
-          .exchange()
-          .assertThat()
-          .hasStatus(HttpStatus.UNAUTHORIZED)
-          .bodyJson()
-          .hasPathSatisfying(
-              "$.detail",
-              path ->
-                  assertThat(path)
-                      .asString()
-                      .isEqualTo(
-                          "No AuthenticationProvider found for"
-                              + " api.arduinothermohygrometer.token.ApiKeyAuthenticationToken"));
-    }
-  }
-
-  @Nested
-  class RateLimitingFilter {
-    @Test
-    void givenValidApiKey_whenNotExceedingRateLimit_thenReturn404NotFound() {
-      for (int i = 0; i < 5; i++) {
-        mockMvcTester
-            .get()
-            .uri("/api/v1/batteries/{id}", UUID.randomUUID())
-            .header("X-API-KEY", "api-secret-key")
-            .exchange()
-            .assertThat()
-            .hasStatus(HttpStatus.NOT_FOUND);
-      }
-    }
-
-    @Test
-    void givenValidApiKey_whenExceedingRateLimit_thenReturn429TooManyRequests() {
-      for (int i = 0; i < 4; i++) {
-        mockMvcTester
-            .get()
-            .uri("/api/v1/batteries/{id}", UUID.randomUUID())
-            .header("X-API-KEY", "api-secret-key")
-            .exchange()
-            .assertThat()
-            .hasStatus(HttpStatus.NOT_FOUND);
-      }
-
+    void givenValidCredentials_whenIssuingToken_thenReturnBearerToken() {
       MvcTestResult result =
           mockMvcTester
-              .get()
-              .uri("/api/v1/batteries/{id}", UUID.randomUUID())
-              .header("X-API-KEY", "api-secret-key")
+              .post()
+              .uri("/auth/token")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content("{\"username\":\"test-user\",\"password\":\"password\"}")
               .exchange();
 
       assertThat(result)
-          .hasStatus(HttpStatus.TOO_MANY_REQUESTS)
+          .hasStatusOk()
           .bodyJson()
-          .hasPathSatisfying(
-              "$.type",
-              path ->
-                  assertThat(path)
-                      .asString()
-                      .isEqualTo("https://api.arduinothermohygrometer/errors/rate-limit"))
-          .hasPathSatisfying(
-              "$.title", path -> assertThat(path).asString().isEqualTo("Too Many Requests."))
-          .hasPathSatisfying(
-              "$.detail",
-              path ->
-                  assertThat(path).asString().isEqualTo("Rate limit exceeded. Try again later."))
-          .hasPathSatisfying(
-              "$.status",
-              path -> assertThat(path).asNumber().isEqualTo(HttpStatus.TOO_MANY_REQUESTS.value()));
+          .hasPathSatisfying("$.tokenType", path -> assertThat(path).asString().isEqualTo("Bearer"))
+          .hasPathSatisfying("$.accessToken", path -> assertThat(path).asString().isNotBlank())
+          .hasPathSatisfying("$.expiresIn", path -> assertThat(path).asNumber().isEqualTo(1800));
+    }
+
+    @Test
+    void givenInvalidCredentials_whenIssuingToken_thenReturn401Unauthorized() {
+      MvcTestResult result =
+          mockMvcTester
+              .post()
+              .uri("/auth/token")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content("{\"username\":\"test-user\",\"password\":\"invalid\"}")
+              .exchange();
+
+      assertThat(result).hasStatus(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    void givenValidJwt_whenGettingApiEndpoint_thenAuthenticateRequest() throws Exception {
+      MvcTestResult tokenResult =
+          mockMvcTester
+              .post()
+              .uri("/auth/token")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content("{\"username\":\"test-user\",\"password\":\"password\"}")
+              .exchange();
+
+      JsonNode token = objectMapper.readTree(tokenResult.getResponse().getContentAsString());
+
+      mockMvcTester
+          .get()
+          .uri("/api/v1/batteries")
+          .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
+          .param("dateOnly", String.valueOf(true))
+          .header("Authorization", "Bearer " + token.get("accessToken").asString())
+          .exchange()
+          .assertThat()
+          .hasStatus(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void givenInvalidJwt_whenGettingApiEndpoint_thenReturn401Unauthorized() {
+      mockMvcTester
+          .get()
+          .uri("/api/v1/batteries")
+          .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
+          .param("dateOnly", String.valueOf(true))
+          .header("Authorization", "Bearer invalid-token")
+          .exchange()
+          .assertThat()
+          .hasStatus(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    void givenNoJwt_whenGettingApiEndpoint_thenReturn401Unauthorized() {
+      mockMvcTester
+          .get()
+          .uri("/api/v1/batteries")
+          .param("registeredAt", LocalDateTime.parse("2026-01-04T12:00:00").toString())
+          .param("dateOnly", String.valueOf(true))
+          .exchange()
+          .assertThat()
+          .hasStatus(HttpStatus.UNAUTHORIZED);
     }
   }
 }
