@@ -30,25 +30,25 @@ tags:
 components:
   examples:
     BatteryDto:
-      description: Battery DTO.
+      description: An example of a Battery DTO.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         batteryStatus: 50
 
     HumidityDto:
-      description: Humidity DTO.
+      description: An example of a Humidity DTO.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         airHumidity: 70.00
 
     TemperatureDto:
-      description: Temperature DTO.
+      description: An example of a Temperature DTO.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         temp: 70.00
 
     BadRequest:
-      summary: Validation error.
+      summary: One or more fields are invalid.
       value:
         type: "https://api.arduinothermohygrometer/errors/validation-error"
         title: "Entity validation error."
@@ -152,7 +152,7 @@ components:
         example: "2017-07-21T17:00:00Z"
 
     DateOnly:
-      description: Only use date of registeredAt parameter.
+      description: Only use date section of registration time (registeredAt parameter).
       in: query
       name: dateOnly
       required: true
@@ -162,14 +162,14 @@ components:
 
   responses:
     ProblemDetails:
-      description: Problem details error.
+      description: Error response in the shape of a Problem details object.
       content:
         application/problem+json:
           schema:
             $ref: "#/components/schemas/ProblemDetailsDto"
 
     TooManyRequests:
-      description: Too Many Requests.
+      description: Too Many Requests error response.
       headers:
         X-RateLimit-Limit:
           $ref: "#/components/headers/X-RateLimit-Limit"
@@ -231,7 +231,7 @@ components:
         - timestamp
 
     ProblemDetailsValidationErrorDto:
-      description: Includes details about validation errors.
+      description: Problem details, including details about validation errors.
       type: object
       properties:
         description:
@@ -257,7 +257,7 @@ components:
         - description
 
     BatteryDto:
-      description: Battery object.
+      description: Battery metadata.
       type: object
       properties:
         registeredAt:
@@ -276,7 +276,7 @@ components:
         - batteryStatus
 
     HumidityDto:
-      description: Humidity object.
+      description: Humidity metadata.
       type: object
       properties:
         registeredAt:
@@ -295,7 +295,7 @@ components:
         - airHumidity
 
     TemperatureDto:
-      description: Temperature object.
+      description: Temperature metadata.
       type: object
       properties:
         registeredAt:

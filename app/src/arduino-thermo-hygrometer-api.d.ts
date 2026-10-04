@@ -106,7 +106,7 @@ export interface components {
             title: string;
             /**
              * @description A human-readable explanation specific to this occurrence of the problem.
-             * @example Resource with id 00000000-0000-0000-0000-000000000000 not found.
+             * @example Resources not found for date 2017-07-21.
              */
             detail: string;
             /**
@@ -116,7 +116,7 @@ export interface components {
             status: number;
             /**
              * @description A URI reference that identifies the specific occurrence of the problem.
-             * @example /api/v1/batteries/{id}
+             * @example /api/v1/batteries?registeredAt=2017-07-21T17:00:00Z&dateOnly=true
              */
             instance: string;
             /**
@@ -133,7 +133,7 @@ export interface components {
             /** @description A collection of validation errors. Occurs only during validation failures. */
             errors?: components["schemas"]["ProblemDetailsValidationErrorDto"][];
         };
-        /** @description Includes details about validation errors. */
+        /** @description Problem details, including details about validation errors. */
         ProblemDetailsValidationErrorDto: {
             /**
              * @description Non-localized description of the error.
@@ -142,7 +142,7 @@ export interface components {
             description: string;
             /**
              * @description Included to identify a path or query parameter that is invalid.
-             * @example id
+             * @example registeredAt
              */
             parameter?: string | null;
             /**
@@ -156,7 +156,7 @@ export interface components {
              */
             pointer?: string | null;
         };
-        /** @description Battery object. */
+        /** @description Battery metadata. */
         BatteryDto: {
             /**
              * Format: date-time
@@ -170,7 +170,7 @@ export interface components {
              */
             batteryStatus: number;
         };
-        /** @description Humidity object. */
+        /** @description Humidity metadata. */
         HumidityDto: {
             /**
              * Format: date-time
@@ -184,7 +184,7 @@ export interface components {
              */
             airHumidity: number;
         };
-        /** @description Temperature object. */
+        /** @description Temperature metadata. */
         TemperatureDto: {
             /**
              * Format: date-time
@@ -200,7 +200,7 @@ export interface components {
         };
     };
     responses: {
-        /** @description Problem details error. */
+        /** @description Error response in the shape of a Problem details object. */
         ProblemDetails: {
             headers: {
                 [name: string]: unknown;
@@ -209,7 +209,7 @@ export interface components {
                 "application/problem+json": components["schemas"]["ProblemDetailsDto"];
             };
         };
-        /** @description Too Many Requests. */
+        /** @description Too Many Requests error response. */
         TooManyRequests: {
             headers: {
                 "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
@@ -225,7 +225,7 @@ export interface components {
     parameters: {
         /** @description Date and time of registration. */
         RegisteredAt: string;
-        /** @description Only use date of registeredAt parameter. */
+        /** @description Only use date section of registration time (registeredAt parameter). */
         DateOnly: boolean;
     };
     requestBodies: never;
@@ -246,7 +246,7 @@ export interface operations {
             query: {
                 /** @description Date and time of registration. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use date section of registration time (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -323,7 +323,7 @@ export interface operations {
             query: {
                 /** @description Date and time of registration. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use date section of registration time (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -359,7 +359,7 @@ export interface operations {
             query: {
                 /** @description Date and time of registration. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use date section of registration time (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -436,7 +436,7 @@ export interface operations {
             query: {
                 /** @description Date and time of registration. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use date section of registration time (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -472,7 +472,7 @@ export interface operations {
             query: {
                 /** @description Date and time of registration. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use date section of registration time (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -549,7 +549,7 @@ export interface operations {
             query: {
                 /** @description Date and time of registration. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use date section of registration time (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;

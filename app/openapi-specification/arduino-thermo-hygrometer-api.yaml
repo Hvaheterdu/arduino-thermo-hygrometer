@@ -29,26 +29,26 @@ tags:
 
 components:
   examples:
-    Battery:
-      description: Battery object.
+    BatteryDto:
+      description: An example of a Battery DTO.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         batteryStatus: 50
 
-    Humidity:
-      description: Humidity object.
+    HumidityDto:
+      description: An example of a Humidity DTO.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         airHumidity: 70.00
 
-    Temperature:
-      description: Temperature object.
+    TemperatureDto:
+      description: An example of a Temperature DTO.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         temp: 70.00
 
     BadRequest:
-      summary: Validation error.
+      summary: One or more fields are invalid.
       value:
         type: "https://api.arduinothermohygrometer/errors/validation-error"
         title: "Entity validation error."
@@ -92,7 +92,7 @@ components:
       value:
         type: "https://api.arduinothermohygrometer/errors/resource-not-found"
         title: "Resource not found."
-        detail: "Battery with id 00000000-0000-0000-0000-000000000000 not found."
+        detail: "Batteries not found for date 2017-07-21."
         status: 404
         instance: "/api/v1/batteries/00000000-0000-0000-0000-000000000000"
         traceId: "00-ghi123jkl456mno789pqr012stu345vw-00"
@@ -152,7 +152,7 @@ components:
         example: "2017-07-21T17:00:00Z"
 
     DateOnly:
-      description: Only use date of registeredAt parameter.
+      description: Only use date section of registration time (registeredAt parameter).
       in: query
       name: dateOnly
       required: true
@@ -162,14 +162,14 @@ components:
 
   responses:
     ProblemDetails:
-      description: Problem details error.
+      description: Error response in the shape of a Problem details object.
       content:
         application/problem+json:
           schema:
             $ref: "#/components/schemas/ProblemDetailsDto"
 
     TooManyRequests:
-      description: Too Many Requests.
+      description: Too Many Requests error response.
       headers:
         X-RateLimit-Limit:
           $ref: "#/components/headers/X-RateLimit-Limit"
@@ -198,7 +198,7 @@ components:
         detail:
           description: A human-readable explanation specific to this occurrence of the problem.
           type: string
-          example: "Resource with id 00000000-0000-0000-0000-000000000000 not found."
+          example: "Resources not found for date 2017-07-21."
         status:
           description: The HTTP status code for the request with the problem.
           type: integer
@@ -206,7 +206,7 @@ components:
         instance:
           description: A URI reference that identifies the specific occurrence of the problem.
           type: string
-          example: "/api/v1/batteries/{id}"
+          example: "/api/v1/batteries?registeredAt=2017-07-21T17:00:00Z&dateOnly=true"
         traceId:
           description: A unique identifier used to correlate logs and diagnostics.
           type: string
@@ -231,7 +231,7 @@ components:
         - timestamp
 
     ProblemDetailsValidationErrorDto:
-      description: Includes details about validation errors.
+      description: Problem details, including details about validation errors.
       type: object
       properties:
         description:
@@ -242,7 +242,7 @@ components:
           description: Included to identify a path or query parameter that is invalid.
           type: string
           nullable: true
-          example: "id"
+          example: "registeredAt"
         header:
           description: Included to identify a header parameter that is invalid.
           type: string
@@ -257,7 +257,7 @@ components:
         - description
 
     BatteryDto:
-      description: Battery object.
+      description: Battery metadata.
       type: object
       properties:
         registeredAt:
@@ -276,7 +276,7 @@ components:
         - batteryStatus
 
     HumidityDto:
-      description: Humidity object.
+      description: Humidity metadata.
       type: object
       properties:
         registeredAt:
@@ -295,7 +295,7 @@ components:
         - airHumidity
 
     TemperatureDto:
-      description: Temperature object.
+      description: Temperature metadata.
       type: object
       properties:
         registeredAt:
@@ -348,7 +348,7 @@ paths:
                   $ref: "#/components/schemas/BatteryDto"
               examples:
                 battery:
-                  $ref: "#/components/examples/Battery"
+                  $ref: "#/components/examples/BatteryDto"
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -442,7 +442,7 @@ paths:
               $ref: "#/components/schemas/BatteryDto"
             examples:
               battery:
-                $ref: "#/components/examples/Battery"
+                $ref: "#/components/examples/BatteryDto"
         required: true
       responses:
         "201":
@@ -460,7 +460,7 @@ paths:
                 $ref: "#/components/schemas/BatteryDto"
               examples:
                 battery:
-                  $ref: "#/components/examples/Battery"
+                  $ref: "#/components/examples/BatteryDto"
         "400":
           description: Bad Request.
           $ref: "#/components/responses/ProblemDetails"
@@ -526,7 +526,7 @@ paths:
                   $ref: "#/components/schemas/HumidityDto"
               examples:
                 humidity:
-                  $ref: "#/components/examples/Humidity"
+                  $ref: "#/components/examples/HumidityDto"
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -620,7 +620,7 @@ paths:
               $ref: "#/components/schemas/HumidityDto"
             examples:
               humidity:
-                $ref: "#/components/examples/Humidity"
+                $ref: "#/components/examples/HumidityDto"
         required: true
       responses:
         "201":
@@ -638,7 +638,7 @@ paths:
                 $ref: "#/components/schemas/HumidityDto"
               examples:
                 humidity:
-                  $ref: "#/components/examples/Humidity"
+                  $ref: "#/components/examples/HumidityDto"
         "400":
           description: Bad Request.
           $ref: "#/components/responses/ProblemDetails"
@@ -704,7 +704,7 @@ paths:
                   $ref: "#/components/schemas/TemperatureDto"
               examples:
                 temperature:
-                  $ref: "#/components/examples/Temperature"
+                  $ref: "#/components/examples/TemperatureDto"
         "401":
           description: Unauthorized.
           $ref: "#/components/responses/ProblemDetails"
@@ -798,7 +798,7 @@ paths:
               $ref: "#/components/schemas/TemperatureDto"
             examples:
               temperature:
-                $ref: "#/components/examples/Temperature"
+                $ref: "#/components/examples/TemperatureDto"
         required: true
       responses:
         "201":
@@ -816,7 +816,7 @@ paths:
                 $ref: "#/components/schemas/TemperatureDto"
               examples:
                 temperature:
-                  $ref: "#/components/examples/Temperature"
+                  $ref: "#/components/examples/TemperatureDto"
         "400":
           description: Bad Request.
           $ref: "#/components/responses/ProblemDetails"
