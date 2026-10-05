@@ -1,6 +1,7 @@
 package api.arduinothermohygrometer.configuration;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
@@ -123,8 +125,8 @@ class SecurityConfigIT {
       assertThat(result)
           .hasStatusOk()
           .bodyJson()
-          .hasPathSatisfying("$.tokenType", path -> assertThat(path).asString().isEqualTo("Bearer"))
           .hasPathSatisfying("$.accessToken", path -> assertThat(path).asString().isNotBlank())
+          .hasPathSatisfying("$.tokenType", path -> assertThat(path).asString().isEqualTo("Bearer"))
           .hasPathSatisfying("$.expiresIn", path -> assertThat(path).asNumber().isEqualTo(1800));
     }
 
@@ -187,6 +189,44 @@ class SecurityConfigIT {
           .exchange()
           .assertThat()
           .hasStatus(HttpStatus.UNAUTHORIZED);
+    }
+  }
+
+  @Nested
+  class RateLimitFilter {
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    @Test
+    void givenValidJwt_whenExceedingRateLimit_thenReturn429TooManyRequests() throws Exception {
+      String token = issueToken();
+      for (int i = 0; i < 10; i++) {
+        mockMvcTester
+            .get()
+            .uri("/api/v1/humidities/{id}", UUID.randomUUID())
+            .header("Authorization", "Bearer " + token)
+            .exchange()
+            .assertThat()
+            .hasStatus(HttpStatus.NOT_FOUND);
+      }
+
+      mockMvcTester
+          .get()
+          .uri("/api/v1/humidities/{id}", UUID.randomUUID())
+          .header("Authorization", "Bearer " + token)
+          .exchange()
+          .assertThat()
+          .hasStatus(HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    private String issueToken() throws Exception {
+      MvcTestResult result =
+          mockMvcTester
+              .post()
+              .uri("/auth/token")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content("{\"username\":\"test-user\",\"password\":\"password\"}")
+              .exchange();
+      JsonNode token = objectMapper.readTree(result.getResponse().getContentAsString());
+      return token.get("accessToken").asString();
     }
   }
 }

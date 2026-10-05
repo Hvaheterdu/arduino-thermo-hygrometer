@@ -29,10 +29,6 @@ public class AuthenticationController implements AuthenticationApi {
   }
 
   public ResponseEntity<JwtTokenResponse> issueToken(final JwtTokenDto jwtTokenDto) {
-    if (jwtTokenDto == null || jwtTokenDto.getPassword() == null) {
-      throw new BadCredentialsException("Empty credentials.");
-    }
-
     boolean correctUsername = securityProperties.username().equals(jwtTokenDto.getUsername());
     boolean correctPassword =
         passwordEncoder.matches(jwtTokenDto.getPassword(), securityProperties.passwordHash());
