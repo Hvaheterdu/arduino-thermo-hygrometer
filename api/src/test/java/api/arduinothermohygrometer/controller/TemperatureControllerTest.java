@@ -96,7 +96,7 @@ class TemperatureControllerTest extends WebMvcTestBase {
   @Nested
   class CreateMethods {
     @Test
-    void givenValidTemperatureDto_thenReturn201CREATED() {
+    void givenValidTemperatureDto_thenReturn201Created() {
       Temperature temperature = new Temperature(LocalDateTime.parse("2026-06-01T12:00:00"), 21.01);
       TemperatureDto temperatureDto =
           TemperatureDto.builder()

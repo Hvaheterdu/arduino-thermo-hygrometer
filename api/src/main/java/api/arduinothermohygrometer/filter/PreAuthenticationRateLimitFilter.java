@@ -2,8 +2,7 @@ package api.arduinothermohygrometer.filter;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.Instant;
 
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
@@ -17,8 +16,8 @@ import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
 
 import api.arduinothermohygrometer.dto.ProblemDetailsDto;
+import api.arduinothermohygrometer.model.Limit;
 import api.arduinothermohygrometer.properties.RateLimitProperties;
-import api.arduinothermohygrometer.properties.SecurityProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,19 +26,15 @@ import tools.jackson.databind.ObjectMapper;
 
 import static api.arduinothermohygrometer.util.ProblemDetailsUtil.buildProblemDetail;
 
-public class RateLimitingFilter extends OncePerRequestFilter {
-  private final ObjectMapper objectMapper;
-  private final SecurityProperties securityProperties;
+public class PreAuthenticationRateLimitFilter extends OncePerRequestFilter {
   private final RateLimitProperties rateLimitProperties;
+  private final ObjectMapper objectMapper;
 
   private final Cache<String, Bucket> buckets;
 
-  public RateLimitingFilter(
-      final ObjectMapper objectMapper,
-      final SecurityProperties securityProperties,
-      final RateLimitProperties rateLimitProperties) {
+  public PreAuthenticationRateLimitFilter(
+      final ObjectMapper objectMapper, final RateLimitProperties rateLimitProperties) {
     this.objectMapper = objectMapper;
-    this.securityProperties = securityProperties;
     this.rateLimitProperties = rateLimitProperties;
     this.buckets =
         Caffeine.newBuilder()
@@ -54,70 +49,64 @@ public class RateLimitingFilter extends OncePerRequestFilter {
       @NonNull final HttpServletResponse response,
       @NonNull final FilterChain filterChain)
       throws ServletException, IOException {
-    String path = request.getRequestURI();
-    if (!path.startsWith("/api/")) {
+    Limit limit = limitFor(request.getRequestURI());
+    if (limit == null) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    String apiKey = request.getHeader(securityProperties.apiHeaderName());
-    if (apiKey == null || apiKey.isBlank()) {
-      apiKey = request.getRemoteAddr();
-    }
-
-    Bucket bucket = computeBucket(apiKey);
-    ConsumptionProbe consumptionProbe = bucket.tryConsumeAndReturnRemaining(1);
-    if (!consumptionProbe.isConsumed()) {
-      buildRateLimitProblemDetails(request, response, consumptionProbe);
+    String keyPrefix = request.getRequestURI().startsWith("/api/") ? "api:" : "auth:";
+    Bucket bucket = computeBucket(keyPrefix + request.getRemoteAddr(), limit);
+    ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+    if (!probe.isConsumed()) {
+      writeRateLimitResponse(request, response, probe, limit);
       return;
     }
-
-    long secondsToReset =
-        LocalDateTime.now(ZoneId.systemDefault())
-            .plusNanos(consumptionProbe.getNanosToWaitForReset())
-            .atZone(ZoneId.systemDefault())
-            .toEpochSecond();
-
-    response.setHeader("X-RateLimit-Limit", String.valueOf(rateLimitProperties.capacity()));
-    response.setHeader(
-        "X-RateLimit-Remaining", String.valueOf(consumptionProbe.getRemainingTokens()));
-    response.setHeader("X-RateLimit-Reset", String.valueOf(secondsToReset));
 
     filterChain.doFilter(request, response);
   }
 
-  private Bucket computeBucket(final String key) {
+  private Limit limitFor(final String path) {
+    if ("/auth/token".equals(path)) {
+      return new Limit(
+          rateLimitProperties.authenticationCapacity(),
+          rateLimitProperties.authenticationRefillPeriod());
+    }
+    if (path.startsWith("/api/")) {
+      return new Limit(rateLimitProperties.apiCapacity(), rateLimitProperties.apiRefillPeriod());
+    }
+
+    return null;
+  }
+
+  private Bucket computeBucket(final String key, final Limit limit) {
     return buckets.get(
         key,
         _ ->
             Bucket.builder()
                 .addLimit(
-                    limit ->
-                        limit
-                            .capacity(rateLimitProperties.capacity())
-                            .refillGreedy(
-                                rateLimitProperties.capacity(), rateLimitProperties.refillPeriod()))
+                    bandwidth ->
+                        bandwidth
+                            .capacity(limit.capacity())
+                            .refillGreedy(limit.capacity(), limit.refillPeriod()))
                 .build());
   }
 
-  private void buildRateLimitProblemDetails(
+  private void writeRateLimitResponse(
       final HttpServletRequest request,
       final HttpServletResponse response,
-      final ConsumptionProbe consumptionProbe)
+      final ConsumptionProbe probe,
+      final Limit limit)
       throws IOException {
     long retryAfterSeconds =
-        Duration.ofNanos(consumptionProbe.getNanosToWaitForRefill()).toSeconds();
-
+        Math.max(1L, Duration.ofNanos(probe.getNanosToWaitForRefill()).toSeconds());
     long resetEpochSeconds =
-        LocalDateTime.now(ZoneId.systemDefault())
-            .plusNanos(consumptionProbe.getNanosToWaitForReset())
-            .atZone(ZoneId.systemDefault())
-            .toEpochSecond();
+        Instant.now().plusNanos(probe.getNanosToWaitForReset()).getEpochSecond();
 
     response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
     response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
     response.setHeader("Retry-After", String.valueOf(retryAfterSeconds));
-    response.setHeader("X-RateLimit-Limit", String.valueOf(rateLimitProperties.capacity()));
+    response.setHeader("X-RateLimit-Limit", String.valueOf(limit.capacity()));
     response.setHeader("X-RateLimit-Remaining", "0");
     response.setHeader("X-RateLimit-Reset", String.valueOf(resetEpochSeconds));
 
@@ -128,7 +117,6 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             "Too Many Requests.",
             "Rate limit exceeded. Try again later.",
             request);
-
     response.getWriter().write(objectMapper.writeValueAsString(body));
   }
 }
