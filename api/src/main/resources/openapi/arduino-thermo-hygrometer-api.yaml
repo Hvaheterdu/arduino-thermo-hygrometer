@@ -20,6 +20,8 @@ servers:
         default: "5000"
 
 tags:
+  - name: Authentication
+    description: JWT authentication.
   - name: Battery
     description: Battery status of Arduino device.
   - name: Temperature
@@ -30,25 +32,25 @@ tags:
 components:
   examples:
     BatteryDto:
-      description: Battery DTO.
+      description: An example of a Battery DTO.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         batteryStatus: 50
 
     HumidityDto:
-      description: Humidity DTO.
+      description: An example of a Humidity DTO.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         airHumidity: 70.00
 
     TemperatureDto:
-      description: Temperature DTO.
+      description: An example of a Temperature DTO.
       value:
         registeredAt: "2017-07-21T17:00:00Z"
         temp: 70.00
 
     BadRequest:
-      summary: Validation error.
+      summary: An example of a Bad Request error.
       value:
         type: "https://api.arduinothermohygrometer/errors/validation-error"
         title: "Entity validation error."
@@ -64,11 +66,11 @@ components:
             pointer: "/batteryStatus"
 
     Unauthorized:
-      summary: Missing or invalid API key.
+      summary: An example of an Unauthorized error.
       value:
         type: "https://api.arduinothermohygrometer/errors/unauthorized"
         title: "Unauthorized."
-        detail: "Missing or invalid API key."
+        detail: "Missing or invalid JWT bearer token."
         status: 401
         instance: "/api/v1/batteries"
         traceId: "00-abc123def456ghi789jkl012mno345pq-00"
@@ -76,7 +78,7 @@ components:
         errors: [ ]
 
     Forbidden:
-      summary: API key authenticated but lacks required role.
+      summary: An example of a Forbidden error.
       value:
         type: "https://api.arduinothermohygrometer/errors/forbidden"
         title: "Forbidden."
@@ -88,7 +90,7 @@ components:
         errors: [ ]
 
     NotFound:
-      summary: Resource not found.
+      summary: An example of a Not Found error.
       value:
         type: "https://api.arduinothermohygrometer/errors/resource-not-found"
         title: "Resource not found."
@@ -100,7 +102,7 @@ components:
         errors: [ ]
 
     TooManyRequests:
-      summary: Rate limit exceeded.
+      summary: An example of a Too Many Requests error.
       value:
         type: "https://api.arduinothermohygrometer/errors/rate-limit"
         title: "Too Many Requests"
@@ -112,7 +114,7 @@ components:
         errors: [ ]
 
     InternalServerError:
-      summary: Internal server error.
+      summary: An example of an Internal Server Error.
       value:
         type: "https://api.arduinothermohygrometer/errors/internal-server-error"
         title: "Internal server error."
@@ -142,7 +144,7 @@ components:
 
   parameters:
     RegisteredAt:
-      description: Date and time of registration.
+      description: Date and time of registered sensor readings from the Arduino device.
       in: query
       name: registeredAt
       required: true
@@ -152,7 +154,8 @@ components:
         example: "2017-07-21T17:00:00Z"
 
     DateOnly:
-      description: Only use date of registeredAt parameter.
+      description: >
+        Only use the date section of registered sensor readings from the Arduino device (registeredAt parameter).
       in: query
       name: dateOnly
       required: true
@@ -161,15 +164,15 @@ components:
         default: false
 
   responses:
-    ProblemDetails:
-      description: Problem details error.
+    ProblemDetailsResponse:
+      description: Error response in the shape of a Problem details object.
       content:
         application/problem+json:
           schema:
             $ref: "#/components/schemas/ProblemDetailsDto"
 
-    TooManyRequests:
-      description: Too Many Requests.
+    TooManyRequestsResponse:
+      description: Error response for a Too Many Requests error.
       headers:
         X-RateLimit-Limit:
           $ref: "#/components/headers/X-RateLimit-Limit"
@@ -231,7 +234,7 @@ components:
         - timestamp
 
     ProblemDetailsValidationErrorDto:
-      description: Includes details about validation errors.
+      description: Problem details, including details about validation errors.
       type: object
       properties:
         description:
@@ -247,7 +250,7 @@ components:
           description: Included to identify a header parameter that is invalid.
           type: string
           nullable: true
-          example: "X-API-KEY"
+          example: "Authorization"
         pointer:
           description: Identifies a JSON property that is invalid, RFC `https://www.rfc-editor.org/rfc/rfc6901`.
           type: string
@@ -257,7 +260,7 @@ components:
         - description
 
     BatteryDto:
-      description: Battery object.
+      description: Metadata about a battery object.
       type: object
       properties:
         registeredAt:
@@ -276,7 +279,7 @@ components:
         - batteryStatus
 
     HumidityDto:
-      description: Humidity object.
+      description: Metadata about a humidity object.
       type: object
       properties:
         registeredAt:
@@ -285,7 +288,9 @@ components:
           format: date-time
           example: "2017-07-21T17:00:00Z"
         airHumidity:
-          description: Measured air humidity by the Arduino device.
+          description: >
+            Measured air humidity by the Arduino device.
+            The air humidity can be between 20.00 and 90.00, where 20.00 means the air is very dry and 90.00 means the air is very humid.
           type: number
           format: double
           minimum: 20.00
@@ -295,7 +300,7 @@ components:
         - airHumidity
 
     TemperatureDto:
-      description: Temperature object.
+      description: Metadata about a temperature object.
       type: object
       properties:
         registeredAt:
@@ -304,7 +309,10 @@ components:
           format: date-time
           example: "2017-07-21T17:00:00Z"
         temp:
-          description: Measured temperature by the Arduino device.
+          description: >
+            Measured temperature by the Arduino device.
+            The temperature can be between -55.00 and 125.00, where -55.00 means the temperature is extremely cold and
+            125.00 means the temperature is extremely hot.
           type: number
           format: double
           minimum: -55.00
@@ -313,19 +321,93 @@ components:
         - registeredAt
         - temp
 
+    JwtTokenDto:
+      description: Credentials used to obtain a JWT access token.
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+      required:
+        - username
+        - password
+
+    JwtTokenResponse:
+      description: JWT access token response.
+      type: object
+      properties:
+        accessToken:
+          type: string
+        tokenType:
+          type: string
+          example: Bearer
+        expiresIn:
+          description: Lifetime of the access token in seconds.
+          type: integer
+          format: int64
+      required:
+        - accessToken
+        - tokenType
+        - expiresIn
+
   securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-KEY
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
 paths:
+  /auth/token:
+    post:
+      tags:
+        - Authentication
+      summary: Issue a JWT access token.
+      description: Exchanges configured client credentials for a short-lived JWT access token.
+      operationId: issueToken
+      security: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JwtTokenDto"
+      responses:
+        "200":
+          description: JWT access token issued.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JwtTokenResponse"
+        "400":
+          description: Bad Request.
+          $ref: "#/components/responses/ProblemDetailsResponse"
+          examples:
+            badRequest:
+              $ref: "#/components/examples/BadRequest"
+        "401":
+          description: Unauthorized.
+          $ref: "#/components/responses/ProblemDetailsResponse"
+          examples:
+            unauthorized:
+              $ref: "#/components/examples/Unauthorized"
+        "429":
+          description: To Many Requests.
+          $ref: "#/components/responses/TooManyRequestsResponse"
+          examples:
+            tooManyRequests:
+              $ref: "#/components/examples/TooManyRequests"
+
   /api/v1/batteries:
     get:
       tags:
         - Battery
       summary: Retrieve a battery by date or timestamp.
-      description: Retrieves the battery status of the Arduino device by date or timestamp.
+      description: >
+        Retrieves the battery status of the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to retrieve the battery status for a specific date,
+        ignoring the time section of the registeredAt parameter.
       operationId: getBatteriesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -351,31 +433,31 @@ paths:
                   $ref: "#/components/examples/BatteryDto"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -383,7 +465,10 @@ paths:
       tags:
         - Battery
       summary: Delete battery by date or timestamp.
-      description: Deletes the battery status of the Arduino device by date or timestamp.
+      description: >
+        Deletes the battery status of the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to delete all the battery statuses for a specific date,
+        or delete the battery status for a specific timestamp.
       operationId: deleteBatteriesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -401,31 +486,31 @@ paths:
           content: { }
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -463,37 +548,37 @@ paths:
                   $ref: "#/components/examples/BatteryDto"
         "400":
           description: Bad Request.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             badRequest:
               $ref: "#/components/examples/BadRequest"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -503,7 +588,10 @@ paths:
       tags:
         - Humidity
       summary: Retrieve measured humidity by date or timestamp.
-      description: Retrieves the measured humidity from the Arduino device by date or timestamp.
+      description: >
+        Retrieves the measured humidity from the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to retrieve the measured humidity for a specific date,
+        ignoring the time section of the registeredAt parameter.
       operationId: getHumiditiesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -529,31 +617,31 @@ paths:
                   $ref: "#/components/examples/HumidityDto"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -561,7 +649,10 @@ paths:
       tags:
         - Humidity
       summary: Delete measured humidity by date or timestamp.
-      description: Deletes the measured humidity from the Arduino device by date or timestamp.
+      description: >
+        Deletes the measured humidity from the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to delete all the measured humidities for a specific date,
+        or delete the measured humidity for a specific timestamp.
       operationId: deleteHumiditiesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -579,31 +670,31 @@ paths:
           content: { }
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -641,37 +732,37 @@ paths:
                   $ref: "#/components/examples/HumidityDto"
         "400":
           description: Bad Request.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             badRequest:
               $ref: "#/components/examples/BadRequest"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -681,7 +772,10 @@ paths:
       tags:
         - Temperature
       summary: Retrieve measured temperature by date or timestamp.
-      description: Retrieves the measured temperature from the Arduino device by date or timestamp.
+      description: >
+        Retrieves the measured temperature from the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to retrieve the measured temperature for a specific date,
+        ignoring the time section of the registeredAt parameter.
       operationId: getTemperaturesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -707,31 +801,31 @@ paths:
                   $ref: "#/components/examples/TemperatureDto"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -739,7 +833,10 @@ paths:
       tags:
         - Temperature
       summary: Delete measured temperature by date or timestamp.
-      description: Deletes the measured temperature from the Arduino device by date or timestamp.
+      description: >
+        Deletes the measured temperature from the Arduino device by date or timestamp.
+        The dateOnly parameter can be used to delete all the measured temperatures for a specific date,
+        or delete the measured temperature for a specific timestamp.
       operationId: deleteTemperaturesByDateOrTimestamp
       parameters:
         - $ref: "#/components/parameters/RegisteredAt"
@@ -757,31 +854,31 @@ paths:
           content: { }
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
@@ -819,40 +916,40 @@ paths:
                   $ref: "#/components/examples/TemperatureDto"
         "400":
           description: Bad Request.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             badRequest:
               $ref: "#/components/examples/BadRequest"
         "401":
           description: Unauthorized.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             unauthorized:
               $ref: "#/components/examples/Unauthorized"
         "403":
           description: Forbidden.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             forbidden:
               $ref: "#/components/examples/Forbidden"
         "404":
           description: Not Found.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             notFound:
               $ref: "#/components/examples/NotFound"
         "429":
           description: To Many Requests.
-          $ref: "#/components/responses/TooManyRequests"
+          $ref: "#/components/responses/TooManyRequestsResponse"
           examples:
             tooManyRequests:
               $ref: "#/components/examples/TooManyRequests"
         "500":
           description: Internal Server Error.
-          $ref: "#/components/responses/ProblemDetails"
+          $ref: "#/components/responses/ProblemDetailsResponse"
           examples:
             internalServerError:
               $ref: "#/components/examples/InternalServerError"
 
 security:
-  - ApiKeyAuth: [ ]
+  - BearerAuth: [ ]

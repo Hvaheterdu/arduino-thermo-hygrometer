@@ -55,17 +55,17 @@ api/
 │   │   │   ├── configuration/     # Spring configuration
 │   │   │   ├── controller/        # REST API controllers
 │   │   │   ├── exception/         # Application exceptions and handlers
-│   │   │   ├── filter/            # API-key authentication and rate limiting
-│   │   │   ├── mapper/             # Domain/DTO mapping
-│   │   │   ├── model/              # Persistence/domain models
-│   │   │   ├── properties/         # Typed application properties
-│   │   │   ├── provider/           # Authentication providers
-│   │   │   ├── repository/         # Repository contracts and implementations
-│   │   │   ├── service/             # Business logic contracts and implementations
-│   │   │   └── util/                # Shared utilities
+│   │   │   ├── filter/            # JWT-aware rate limiting
+│   │   │   ├── mapper/            # Domain/DTO mapping
+│   │   │   ├── model/             # Persistence/domain models
+│   │   │   ├── properties/        # Typed application properties
+│   │   │   ├── provider/          # Authentication providers
+│   │   │   ├── repository/        # Repository contracts and implementations
+│   │   │   ├── service/           # Business logic contracts and implementations
+│   │   │   └── util/              # Shared utilities
 │   │   └── resources/
 │   │       ├── db/migration/       # Flyway migrations
-│   │       ├── openapi/             # OpenAPI contract
+│   │       ├── openapi/            # OpenAPI contract
 │   │       └── application*.yaml   # Environment configuration
 │   └── test/
 │       ├── java/                    # Unit and integration tests
@@ -121,29 +121,48 @@ Environment-specific configuration is provided by:
 
 The API listens on port `5000` by default.
 
-### API key
+### JWT authentication
 
-API endpoints under `/api/**` require API-key authentication.
+API endpoints under `/api/**` require a short-lived JWT access token in the standard `Authorization` header.
 
-The API key is read from the `API_KEY` environment variable in the default configuration and must be sent using the
-`X-API-KEY` header.
+The API exposes `/auth/token` for exchanging configured credentials for a signed JWT. Configure the username, a BCrypt
+password hash, and a Base64-encoded 512-bit signing secret through environment variables.
 
-Example:
+Generate a signing secret with:
 
 ```bash
-export API_KEY="your-api-key"
+openssl rand -base64 32
 ```
 
-Then include it in requests:
+Configure the API:
+
+```bash
+export JWT_SECRET_BASE64="<base64-encoded-512-bit-secret>"
+export JWT_USERNAME="api-client"
+export JWT_PASSWORD_HASH='{bcrypt}<bcrypt-password-hash>'
+export JWT_ISSUER="arduino-thermo-hygrometer-api"
+export JWT_ACCESS_TOKEN_TTL="PT30M"
+```
+
+Issue a token:
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"username":"api-client","password":"your-password"}' \
+  http://localhost:5000/auth/token
+```
+
+Then use the returned token:
 
 ```http
-X-API-KEY: your-api-key
+Authorization: Bearer <access-token>
 ```
 
-The API is stateless and uses the API key to authenticate requests. Authenticated API requests require the `API_ADMIN`
-role.
+The API is stateless. JWTs are signed with HS512 and validated locally by Spring Security's OAuth2 Resource Server
+support. Access tokens contain the configured roles and expire after the configured TTL.
 
-> Do not commit real API keys or other secrets to the repository.
+> Do not commit JWT signing secrets or plaintext passwords to the repository.
 
 ## Running the API
 
@@ -259,7 +278,7 @@ Swagger UI is disabled in the production profile.
 
 ## API endpoints
 
-All application endpoints are under `/api/v1` and require the `X-API-KEY` header.
+All application endpoints are under `/api/v1` and require an `Authorization: Bearer <JWT>` header.
 
 ### Battery
 
@@ -278,7 +297,7 @@ Request/query parameters:
 Example:
 
 ```bash
-curl -H "X-API-KEY: your-api-key" \
+curl -H "Authorization: Bearer <access-token>" \
   "http://localhost:5000/api/v1/batteries?registeredAt=2026-08-23T20:00:00&dateOnly=false"
 ```
 
@@ -413,7 +432,7 @@ Allowed request headers include:
 ```text
 Accept
 Content-Type
-X-API-KEY
+Authorization
 ```
 
 Update the environment-specific configuration if the frontend is served from another origin.
@@ -462,8 +481,10 @@ A typical local workflow is:
 # 1. Start PostgreSQL
 podman start postgres-local
 
-# 2. Set the API key
-export API_KEY="your-api-key"
+# 2. Configure JWT authentication
+export JWT_SECRET_BASE64="<base64-encoded-512-bit-secret>"
+export JWT_USERNAME="api-client"
+export JWT_PASSWORD_HASH='{bcrypt}<bcrypt-password-hash>'
 
 # 3. Start the API
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
@@ -499,3 +520,15 @@ the Java controllers.
 ## License
 
 This project is licensed under the MIT License. See the repository `LICENSE` file for details.
+
+## Security
+
+The API uses short-lived JWT bearer tokens. Tokens are not persisted server-side. The signing key, client credential
+hash, database credentials, CORS origins, issuer and audience are supplied through environment variables outside
+test/local profiles.
+The `/auth/token` endpoint has a separate, stricter IP-based rate limit to mitigate credential brute-force attempts.
+Authenticated API requests are rate limited by the authenticated JWT subject, with unauthenticated requests falling back
+to the client IP.
+Production and staging disable Swagger/OpenAPI UI and API documentation endpoints. Health probes remain public for
+container orchestration; other actuator endpoints require the `ACTUATOR` role.
+JWT validation enforces the signing algorithm (HS512), issuer, audience, expiration and not-before claims.
