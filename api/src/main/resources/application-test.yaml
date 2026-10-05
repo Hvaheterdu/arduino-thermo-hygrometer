@@ -1,5 +1,5 @@
 cors:
-  allowed-headers: [ Accept, Content-Type, X-API-KEY ]
+  allowed-headers: [ Accept, Content-Type, Authorization ]
   allowed-methods: [ GET, DELETE, POST ]
   allowed-origins: [ http://localhost:3000 ]
 
@@ -27,16 +27,22 @@ management:
         include: health, info, metrics
 
 rate-limit:
-  capacity: 10
-  refill-period: 10m
-  maximum-buckets: 1
+  api-capacity: 10
+  api-refill-period: 10m
+  authentication-capacity: 5
+  authentication-refill-period: 10m
+  maximum-buckets: 100
   bucket-expiration: 30m
 
 security:
-  api-key: "api-secret-key"
-  api-header-name: X-API-KEY
-  api-roles: [ ACTUATOR, API_ADMIN ]
-  api-scheme-name: ApiKeyAuth
+  jwt-secret-base64: "LbNpq+McWaXkLKdC+wNqfzBNmdU3/qpnDcddcCJI7BoPFiWaWHWMzDhMunKItaeAFSILPLwTd5sCLaZrNfWMbw=="
+  jwt-issuer: "arduino-thermo-hygrometer-api-test"
+  jwt-audience: "arduino-thermo-hygrometer-api-test"
+  access-token-ttl: PT30M
+  username: "test-user"
+  password-hash: "{bcrypt}$2a$10$nhiie7DaM4/dFUi0ukcweuB.2c1Wkc2dkPKz2tHVA0hwv0AMsIGSy"
+  roles: [ ACTUATOR, API_ADMIN ]
+  jwt-scheme-name: BearerAuth
 
 spring:
   datasource:

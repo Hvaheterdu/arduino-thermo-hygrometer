@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+    "/auth/token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Issue a JWT access token.
+         * @description Exchanges configured client credentials for a short-lived JWT access token.
+         */
+        post: operations["issueToken"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/batteries": {
         parameters: {
             query?: never;
@@ -13,7 +33,7 @@ export interface paths {
         };
         /**
          * Retrieve a battery by date or timestamp.
-         * @description Retrieves the battery status of the Arduino device by date or timestamp.
+         * @description Retrieves the battery status of the Arduino device by date or timestamp. The dateOnly parameter can be used to retrieve the battery status for a specific date, ignoring the time section of the registeredAt parameter.
          */
         get: operations["getBatteriesByDateOrTimestamp"];
         put?: never;
@@ -24,7 +44,7 @@ export interface paths {
         post: operations["createBattery"];
         /**
          * Delete battery by date or timestamp.
-         * @description Deletes the battery status of the Arduino device by date or timestamp.
+         * @description Deletes the battery status of the Arduino device by date or timestamp. The dateOnly parameter can be used to delete all the battery statuses for a specific date, or delete the battery status for a specific timestamp.
          */
         delete: operations["deleteBatteriesByDateOrTimestamp"];
         options?: never;
@@ -41,7 +61,7 @@ export interface paths {
         };
         /**
          * Retrieve measured humidity by date or timestamp.
-         * @description Retrieves the measured humidity from the Arduino device by date or timestamp.
+         * @description Retrieves the measured humidity from the Arduino device by date or timestamp. The dateOnly parameter can be used to retrieve the measured humidity for a specific date, ignoring the time section of the registeredAt parameter.
          */
         get: operations["getHumiditiesByDateOrTimestamp"];
         put?: never;
@@ -52,7 +72,7 @@ export interface paths {
         post: operations["createHumidity"];
         /**
          * Delete measured humidity by date or timestamp.
-         * @description Deletes the measured humidity from the Arduino device by date or timestamp.
+         * @description Deletes the measured humidity from the Arduino device by date or timestamp. The dateOnly parameter can be used to delete all the measured humidities for a specific date, or delete the measured humidity for a specific timestamp.
          */
         delete: operations["deleteHumiditiesByDateOrTimestamp"];
         options?: never;
@@ -69,7 +89,7 @@ export interface paths {
         };
         /**
          * Retrieve measured temperature by date or timestamp.
-         * @description Retrieves the measured temperature from the Arduino device by date or timestamp.
+         * @description Retrieves the measured temperature from the Arduino device by date or timestamp. The dateOnly parameter can be used to retrieve the measured temperature for a specific date, ignoring the time section of the registeredAt parameter.
          */
         get: operations["getTemperaturesByDateOrTimestamp"];
         put?: never;
@@ -80,7 +100,7 @@ export interface paths {
         post: operations["createTemperature"];
         /**
          * Delete measured temperature by date or timestamp.
-         * @description Deletes the measured temperature from the Arduino device by date or timestamp.
+         * @description Deletes the measured temperature from the Arduino device by date or timestamp. The dateOnly parameter can be used to delete all the measured temperatures for a specific date, or delete the measured temperature for a specific timestamp.
          */
         delete: operations["deleteTemperaturesByDateOrTimestamp"];
         options?: never;
@@ -106,7 +126,7 @@ export interface components {
             title: string;
             /**
              * @description A human-readable explanation specific to this occurrence of the problem.
-             * @example Resource with id 00000000-0000-0000-0000-000000000000 not found.
+             * @example Resources not found for date 2017-07-21.
              */
             detail: string;
             /**
@@ -116,7 +136,7 @@ export interface components {
             status: number;
             /**
              * @description A URI reference that identifies the specific occurrence of the problem.
-             * @example /api/v1/batteries/{id}
+             * @example /api/v1/batteries?registeredAt=2017-07-21T17:00:00Z&dateOnly=true
              */
             instance: string;
             /**
@@ -133,7 +153,7 @@ export interface components {
             /** @description A collection of validation errors. Occurs only during validation failures. */
             errors?: components["schemas"]["ProblemDetailsValidationErrorDto"][];
         };
-        /** @description Includes details about validation errors. */
+        /** @description Problem details, including details about validation errors. */
         ProblemDetailsValidationErrorDto: {
             /**
              * @description Non-localized description of the error.
@@ -142,12 +162,12 @@ export interface components {
             description: string;
             /**
              * @description Included to identify a path or query parameter that is invalid.
-             * @example id
+             * @example registeredAt
              */
             parameter?: string | null;
             /**
              * @description Included to identify a header parameter that is invalid.
-             * @example X-API-KEY
+             * @example Authorization
              */
             header?: string | null;
             /**
@@ -156,7 +176,7 @@ export interface components {
              */
             pointer?: string | null;
         };
-        /** @description Battery object. */
+        /** @description Metadata about a battery object. */
         BatteryDto: {
             /**
              * Format: date-time
@@ -170,7 +190,7 @@ export interface components {
              */
             batteryStatus: number;
         };
-        /** @description Humidity object. */
+        /** @description Metadata about a humidity object. */
         HumidityDto: {
             /**
              * Format: date-time
@@ -180,11 +200,11 @@ export interface components {
             registeredAt: string;
             /**
              * Format: double
-             * @description Measured air humidity by the Arduino device.
+             * @description Measured air humidity by the Arduino device. The air humidity can be between 20.00 and 90.00, where 20.00 means the air is very dry and 90.00 means the air is very humid.
              */
             airHumidity: number;
         };
-        /** @description Temperature object. */
+        /** @description Metadata about a temperature object. */
         TemperatureDto: {
             /**
              * Format: date-time
@@ -194,14 +214,31 @@ export interface components {
             registeredAt: string;
             /**
              * Format: double
-             * @description Measured temperature by the Arduino device.
+             * @description Measured temperature by the Arduino device. The temperature can be between -55.00 and 125.00, where -55.00 means the temperature is extremely cold and 125.00 means the temperature is extremely hot.
              */
             temp: number;
         };
+        /** @description Credentials used to obtain a JWT access token. */
+        JwtTokenDto: {
+            username: string;
+            /** Format: password */
+            password: string;
+        };
+        /** @description JWT access token response. */
+        JwtTokenResponse: {
+            accessToken: string;
+            /** @example Bearer */
+            tokenType: string;
+            /**
+             * Format: int64
+             * @description Lifetime of the access token in seconds.
+             */
+            expiresIn: number;
+        };
     };
     responses: {
-        /** @description Problem details error. */
-        ProblemDetails: {
+        /** @description Error response in the shape of a Problem details object. */
+        ProblemDetailsResponse: {
             headers: {
                 [name: string]: unknown;
             };
@@ -209,8 +246,8 @@ export interface components {
                 "application/problem+json": components["schemas"]["ProblemDetailsDto"];
             };
         };
-        /** @description Too Many Requests. */
-        TooManyRequests: {
+        /** @description Error response for a Too Many Requests error. */
+        TooManyRequestsResponse: {
             headers: {
                 "X-RateLimit-Limit": components["headers"]["X-RateLimit-Limit"];
                 "X-RateLimit-Remaining": components["headers"]["X-RateLimit-Remaining"];
@@ -223,9 +260,9 @@ export interface components {
         };
     };
     parameters: {
-        /** @description Date and time of registration. */
+        /** @description Date and time of registered sensor readings from the Arduino device. */
         RegisteredAt: string;
-        /** @description Only use date of registeredAt parameter. */
+        /** @description Only use the date section of registered sensor readings from the Arduino device (registeredAt parameter). */
         DateOnly: boolean;
     };
     requestBodies: never;
@@ -241,12 +278,42 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    issueToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JwtTokenDto"];
+            };
+        };
+        responses: {
+            /** @description JWT access token issued. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JwtTokenResponse"];
+                };
+            };
+            /** @description Bad Request. */
+            400: components["responses"]["ProblemDetailsResponse"];
+            /** @description Unauthorized. */
+            401: components["responses"]["ProblemDetailsResponse"];
+            /** @description To Many Requests. */
+            429: components["responses"]["TooManyRequestsResponse"];
+        };
+    };
     getBatteriesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registered sensor readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use the date section of registered sensor readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -268,15 +335,15 @@ export interface operations {
                 };
             };
             /** @description Unauthorized. */
-            401: components["responses"]["ProblemDetails"];
+            401: components["responses"]["ProblemDetailsResponse"];
             /** @description Forbidden. */
-            403: components["responses"]["ProblemDetails"];
+            403: components["responses"]["ProblemDetailsResponse"];
             /** @description Not Found. */
-            404: components["responses"]["ProblemDetails"];
+            404: components["responses"]["ProblemDetailsResponse"];
             /** @description To Many Requests. */
-            429: components["responses"]["TooManyRequests"];
+            429: components["responses"]["TooManyRequestsResponse"];
             /** @description Internal Server Error. */
-            500: components["responses"]["ProblemDetails"];
+            500: components["responses"]["ProblemDetailsResponse"];
         };
     };
     createBattery: {
@@ -305,25 +372,25 @@ export interface operations {
                 };
             };
             /** @description Bad Request. */
-            400: components["responses"]["ProblemDetails"];
+            400: components["responses"]["ProblemDetailsResponse"];
             /** @description Unauthorized. */
-            401: components["responses"]["ProblemDetails"];
+            401: components["responses"]["ProblemDetailsResponse"];
             /** @description Forbidden. */
-            403: components["responses"]["ProblemDetails"];
+            403: components["responses"]["ProblemDetailsResponse"];
             /** @description Not Found. */
-            404: components["responses"]["ProblemDetails"];
+            404: components["responses"]["ProblemDetailsResponse"];
             /** @description To Many Requests. */
-            429: components["responses"]["TooManyRequests"];
+            429: components["responses"]["TooManyRequestsResponse"];
             /** @description Internal Server Error. */
-            500: components["responses"]["ProblemDetails"];
+            500: components["responses"]["ProblemDetailsResponse"];
         };
     };
     deleteBatteriesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registered sensor readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use the date section of registered sensor readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -343,23 +410,23 @@ export interface operations {
                 content?: never;
             };
             /** @description Unauthorized. */
-            401: components["responses"]["ProblemDetails"];
+            401: components["responses"]["ProblemDetailsResponse"];
             /** @description Forbidden. */
-            403: components["responses"]["ProblemDetails"];
+            403: components["responses"]["ProblemDetailsResponse"];
             /** @description Not Found. */
-            404: components["responses"]["ProblemDetails"];
+            404: components["responses"]["ProblemDetailsResponse"];
             /** @description To Many Requests. */
-            429: components["responses"]["TooManyRequests"];
+            429: components["responses"]["TooManyRequestsResponse"];
             /** @description Internal Server Error. */
-            500: components["responses"]["ProblemDetails"];
+            500: components["responses"]["ProblemDetailsResponse"];
         };
     };
     getHumiditiesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registered sensor readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use the date section of registered sensor readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -381,15 +448,15 @@ export interface operations {
                 };
             };
             /** @description Unauthorized. */
-            401: components["responses"]["ProblemDetails"];
+            401: components["responses"]["ProblemDetailsResponse"];
             /** @description Forbidden. */
-            403: components["responses"]["ProblemDetails"];
+            403: components["responses"]["ProblemDetailsResponse"];
             /** @description Not Found. */
-            404: components["responses"]["ProblemDetails"];
+            404: components["responses"]["ProblemDetailsResponse"];
             /** @description To Many Requests. */
-            429: components["responses"]["TooManyRequests"];
+            429: components["responses"]["TooManyRequestsResponse"];
             /** @description Internal Server Error. */
-            500: components["responses"]["ProblemDetails"];
+            500: components["responses"]["ProblemDetailsResponse"];
         };
     };
     createHumidity: {
@@ -418,25 +485,25 @@ export interface operations {
                 };
             };
             /** @description Bad Request. */
-            400: components["responses"]["ProblemDetails"];
+            400: components["responses"]["ProblemDetailsResponse"];
             /** @description Unauthorized. */
-            401: components["responses"]["ProblemDetails"];
+            401: components["responses"]["ProblemDetailsResponse"];
             /** @description Forbidden. */
-            403: components["responses"]["ProblemDetails"];
+            403: components["responses"]["ProblemDetailsResponse"];
             /** @description Not Found. */
-            404: components["responses"]["ProblemDetails"];
+            404: components["responses"]["ProblemDetailsResponse"];
             /** @description To Many Requests. */
-            429: components["responses"]["TooManyRequests"];
+            429: components["responses"]["TooManyRequestsResponse"];
             /** @description Internal Server Error. */
-            500: components["responses"]["ProblemDetails"];
+            500: components["responses"]["ProblemDetailsResponse"];
         };
     };
     deleteHumiditiesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registered sensor readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use the date section of registered sensor readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -456,23 +523,23 @@ export interface operations {
                 content?: never;
             };
             /** @description Unauthorized. */
-            401: components["responses"]["ProblemDetails"];
+            401: components["responses"]["ProblemDetailsResponse"];
             /** @description Forbidden. */
-            403: components["responses"]["ProblemDetails"];
+            403: components["responses"]["ProblemDetailsResponse"];
             /** @description Not Found. */
-            404: components["responses"]["ProblemDetails"];
+            404: components["responses"]["ProblemDetailsResponse"];
             /** @description To Many Requests. */
-            429: components["responses"]["TooManyRequests"];
+            429: components["responses"]["TooManyRequestsResponse"];
             /** @description Internal Server Error. */
-            500: components["responses"]["ProblemDetails"];
+            500: components["responses"]["ProblemDetailsResponse"];
         };
     };
     getTemperaturesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registered sensor readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use the date section of registered sensor readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -494,15 +561,15 @@ export interface operations {
                 };
             };
             /** @description Unauthorized. */
-            401: components["responses"]["ProblemDetails"];
+            401: components["responses"]["ProblemDetailsResponse"];
             /** @description Forbidden. */
-            403: components["responses"]["ProblemDetails"];
+            403: components["responses"]["ProblemDetailsResponse"];
             /** @description Not Found. */
-            404: components["responses"]["ProblemDetails"];
+            404: components["responses"]["ProblemDetailsResponse"];
             /** @description To Many Requests. */
-            429: components["responses"]["TooManyRequests"];
+            429: components["responses"]["TooManyRequestsResponse"];
             /** @description Internal Server Error. */
-            500: components["responses"]["ProblemDetails"];
+            500: components["responses"]["ProblemDetailsResponse"];
         };
     };
     createTemperature: {
@@ -531,25 +598,25 @@ export interface operations {
                 };
             };
             /** @description Bad Request. */
-            400: components["responses"]["ProblemDetails"];
+            400: components["responses"]["ProblemDetailsResponse"];
             /** @description Unauthorized. */
-            401: components["responses"]["ProblemDetails"];
+            401: components["responses"]["ProblemDetailsResponse"];
             /** @description Forbidden. */
-            403: components["responses"]["ProblemDetails"];
+            403: components["responses"]["ProblemDetailsResponse"];
             /** @description Not Found. */
-            404: components["responses"]["ProblemDetails"];
+            404: components["responses"]["ProblemDetailsResponse"];
             /** @description To Many Requests. */
-            429: components["responses"]["TooManyRequests"];
+            429: components["responses"]["TooManyRequestsResponse"];
             /** @description Internal Server Error. */
-            500: components["responses"]["ProblemDetails"];
+            500: components["responses"]["ProblemDetailsResponse"];
         };
     };
     deleteTemperaturesByDateOrTimestamp: {
         parameters: {
             query: {
-                /** @description Date and time of registration. */
+                /** @description Date and time of registered sensor readings from the Arduino device. */
                 registeredAt: components["parameters"]["RegisteredAt"];
-                /** @description Only use date of registeredAt parameter. */
+                /** @description Only use the date section of registered sensor readings from the Arduino device (registeredAt parameter). */
                 dateOnly: components["parameters"]["DateOnly"];
             };
             header?: never;
@@ -569,15 +636,15 @@ export interface operations {
                 content?: never;
             };
             /** @description Unauthorized. */
-            401: components["responses"]["ProblemDetails"];
+            401: components["responses"]["ProblemDetailsResponse"];
             /** @description Forbidden. */
-            403: components["responses"]["ProblemDetails"];
+            403: components["responses"]["ProblemDetailsResponse"];
             /** @description Not Found. */
-            404: components["responses"]["ProblemDetails"];
+            404: components["responses"]["ProblemDetailsResponse"];
             /** @description To Many Requests. */
-            429: components["responses"]["TooManyRequests"];
+            429: components["responses"]["TooManyRequestsResponse"];
             /** @description Internal Server Error. */
-            500: components["responses"]["ProblemDetails"];
+            500: components["responses"]["ProblemDetailsResponse"];
         };
     };
 }
