@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -52,8 +53,7 @@ public class JwtConfiguration {
         new JwtClaimValidator<Collection<String>>(
             "aud", audience -> audience.contains(securityProperties.jwtAudience()));
     nimbusJwtDecoder.setJwtValidator(
-        new org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator<>(
-            issuerValidator, audienceValidator));
+        new DelegatingOAuth2TokenValidator<>(issuerValidator, audienceValidator));
 
     return nimbusJwtDecoder;
   }
