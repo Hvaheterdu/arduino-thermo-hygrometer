@@ -39,11 +39,11 @@ Spring configuration and servlet filters.
 Before running the API locally, install:
 
 - Java 25
-- Maven 3.9.11 or use the included Maven Wrapper
+- Maven 3.9.16 or use the included Maven Wrapper
 - Podman or Docker
 - PostgreSQL 18.x, if you do not use the provided container setup
 
-The project declares Java 25 and Maven 3.9.11 as required versions.
+The project declares Java 25 and Maven 3.9.16 as required versions.
 
 ## Project structure
 
@@ -128,19 +128,21 @@ API endpoints under `/api/**` require a short-lived JWT access token in the stan
 The API exposes `/auth/token` for exchanging configured credentials for a signed JWT. Configure the username, a BCrypt
 password hash, and a Base64-encoded 512-bit signing secret through environment variables.
 
-Generate a signing secret with:
+Generate a 512-bit signing secret with:
 
 ```bash
-openssl rand -base64 32
+openssl rand -base64 64
 ```
 
 Configure the API:
 
 ```bash
 export JWT_SECRET_BASE64="<base64-encoded-512-bit-secret>"
+export JWT_BEARER_FORMAT="JWT"
 export JWT_USERNAME="api-client"
 export JWT_PASSWORD_HASH='{bcrypt}<bcrypt-password-hash>'
 export JWT_ISSUER="arduino-thermo-hygrometer-api"
+export JWT_AUDIENCE="arduino-thermo-hygrometer-api"
 export JWT_ACCESS_TOKEN_TTL="PT30M"
 ```
 
@@ -224,7 +226,8 @@ Run the complete verification lifecycle, including integration tests:
 
 Integration tests use Testcontainers and therefore require a container runtime such as Podman or Docker.
 
-The test profile uses an API key of `api-secret-key` and a local PostgreSQL configuration.
+The test profile provides test JWT settings and uses Testcontainers to start PostgreSQL. Running integration tests
+therefore requires a working Docker-compatible container runtime.
 
 ## Formatting and quality checks
 
@@ -283,7 +286,7 @@ All application endpoints are under `/api/v1` and require an `Authorization: Bea
 ### Battery
 
 | Method   | Endpoint            | Description                                        |
-|----------|---------------------|----------------------------------------------------|
+| -------- | ------------------- | -------------------------------------------------- |
 | `GET`    | `/api/v1/batteries` | Retrieve battery measurements by date or timestamp |
 | `POST`   | `/api/v1/batteries` | Register a battery measurement                     |
 | `DELETE` | `/api/v1/batteries` | Delete battery measurements by date or timestamp   |
@@ -315,7 +318,7 @@ Example request body:
 ### Humidity
 
 | Method   | Endpoint             | Description                                         |
-|----------|----------------------|-----------------------------------------------------|
+| -------- | -------------------- | --------------------------------------------------- |
 | `GET`    | `/api/v1/humidities` | Retrieve humidity measurements by date or timestamp |
 | `POST`   | `/api/v1/humidities` | Register a humidity measurement                     |
 | `DELETE` | `/api/v1/humidities` | Delete humidity measurements by date or timestamp   |
@@ -334,7 +337,7 @@ Example request body:
 ### Temperature
 
 | Method   | Endpoint               | Description                                            |
-|----------|------------------------|--------------------------------------------------------|
+| -------- | ---------------------- | ------------------------------------------------------ |
 | `GET`    | `/api/v1/temperatures` | Retrieve temperature measurements by date or timestamp |
 | `POST`   | `/api/v1/temperatures` | Register a temperature measurement                     |
 | `DELETE` | `/api/v1/temperatures` | Delete temperature measurements by date or timestamp   |
@@ -355,7 +358,7 @@ Example request body:
 Successful operations use the following status codes:
 
 | Status           | Meaning                                  |
-|------------------|------------------------------------------|
+| ---------------- | ---------------------------------------- |
 | `200 OK`         | A measurement was successfully retrieved |
 | `201 Created`    | A measurement was successfully created   |
 | `204 No Content` | Measurements were successfully deleted   |
@@ -364,14 +367,14 @@ Errors are returned using `application/problem+json` and follow RFC 9457-style p
 
 Common error responses include:
 
-| Status                      | Meaning                                               |
-|-----------------------------|-------------------------------------------------------|
-| `400 Bad Request`           | Request validation failed                             |
-| `401 Unauthorized`          | API key is missing                                    |
-| `403 Forbidden`             | API key is invalid or does not have the required role |
-| `404 Not Found`             | Requested resource was not found                      |
-| `429 Too Many Requests`     | API rate limit was exceeded                           |
-| `500 Internal Server Error` | Unexpected server-side error                          |
+| Status                      | Meaning                                  |
+| --------------------------- | ---------------------------------------- |
+| `400 Bad Request`           | Request validation failed                |
+| `401 Unauthorized`          | JWT is missing or invalid                |
+| `403 Forbidden`             | JWT is valid but lacks the required role |
+| `404 Not Found`             | Requested resource was not found         |
+| `429 Too Many Requests`     | API rate limit was exceeded              |
+| `500 Internal Server Error` | Unexpected server-side error             |
 
 A problem response contains fields such as:
 
@@ -394,7 +397,7 @@ For validation failures, `errors` contains information about the invalid paramet
 
 Requests to `/api/**` are rate limited using Bucket4j.
 
-The current limit is:
+The current authenticated API limit is:
 
 ```text
 100 requests per 10 minutes
@@ -408,8 +411,8 @@ The API returns these headers for API requests:
 
 When the limit is exceeded, the API responds with `429 Too Many Requests` and a `Retry-After` header.
 
-Rate limiting is keyed by the API key. If no API key is supplied, the remote address is used as the rate-limit key
-before authentication rejects the request.
+Authenticated API limits are keyed by the JWT subject. Requests without an authenticated subject use the client IP;
+the token endpoint has a separate, stricter IP-based limit of 5 requests per 10 minutes.
 
 ## CORS
 
@@ -481,10 +484,14 @@ A typical local workflow is:
 # 1. Start PostgreSQL
 podman start postgres-local
 
-# 2. Configure JWT authentication
+# 2. Configure JWT authentication (set all values required by application.yaml)
 export JWT_SECRET_BASE64="<base64-encoded-512-bit-secret>"
+export JWT_BEARER_FORMAT="JWT"
 export JWT_USERNAME="api-client"
 export JWT_PASSWORD_HASH='{bcrypt}<bcrypt-password-hash>'
+export JWT_ISSUER="arduino-thermo-hygrometer-api"
+export JWT_AUDIENCE="arduino-thermo-hygrometer-api"
+export JWT_ACCESS_TOKEN_TTL="PT30M"
 
 # 3. Start the API
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
