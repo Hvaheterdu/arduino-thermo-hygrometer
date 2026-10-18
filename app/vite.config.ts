@@ -1,4 +1,5 @@
 import viteReact from "@vitejs/plugin-react";
+import { msw } from "msw/vite";
 import { ConfigEnv, defineConfig, loadEnv, UserConfig } from "vite";
 import type { Plugin } from "vitest/config";
 
@@ -86,7 +87,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
       reportCompressedSize: true
     },
     cacheDir: "node_modules/.vite/app",
-    plugins: [viteReact(), contentSecurityPolicyPlugin(apiBaseUrl, allowInlineScripts)],
+    plugins: [msw(), viteReact(), contentSecurityPolicyPlugin(apiBaseUrl, allowInlineScripts)],
     resolve: {
       tsconfigPaths: true
     },
