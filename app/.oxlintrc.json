@@ -38,15 +38,5 @@
     "vitest/max-nested-describe": ["error", { "max": 2 }],
     "@typescript-eslint/consistent-type-definitions": ["error", "type"]
   },
-  "settings": { "react": { "version": "19.3" } },
-  "overrides": [
-    {
-      "files": ["vite.config.ts", "tools/**/*.ts"],
-      "env": { "node": true }
-    },
-    {
-      "files": ["src/test/**", "**/*.test.ts", "**/*.test.tsx"],
-      "rules": { "react/only-export-components": "off" }
-    }
-  ]
+  "settings": { "react": { "version": "19.3" } }
 }
