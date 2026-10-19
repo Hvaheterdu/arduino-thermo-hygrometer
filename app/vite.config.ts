@@ -30,7 +30,7 @@ export default defineConfig(({ command, mode, isPreview }) => {
     base: env.VITE_BASE_PATH,
     plugins: [react(), ...(isDevServer ? [msw({ mode: "worker-only" })] : [])],
     resolve: { tsconfigPaths: true },
-    build: { target: "es2023", sourcemap: mode !== "production" },
+    build: { target: "esnext", sourcemap: mode !== "production" },
     server: { host: "localhost", port: 3000, strictPort: true, headers },
     preview: { host: "localhost", headers },
     test: {
