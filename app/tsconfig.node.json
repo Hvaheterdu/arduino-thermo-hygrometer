@@ -2,25 +2,19 @@
   "compilerOptions": {
     "composite": true,
     "lib": ["ESNext"],
+    "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "moduleDetection": "force",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "target": "ESNext",
-    "types": [
-      "@testing-library/dom",
-      "@testing-library/jest-dom",
-      "@testing-library/react",
-      "node",
-      "vite/client",
-      "vitest/globals"
-    ],
+    "strict": true,
+    "noEmit": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": ["node"],
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.node.tsbuildinfo"
   },
-  "exclude": ["dist", "node_modules"],
   "include": ["vite.config.ts"]
 }

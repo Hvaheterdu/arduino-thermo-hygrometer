@@ -1,541 +1,304 @@
 # Arduino Thermo Hygrometer API
 
-A Java RESTful API for an Arduino Thermo Hygrometer IoT device. The API stores and exposes temperature, air-humidity,
-and battery measurements collected from the device.
+Store and expose temperature, air-humidity, and battery readings collected from an Arduino device.
 
 ## Overview
 
-The API is built with:
+The API uses Java 25, Spring Boot 4.1, Spring MVC, Spring Security, Spring JDBC, PostgreSQL,
+and Flyway. The OpenAPI contract generates Spring interfaces and DTOs. Controllers delegate
+to services and repositories; configuration and filters handle authentication, CORS, rate
+limiting, and problem responses.
 
-- Java 25
-- Spring Boot 4.1
-- Spring MVC
-- Spring Security
-- Spring JDBC
-- PostgreSQL
-- Flyway database migrations
-- Springdoc OpenAPI / Swagger UI
-- Bucket4j for API rate limiting
-- Testcontainers for integration tests
-- Maven Wrapper
-
-The API follows a layered architecture:
-
-```text
-Controller
-    ↓
-Service
-    ↓
-Repository
-    ↓
-PostgreSQL
-```
-
-Cross-cutting concerns such as authentication, rate limiting, CORS, and error handling are handled separately through
-Spring configuration and servlet filters.
+The [frontend](../app/README.md) consumes this API and also provides a standalone mock mode.
+OpenAM is not required.
 
 ## Requirements
 
-Before running the API locally, install:
+- Java 25; Maven Enforcer requires a version in `[25, 26)`.
+- The included Maven 3.9.16 Wrapper, or a compatible installed Maven version satisfying
+  [pom.xml](pom.xml).
+- PostgreSQL 18.x for a live database.
+- Docker or Podman with a Docker-compatible endpoint for Testcontainers integration tests.
 
-- Java 25
-- Maven 3.9.16 or use the included Maven Wrapper
-- Podman or Docker
-- PostgreSQL 18.x, if you do not use the provided container setup
+Commands below run from `api/` unless stated otherwise. On Windows, use `mvnw.cmd` instead
+of `./mvnw`.
 
-The project declares Java 25 and Maven 3.9.16 as required versions.
+## Getting started
+
+### Local database
+
+Start the database used by the local profile:
+
+```sh
+podman run --name postgres-local \
+  -e POSTGRES_USER=postgres-local \
+  -e POSTGRES_PASSWORD=postgres-local \
+  -e POSTGRES_DB=arduinothermohygrometer-local \
+  -p 127.0.0.1:5432:5432 \
+  -d postgres:18.3
+```
+
+Replace `podman` with `docker` if preferred. These credentials are local-development
+examples, not production settings. This container command does not configure a persistent
+volume; do not remove the container if you need to retain its database.
+
+For later sessions, start the existing container with `podman start postgres-local`.
+Flyway applies migrations automatically when the API starts.
+
+### JWT credentials
+
+The API requires the following environment variables, including in the local profile:
+
+```sh
+export JWT_SECRET_BASE64="$(openssl rand -base64 64 | tr -d '\n')"
+export JWT_BEARER_FORMAT="JWT"
+export JWT_USERNAME="api-client"
+export JWT_PASSWORD_HASH='{bcrypt}<bcrypt-password-hash>'
+export JWT_ISSUER="arduino-thermo-hygrometer-api"
+export JWT_AUDIENCE="arduino-thermo-hygrometer-api"
+export JWT_ACCESS_TOKEN_TTL="PT30M"
+```
+
+Replace the password-hash placeholder with a BCrypt hash of your chosen password, prefixed
+with `{bcrypt}` for Spring's delegating password encoder. The Base64 signing secret must
+decode to at least 64 bytes. Generating a new secret invalidates previously issued tokens.
+Do not commit signing secrets, real credentials, or access tokens.
+
+### Start the API
+
+```sh
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+The API listens at <http://localhost:5000>. Local documentation is available at
+<http://localhost:5000/swagger-ui.html> and <http://localhost:5000/v3/api-docs>.
+Configure the [frontend's live mode](../app/README.md#live-api) to sign in with the same
+username and the plaintext password corresponding to the configured hash.
+
+## Configuration
+
+### Spring profiles
+
+The base settings are in [application.yaml](src/main/resources/application.yaml).
+
+| Profile   | Configuration                                                           | API documentation |
+| --------- | ----------------------------------------------------------------------- | ----------------- |
+| `local`   | [application-local.yaml](src/main/resources/application-local.yaml)     | Enabled           |
+| `dev`     | [application-dev.yaml](src/main/resources/application-dev.yaml)         | Enabled           |
+| `test`    | [application-test.yaml](src/main/resources/application-test.yaml)       | Enabled           |
+| `staging` | [application-staging.yaml](src/main/resources/application-staging.yaml) | Disabled          |
+| `prod`    | [application-prod.yaml](src/main/resources/application-prod.yaml)       | Disabled          |
+
+The checked-in local, development, staging, and production datasource settings all point
+to the sample local database. Override `SPRING_DATASOURCE_URL`,
+`SPRING_DATASOURCE_USERNAME`, and `SPRING_DATASOURCE_PASSWORD` for deployed environments.
+The staging/production profile names do not make those sample credentials deployment-ready.
+
+### Authentication and authorization
+
+`POST /auth/token` exchanges configured credentials for a short-lived JWT:
+
+```sh
+curl --request POST \
+  --header "Content-Type: application/json" \
+  --data '{"username":"api-client","password":"<your-password>"}' \
+  http://localhost:5000/auth/token
+```
+
+Send the returned `accessToken` as a bearer token on `/api/**` requests. The API is stateless:
+tokens are not stored server-side. HS512 signatures, issuer, audience, and token timestamps
+are validated by Spring Security's resource server support.
+
+Application endpoints require the `API_ADMIN` role. Non-public actuator endpoints require
+`ACTUATOR`. Both roles are assigned to the configured client by the base configuration.
+Review those privileges before deploying.
+
+### CORS
+
+The default allowed origin is `http://localhost:3000`. Allowed methods are `GET`, `POST`,
+and `DELETE`; allowed request headers are `Accept`, `Content-Type`, and `Authorization`.
+Update `cors.allowed-origins` when serving the frontend from another origin. Browser cookies
+are not used for API authentication.
+
+### Rate limiting
+
+Default Bucket4j limits are:
+
+| Requests                           | Bucket key  | Limit              |
+| ---------------------------------- | ----------- | ------------------ |
+| Authenticated `/api/**` requests   | JWT subject | 100 per 10 minutes |
+| Unauthenticated `/api/**` requests | Client IP   | 100 per 10 minutes |
+| `/auth/token` requests             | Client IP   | 5 per 10 minutes   |
+
+Rate-limited responses include `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and
+`X-RateLimit-Reset` as implemented by the filters. Exhausted buckets return HTTP 429 with
+`Retry-After`. Settings are under `rate-limit` in the base configuration.
 
 ## Project structure
 
 ```text
 api/
-├── src/
-│   ├── main/
-│   │   ├── java/api/arduinothermohygrometer/
-│   │   │   ├── configuration/     # Spring configuration
-│   │   │   ├── controller/        # REST API controllers
-│   │   │   ├── exception/         # Application exceptions and handlers
-│   │   │   ├── filter/            # JWT-aware rate limiting
-│   │   │   ├── mapper/            # Domain/DTO mapping
-│   │   │   ├── model/             # Persistence/domain models
-│   │   │   ├── properties/        # Typed application properties
-│   │   │   ├── provider/          # Authentication providers
-│   │   │   ├── repository/        # Repository contracts and implementations
-│   │   │   ├── service/           # Business logic contracts and implementations
-│   │   │   └── util/              # Shared utilities
-│   │   └── resources/
-│   │       ├── db/migration/       # Flyway migrations
-│   │       ├── openapi/            # OpenAPI contract
-│   │       └── application*.yaml   # Environment configuration
-│   └── test/
-│       ├── java/                    # Unit and integration tests
-│       └── resources/sql/           # Test database fixtures
-├── mvnw
-├── mvnw.cmd
-├── pom.xml
+  src/
+    main/
+      java/api/arduinothermohygrometer/
+        configuration/       Spring configuration and JWT/security setup
+        controller/          Implementations of generated API interfaces
+        exception/           Exceptions and global problem handling
+        filter/              Authentication and API rate limiting
+        mapper/              Domain/DTO mapping
+        model/               Persistence models
+        properties/          Typed configuration properties
+        repository/          Repository contracts and implementations
+        service/             Business logic contracts and implementations
+        util/                Shared utilities
+      resources/
+        db/migration/        Flyway migrations
+        openapi/             Canonical OpenAPI contract
+        application*.yaml    Base and profile configuration
+    test/
+      java/                  Unit and integration tests
+      resources/sql/         Database fixtures
+  .mvn/wrapper/              Maven Wrapper configuration
+  mvnw                       Unix Maven Wrapper
+  mvnw.cmd                   Windows Maven Wrapper
+  pom.xml                    Dependencies and build configuration
 ```
 
-## Local database
+## Development
 
-The local and development Spring profiles use PostgreSQL on `localhost:5432` with the following database configuration:
+### OpenAPI and generated sources
 
-```text
-Database: arduinothermohygrometer-local
-Username: postgres-local
-Password: postgres-local
-Host: localhost
-Port: 5432
+The canonical OpenAPI 3.1.2 contract is
+[`src/main/resources/openapi/arduino-thermo-hygrometer-api.yaml`](src/main/resources/openapi/arduino-thermo-hygrometer-api.yaml).
+The Maven `generate-sources` phase creates Spring interfaces and DTOs under
+`target/generated-sources/openapi`. Controllers implement those interfaces.
+
+After a contract change, update the [frontend snapshot and types](../app/README.md#openapi-and-generated-types).
+Do not edit generated Java or TypeScript files by hand.
+
+### Testing and quality checks
+
+```sh
+./mvnw test
+./mvnw verify
 ```
 
-### Podman
+`test` runs unit tests through Surefire. `verify` also runs integration tests through
+Failsafe. Both use the `test` Spring profile. Integration tests start their own PostgreSQL
+18.3 container using Testcontainers and need a working Docker-compatible runtime; an
+already-running local PostgreSQL service is not a substitute.
 
-Start PostgreSQL with:
+Spotless checks Java formatting during `validate`. Apply formatting with:
 
-```bash
-podman run --name postgres-local \
-  -e POSTGRES_USER=postgres-local \
-  -e POSTGRES_PASSWORD=postgres-local \
-  -e POSTGRES_DB=arduinothermohygrometer-local \
-  -p 5432:5432 \
-  -d postgres:18.3
+```sh
+./mvnw spotless:apply
 ```
 
-The same command works with Docker by replacing `podman` with `docker`.
+### Building
 
-Flyway runs automatically when the application starts and applies migrations from:
-
-```text
-src/main/resources/db/migration
-```
-
-## Configuration
-
-The base configuration is in `src/main/resources/application.yaml`.
-
-Environment-specific configuration is provided by:
-
-- `application-local.yaml`
-- `application-dev.yaml`
-- `application-test.yaml`
-- `application-prod.yaml`
-
-The API listens on port `5000` by default.
-
-### JWT authentication
-
-API endpoints under `/api/**` require a short-lived JWT access token in the standard `Authorization` header.
-
-The API exposes `/auth/token` for exchanging configured credentials for a signed JWT. Configure the username, a BCrypt
-password hash, and a Base64-encoded 512-bit signing secret through environment variables.
-
-Generate a 512-bit signing secret with:
-
-```bash
-openssl rand -base64 64
-```
-
-Configure the API:
-
-```bash
-export JWT_SECRET_BASE64="<base64-encoded-512-bit-secret>"
-export JWT_BEARER_FORMAT="JWT"
-export JWT_USERNAME="api-client"
-export JWT_PASSWORD_HASH='{bcrypt}<bcrypt-password-hash>'
-export JWT_ISSUER="arduino-thermo-hygrometer-api"
-export JWT_AUDIENCE="arduino-thermo-hygrometer-api"
-export JWT_ACCESS_TOKEN_TTL="PT30M"
-```
-
-Issue a token:
-
-```bash
-curl -X POST \
-  -H "Content-Type: application/json" \
-  -d '{"username":"api-client","password":"your-password"}' \
-  http://localhost:5000/auth/token
-```
-
-Then use the returned token:
-
-```http
-Authorization: Bearer <access-token>
-```
-
-The API is stateless. JWTs are signed with HS512 and validated locally by Spring Security's OAuth2 Resource Server
-support. Access tokens contain the configured roles and expire after the configured TTL.
-
-> Do not commit JWT signing secrets or plaintext passwords to the repository.
-
-## Running the API
-
-### Local profile
-
-From the `api` directory:
-
-```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local
-```
-
-On Windows:
-
-```powershell
-./mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=local
-```
-
-The API will be available at:
-
-```text
-http://localhost:5000
-```
-
-The local profile enables OpenAPI documentation and Swagger UI.
-
-## Building
-
-Create a production JAR with:
-
-```bash
+```sh
 ./mvnw clean package
 ```
 
-The generated application JAR is placed in:
+The application JAR is written to `target/`. Packaging runs unit tests; use `verify` to
+include integration tests. `-DskipTests` skips tests when deliberately needed for packaging.
 
-```text
-target/
+### Database migrations
+
+Flyway migrations live in `src/main/resources/db/migration`, starting with
+`V1__initial_migration.sql`. Add a new versioned migration for schema changes.
+Do not edit a migration already applied in a shared environment.
+
+## API reference
+
+### Reading endpoints
+
+All reading endpoints require a bearer token with `API_ADMIN`:
+
+| Resource    | Endpoint               | Value field     | Range                 |
+| ----------- | ---------------------- | --------------- | --------------------- |
+| Temperature | `/api/v1/temperatures` | `temp`          | -55 to 125            |
+| Humidity    | `/api/v1/humidities`   | `airHumidity`   | 20 to 90              |
+| Battery     | `/api/v1/batteries`    | `batteryStatus` | Integer from 0 to 100 |
+
+Each endpoint supports:
+
+| Method   | Input                                                   | Success response                   |
+| -------- | ------------------------------------------------------- | ---------------------------------- |
+| `GET`    | `registeredAt` and `dateOnly` query parameters          | HTTP 200 with an array of readings |
+| `POST`   | JSON with `registeredAt` and the resource's value field | HTTP 201 with the created reading  |
+| `DELETE` | `registeredAt` and `dateOnly` query parameters          | HTTP 204 without a response body   |
+
+For GET and DELETE, both parameters are required. `dateOnly=true` selects the calendar day;
+`dateOnly=false` matches the timestamp. Deletion affects all matching records, including
+duplicates. No matching readings produces HTTP 404 rather than an empty GET array.
+
+Example date search using an access token returned by `/auth/token`:
+
+```sh
+curl --get \
+  --header "Authorization: Bearer <access-token>" \
+  --data-urlencode "registeredAt=2026-10-19T00:00:00Z" \
+  --data-urlencode "dateOnly=true" \
+  http://localhost:5000/api/v1/temperatures
 ```
 
-To skip tests when packaging:
-
-```bash
-./mvnw clean package -DskipTests
-```
-
-## Testing
-
-Run unit tests:
-
-```bash
-./mvnw test
-```
-
-Run the complete verification lifecycle, including integration tests:
-
-```bash
-./mvnw verify
-```
-
-Integration tests use Testcontainers and therefore require a container runtime such as Podman or Docker.
-
-The test profile provides test JWT settings and uses Testcontainers to start PostgreSQL. Running integration tests
-therefore requires a working Docker-compatible container runtime.
-
-## Formatting and quality checks
-
-The project uses Spotless with Google Java Format. Formatting is checked during the Maven `validate` phase.
-
-Run the Maven lifecycle normally to execute the configured checks:
-
-```bash
-./mvnw verify
-```
-
-## OpenAPI
-
-The API contract is maintained at:
-
-```text
-src/main/resources/openapi/arduino-thermo-hygrometer-api.yaml
-```
-
-The specification uses OpenAPI `3.1.2`.
-
-The Maven build also generates Spring API interfaces and DTOs from this specification during the `generate-sources`
-phase. Generated sources are written under:
-
-```text
-target/generated-sources/openapi
-```
-
-The application controllers implement the generated API interfaces. This keeps the API contract and implementation
-aligned.
-
-## Swagger UI
-
-Swagger UI is enabled for the local, development, and test profiles.
-
-After starting the application locally, open:
-
-```text
-http://localhost:5000/swagger-ui.html
-```
-
-The generated OpenAPI document is available at:
-
-```text
-http://localhost:5000/v3/api-docs
-```
-
-Swagger UI and OpenAPI endpoints do not require an API key.
-
-Swagger UI is disabled in the production profile.
-
-## API endpoints
-
-All application endpoints are under `/api/v1` and require an `Authorization: Bearer <JWT>` header.
-
-### Battery
-
-| Method   | Endpoint            | Description                                        |
-| -------- | ------------------- | -------------------------------------------------- |
-| `GET`    | `/api/v1/batteries` | Retrieve battery measurements by date or timestamp |
-| `POST`   | `/api/v1/batteries` | Register a battery measurement                     |
-| `DELETE` | `/api/v1/batteries` | Delete battery measurements by date or timestamp   |
-
-Request/query parameters:
-
-- `registeredAt` — required ISO-8601 date-time value.
-- `dateOnly` — required boolean. When `true`, the date portion of `registeredAt` is used; when `false`, the timestamp is
-  matched.
-
-Example:
-
-```bash
-curl -H "Authorization: Bearer <access-token>" \
-  "http://localhost:5000/api/v1/batteries?registeredAt=2026-08-23T20:00:00&dateOnly=false"
-```
-
-Example request body:
+Example temperature body:
 
 ```json
 {
-  "registeredAt": "2026-08-23T20:00:00Z",
-  "batteryStatus": 75
-}
-```
-
-`batteryStatus` must be between `0` and `100`.
-
-### Humidity
-
-| Method   | Endpoint             | Description                                         |
-| -------- | -------------------- | --------------------------------------------------- |
-| `GET`    | `/api/v1/humidities` | Retrieve humidity measurements by date or timestamp |
-| `POST`   | `/api/v1/humidities` | Register a humidity measurement                     |
-| `DELETE` | `/api/v1/humidities` | Delete humidity measurements by date or timestamp   |
-
-Example request body:
-
-```json
-{
-  "registeredAt": "2026-08-23T20:00:00Z",
-  "airHumidity": 55.5
-}
-```
-
-`airHumidity` must be between `20.00` and `90.00`.
-
-### Temperature
-
-| Method   | Endpoint               | Description                                            |
-| -------- | ---------------------- | ------------------------------------------------------ |
-| `GET`    | `/api/v1/temperatures` | Retrieve temperature measurements by date or timestamp |
-| `POST`   | `/api/v1/temperatures` | Register a temperature measurement                     |
-| `DELETE` | `/api/v1/temperatures` | Delete temperature measurements by date or timestamp   |
-
-Example request body:
-
-```json
-{
-  "registeredAt": "2026-08-23T20:00:00Z",
+  "registeredAt": "2026-10-19T09:30:00Z",
   "temp": 21.5
 }
 ```
 
-`temp` must be between `-55.00` and `125.00`.
+Humidity uses the same timestamp field with, for example, `"airHumidity": 55.5`.
+Battery uses `"batteryStatus": 75`.
 
-## HTTP responses
+The contract declares `registeredAt` as an ISO date-time. The implementation maps it to
+`LocalDateTime`, without an offset, and the Maven run configuration sets the JVM timezone
+to `Europe/Oslo`. The frontend explicitly uses UTC. Configure the device and application
+to use a consistent timestamp convention; existing offset-free readings cannot establish
+their original timezone. Do not assume the API converts offsets to UTC.
 
-Successful operations use the following status codes:
+### Error responses
 
-| Status           | Meaning                                  |
-| ---------------- | ---------------------------------------- |
-| `200 OK`         | A measurement was successfully retrieved |
-| `201 Created`    | A measurement was successfully created   |
-| `204 No Content` | Measurements were successfully deleted   |
+Errors use `application/problem+json` and RFC 9457-style fields:
+`type`, `title`, `detail`, `status`, `instance`, `traceId`, and `timestamp`.
+Validation failures can include an `errors` array identifying invalid values.
 
-Errors are returned using `application/problem+json` and follow RFC 9457-style problem details.
+| Status | Meaning                                             |
+| ------ | --------------------------------------------------- |
+| `400`  | Invalid request                                     |
+| `401`  | Missing/invalid JWT or rejected sign-in credentials |
+| `403`  | Required role is missing                            |
+| `404`  | No matching resource/readings                       |
+| `429`  | Rate limit exceeded                                 |
+| `500`  | Unexpected server error                             |
 
-Common error responses include:
+### Health and documentation
 
-| Status                      | Meaning                                  |
-| --------------------------- | ---------------------------------------- |
-| `400 Bad Request`           | Request validation failed                |
-| `401 Unauthorized`          | JWT is missing or invalid                |
-| `403 Forbidden`             | JWT is valid but lacks the required role |
-| `404 Not Found`             | Requested resource was not found         |
-| `429 Too Many Requests`     | API rate limit was exceeded              |
-| `500 Internal Server Error` | Unexpected server-side error             |
+`GET /actuator/health`, `/actuator/health/liveness`, and `/actuator/health/readiness`
+are public. Health details are restricted to authorized callers. The exposed `info` and
+`metrics` actuator endpoints require `ACTUATOR`.
 
-A problem response contains fields such as:
+When enabled by the profile, Swagger UI and `/v3/api-docs` are publicly accessible.
+They are disabled in staging and production.
 
-```json
-{
-  "type": "https://api.arduinothermohygrometer/errors/validation-error",
-  "title": "Entity validation error.",
-  "detail": "One or more fields are invalid.",
-  "status": 400,
-  "instance": "/api/v1/temperatures",
-  "traceId": "00-example-example-00",
-  "timestamp": "2026-08-23T20:00:00Z",
-  "errors": []
-}
-```
+## Deployment
 
-For validation failures, `errors` contains information about the invalid parameter and its JSON pointer.
+Use the `staging` or `prod` profile with externally supplied JWT settings and datasource
+credentials, HTTPS, and the intended CORS origins. Do not deploy with the checked-in sample
+database credentials. Protect the signing secret, use a suitable short token lifetime,
+and persist PostgreSQL data outside disposable containers.
 
-## Rate limiting
+## Related documentation
 
-Requests to `/api/**` are rate limited using Bucket4j.
-
-The current authenticated API limit is:
-
-```text
-100 requests per 10 minutes
-```
-
-The API returns these headers for API requests:
-
-- `X-RateLimit-Limit`
-- `X-RateLimit-Remaining`
-- `X-RateLimit-Reset`
-
-When the limit is exceeded, the API responds with `429 Too Many Requests` and a `Retry-After` header.
-
-Authenticated API limits are keyed by the JWT subject. Requests without an authenticated subject use the client IP;
-the token endpoint has a separate, stricter IP-based limit of 5 requests per 10 minutes.
-
-## CORS
-
-The default configuration permits requests from:
-
-```text
-http://localhost:3000
-```
-
-Allowed methods are:
-
-```text
-GET
-POST
-DELETE
-```
-
-Allowed request headers include:
-
-```text
-Accept
-Content-Type
-Authorization
-```
-
-Update the environment-specific configuration if the frontend is served from another origin.
-
-## Health and actuator endpoints
-
-The following health endpoints are publicly accessible:
-
-```text
-GET /actuator/health
-GET /actuator/health/liveness
-GET /actuator/health/readiness
-```
-
-The application exposes the following actuator endpoints according to its management configuration:
-
-- `health`
-- `info`
-- `metrics`
-
-Other actuator endpoints require the `ACTUATOR` role.
-
-## Database migrations
-
-Flyway manages database schema migrations.
-
-Migrations are stored in:
-
-```text
-src/main/resources/db/migration
-```
-
-The initial schema is created by:
-
-```text
-V1__initial_migration.sql
-```
-
-Do not modify an already-applied migration in a shared environment. Add a new versioned migration for schema changes.
-
-## Development workflow
-
-A typical local workflow is:
-
-```bash
-# 1. Start PostgreSQL
-podman start postgres-local
-
-# 2. Configure JWT authentication (set all values required by application.yaml)
-export JWT_SECRET_BASE64="<base64-encoded-512-bit-secret>"
-export JWT_BEARER_FORMAT="JWT"
-export JWT_USERNAME="api-client"
-export JWT_PASSWORD_HASH='{bcrypt}<bcrypt-password-hash>'
-export JWT_ISSUER="arduino-thermo-hygrometer-api"
-export JWT_AUDIENCE="arduino-thermo-hygrometer-api"
-export JWT_ACCESS_TOKEN_TTL="PT30M"
-
-# 3. Start the API
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local
-
-# 4. Run tests when making changes
-./mvnw verify
-```
-
-For a clean database container:
-
-```bash
-podman rm -f postgres-local
-
-podman run --name postgres-local \
-  -e POSTGRES_USER=postgres-local \
-  -e POSTGRES_PASSWORD=postgres-local \
-  -e POSTGRES_DB=arduinothermohygrometer-local \
-  -p 5432:5432 \
-  -d postgres:18.3
-```
-
-## Related project directories
-
-```text
-arduino-thermo-hygrometer/
-├── api/   # Java/Spring REST API
-└── app/   # Frontend application
-```
-
-The frontend consumes the API contract from the OpenAPI specification rather than depending on implementation details of
-the Java controllers.
+- [Repository overview](../README.md)
+- [Frontend guide](../app/README.md)
+- [GitHub configuration](../.github/README.md)
+- [CI workflows and current limitations](../.github/workflows/README.md)
 
 ## License
 
-This project is licensed under the MIT License. See the repository `LICENSE` file for details.
-
-## Security
-
-The API uses short-lived JWT bearer tokens. Tokens are not persisted server-side. The signing key, client credential
-hash, database credentials, CORS origins, issuer and audience are supplied through environment variables outside
-test/local profiles.
-The `/auth/token` endpoint has a separate, stricter IP-based rate limit to mitigate credential brute-force attempts.
-Authenticated API requests are rate limited by the authenticated JWT subject, with unauthenticated requests falling back
-to the client IP.
-Production and staging disable Swagger/OpenAPI UI and API documentation endpoints. Health probes remain public for
-container orchestration; other actuator endpoints require the `ACTUATOR` role.
-JWT validation enforces the signing algorithm (HS512), issuer, audience, expiration and not-before claims.
+MIT. See [LICENSE](../LICENSE).

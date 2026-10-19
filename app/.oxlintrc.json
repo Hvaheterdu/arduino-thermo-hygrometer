@@ -1,41 +1,52 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": [
-    ".idea",
-    "build",
-    "coverage",
-    "dist",
-    "node_modules",
-    "**/*.d.ts",
-    "**/*.generated.ts",
-    "package-lock.json"
-  ],
-  "env": {
-    "builtin": true,
-    "browser": true,
-    "node": true
-  },
-  "categories": {
-    "correctness": "error",
-    "suspicious": "error",
-    "pedantic": "warn",
-    "perf": "warn",
-    "restriction": "warn"
-  },
+  "ignorePatterns": [".idea", "dist", "coverage", "**/node_modules", "**/*.d.ts", "**/package-lock.json"],
+  "plugins": ["typescript", "oxc", "import", "react", "jsx-a11y", "vitest"],
+  "env": { "browser": true, "es2026": true },
+  "categories": { "correctness": "error", "suspicious": "error" },
   "rules": {
-    "react/jsx-filename-extension": [
-      "allow",
-      {
-        "extensions": [".tsx"]
-      }
+    "curly": ["error", "all"],
+    "func-style": ["error", "expression"],
+    "import/no-unassigned-import": ["error", { "allow": ["**/*.css", "@testing-library/jest-dom/vitest"] }],
+    "import/no-cycle": "error",
+    "max-classes-per-file": ["error", { "max": 0, "ignoreExpressions": false }],
+    "no-console": "error",
+    "no-undef": "error",
+    "no-dupe-keys": "error",
+    "no-duplicate-imports": "error",
+    "no-irregular-whitespace": "error",
+    "no-unsafe-optional-chaining": "error",
+    "no-unreachable": "error",
+    "no-useless-escape": "error",
+    "no-var": "error",
+    "prefer-arrow-callback": ["error", { "allowNamedFunctions": false, "allowUnboundThis": false }],
+    "prefer-const": "error",
+    "react/function-component-definition": [
+      "error",
+      { "namedComponents": "arrow-function", "unnamedComponents": "arrow-function" }
     ],
-    "react/only-export-components": "allow",
-    "react/react-in-jsx-scope": "allow"
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "react/only-export-components": ["error", { "allowConstantExport": true }],
+    "react/react-in-jsx-scope": "off",
+    "typescript/consistent-type-imports": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/no-non-null-assertion": "error",
+    "typescript/consistent-return": "off",
+    "vitest/max-nested-describe": ["error", { "max": 2 }],
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"]
   },
-  "plugins": ["eslint", "import", "oxc", "react", "typescript"],
-  "settings": {
-    "react": {
-      "version": "19.2.8"
+  "settings": { "react": { "version": "19.3" } },
+  "overrides": [
+    {
+      "files": ["vite.config.ts", "tools/**/*.ts"],
+      "env": { "node": true }
+    },
+    {
+      "files": ["src/test/**", "**/*.test.ts", "**/*.test.tsx"],
+      "rules": { "react/only-export-components": "off" }
     }
-  }
+  ]
 }

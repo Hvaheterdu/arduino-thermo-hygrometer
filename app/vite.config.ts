@@ -1,109 +1,49 @@
-import viteReact from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react";
 import { msw } from "msw/vite";
-import { ConfigEnv, defineConfig, loadEnv, UserConfig } from "vite";
-import type { Plugin } from "vitest/config";
+import { loadEnv } from "vite";
+import { defineConfig } from "vitest/config";
 
-const buildContentSecurityPolicy = (apiBaseUrl: string, allowInlineScripts: boolean): string => {
-  const apiOrigin = URL.canParse(apiBaseUrl) ? new URL(apiBaseUrl).origin : "'self'";
-  const connectSource = apiOrigin === "'self'" ? "'self'" : `'self' ${apiOrigin}`;
-  const scriptSource = allowInlineScripts ? "'self' 'unsafe-inline'" : "'self'";
-  const directives = [
-    "base-uri 'self'",
-    `connect-src ${connectSource}`,
-    "default-src 'self'",
-    "form-action 'self'",
-    "frame-ancestors 'none'",
-    "img-src 'self' data:",
-    "manifest-src 'none'",
-    "object-src 'none'",
-    `script-src ${scriptSource}`,
-    "style-src 'self' 'unsafe-inline'",
-    "worker-src 'self'"
-  ];
-
-  return directives.join("; ");
-};
-
-const buildSecurityHeaders = (apiBaseUrl: string, allowInlineScripts: boolean): Record<string, string> => {
-  return {
-    "x-content-type-options": "nosniff",
-    "referrer-policy": "no-referrer",
-    "permissions-policy":
-      "accelerometer=(), autoplay=(), bluetooth=(), camera=(), compute-pressure=(), cross-origin-isolated=(), "
-      + "display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), hid=(), "
-      + "identity-credentials-get=(), idle-detection=(), magnetometer=(), microphone=(), midi=(), payment=(), "
-      + "picture-in-picture=(), publickey-credentials-create=(), publickey-credentials-get=(), "
-      + "screen-wake-lock=(), storage-access=(), sync-xhr=(), usb=(), web-share=(), window-management=(), "
-      + "xr-spatial-tracking=()",
-    "content-security-policy": buildContentSecurityPolicy(apiBaseUrl, allowInlineScripts)
+export default defineConfig(({ command, mode, isPreview }) => {
+  const env = loadEnv(mode, import.meta.dirname, "VITE_");
+  const isDevServer = command === "serve" && !isPreview;
+  const apiUrl = isDevServer ? env.VITE_API_BASEURL_LOCAL : env[`VITE_API_BASEURL_${mode.toUpperCase()}`];
+  const apiOrigin = apiUrl && URL.canParse(apiUrl) ? new URL(apiUrl).origin : "";
+  const headers = {
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "Content-Security-Policy": [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+      "form-action 'self'",
+      `script-src 'self'${isDevServer ? " 'unsafe-inline'" : ""}`,
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data:",
+      `connect-src 'self' ${apiOrigin}${isDevServer ? " ws://localhost:3000" : ""}`,
+      "worker-src 'self'"
+    ].join("; ")
   };
-};
-
-const contentSecurityPolicyPlugin = (apiBaseUrl: string, allowInlineScripts: boolean): Plugin => ({
-  name: "content-security-policy",
-  transformIndexHtml: {
-    order: "pre",
-    handler: () => [
-      {
-        tag: "meta",
-        attrs: {
-          "http-equiv": "Content-Security-Policy",
-          content: buildContentSecurityPolicy(apiBaseUrl, allowInlineScripts)
-        },
-        injectTo: "head-prepend"
-      }
-    ]
-  }
-});
-
-// oxlint-disable-next-line import/no-default-export
-export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
-  const env = loadEnv(mode, import.meta.dirname, "");
-  const isLocal = command === "serve";
-  const allowInlineScripts = isLocal || mode === "development";
-  let apiBaseUrl: string;
-  if (isLocal) {
-    apiBaseUrl = env.VITE_API_BASEURL_LOCAL;
-  } else {
-    switch (mode) {
-      case "production":
-        apiBaseUrl = env.VITE_API_BASEURL_PRODUCTION;
-        break;
-      case "staging":
-        apiBaseUrl = env.VITE_API_BASEURL_STAGING;
-        break;
-      case "development":
-      default:
-        apiBaseUrl = env.VITE_API_BASEURL_DEVELOPMENT;
-        break;
-    }
-  }
 
   return {
     base: env.VITE_BASE_PATH,
-    build: {
-      outDir: "dist",
-      sourcemap: mode !== "production",
-      reportCompressedSize: true
-    },
-    cacheDir: "node_modules/.vite/app",
-    plugins: [msw(), viteReact(), contentSecurityPolicyPlugin(apiBaseUrl, allowInlineScripts)],
-    resolve: {
-      tsconfigPaths: true
-    },
-    root: import.meta.dirname,
+    plugins: [react(), ...(isDevServer ? [msw({ mode: "worker-only" })] : [])],
+    resolve: { tsconfigPaths: true },
+    build: { target: "es2023", sourcemap: mode !== "production" },
+    server: { host: "localhost", port: 3000, strictPort: true, headers },
+    preview: { host: "localhost", headers },
     test: {
-      clearMocks: true,
       environment: "jsdom",
-      globals: true,
+      globals: false,
+      clearMocks: true,
+      restoreMocks: true,
       include: ["src/**/*.test.{ts,tsx}"],
-      setupFiles: ["./src/test/setup.ts"]
-    },
-    server: {
-      host: "localhost",
-      port: 3000,
-      strictPort: true,
-      headers: buildSecurityHeaders(apiBaseUrl, allowInlineScripts)
+      setupFiles: ["./src/test/test.setup.ts"],
+      env: {
+        VITE_MOCK_BACKEND: "false",
+        VITE_API_BASEURL_LOCAL: "http://localhost:5000"
+      }
     }
   };
 });
