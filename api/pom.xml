@@ -11,6 +11,13 @@
         device.
     </description>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.1</version>
+        <relativePath/>
+    </parent>
+
     <licenses>
         <license>
             <name>MIT</name>
@@ -33,19 +40,12 @@
         <developerConnection>https://github.com/Hvaheterdu/arduino-thermo-hygrometer.git</developerConnection>
     </scm>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.1</version>
-        <relativePath/>
-    </parent>
-
     <properties>
         <!-- Java version -->
         <java.version>25</java.version>
 
         <!-- Maven version -->
-        <maven.version>3.9.16</maven.version>
+        <maven.version>3.10.0</maven.version>
 
         <!-- Maven plugin dependencies -->
         <google-java-format.version>1.36.1</google-java-format.version>
@@ -77,7 +77,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <!-- Maven build properties -->
-        <maven.build.timestamp.format>ddMMyyyyHHmmss</maven.build.timestamp.format>
+        <maven.build.timestamp.format>MMddyyyyHHmmss</maven.build.timestamp.format>
 
         <!-- Project build properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
