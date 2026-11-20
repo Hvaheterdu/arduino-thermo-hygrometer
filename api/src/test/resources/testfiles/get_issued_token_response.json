@@ -1,0 +1,5 @@
+{
+  "accessToken": "signed-token",
+  "tokenType": "Bearer",
+  "expiresIn": 1800
+}

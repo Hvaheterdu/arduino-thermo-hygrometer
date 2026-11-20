@@ -5,30 +5,29 @@ import java.time.Duration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import api.arduinothermohygrometer.dto.ProblemDetailsDto;
-import api.arduinothermohygrometer.filter.ApiKeyFilter;
-import api.arduinothermohygrometer.filter.RateLimitingFilter;
+import api.arduinothermohygrometer.filter.PreAuthenticationRateLimitFilter;
+import api.arduinothermohygrometer.filter.RateLimitFilter;
 import api.arduinothermohygrometer.properties.CorsProperties;
 import api.arduinothermohygrometer.properties.RateLimitProperties;
-import api.arduinothermohygrometer.properties.SecurityProperties;
-import api.arduinothermohygrometer.provider.ApiKeyAuthenticationProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import tools.jackson.databind.ObjectMapper;
 
@@ -41,28 +40,10 @@ public class SecurityConfig {
 
   private final CorsProperties corsProperties;
   private final ObjectMapper objectMapper;
-  private final SecurityProperties securityProperties;
 
-  public SecurityConfig(
-      final CorsProperties corsProperties,
-      final ObjectMapper objectMapper,
-      final SecurityProperties securityProperties) {
+  public SecurityConfig(final CorsProperties corsProperties, final ObjectMapper objectMapper) {
     this.corsProperties = corsProperties;
     this.objectMapper = objectMapper;
-    this.securityProperties = securityProperties;
-  }
-
-  @Bean
-  ApiKeyFilter apiKeyFilter(
-      final AuthenticationManager authenticationManager,
-      final AuthenticationEntryPoint authenticationEntryPoint) {
-    return new ApiKeyFilter(authenticationManager, securityProperties, authenticationEntryPoint);
-  }
-
-  @Bean
-  AuthenticationManager authenticationManager(
-      final ApiKeyAuthenticationProvider apiKeyAuthenticationProvider) {
-    return new ProviderManager(apiKeyAuthenticationProvider);
   }
 
   @Bean
@@ -107,21 +88,43 @@ public class SecurityConfig {
   }
 
   @Bean
-  RateLimitingFilter rateLimitingFilter(final RateLimitProperties rateLimitProperties) {
-    return new RateLimitingFilter(objectMapper, securityProperties, rateLimitProperties);
+  JwtAuthenticationConverter jwtAuthenticationConverter() {
+    var authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    authoritiesConverter.setAuthoritiesClaimName("roles");
+    authoritiesConverter.setAuthorityPrefix("ROLE_");
+
+    var converter = new JwtAuthenticationConverter();
+    converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+
+    return converter;
+  }
+
+  @Bean
+  PreAuthenticationRateLimitFilter preAuthenticationRateLimitingFilter(
+      final ObjectMapper objectMapper, final RateLimitProperties rateLimitProperties) {
+    return new PreAuthenticationRateLimitFilter(objectMapper, rateLimitProperties);
+  }
+
+  @Bean
+  RateLimitFilter rateLimitingFilter(
+      final ObjectMapper objectMapper, final RateLimitProperties rateLimitProperties) {
+    return new RateLimitFilter(objectMapper, rateLimitProperties);
   }
 
   @Bean
   SecurityFilterChain securityFilterChain(
       final HttpSecurity httpSecurity,
-      final ApiKeyFilter apiKeyFilter,
-      final RateLimitingFilter rateLimitingFilter,
       final AuthenticationEntryPoint authenticationEntryPoint,
-      final AccessDeniedHandler accessDeniedHandler) {
+      final AccessDeniedHandler accessDeniedHandler,
+      final JwtAuthenticationConverter jwtAuthenticationConverter,
+      final PreAuthenticationRateLimitFilter preAuthenticationRateLimitFilter,
+      final RateLimitFilter rateLimitFilter) {
     return httpSecurity
         .authorizeHttpRequests(
             authorizationManagerRequestMatcherRegistry ->
                 authorizationManagerRequestMatcherRegistry
+                    .requestMatchers(HttpMethod.POST, "/auth/token")
+                    .permitAll()
                     .requestMatchers(
                         "/actuator/health",
                         "/actuator/health/liveness",
@@ -161,8 +164,13 @@ public class SecurityConfig {
                 httpSecurityExceptionHandlingConfigurer
                     .authenticationEntryPoint(authenticationEntryPoint)
                     .accessDeniedHandler(accessDeniedHandler))
-        .addFilterBefore(rateLimitingFilter, ApiKeyFilter.class)
-        .addFilterAfter(apiKeyFilter, LogoutFilter.class)
+        .oauth2ResourceServer(
+            oauth2 ->
+                oauth2
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                    .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
+        .addFilterBefore(preAuthenticationRateLimitFilter, BearerTokenAuthenticationFilter.class)
+        .addFilterAfter(rateLimitFilter, BearerTokenAuthenticationFilter.class)
         .build();
   }
 

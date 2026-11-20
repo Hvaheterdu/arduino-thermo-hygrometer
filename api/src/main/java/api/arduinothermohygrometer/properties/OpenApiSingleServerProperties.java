@@ -2,12 +2,15 @@ package api.arduinothermohygrometer.properties;
 
 import java.util.Map;
 
+import org.springframework.validation.annotation.Validated;
+
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariable;
 import io.swagger.v3.oas.models.servers.ServerVariables;
 
 import jakarta.validation.constraints.NotEmpty;
 
+@Validated
 public record OpenApiSingleServerProperties(
     @NotEmpty String url,
     @NotEmpty String description,

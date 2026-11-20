@@ -95,7 +95,7 @@ class HumidityControllerTest extends WebMvcTestBase {
   @Nested
   class CreateMethods {
     @Test
-    void givenValidHumidityDto_thenReturn201CREATED() {
+    void givenValidHumidityDto_thenReturn201Created() {
       Humidity humidity = new Humidity(LocalDateTime.parse("2026-06-01T12:00:00"), 21.02);
       HumidityDto humidityDto =
           HumidityDto.builder()

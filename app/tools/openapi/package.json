@@ -1,0 +1,12 @@
+{
+  "name": "thermo-hygrometer-openapi-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "npx openapi-typescript ../../openapi-specification/arduino-thermo-hygrometer-api.yaml -o ../../src/types/arduino-thermo-hygrometer-api.d.ts",
+    "check": "npx openapi-typescript ../../openapi-specification/arduino-thermo-hygrometer-api.yaml -o ../../src/types/arduino-thermo-hygrometer-api.d.ts --check && npx openapi-typescript ../../../api/src/main/resources/openapi/arduino-thermo-hygrometer-api.yaml -o ../../src/types/arduino-thermo-hygrometer-api.d.ts --check"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}

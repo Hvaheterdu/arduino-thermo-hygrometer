@@ -1,23 +1,16 @@
 {
   "compilerOptions": {
     "composite": true,
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "paths": {
       "@/*": ["./src/*"]
     },
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "target": "esnext",
+    "target": "ESNext",
+    "strict": true,
     "tsBuildInfoFile": "node_modules/.tsconfig/tsconfig.app.tsbuildinfo",
-    "types": [
-      "@testing-library/dom",
-      "@testing-library/jest-dom",
-      "@testing-library/react",
-      "node",
-      "vite/client",
-      "vitest/globals"
-    ],
+    "types": ["@testing-library/dom", "@testing-library/jest-dom", "@testing-library/react", "vite/client"],
     "useDefineForClassFields": true,
     /* Bundler mode */
     "isolatedModules": true,
@@ -41,5 +34,5 @@
     "noUnusedParameters": true
   },
   "exclude": ["dist", "node_modules"],
-  "include": ["src", "src/**/*.js", "src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src"]
 }

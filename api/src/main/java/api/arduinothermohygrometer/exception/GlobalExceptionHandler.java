@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -66,6 +67,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         .build();
   }
 
+  @ExceptionHandler(BadCredentialsException.class)
+  public ResponseEntity<ProblemDetailsDto> handleBadCredentials(
+      final BadCredentialsException badCredentialsException, final HttpServletRequest request) {
+    log.error("Invalid credentials message={}", badCredentialsException.getMessage());
+    ProblemDetailsDto body =
+        buildProblemDetail(
+            HttpStatus.UNAUTHORIZED,
+            "unauthorized",
+            "Unauthorized.",
+            badCredentialsException.getMessage(),
+            request);
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+  }
+
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ProblemDetailsDto> handleResourceNotFound(
       final ResourceNotFoundException resourceNotFoundException, final HttpServletRequest request) {
@@ -100,13 +115,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ProblemDetailsDto> handleGeneralException(
       final Exception exception, final HttpServletRequest request) {
-    log.error("Internal server error exception with message={}", exception.getMessage());
+    log.error("Internal server error while processing request.", exception);
     ProblemDetailsDto body =
         buildProblemDetail(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "internal-error",
             "Internal server error.",
-            exception.getMessage(),
+            "An unexpected error occurred.",
             request);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
   }

@@ -11,6 +11,13 @@
         device.
     </description>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.2</version>
+        <relativePath/>
+    </parent>
+
     <licenses>
         <license>
             <name>MIT</name>
@@ -33,36 +40,29 @@
         <developerConnection>https://github.com/Hvaheterdu/arduino-thermo-hygrometer.git</developerConnection>
     </scm>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.2.0-M2</version>
-        <relativePath/>
-    </parent>
-
     <properties>
         <!-- Java version -->
         <java.version>25</java.version>
 
         <!-- Maven version -->
-        <maven.version>3.9.16</maven.version>
+        <maven.version>3.10.0</maven.version>
 
         <!-- Maven plugin dependencies -->
         <google-java-format.version>1.36.1</google-java-format.version>
-        <spotless-maven-plugin.version>3.10.3</spotless-maven-plugin.version>
+        <spotless-maven-plugin.version>3.10.4</spotless-maven-plugin.version>
 
         <!-- Bucket4J -->
         <bucket4j.version>8.20.0</bucket4j.version>
 
-        <!-- Postgresql version -->
+        <!-- PostgreSQL version -->
         <postgresql.version>42.7.13</postgresql.version>
 
         <!-- Springdoc/Swagger version -->
-        <springdoc-openapi-starter-webmvc-ui.version>3.1.1</springdoc-openapi-starter-webmvc-ui.version>
+        <springdoc-openapi-starter-webmvc-ui.version>3.2.0</springdoc-openapi-starter-webmvc-ui.version>
 
         <!-- OpenAPI Generator -->
         <jackson-databind-nullable.version>0.2.12</jackson-databind-nullable.version>
-        <okhttp3.version>5.5.0</okhttp3.version>
+        <okhttp3.version>5.5.1</okhttp3.version>
         <openapi-generator-maven-plugin.version>7.25.0</openapi-generator-maven-plugin.version>
         <swagger.version>2.2.55</swagger.version>
 
@@ -77,12 +77,12 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <!-- Maven build properties -->
-        <maven.build.timestamp.format>ddMMyyyyHHmmss</maven.build.timestamp.format>
+        <maven.build.timestamp.format>MMddyyyyHHmmss</maven.build.timestamp.format>
 
         <!-- Project build properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- Spring boot properties -->
+        <!-- Spring Boot properties -->
         <spring-boot.run.jvmArguments>-Duser.timezone=Europe/Oslo</spring-boot.run.jvmArguments>
     </properties>
 
@@ -105,6 +105,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security-oauth2-resource-server</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -134,7 +138,7 @@
             <artifactId>caffeine</artifactId>
         </dependency>
 
-        <!-- Flyway Postgresql -->
+        <!-- Flyway PostgreSQL -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
@@ -161,7 +165,7 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- Postgresql -->
+        <!-- PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -181,7 +185,7 @@
             <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
         </dependency>
 
-        <!-- OpenApi Generator -->
+        <!-- OpenAPI Generator -->
         <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>

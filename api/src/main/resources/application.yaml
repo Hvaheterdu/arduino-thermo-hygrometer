@@ -1,5 +1,5 @@
 cors:
-  allowed-headers: [ Accept, Content-Type, X-API-KEY ]
+  allowed-headers: [ Accept, Content-Type, Authorization ]
   allowed-methods: [ GET, DELETE, POST ]
   allowed-origins: [ http://localhost:3000 ]
 
@@ -27,16 +27,23 @@ management:
         include: health, info, metrics
 
 rate-limit:
-  capacity: 100
-  refill-period: 10m
+  api-capacity: 100
+  api-refill-period: 10m
+  authentication-capacity: 5
+  authentication-refill-period: 10m
   maximum-buckets: 100
   bucket-expiration: 30m
 
 security:
-  api-key: ${API_KEY}
-  api-header-name: X-API-KEY
-  api-roles: [ ACTUATOR, API_ADMIN ]
-  api-scheme-name: ApiKeyAuth
+  jwt-bearer-format: ${JWT_BEARER_FORMAT}
+  jwt-secret-base64: ${JWT_SECRET_BASE64}
+  jwt-issuer: ${JWT_ISSUER}
+  jwt-audience: ${JWT_AUDIENCE}
+  access-token-ttl: ${JWT_ACCESS_TOKEN_TTL}
+  username: ${JWT_USERNAME}
+  password-hash: ${JWT_PASSWORD_HASH}
+  roles: [ ACTUATOR, API_ADMIN ]
+  jwt-scheme-name: BearerAuth
 
 server:
   port: 5000

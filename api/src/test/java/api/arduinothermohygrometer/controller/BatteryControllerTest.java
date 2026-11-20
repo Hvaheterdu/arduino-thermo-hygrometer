@@ -93,7 +93,7 @@ class BatteryControllerTest extends WebMvcTestBase {
   @Nested
   class CreateMethods {
     @Test
-    void givenValidBatteryDto_thenReturn201CREATED() {
+    void givenValidBatteryDto_thenReturn201Created() {
       Battery battery = new Battery(LocalDateTime.parse("2026-06-01T12:00:00"), 95);
       BatteryDto batteryDto =
           BatteryDto.builder()

@@ -38,15 +38,15 @@ public class OpenApiConfig {
   @Bean
   OpenAPI customOpenAPI() {
     return new OpenAPI()
-        .addSecurityItem(new SecurityRequirement().addList(securityProperties.apiSchemeName()))
+        .addSecurityItem(new SecurityRequirement().addList(securityProperties.jwtSchemeName()))
         .components(
             new Components()
                 .addSecuritySchemes(
-                    securityProperties.apiSchemeName(),
+                    securityProperties.jwtSchemeName(),
                     new SecurityScheme()
-                        .type(SecurityScheme.Type.APIKEY)
-                        .in(SecurityScheme.In.HEADER)
-                        .name(securityProperties.apiHeaderName())))
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat(securityProperties.jwtBearerFormat())))
         .info(
             new Info()
                 .version(buildProperties.getVersion())
